@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+'use strict'
+
+process.title = 'asciidoctorjs-pdf'
+const cli = require('../lib/cli.js')
+const argv = cli.argsParser().argv
+cli.run(argv)
