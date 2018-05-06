@@ -4,5 +4,17 @@
 
 process.title = 'asciidoctorjs-pdf'
 const cli = require('../lib/cli.js')
-const argv = cli.argsParser().argv
-cli.run(argv)
+
+async function main() {
+    const argv = cli.argsParser().argv
+    await cli.run(argv)
+}
+
+main()
+    .then(() => {
+        process.exit(0)
+    })
+    .catch((error) => {
+        console.log('error', error)
+        process.exit(1)
+    })

@@ -1,3 +1,15 @@
 = Asciidoctor.js PDF
 
 Convert AsciiDoc document to PDF using Asciidoctor.js and Puppeteer (Headless Chrome)
+
+== About
+
+Inspired by an awesome project called https://github.com/RelaxedJS/ReLaXed/blob/master/src/index.js[Relaxed.JS].
+
+Asciidoctor.js PDF is using Headless Chrome to generate a beautiful PDF.
+It allows complex layouts to be defined with CSS and JavaScript, while writing the content in AsciiDoc.
+
+== Examples
+
+.Letter
+ ./bin/asciidoctorjs-pdf examples/letter/letter.adoc --template-require ../examples/letter/template.js
