@@ -1,0 +1,8 @@
+= Alice in Wonderland
+Lewis Caroll
+:pdf-width: 4in
+:pdf-height: 7in
+
+include::chapter_1.adoc[]
+
+include::chapter_2.adoc[]

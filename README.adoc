@@ -13,3 +13,6 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 
 .Letter
  ./bin/asciidoctorjs-pdf examples/letter/letter.adoc --template-require ../examples/letter/template.js
+
+.Book
+ ./bin/asciidoctorjs-pdf examples/book/book.adoc --template-require ../examples/book/template.js

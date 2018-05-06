@@ -1,6 +1,5 @@
 module.exports = [{
   paragraph: (ctx) => `<p class="${ctx.node.getRoles()}">${ctx.node.getContent()}</p>`,
-  section: (ctx) => `<section>${ctx.node.getContent()}</section>`,
   document: (ctx) => `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,5 @@ module.exports = [{
 <body>
 ${ctx.node.getContent()}
 </body>`,
-  image: (ctx) => {
-    return `<div class="image ${ctx.node.getRoles()}"><img src="${ctx.node.getImageUri(ctx.node.getAttribute('target'))}"/></div>`
-  }
+  image: (ctx) => `<div class="image ${ctx.node.getRoles()}"><img src="${ctx.node.getImageUri(ctx.node.getAttribute('target'))}"/></div>`
 }]
