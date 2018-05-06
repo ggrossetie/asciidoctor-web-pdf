@@ -13,7 +13,7 @@ ${ctx.node.getContent()}
 <body>
 <div id="cover">
 <h1>${ctx.node.getDocumentTitle()}</h1>
-<h2>${ctx.node.getDocument().getAuthor()}</h2>
+<h2>by ${ctx.node.getDocument().getAuthor()}</h2>
 </div>
 ${ctx.node.getContent()}
 </body>`,
