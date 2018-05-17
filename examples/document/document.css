@@ -1,0 +1,69 @@
+@import 'https://fonts.googleapis.com/css?family=Noto+Serif';
+@import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css';
+
+@page {
+  margin: 1cm 1.5cm 1cm 1.5cm;
+}
+
+html {
+  font-family: 'Noto Serif', serif;
+  text-align: justify;
+}
+
+#cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  page-break-after: always;
+  align-items: flex-end;
+}
+
+#cover h1 {
+  color: #999;
+  font-family: 'Noto-serif', serif;
+  font-size: 2.5rem;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+#cover h2 {
+  font-size: 1.1rem;
+  padding: 0;
+  margin: 0;
+}
+
+h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
+  color: #333;
+  font-family: 'Noto Serif', serif;
+  font-weight: 600;
+}
+
+a {
+  color: #2986e7;
+  text-decoration: none;
+  line-height: inherit;
+}
+
+p, blockquote, dt, td.content, span.alt {
+  font-size: 0.95rem;
+}
+
+.admonitionblock > table td.icon .title {
+  font-family: 'Noto-serif', serif;
+}
+
+.subheader, .admonitionblock td.content > .title, .audioblock > .title, .exampleblock > .title, .imageblock > .title, .listingblock > .title, .literalblock > .title, .stemblock > .title, .openblock > .title, .paragraph > .title, .quoteblock > .title, table.tableblock > .title, .verseblock > .title, .videoblock > .title, .dlist > .title, .olist > .title, .ulist > .title, .qlist > .title, .hdlist > .title {
+  color: #333;
+}
+
+p {
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
+  line-height: 1;
+  font-size: 0.9rem;
+}
