@@ -22,5 +22,8 @@
     "asciidoctor.js-pug": "github:Mogztter/asciidoctor.js-pug#89c433e6282370a9ac8fe07426523a7d42aa4d83",
     "puppeteer": "^1.3.0",
     "yargs": "^11.0.0"
+  },
+  "devDependencies": {
+    "chokidar": "^2.0.4"
   }
 }
