@@ -1,0 +1,127 @@
+= Cheat Sheet: 10 Maven Security Best Practices
+Simon Maple <https://twitter.com/sjmaple> @sjmaple, Java Champion and Developer Advocate at Snyk;Robert Scholte <https://twitter.com/rfscholte> @rfscholte, CEO of Sourcegrounds, Chairman of the Apache Maven project
+:pdf-width: 508mm
+:pdf-height: 361mm
+:sectnums:
+
+== Encrypt your Secrets
+
+```
+$ mvn --encrypt-master-password
+Master password: *********
+{encrypted_master_password}
+```
+
+Store this in `~/.m2/settings-security.xml`
+
+```xml
+<settingsSecurity>
+ <master>{encrypted_master_password}</master>
+</settingsSecurity>
+```
+Now encrypt your server password:
+
+```
+mvn --encrypt-password
+Master password: *********
+{encrypted_password}
+```
+
+Store this in your `settings.xml` file as follows:
+
+```xml
+<server>
+ <id>my.server</id>
+ <username>smaple</username>
+ <password>{encrypted_password}</password>
+</server>
+```
+
+== Don't use passwords in the CLI
+
+Never enter passwords in plain text on the CLI:
+
+[source,sh,role=dont]
+----
+$ mvn --encrypt-master-password P@ssw0rd
+
+$ mvn --encrypt-password P@ssw0rd
+----
+
+== Always Use HTTPS
+
+Use HTTPS to connect to remote Maven repositories, to avoid MITM attacks.
+
+Ensure your `<repositories>` and `<pluginRepositories>` use https in their URLs.
+
+== Check Dependency Health
+
+Verify the health of your third-party libraries by confirming they have:
+
+[.do]
+* [x] A team of committers
+* [x] Well documented security policies
+* [x] Regular updates and releases
+
+== Test for Known Vulnerabilities
+
+Do not use Maven dependencies with known vulnerabilities. +
+Use a tool like Snyk to:
+
+[.do]
+* [x] Test your app for known vulnerabilities.
+* [x] Automatically fix issues that exist.
+* [x] Continuously monitor for new vulnerabilities
+
+== Test your Checksums
+
+As part of validating the authenticity of your dependencies,
+test their checksums using the -C flag on Maven commands:
+
+```
+$ mvn -C install
+// fail if checksums don’t match
+
+$ mvn -c install
+// warn if checksums don’t match
+```
+
+== Don't use Properties for Passwords
+
+Never store your secrets in your pom.xml properties.
+
+[source,xml,role=dont]
+----
+<properties>
+  <my.property>P@ssw0rd</my.property>
+</properties>
+----
+
+== Use Maven developers/roles
+
+Use Maven roles to state who should be contacted for security issues.
+
+```xml
+<developers>
+ <developer>
+   <id>grander</id>
+   <name>Danny Grander</name>
+   <email>security@your_org.com</email>
+   <roles>
+     <role>security</role>
+   </roles>
+ <developer>
+<developers>
+```
+
+== Stay up-to-date
+
+Try to stay on the latest releases of Maven. Check the download page for the latest version.
+
+Avoid Maven 3.0.4 as it ignores certificates for HTTPS connections.
+
+== Check Security Bulletins
+
+Monitor the security bulletins the Apache Maven team publish on the
+https://maven.apache.org/security.html[Maven site].
+

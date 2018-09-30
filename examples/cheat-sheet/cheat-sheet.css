@@ -1,0 +1,118 @@
+@import 'https://fonts.googleapis.com/css?family=Roboto:400,500';
+
+@page {
+  size: 508mm 361mm;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: #4a4a4a;
+  text-align: justify;
+}
+
+html {
+  font-family: Roboto, 'DejaVu Sans', Arial, sans-serif;
+  font-size: 18px;
+}
+
+header {
+  background-color: #4842a5;
+  padding: 0.7cm;
+}
+
+h1 {
+  font-size: 2em;
+  color: white;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+section.content {
+  margin: 0.5cm;
+  padding: 0;
+  height: calc(100vh - 50mm);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.sect1 {
+  max-width: calc((100vw / 3) - 3cm);
+  margin-right: 1.2cm;
+  margin-left: 1.2cm
+}
+
+h2 {
+  color: #4842a5;
+  font-size: 1.4em;
+  font-weight: 500;
+}
+
+.listingblock pre {
+  background:#fafcfe;
+  border: 1px solid #d5d4d9;
+  color: #4a4a4a;
+}
+
+.listingblock.dont pre {
+  border: 1px solid #d0021b;
+}
+
+.listingblock.dont {
+  position: relative;
+}
+
+.listingblock.dont::before {
+  content: "X";
+  color: #d0021b;
+  background-color: #fae6e8;
+  border-radius: 50%;
+  line-height: 2em;
+  width: 2em;
+  height: 2em;
+  display: block;
+  text-align: center;
+  right: -2.5em;
+  position: absolute;
+  margin-bottom: -3em;
+}
+
+.listingblock pre,.listingblock pre[class] {
+  font-size: 0.8em;
+  line-height: 1.5em;
+  border-radius: 4px;
+  word-wrap: break-word;
+  padding: 1em;
+}
+
+.listingblock {
+  margin-bottom: 2em;
+}
+
+ul.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ulist.checklist.do > ul.checklist > li > p::first-letter {
+  color: #188a8a;
+  border-radius: 50%;
+  background-color: #e9f9f0;
+  line-height: 1em;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin-right: 0.5em;
+}
+
+a {
+  color: #4842a5;
+  text-decoration: none;
+}
