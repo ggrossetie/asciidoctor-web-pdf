@@ -22,13 +22,39 @@ html {
 header {
   background-color: #4842a5;
   padding: 0.7cm;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding-right: 12em;
+  align-items: center;
+  color: white;
+}
+
+header > a {
+  color: white;
+}
+
+header > .wordmark {
+  max-height: 3em;
+}
+
+header > .website {
+  font-size: 1.4em;
+  font-weight: 400;
+  align-self: end;
+}
+
+header > .logo {
+  position: absolute;
+  top: 1em;
+  right: 3em;
+  max-width: 6em;
 }
 
 h1 {
   font-size: 2em;
-  color: white;
   margin: 0;
   padding: 0;
+  padding-left: 1em;
   font-weight: 400;
 }
 
@@ -54,6 +80,11 @@ section.content {
 h2 {
   color: #4842a5;
   font-size: 1.4em;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.1em;
   font-weight: 500;
 }
 
@@ -119,4 +150,29 @@ ul.checklist {
 a {
   color: #4842a5;
   text-decoration: none;
+}
+
+.authors {
+  margin-top: auto;
+}
+
+.author {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  padding-bottom: 1em;
+}
+
+.author-avatar > img {
+  border-radius: 50%;
+  max-height: 2em;
+}
+
+.author-avatar {
+  grid-row-start: span 2;
+  padding-right: 1em;
+}
+
+.author-bio {
+  font-size: 0.9em
 }
