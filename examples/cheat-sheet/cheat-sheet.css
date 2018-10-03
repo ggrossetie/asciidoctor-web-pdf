@@ -41,6 +41,10 @@ section.content {
   flex-wrap: wrap;
 }
 
+.admonitionblock div {
+  font-weight: bold
+}
+
 .sect1 {
   max-width: calc((100vw / 3) - 3cm);
   margin-right: 1.2cm;
