@@ -6,7 +6,7 @@ chokidar.watch(['examples/**/*.css', 'examples/**/*.js'], {ignored: /(^|[\/\\])\
   console.log(event, path);
   if (event === 'change') {
     try {
-      child_process.exec('./bin/asciidoctorjs-pdf examples/cheat-sheet/maven-security-cheat-sheet.adoc --template-require ../examples/cheat-sheet/template.js');
+      child_process.exec('./bin/asciidoctorjs-pdf examples/cheat-sheet/maven-security-cheat-sheet.adoc --template-require ../examples/cheat-sheet/snyk/template.js');
     } catch (e) {
       console.log('error', e);
     }
