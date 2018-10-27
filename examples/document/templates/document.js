@@ -1,5 +1,5 @@
 module.exports = (ctx) => `<!DOCTYPE html>
-<html lang="en">
+<html dir="ltr" lang="en">
 <head>
 <meta charset="UTF-8">
 <link href="./asciidoctor.css" rel="stylesheet">
