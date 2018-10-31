@@ -14,7 +14,6 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100vw;
   height: 100vh;
   page-break-after: always;
   align-items: flex-end;

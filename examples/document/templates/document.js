@@ -4,6 +4,7 @@ module.exports = (ctx) => `<!DOCTYPE html>
 <meta charset="UTF-8">
 <link href="./asciidoctor.css" rel="stylesheet">
 <link href="./document.css" rel="stylesheet">
+<script src="../../node_modules/pagedjs/dist/paged.polyfill.js"></script>
 </head>
 <body class="article">
 <div id="cover">
@@ -13,4 +14,10 @@ module.exports = (ctx) => `<!DOCTYPE html>
 <div id="content">
 ${ctx.node.getContent()}
 </div>
+<script>
+window.PagedConfig = {
+  auto: false,
+  after: (flow) => { console.log("after", flow) }
+};
+</script>
 </body>`
