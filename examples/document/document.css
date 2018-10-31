@@ -2,11 +2,11 @@
 @import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css';
 
 @page {
-  margin: 1cm 1.5cm 1cm 1.5cm;
+  margin: 0.5in 0.67in 0.67in 0.67in;
 }
 
 html {
-  font-family: 'Noto Serif', serif;
+  font: 10.5pt/1.15 'Noto Serif', serif;
   text-align: justify;
 }
 
@@ -22,14 +22,15 @@ html {
 
 #cover h1 {
   color: #999;
-  font-family: 'Noto-serif', serif;
-  font-size: 2.5rem;
+  font-weight: 200;
+  font-size: 2.6rem;
   padding: 0;
   margin-bottom: 1rem;
 }
 
 #cover h2 {
   font-size: 1.1rem;
+  font-weight: 200;
   padding: 0;
   margin: 0;
 }
@@ -51,7 +52,7 @@ p, blockquote, dt, td.content, span.alt {
 }
 
 .admonitionblock > table td.icon .title {
-  font-family: 'Noto-serif', serif;
+  font-family: 'Noto Serif', serif;
 }
 
 .subheader, .admonitionblock td.content > .title, .audioblock > .title, .exampleblock > .title, .imageblock > .title, .listingblock > .title, .literalblock > .title, .stemblock > .title, .openblock > .title, .paragraph > .title, .quoteblock > .title, table.tableblock > .title, .verseblock > .title, .videoblock > .title, .dlist > .title, .olist > .title, .ulist > .title, .qlist > .title, .hdlist > .title {

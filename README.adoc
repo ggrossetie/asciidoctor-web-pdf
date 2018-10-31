@@ -16,3 +16,6 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 
 .Book
  ./bin/asciidoctorjs-pdf examples/book/book.adoc --template-require ../examples/book/template.js
+
+.Document
+ ./bin/asciidoctorjs-pdf examples/document/document.adoc --template-require ../examples/document/templates/index.js
