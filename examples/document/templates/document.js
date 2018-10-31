@@ -4,6 +4,8 @@ module.exports = (node) => `<!DOCTYPE html>
 <meta charset="UTF-8">
 <link href="./asciidoctor.css" rel="stylesheet">
 <link href="./document.css" rel="stylesheet">
+<script src="../../node_modules/pagedjs/dist/paged.polyfill.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="article">
 <div id="cover">

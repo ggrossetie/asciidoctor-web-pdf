@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Mogztter/asciidoctor-pdf.js#readme",
   "dependencies": {
     "asciidoctor.js": "1.5.7",
+    "pagedjs": "^0.1.22",
     "puppeteer": "^1.3.0",
     "yargs": "^11.0.0"
   },
