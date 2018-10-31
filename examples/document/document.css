@@ -64,7 +64,29 @@ p {
   margin-bottom: 1rem;
 }
 
+table.frame-all {
+  border-width: 0;
+  border-collapse: collapse;
+}
+
 table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
   line-height: 1;
   font-size: 0.9rem;
+}
+
+table.grid-all > thead > tr > .tableblock, table.grid-all > tbody > tr > .tableblock {
+  border-width: 1px 1px 1px 1px;
+  border-collapse: collapse;
+}
+
+.table.tableblock {
+  border-collapse: collapse;
+}
+
+table.grid-all > * > tr > .tableblock:last-child, table.grid-cols > * > tr > .tableblock:last-child {
+  border-right-width: 1px;
+}
+
+table.grid-all > tbody > tr:last-child > .tableblock, table.grid-all > thead:last-child > tr > .tableblock, table.grid-rows > tbody > tr:last-child > .tableblock, table.grid-rows > thead:last-child > tr > .tableblock {
+  border-bottom-width: 1px;
 }
