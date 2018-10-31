@@ -14,10 +14,4 @@ module.exports = (ctx) => `<!DOCTYPE html>
 <div id="content">
 ${ctx.node.getContent()}
 </div>
-<script>
-window.PagedConfig = {
-  auto: false,
-  after: (flow) => { console.log("after", flow) }
-};
-</script>
 </body>`

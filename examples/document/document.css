@@ -5,9 +5,33 @@
   margin: 0.5in 0.67in 0.67in 0.67in;
 }
 
+@page :first {
+  @bottom-right-corner,
+  @bottom-left-corner {
+    content: unset;
+  }
+}
+
+@page :right {
+  @bottom-right-corner {
+    content: counter(page);
+  }
+}
+
+@page :left {
+  @bottom-left-corner {
+    content: counter(page);
+  }
+}
+
 html {
   font: 10.5pt/1.15 'Noto Serif', serif;
   text-align: justify;
+}
+
+p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-split-to],
+.sectionbody, [data-split-original] {
+  text-align-last: left !important;
 }
 
 #cover {
@@ -17,6 +41,13 @@ html {
   height: 100vh;
   page-break-after: always;
   align-items: flex-end;
+
+  counter-increment: page -1;
+
+}
+
+.pagedjs_page.pagedjs_first_page {
+  counter-increment: page 0;
 }
 
 #cover h1 {
