@@ -1,0 +1,306 @@
+= Service Mesh with Istio
+Alex Soto <https://twitter.com/alexsotob>; Christian Posta <https://twitter.com/christianposta>
+:authorbio_1: Java Champion and SW Engineer at Red Hat
+:authorbio_2: Chief Architect at Red Hat
+:pdf-width: 508mm
+:pdf-height: 361mm
+
+
+== What is Service Mesh and Istio
+
+A *service mesh* is a dedicated infrastructure layer for making service-to-service communication safe, fast, and reliable.
+
+Istio is a service mesh which allows you to connect, manage and secure your microservices in an easy and none intrusive way.
+
+Some of the features that offer Istio are:
+
+* Intelligent routing and load balancing
+* Resilience against network failures
+* Policy enforcement between services
+* Observability of your architecture. Tracing and Metrics
+* Securing service to service communication
+
+== Istio Architecture
+
+Istio is composed of two major components:
+
+* **Data plane** which is composed of *Envoy* proxies deployed as sidecar container along with your service for managing network along with policy and telemetry features.
+* **Control plane** which is in charge of managing and configuring all *Envoy* proxies.
+
+All communication within your *service mesh* happens through *Envoy* proxy, so any network logic to apply is moved from your service into your infrastructure.
+
+== Key Concepts of Istio
+
+== DestinationRule
+
+A *DestinationRule* configures the set of rules to be applied when forwarding traffic to a service.
+Some of the purposes of a *DestinationRule* are describing circuit breakers, load balancer, and TLS settings or define *subsets* (named versions) of the destination host so they can be reused in other Istio elements.
+
+For example to define two services based on the version label of a service with hostname *recommendation* you could do:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  host: recommendation
+  subsets:
+  - labels:
+      version: v1
+    name: version-v1
+  - labels:
+      version: v2
+    name: version-v2
+```
+
+== VirtualService
+
+A *VirtualService* describes the mapping between one or more user-addressable destinations to the actual destination inside the mesh.
+
+For example, to define two virtual services where the traffic is split between 50% to each one.
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  hosts:
+  - recommendation
+  http:
+  - route:
+    - destination:
+        host: recommendation
+        subset: version-v1
+      weight: 90
+    - destination:
+        host: recommendation
+        subset: version-v2
+      weight: 10
+```
+
+== ServiceEntry
+
+A *ServiceEntry* is used to configure traffic to external services of the mesh such as APIs or legacy systems.
+You can use it in conjunction with a *VirtualService* and/or *DestinationRule*.
+
+For example to configure _httpbin_ external service:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: httpbin-egress-rule
+  namespace: istioegress
+spec:
+  hosts:
+  - httpbin.org
+  ports:
+  - name: http-80
+    number: 80
+    protocol: http
+```
+
+== Gateway
+
+A *Gateway* is used to describe a load balancer operating at the edge of the mesh for incoming/outgoing HTTP/TCP connections.
+You can bind a *Gateway* to a *VirtualService*.
+
+To configures a load balancer to allow external https traffic for host foo.com into the mesh:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: foo-gateway
+spec:
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - foo.com
+    tls:
+      mode: SIMPLE
+      serverCertificate: /tmp/tls.crt
+      privateKey: /tmp/tls.key
+```
+
+<<<
+
+== Getting started with Istio
+
+*Istio* can be installed with _automatic sidecar injection_ or without it.
+We recommend as starting point *without* _automatic sidecar injection_ so you understand each of the steps.
+
+== Installing Istio
+
+First you need to download Istio and register in `PATH`:
+
+```bash
+curl -L https://github.com/istio/istio/releases/download/1.0.2/istio-1.0.2-osx.tar.gz | tar xz
+
+cd istio-1.0.2
+export ISTIO_HOME=`pwd`
+export PATH=$ISTIO_HOME/bin:$PATH
+```
+
+You can install Istio into Kubernetes cluster by either using `helm install` or `helm template`.
+
+```yaml
+$ helm template install/kubernetes/helm/istio --name istio --namespace istio-system --set sidecarInjectorWebhook.enabled=false > $HOME/istio.yaml
+
+kubectl create namespace istio-system
+kubectl create -f $HOME/istio.yaml
+```
+
+Wait until all pods are up and running.
+
+<<<
+
+== Intelligent Routing
+
+Routing some percentage of traffic between two versions of recommendation service:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  hosts:
+  - recommendation
+  http:
+  - route:
+    - destination:
+        host: recommendation
+        subset: version-v1
+      weight: 75
+    - destination:
+        host: recommendation
+        subset: version-v2
+      weight: 25
+```
+
+Routing to a specific version in case of prefixed URI and cookie with a value matching a regular expression:
+
+```yaml
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(user=jason)(;.*)?"
+        uri:
+          prefix: "/ratings/v2/"
+    route:
+    - destination:
+        host: ratings
+        subset: version-v2
+```
+
+<<<
+
+Possible **match** options:
+
+|===
+|	Field		          | Type          |Description
+
+a|	**uri**
+a| `StringMatch`
+a| URI value to match. `exact`, `prefix`, `regex`
+
+a| **scheme**
+a| `StringMatch`
+a| URI Scheme to match. `exact`, `prefix`, `regex`
+
+a| **method**
+a| `StringMatch`
+a| Http Method to match. `exact`, `prefix`, `regex`
+
+a| **authority**
+a| `StringMatch`
+a| Http Authority value to match. `exact`, `prefix`, `regex`
+
+a| **headers**
+a| `map<string, StringMatch>`
+a| Headers key/value. `exact`, `prefix`, `regex`
+
+a| **port**
+a| int
+a| Set port being addressed. If only one port exposed, not required
+
+a| **sourceLabels**
+a| `map<string, string`>
+a| Caller labels to match
+
+a| **gateways**
+a| string[]
+a| Names of the gateways where rule is applied to.
+|===
+
+<<<
+
+[.single-block]
+--
+Sending traffic depending on caller labels:
+
+```yaml
+- match:
+  - sourceLabels:
+      app: preference
+      version: v2
+  route:
+  - destination:
+      host: recommendation
+      subset: version-v2
+- route:
+  - destination:
+      host: recommendation
+      subset: version-v1
+```
+
+When caller contains labels `app=preference` and `version=v2` traffic is routed to **subset** `version-v2` if not routed to `version-v1`
+
+Mirroring traffic between two versions:
+
+```yaml
+spec:
+  hosts:
+  - recommendation
+  http:
+  - route:
+    - destination:
+        host: recommendation
+        subset: version-v1
+    mirror:
+      host: recommendation
+      subset: version-v2
+```
+
+For routing purposes `VirtualService` also supports **redirects**, **rewrites**, **corsPolicies** or *appending* custom headers.
+
+Apart from HTTP rules, `VirtualService` also supports matchers at _tcp_ level.
+
+```yaml
+spec:
+  hosts:
+  - postgresql
+  tcp:
+  - match:
+    - port: 5432
+      sourceSubnet: "172.17.0.0/16"
+    route:
+    - destination:
+        host: postgresql
+        port:
+          number: 5555
+```
+--
