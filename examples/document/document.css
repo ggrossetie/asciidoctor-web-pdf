@@ -3,6 +3,50 @@
 
 @page {
   margin: 0.5in 0.67in 0.67in 0.67in;
+  size: A4;
+}
+
+@page :left {
+  @bottom-right {
+    content: counter(page);
+    font-size: 0.8rem;
+    padding: 10pt 0 0 0;
+    margin: 10pt 10pt 30pt 10pt;
+    border-top: .1pt solid #d2d2d2;
+  }
+  @bottom-left {
+    margin: 10pt 0 30pt 0;
+    border-top: .1pt solid #d2d2d2;
+  }
+}
+
+@page :right {
+  @bottom-right {
+    margin: 10pt 0 30pt 0;
+    border-top: .1pt solid #d2d2d2;
+  }
+  @bottom-left {
+    content: counter(page);
+    font-size: 0.8rem;
+    padding: 10pt 0 0 0;
+    margin: 10pt 10pt 30pt 10pt;
+    border-top: .1pt solid #d2d2d2;
+  }
+}
+
+@page :first {
+  @bottom-right {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+  @bottom-left {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
 }
 
 html {
@@ -10,14 +54,22 @@ html {
   text-align: justify;
 }
 
+p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-split-to],
+.sectionbody, [data-split-original] {
+  text-align-last: left !important;
+}
+
 #cover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100vw;
   height: 100vh;
   page-break-after: always;
   align-items: flex-end;
+}
+
+.pagedjs_page.pagedjs_first_page {
+  counter-increment: page 0;
 }
 
 #cover h1 {
@@ -89,4 +141,16 @@ table.grid-all > * > tr > .tableblock:last-child, table.grid-cols > * > tr > .ta
 
 table.grid-all > tbody > tr:last-child > .tableblock, table.grid-all > thead:last-child > tr > .tableblock, table.grid-rows > tbody > tr:last-child > .tableblock, table.grid-rows > thead:last-child > tr > .tableblock {
   border-bottom-width: 1px;
+}
+
+table {
+  page-break-inside: avoid;
+}
+
+tr {
+  page-break-inside: avoid;
+}
+
+.listingblock {
+  page-break-inside: avoid;
 }
