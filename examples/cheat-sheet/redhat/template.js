@@ -55,6 +55,7 @@ ${ctx.node.getContent()}
 <div class="sect1 authors">
 <h3>Authors :</h3>
 ${renderAuthors(getAuthors(ctx.node))}
+<div class="author-bio">${ctx.node.getAttribute('version')}</div>
 </div>
 </section>
 </body>`,
