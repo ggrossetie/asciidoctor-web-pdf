@@ -1,0 +1,685 @@
+= Service Mesh with Istio
+Alex Soto <https://twitter.com/alexsotob>; Christian Posta <https://twitter.com/christianposta>
+:authorbio_1: Java Champion and SW Engineer at Red Hat
+:authorbio_2: Chief Architect at Red Hat
+:pdf-width: 508mm
+:pdf-height: 361mm
+
+
+== What is Service Mesh and Istio
+
+A *service mesh* is a dedicated infrastructure layer for making service-to-service communication safe, fast, and reliable.
+
+Istio is a service mesh which allows you to connect, manage and secure your microservices in an easy and none intrusive way.
+
+Some of the features that offer Istio are:
+
+* Intelligent routing and load balancing
+* Resilience against network failures
+* Policy enforcement between services
+* Observability of your architecture. Tracing and Metrics
+* Securing service to service communication
+
+== Istio Architecture
+
+Istio is composed of two major components:
+
+* **Data plane** which is composed of *Envoy* proxies deployed as sidecar container along with your service for managing network along with policy and telemetry features.
+* **Control plane** which is in charge of managing and configuring all *Envoy* proxies.
+
+All communication within your *service mesh* happens through *Envoy* proxy, so any network logic to apply is moved from your service into your infrastructure.
+
+== Key Concepts of Istio
+
+== DestinationRule
+
+A *DestinationRule* configures the set of rules to be applied when forwarding traffic to a service.
+Some of the purposes of a *DestinationRule* are describing circuit breakers, load balancer, and TLS settings or define *subsets* (named versions) of the destination host so they can be reused in other Istio elements.
+
+For example to define two services based on the version label of a service with hostname *recommendation* you could do:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  host: recommendation
+  subsets:
+  - labels:
+      version: v1
+    name: version-v1
+  - labels:
+      version: v2
+    name: version-v2
+```
+
+== VirtualService
+
+A *VirtualService* describes the mapping between one or more user-addressable destinations to the actual destination inside the mesh.
+
+For example, to define two virtual services where the traffic is split between 50% to each one.
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  hosts:
+  - recommendation
+  http:
+  - route:
+    - destination:
+        host: recommendation
+        subset: version-v1
+      weight: 90
+    - destination:
+        host: recommendation
+        subset: version-v2
+      weight: 10
+```
+
+== ServiceEntry
+
+A *ServiceEntry* is used to configure traffic to external services of the mesh such as APIs or legacy systems.
+You can use it in conjunction with a *VirtualService* and/or *DestinationRule*.
+
+For example to configure _httpbin_ external service:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: httpbin-egress-rule
+  namespace: istioegress
+spec:
+  hosts:
+  - httpbin.org
+  ports:
+  - name: http-80
+    number: 80
+    protocol: http
+```
+
+== Gateway
+
+A *Gateway* is used to describe a load balancer operating at the edge of the mesh for incoming/outgoing HTTP/TCP connections.
+You can bind a *Gateway* to a *VirtualService*.
+
+To configures a load balancer to allow external https traffic for host foo.com into the mesh:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: foo-gateway
+spec:
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - foo.com
+    tls:
+      mode: SIMPLE
+      serverCertificate: /tmp/tls.crt
+      privateKey: /tmp/tls.key
+```
+
+<<<
+
+== Getting started with Istio
+
+*Istio* can be installed with _automatic sidecar injection_ or without it.
+We recommend as starting point *without* _automatic sidecar injection_ so you understand each of the steps.
+
+== Installing Istio
+
+First you need to download Istio and register in `PATH`:
+
+```bash
+open https://github.com/istio/istio/releases/
+
+cd istio-1.0.2
+export ISTIO_HOME=`pwd`
+export PATH=$ISTIO_HOME/bin:$PATH
+```
+
+You can install Istio into Kubernetes cluster by either using `helm install` or `helm template`.
+
+```yaml
+$ helm template install/kubernetes/helm/istio \
+    --name istio --namespace istio-system \
+    --set sidecarInjectorWebhook.enabled=false \
+    > $HOME/istio.yaml
+
+kubectl create namespace istio-system
+kubectl create -f $HOME/istio.yaml
+```
+
+Wait until all pods are up and running.
+
+<<<
+
+== Intelligent Routing
+
+Routing some percentage of traffic between two versions of recommendation service:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  hosts:
+  - recommendation
+  http:
+  - route:
+    - destination:
+        host: recommendation
+        subset: version-v1
+      weight: 75
+    - destination:
+        host: recommendation
+        subset: version-v2
+      weight: 25
+```
+
+Routing to a specific version in case of prefixed URI and cookie with a value matching a regular expression:
+
+```yaml
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(user=jason)(;.*)?"
+        uri:
+          prefix: "/ratings/v2/"
+    route:
+    - destination:
+        host: ratings
+        subset: version-v2
+```
+
+<<<
+
+Possible **match** options:
+
+|===
+|	Field		          | Type          |Description
+
+a|	**uri**
+a| `StringMatch`
+a| URI value to match. `exact`, `prefix`, `regex`
+
+a| **scheme**
+a| `StringMatch`
+a| URI Scheme to match. `exact`, `prefix`, `regex`
+
+a| **method**
+a| `StringMatch`
+a| Http Method to match. `exact`, `prefix`, `regex`
+
+a| **authority**
+a| `StringMatch`
+a| Http Authority value to match. `exact`, `prefix`, `regex`
+
+a| **headers**
+a| `map<string, StringMatch>`
+a| Headers key/value. `exact`, `prefix`, `regex`
+
+a| **port**
+a| int
+a| Set port being addressed. If only one port exposed, not required
+
+a| **sourceLabels**
+a| `map<string, string`>
+a| Caller labels to match
+
+a| **gateways**
+a| string[]
+a| Names of the gateways where rule is applied to.
+|===
+
+<<<
+
+[.single-block]
+--
+Sending traffic depending on caller labels:
+
+```yaml
+- match:
+  - sourceLabels:
+      app: preference
+      version: v2
+  route:
+  - destination:
+      host: recommendation
+      subset: version-v2
+- route:
+  - destination:
+      host: recommendation
+      subset: version-v1
+```
+
+When caller contains labels `app=preference` and `version=v2` traffic is routed to **subset** `version-v2` if not routed to `version-v1`
+
+Mirroring traffic between two versions:
+
+```yaml
+spec:
+  hosts:
+  - recommendation
+  http:
+  - route:
+    - destination:
+        host: recommendation
+        subset: version-v1
+    mirror:
+      host: recommendation
+      subset: version-v2
+```
+
+For routing purposes `VirtualService` also supports **redirects**, **rewrites**, **corsPolicies** or *appending* custom headers.
+
+Apart from HTTP rules, `VirtualService` also supports matchers at _tcp_ level.
+
+```yaml
+spec:
+  hosts:
+  - postgresql
+  tcp:
+  - match:
+    - port: 5432
+      sourceSubnet: "172.17.0.0/16"
+    route:
+    - destination:
+        host: postgresql
+        port:
+          number: 5555
+```
+--
+
+Possible **match** options at _tcp_ level:
+
+<<<
+
+|===	
+| Field | Type | Description
+ 
+a| **destinationSubnet**
+a| string
+a| IPv4 or IPv6 of destination with optional subnet
+
+a| **port**
+a| int
+a| Set port being addressed. If only one port exposed, not required
+
+a| **sourceSubnet**
+a| string
+a| IPv4 or IPv6 of source with optional subnet
+
+a| **sourceLabels**
+a| `map<string, string`>
+a| Caller labels to match
+
+a| **gateways**
+a| string[]
+a| Names of the gateways where rule is applied to
+|===
+
+== Resilience
+
+Retry 3 times when things go wrong before throwing the error upstream.
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  hosts:
+  - recommendation
+  http:
+  - retries:
+      attempts: 3
+      perTryTimeout: 4.000s
+    route:
+    - destination:
+        host: recommendation
+        subset: version-v1
+```
+
+You can add timeouts to communications, for example aborting call after 1 second:
+
+```yaml
+http:
+- route:
+  - destination:
+      host: recommendation
+  timeout: 1.000s
+```
+
+<<<
+
+If the request is forwarded to a certain instance and it fails (e.g. returns a 50x error code), 
+then this instance of an instance/pod is ejected to serve any other client request for an amount of time.
+In next example there must occur 5 consecutive errors before pod is ejected, ejection analysis occurs every 15 seconds, in case of ejection host will be ejected for 2 minutes and any host can be ejected.
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: recommendation
+  namespace: tutorial
+spec:
+  host: recommendation
+  trafficPolicy:
+    outlierDetection:
+      baseEjectionTime: 2m
+      consecutiveErrors: 5
+      interval: 15.000s
+      maxEjectionPercent: 100
+  subsets:
+```
+
+`trafficPolicy` can be applied at subset level to make it specific to a subset instead of all them.
+
+You can also create connection pools at _tcp_ and _http_ level:
+
+```yaml
+trafficPolicy:
+  connectionPool:
+    http:
+      http1MaxPendingRequests: 100
+      http2MaxRequests: 100
+      maxRequestsPerConnection: 1
+    tcp:
+      maxConnections: 100
+      connectTimeout: 50ms
+```
+
+Traffic Policy possible values:
+
+|===	
+| Field | Type | Description
+
+a|	**loadbalancer**
+a| `LoadBalancerSettings`
+a| Controlling load blancer algorithm
+
+a| **connectionPool**
+a| `ConnectionPoolSettings`
+a| Controlling connection pool
+
+a| **outlierDetection**
+a| `OutlierDetection`
+a| Controlling eviction of unhealthy hosts
+
+a| **tls**
+a| `TLSSettings`
+a| TLS settings for connections
+
+a| **portLevelSettings**
+a| `PortTrafficPolicy[]`
+a| Traffic policies specific to concrete ports
+|===
+
+
+== Policy Enforcement
+
+Istio provides a model to enforce authorization policies in the communication between policies.
+You can, for example, black-list or white-list intercommunication between services or add some quota.
+
+You can configure that preference service only allows requests from the recommendation service.
+
+```yaml
+apiVersion: "config.istio.io/v1alpha2"
+kind: listchecker
+metadata:
+  name: preferencewhitelist
+spec:
+  overrides: ["recommendation"]
+  blacklist: false
+```
+
+```yaml
+apiVersion: "config.istio.io/v1alpha2"
+kind: listentry
+metadata:
+  name: preferencesource
+spec:
+  value: source.labels["app"]
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: checkfromcustomer
+spec:
+  match: destination.labels["app"] == "preference"
+  actions:
+  - handler: preferencewhitelist.listchecker
+    instances:
+    - preferencesource.listentry
+```
+
+Source part is configured by using `listchecker` (to provide the list of allows hosts) and `listentry` (to configure how to get whitelist value from the request) elements.
+Destination part and rule is configured by using the `rule` element.
+
+|===	
+| Field | Type | Description
+
+a|	**providerUrl**
+a| string
+a| Url where to load the list to check against, can be empty
+
+a| **refreshInterval**
+a| `Duration`
+a| How often provider is polled
+
+a| **ttl**
+a| `Duration`
+a| How long keep list before discarding it
+
+a| **cachingInterval**
+a| `Duration`
+a| How long a caller can cache an answer befoer ask again
+
+a| **cachingUseCount**
+a| int
+a| Number of times a caller can use a cached answer
+
+a| **overrides**
+a| string[]
+a| List of entries consulted first before `providerUrl`
+
+a| **entryType**
+a| `ListEntryType`
+a| The kind (`STRINGS`, `CASE_INSENSITIVE_STRINGS`, `IP_ADDRESSES, `REGEX`) of list entry and overrides
+
+a| **blacklist**
+a| boolean
+a| the list operates as a blacklist or a whitelist
+|===
+
+
+== Telemetry, Monitoring and Tracing
+
+Isito comes with observability in mind providing out-of-the-box integration with Prometheus/Graphana and Jaeger.
+
+== Service to Service Security
+
+You can secure the communication between all services by enabling mutual TLS (peer authentication).
+
+First, you need to enable mutual TLS.
+
+You can enable it globally:
+
+```yaml
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "MeshPolicy"
+metadata:
+  name: "default"
+spec:
+  peers:
+  - mtls: {}
+```
+
+[.single-block]
+--
+
+Or by namespace:
+
+```yaml
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "default"
+  namespace: "tutorial"
+spec:
+  peers:
+  - mtls: {}
+```
+--
+
+Applying mTLS to specific destination and port:
+
+```yaml
+spec:
+  target:
+  - name: preference
+    ports:
+    - number: 9000
+```
+
+If `ports` not set then it is applied to all ports.
+
+|===
+|	Field | Type | Description
+
+a| **peers**
+a| `PeerAuthentication`
+
+`Method[]`
+a| List of authentication methods for peer auth
+
+a| **peerIsOptional**
+a| boolean
+a| Accept request when none of the peer authentication methods defined are satisfied
+
+a| **targets**
+a| `TargetSelector[]`
+a| Destinations where policy should be applied on. Enabled all by default
+
+a| **origins**
+a| `OriginAuthentication`
+
+`Method[]`
+a| List of authentication methods for origin auth
+
+a| **originIsOptional**
+a| boolean
+a| Accept request when none of the origin authentication methods defined are satisfied
+
+a| **principalBinding**
+a| `PrincipalBinding`
+a| Peer or origin identity should be use for principal. USE_PEER by default
+|===
+
+End user authentication (origin authentication) using JWT:
+
+```yaml
+spec:
+  origins:
+  - jwt:
+      issuer: "https://keycloak/auth/realms/istio"
+      audiences:
+      - "customer-tutorial"
+      jwksUri: > 
+        https://keycloak/auth/realms/istio
+        /protocol/openid-connect/certs
+  principaBinding: USE_ORIGIN
+```
+
+At this time, `Origins` only support JWT. Possible values for JWT are:
+
+|===
+|	Field | Type | Description
+
+a| **issuer**
+a| string
+a| Issuer of the token
+
+a| **audiences**
+a| string[]
+a| List of JWT _audiences_ allowed to access
+
+a| **jwksUri**
+a| string
+a| URL of the public key to validate signature
+
+a| **jwtParams**
+a| string[]
+a| JWT is sent in a query parameter
+
+a| **jwtHeaders**
+a| string[]
+a| JWT is sent in a request header. If empty `Authorization: Bearer $token`
+|===  
+
+After enabling mTLS, you need to configure it at the client side by using a `DestinationRule`.
+Need to set which hosts communicate through mTLS using `host` field. 
+
+```yaml
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "default"
+  namespace: "tutorial"
+spec:
+  host: "*.tutorial.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+```
+
+If **ISTIO_MUTUAL** is set, Istio configures client certificate, private key and CA crtificates with its internal implementation.
+
+You can set other options to have more deep control of certificates, CAs by using next properties:
+
+|===
+|	Field| Type | Description
+
+| **httpsRedirect**
+| boolean
+| Send 301 redirect when communication is using HTTP asking to use HTTPS
+
+| **mode**
+| `TLSmode`
+| How TLS is enforced. Values _PASSTHROUGH_, _SIMPLE_, _MUTUAL_
+
+| **serverCertificate**
+| string
+| The location to the file of the server-side TLS certificate
+
+| **privateKey**
+| string
+| The location to the file of the server's private key
+
+| **caCertificates**
+| string
+| The location to the file of the certificate authority certificates
+
+| **subjectAltNames**
+| string[]
+| Alternate names to verify the subject identity
+|===

@@ -2,6 +2,11 @@
 
 @page {
   size: 508mm 361mm;
+  margin: 0.5cm;
+  padding: 0.5cm;
+}
+
+@page :first {
   margin: 0;
   padding: 0;
 }
@@ -20,11 +25,10 @@ html {
 }
 
 header {
-  background-color: #4842a5;
-  padding: 0.7cm;
+  background-color: #131313;
   display: grid;
   grid-template-columns: auto 1fr auto;
-  padding-right: 12em;
+  padding: 0.7cm 12em 0.7cm 0.7cm;
   align-items: center;
   color: white;
 }
@@ -53,18 +57,14 @@ header > .logo {
 h1 {
   font-size: 2em;
   margin: 0;
-  padding: 0;
-  padding-left: 1em;
+  padding: 0 0 0 1em;
   font-weight: 400;
 }
 
 section.content {
   margin: 0.5cm;
   padding: 0;
-  height: calc(100vh - 50mm);
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  columns: auto calc((100vw / 3) - 3cm);
 }
 
 .admonitionblock div {
@@ -74,13 +74,16 @@ section.content {
 .sect1 {
   max-width: calc((100vw / 3) - 3cm);
   margin-right: 1.2cm;
-  margin-left: 1.2cm
+  margin-left: 1.2cm;
+  margin-top: 0.5cm;
+  break-inside: avoid-region;
 }
 
 h2 {
-  color: #4842a5;
+  color: #131313;
   font-size: 1.4em;
   font-weight: 500;
+  margin-top: 0;
 }
 
 h3 {
@@ -94,28 +97,6 @@ h3 {
   color: #4a4a4a;
 }
 
-.listingblock.dont pre {
-  border: 1px solid #d0021b;
-}
-
-.listingblock.dont {
-  position: relative;
-}
-
-.listingblock.dont::before {
-  content: "X";
-  color: #d0021b;
-  background-color: #fae6e8;
-  border-radius: 50%;
-  line-height: 2em;
-  width: 2em;
-  height: 2em;
-  display: block;
-  text-align: center;
-  right: -2.5em;
-  position: absolute;
-  margin-bottom: -3em;
-}
 
 .listingblock pre,.listingblock pre[class] {
   font-size: 0.8em;
@@ -129,26 +110,8 @@ h3 {
   margin-bottom: 2em;
 }
 
-ul.checklist {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.ulist.checklist.do > ul.checklist > li > p::first-letter {
-  color: #188a8a;
-  border-radius: 50%;
-  background-color: #e9f9f0;
-  line-height: 1em;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  margin-right: 0.5em;
-}
-
 a {
-  color: #4842a5;
+  color: #131313;
   text-decoration: none;
 }
 
@@ -175,4 +138,16 @@ a {
 
 .author-bio {
   font-size: 0.9em
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+pre {
+  break-inside: avoid;
+}
+
+.single-block {
+  break-inside: avoid-column;
 }

@@ -43,14 +43,12 @@ module.exports = [{
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="./snyk/assets/style.css" rel="stylesheet">
+<link href="./redhat/assets/style.css" rel="stylesheet">
 </head>
 <body>
 <header>
-  <img class="wordmark" src="./snyk/assets/wordmark.svg"/>
   <h1>${ctx.node.getHeader().getTitle()}</h1>
-  <a class="website" href="www.snyk.io">www.snyk.io</a>
-  <img class="logo" src="./snyk/assets/logo.svg"/>
+  <img class="logo" src="./redhat/assets/logo.png"/>
 </header>
 <section class="content">
 ${ctx.node.getContent()}
@@ -59,5 +57,6 @@ ${ctx.node.getContent()}
 ${renderAuthors(getAuthors(ctx.node))}
 </div>
 </section>
-</body>`
+</body>`,
+  page_break: () => `<div class="page-break"></div>`
 }]
