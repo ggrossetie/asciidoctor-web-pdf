@@ -1,4 +1,4 @@
-module.exports = (ctx) => `<!DOCTYPE html>
+module.exports = (node) => `<!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,10 +7,10 @@ module.exports = (ctx) => `<!DOCTYPE html>
 </head>
 <body class="article">
 <div id="cover">
-<h1>${ctx.node.getDocumentTitle()}</h1>
-<h2>${ctx.node.getDocument().getAuthor()}</h2>
+<h1>${node.getDocumentTitle()}</h1>
+<h2>${node.getDocument().getAuthor()}</h2>
 </div>
 <div id="content">
-${ctx.node.getContent()}
+${node.getContent()}
 </div>
 </body>`
