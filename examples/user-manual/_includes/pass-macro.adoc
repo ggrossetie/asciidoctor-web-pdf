@@ -1,0 +1,133 @@
+////
+Included in:
+
+- user-manual: Passthroughs Macros
+- writers-guide: preventing subs
+////
+
+Asciidoctor supports several forms of the passthrough macro.
+
+inline pass macro:: An inline macro named `pass` that can be used to passthrough content.
+Supports an optional set of substitutions.
++
+[source]
+----
+pass:[content like #{variable} passed directly to the output] followed by normal content.
+
+content with only select substitutions applied: pass:c,a[__<{email}>__]
+----
+
+single and double plus:: A special syntax for preventing text from being formatted.
+Only escapes special characters for compliance with the output format and doesn't support explicit substitutions.
+
+triple plus:: A special syntax for designating passthrough content.
+Does not apply any substitutions (equivalent to the inline pass macro) and doesn't support explicit substitutions.
+
+double dollar (deprecated):: A deprecated special syntax for designating passthrough content.
+Like the triple plus, does not apply any substitutions and doesn't support explicit substitutions.
+
+CAUTION: Asciidoctor does not implement the block pass macro.
+Instead, you should use a <<pass-blocks,pass block>>.
+
+==== Inline pass macro and explicit substitutions
+
+To exclude a phrase from substitutions and disable escaping of special characters, enclose it in the inline pass macro.
+For example, here's one way to format text as underline when generating HTML from AsciiDoc:
+
+[source]
+----
+include::ex-pass.adoc[tag=in-macro]
+----
+
+====
+include::ex-pass.adoc[tag=in-macro]
+====
+
+If you want to enable ad-hoc `quotes` substitution, then assign the `macros` value to `subs` and use the inline pass macro.
+
+....
+include::ex-pass.adoc[tag=sub-in]
+....
+<1> `macros` is assigned to `subs`, which allows any macros within the block to be processed.
+<2> The pass macro is assigned the `quotes` value. Text within the square brackets will be formatted.
+
+The inline pass macro does introduce additional markup into the source code that could make it invalid in raw form.
+However, the output it produces will be valid when viewed in a viewer (HTML, PDF, etc.).
+
+====
+include::ex-pass.adoc[tag=sub-out]
+====
+
+The inline pass macro also accepts shorthand values for specifying substitutions.
+
+* `c` = special characters
+* `q` = quotes
+* `a` = attributes
+* `r` = replacements
+* `m` = macros
+* `p` = post replacements
+
+For example, the quotes text substitution value is assigned in the inline passthrough macro below:
+
+[source]
+----
+include::ex-pass.adoc[tag=s-macro]
+----
+
+====
+include::ex-pass.adoc[tag=s-macro]
+====
+
+==== Triple plus passthrough
+
+The triple-plus passthrough works much the same way as the pass macro.
+To exclude content from substitutions, enclose it in triple pluses (pass:[+++]).
+
+ +++content passed directly to the output+++ followed by normal content.
+
+The triple-plus macro is often used to output custom HTML or XML.
+
+[source]
+----
+include::ex-pass.adoc[tag=3p]
+----
+
+====
+include::ex-pass.adoc[tag=3p]
+====
+
+////
+.Double-dollar passthrough
+
+The double-dollar passthrough behaves like the triple-plus passthrough, but it allows <<user-manual#special-characters,special characters>> in its content to be replaced.
+Passthrough content is enclosed by double dollar signs (+$$+).
+
+ $$Content passed directly to the output$$ followed by normal content.
+
+[source]
+----
+include::ex-pass.adoc[tag=dollar]
+----
+
+====
+include::ex-pass.adoc[tag=dollar]
+====
+
+[#back-pass]
+.Backtick passthrough
+
+Content enclosed in a backtick passthrough is subject to <<user-manual#special-characters,special characters>> substition and displayed as monospace text.
+
+ `Content in a line that is passed directly to the output` followed by normal content.
+
+Backticks (+`+) are commonly used around inline code containing markup.
+
+[source]
+----
+include::ex-pass.adoc[tag=tick]
+----
+
+====
+include::ex-pass.adoc[tag=tick]
+====
+////

@@ -1,0 +1,283 @@
+////
+Included in:
+
+- user-manual: tables: columns
+////
+
+[#cols]
+=== Columns
+
+The number of columns in a table is determined by the number of cells found in the first non-blank line after the table delimiter (`|===`) or by the values assigned to the `cols` attribute.
+
+For example, the syntax in the two examples below will both converted to a table with two columns.
+
+[source]
+----
+include::ex-table.adoc[tag=2col-alt]
+----
+
+.Result: Rendered table with two columns as defined by the number of cells in the first row
+[width="90"]
+include::ex-table.adoc[tag=2col-alt]
+
+[source]
+----
+include::ex-table.adoc[tag=2col]
+----
+
+.Result: Rendered table with two columns as defined by the `cols` attribute
+[width="90"]
+include::ex-table.adoc[tag=2col]
+
+When a single number is assigned to the cols attribute, its value indicates the number of columns.
+Each column will be the same width.
+However, the number of columns can also be assigned as a comma delimited list.
+The number of entries in the list determines the number of columns.
+
+The comma delimited list below creates a table with four columns of equal width.
+
+[source]
+----
+[cols="1,1,1,1"]
+----
+
+This syntax provides that same result:
+
+[source]
+----
+[cols="4*"]
+----
+
+Now, let's talk about that asterisk in the syntax above.
+
+[#cols-format]
+=== Column Formatting
+
+The AsciiDoc syntax provides a variety of ways to control the size, style and layout of content within columns.
+These *specifiers* can be applied to whole columns.
+
+To apply a specifier to a column, you must set the `cols` attribute and assign it a value.
+A column specifier can contain any of the following components:
+
+* multiplier
+* align
+* width
+* style
+
+Each component is optional.
+
+The multiplier operator (`+*+`) is used when you want a specifier to apply to more than one consecutive column.
+If used, the multiplier must always be placed at the beginning of the specifier.
+
+For example:
+
+[source]
+----
+include::ex-table.adoc[tag=indv-co]
+----
+<1> The table will consist of three columns, as indicated by the *3*. The `+*+` operator ensures that the default layout and style will be applied to all of the columns.
+
+.Result: Rendered table with multiplier applied
+[width="90"]
+include::ex-table.adoc[tag=indv]
+
+[#cols-align]
+The alignment component allows you to horizontally or vertically align a column's content.
+Content can be horizontally aligned left (`<`), center (`+^+`), or right (`>`).
+
+To horizontally center the content in all of the columns, add the `+^+` operator after the multiplier.
+
+[source]
+----
+[cols="3*^"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Rendered table with horizontal, center alignment applied to all columns
+[width="90"]
+[cols="3*^"]
+include::ex-table.adoc[tag=base]
+
+What if you only want to center the content in the last column?
+Assign the default styles to the preceding columns, and `+^+` to the last column in a comma separated list.
+
+[source]
+----
+[cols="2*,^"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Rendered table with horizontal, center alignment applied to last column
+[width="90"]
+[cols="2*,^"]
+include::ex-table.adoc[tag=base]
+
+Let's specify a different horizontal alignment for each column.
+
+[source]
+----
+[cols="<,^,>"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Rendered table with a different horizontal alignment for each column
+[width="90"]
+[cols="<,^,>"]
+include::ex-table.adoc[tag=base]
+
+You'll notice that the content in the examples above is only centered on the horizontal.
+It can also be aligned vertically when the alignment operator is prefixed with a dot (`.`).
+Content can be vertically aligned to the top (`<`), middle (`+^+`), or bottom (`>`) of a cell.
+
+To vertically align the content to the middle of the cells in all of the columns, add a `.` and then the `+^+` operator after the multiplier.
+
+[source]
+----
+[cols="3*.^"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Rendered table with vertical, middle alignment applied to all columns
+[width="90"]
+[cols="3*.^"]
+include::ex-table.adoc[tag=base]
+
+If you only want to align the content to the bottom of each cell in the last column, you'd assign the default styles to the preceding columns, and `>` to the last column in a comma separated list.
+
+[source]
+----
+[cols="2*,.>"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Rendered table with vertical, bottom alignment applied to last column
+[width="90"]
+[cols="2*,.>"]
+include::ex-table.adoc[tag=base]
+
+Let's specify a different vertical alignment for each column.
+
+[source]
+----
+[cols=".<,.^,.>"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Rendered table with a different vertical alignment for each column
+[width="90"]
+[cols=".<,.^,.>"]
+include::ex-table.adoc[tag=base]
+
+Finally, we'll also horizontally center the content in the last column.
+
+[source]
+----
+[cols=".<,.^,^.>"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Rendered table with a different vertical alignment for each column and horizontal, center alignment in the last column
+[width="90"]
+[cols=".<,.^,^.>"]
+include::ex-table.adoc[tag=base]
+
+When both a horizontal and vertical alignment is assigned to a column, the horizontal alignment operator must precede the vertical operator.
+
+The width component sets the width of a column.
+Its value can be a proportional integer (the default is 1) or a percentage (1 to 99).
+
+[source]
+----
+[cols="1,2,6"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Table rendered with column sizes adjusted by a proportional integer
+[cols="1,2,6"]
+include::ex-table.adoc[tag=base]
+
+When assigning percentage values to the cols attribute, you do not need to include the percent sign (`%`).
+
+[source]
+----
+[cols="50,20,30"]
+include::ex-table.adoc[tag=base]
+----
+
+.Result: Table rendered with column sizes adjusted by a percentage
+[cols="50,20,30"]
+include::ex-table.adoc[tag=base]
+
+Let's create a table with custom widths and alignments.
+
+[source]
+----
+[cols=".<2,.^5,^.>3"]
+include::ex-table.adoc[tag=base-xtr]
+----
+
+.Result: Rendered table with variable widths and alignments
+[cols=".<2,.^5,^.>3"]
+include::ex-table.adoc[tag=base-xtr]
+
+[#cols-style]
+The style component must always be located at the end of the specifier.
+When no style name is provided column contents will be processed as regular inline text.
+
+The column styles are described in the table below.
+
+[cols="20,30m,50"]
+|===
+|Style Name |Value |Description
+
+|AsciiDoc
+|a
+|Supports block-level elements (paragraphs, delimited blocks, and block macros).
+This style effectively creates a nested, standalone AsciiDoc document.
+Implicit attributes such as doctitle from the parent document will be shadowed.
+Custom attributes are inherited.
+
+|Emphasis
+|e
+|Text is italicized
+
+|Header
+|h
+|Header styles are applied to the column
+
+|Literal
+|l
+|Column content is treated as if it were inside a literal block
+
+|Monospaced
+|m
+|Text is rendered in monospaced font
+
+|None (default style)
+|d
+|Text is handled like a normal paragraph.
+Supports all markup (i.e., inline formatting, inline macros) that is permitted in a paragraph.
+
+|Strong
+|s
+|Text is bolded
+
+|Verse
+|v
+|Column content is treated as if it were inside a verse block
+|===
+
+Let's apply the header style to the first column, the monospaced style to the second, the strong style to the third, and the emphasis style to the fourth.
+
+[source]
+----
+[cols="h,m,s,e"]
+include::ex-table.adoc[tag=4col]
+----
+
+.Result: Rendered table with a header, monospaced, and strong styled column
+[width="90"]
+[cols="h,m,s,e"]
+include::ex-table.adoc[tag=4col]
+
+Specifiers can also be applied to individual cells.

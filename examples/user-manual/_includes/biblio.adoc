@@ -1,0 +1,48 @@
+////
+Included in:
+
+- user-manual: Bibliography
+////
+
+AsciiDoc has basic support for bibliographies.
+AsciiDoc doesn't concern itself with the structure of the bibliography entry itself, which is entirely freeform.
+What it does is provide a way to make references to the entries from the same document and output the bibliography with proper semantics for processing by other toolchains (such as DocBook).
+
+In order to reference a bibliography entry, you need to assign a _non-numeric_ label to the entry.
+To assign this label, prefix the entry with the label enclosed in a pair of triple square brackets (e.g., `+[[[label]]]+`).
+We call this a bibliography anchor.
+Using this label, you can then reference the entry from anywhere above the bibliography in the same document using the normal cross reference syntax (e.g., `+<<label>>+`).
+
+By default, the bibliography anchor and reference to the bibliography entry is converted to `[<label>]`, where <label> is the ID of the entry.
+If you specify xreftext on the bibliography anchor (e.g., `+[[[label,xreftext]]]+`), the bibliography anchor and reference to the bibliography entry converts to `[<xreftext>]` instead.
+
+If you want the bibliography anchor and reference to appear as a number, assign the number of the entry using the xreftext.
+For example, `+[[[label,1]]]+` will be converted to `[1]`.
+
+The bibliography entries themselves are declared as items in an unordered list.
+You promote a normal unordered list to a bibliography list by adding the `bibliography` style.
+However, to be conforming, bibliography lists must be contained inside a bibliography section.
+A bibliography section is a section with the special `bibliography` style.
+By adding the `bibliography` style to the section, you implicitly add it to each unordered list in that section.
+
+WARNING: If the bibliography style is used on an unordered list outside of a bibliography section, the resulting behavior is undefined.
+
+Let's consider an example.
+
+.Bibliography with inbound references
+[source]
+----
+include::ex-biblio.adoc[tag=base]
+----
+
+This renders as:
+
+|===
+a|
+include::ex-biblio.adoc[tag=base]
+|===
+
+If you want more advanced features such as automatic numbering and custom citation styles, try the {uri-org}/asciidoctor-bibtex[asciidoctor-bibtex] project.
+
+TIP: To escape a bibliography anchor anywhere in the text, use the syntax `[\[[word]]]`.
+This prevents the anchor from being matched as a bibliography anchor or a normal anchor.

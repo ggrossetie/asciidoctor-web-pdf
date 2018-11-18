@@ -1,0 +1,45 @@
+////
+Included in:
+
+- user-manual: Stylesheet Factory: Generate an HTML document
+////
+
+Now it's time to pick the stylesheet you want to apply to your content when it is rendered.
+In your file browser, navigate to the [.path]_stylesheets/_ directory.
+Or, using a console, change to the [.path]_stylesheets/_ directory and list the available stylesheets using the `ls` command.
+
+ $ ls
+
+.Console output of `ls` command
+....
+asciidoctor.css  foundation-lime.css    iconic.css       riak.css
+colony.css       foundation-potion.css  maker.css        rubygems.css
+foundation.css   golo.css               readthedocs.css
+....
+
+Let's apply the [.path]_colony.css_ stylesheet to the sample document.
+
+. Navigate to the directory where you saved [.path]_mysample.adoc_.
+. Call the `asciidoctor` processor.
+. Specify the stylesheet you want applied with the `stylesheet` attribute.
+. Tell the processor where the specified stylesheet is located with the `stylesdir` attribute.
+
+ $ asciidoctor -a stylesheet=colony.css -a stylesdir=../stylesheets mysample.adoc
+
+Open a browser, navigate to [.path]_mysample.html_ and checkout the result!
+If you inspect the [.path]_mysample.html_ document, you should see that the stylesheet is embedded in the converted document.
+
+.Stylesheet images
+****
+The Golo, Maker, and Riak themes include image assets.
+To apply these themes to your document correctly, the applicable images must be copied into the same directory as the generated output.
+
+For example, to apply the [.path]_maker.css_ stylesheet to [.path]_mysample.adoc_:
+
+. Copy [.path]_body-bh.png_ from the [.path]_images/maker/_ directory into the output directory.
+. Call the `stylesheet` and `styledir` attributes.
+
+ $ asciidoctor -a stylesheet=maker.css -a stylesdir=../stylesheets mysample.adoc
+
+Navigate to [.path]_mysample.html_ in your browser. The [.path]_body-bh.png_ image should add a graph paper-like background to your generated output.
+****

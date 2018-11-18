@@ -1,0 +1,9 @@
+////
+User manual
+////
+
+.Page break syntax
+[source]
+----
+<<<
+----

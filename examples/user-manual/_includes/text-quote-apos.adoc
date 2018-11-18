@@ -1,0 +1,91 @@
+////
+Included in:
+
+- user-manual: text formatting: Smart quotation marks
+////
+
+Single and double quotation marks are *not* rendered as curved quotation marks (also known as smart, curly, typographic or book quotation marks).
+When entered using the kbd:[{apos}] and kbd:[{quot}] key, Asciidoctor outputs straight (dumb, vertical, typewriter)
+quotation marks.
+However, by creating a set of backticks (`{backtick}`) contained within a set of single quotes (`{apos}`) or double quotes (`{quot}`), you can tell Asciidoctor where to output curved quotation marks.
+
+.Single and double curved quotation marks syntax
+[source]
+----
+include::ex-text.adoc[tag=c-quote-co]
+----
+<1> To output double curved quotes, enclose a word or phrase in a set of double quotes (`{quot}`) and a set of backticks (`{backtick}`).
+<2> To output single curved quotes, enclose a word or phrase in a set of single quotes (`{apos}`) and a set of backticks (`{backtick}`). In this example, the phrase _wormwood and licorice_ should be enclosed in curved single quotes when the document is rendered.
+
+.Rendered curved quotation marks
+====
+include::ex-text.adoc[tag=c-quote]
+====
+
+When entered with the kbd:[{apos}] key, Asciidoctor renders an apostrophe that is directly preceded and followed by a character, such as in contractions and possessive singular forms, as a curved apostrophe.
+This inconsistent handling of apostrophes and quotation marks is a hold over from the original AsciiDoc processor.
+An apostrophe directly bounded by two characters is processed during the <<user-manual#replacements,replacements substitution phase>>, not the <<user-manual#quotes,quotes phase>>.
+This is why an apostrophe directly followed by white space, such as the possessive plural form, is not curved by default.
+
+To render an apostrophe as curved when it is not bound by two characters, mark it as you would a single curved quote.
+
+.Curved apostrophe syntax
+[source]
+----
+include::ex-text.adoc[tag=apos]
+----
+
+In the rendered output, note that the plural possessive apostrophe, seen trailing _werewolves_, is curved, as is the omission apostrophe before _60s_.
+
+.Rendered apostrophes
+====
+include::ex-text.adoc[tag=apos]
+====
+
+If you don't want an apostrophe that is bound by two characters to be rendered as curved, escape it by preceding it with a backslash (`{backslash}`).
+The <<user-manual#preventing-substitutions,preventing substitutions>> and <<user-manual#passthroughs,passthrough>> sections detail additional ways to prevent punctuation substitutions.
+
+[source]
+----
+Olaf\'s desk ...
+----
+
+.Rendered escaped apostrophe
+====
+Olaf\'s desk ...
+====
+
+In order to make a possessive, monospaced phrase, you need to switch to unconstrained formatting and use an explicit typographic apostrophe.
+
+[source]
+----
+``npm```'s job is to manage the dependencies for your application.
+----
+
+.Rendered possessive, monospaced phrase
+====
+``npm```'s job is to manage the dependencies for your application.
+====
+
+The same goes if the monospaced phrase ends in an "`s`".
+
+[source]
+----
+This ``class```' static methods make it easy to operate on files and directories.
+----
+
+.Rendered possessive, monospaced phrase that ends in an "`s`"
+====
+This ``class```' static methods make it easy to operate on files and directories.
+====
+
+Alternately, you could encode the typographic apostrophe directly in the AsciiDoc source to get the same result without the need to use unconstrained formatting.
+
+[source]
+----
+The `class`’ static methods make it easy to operate on files and directories.
+----
+
+////
+Add a sidebar describing the history and concerns with smart quotes regarding copy and paste and correct Unicode output.
+////

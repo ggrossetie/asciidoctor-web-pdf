@@ -1,0 +1,59 @@
+////
+Included in:
+
+- user-manual: Header
+////
+
+The revision information is read from the third (non-attribute) line of the header, beneath the author information line.
+A document's revision information has slots for three implicit attributes.
+
+[horizontal]
+`revnumber`::
+The document's version number.
+In order to be recognized, the version number must contain at least one numeric character.
+Any letters or symbols preceding the numeric character are ignored.
+If the implicit `revnumber` is on a line by itself, it must begin with the "`v`" character (e.g., `v1.0`) or be followed by a comma (e.g., `1.0,`)
+If the implicit `revdate` is present, it must be separated from the `revnumber` by a comma (e.g., `2020-10-10, v78.1`).
+
+`revdate`::
+The date the document version was completed.
+When the `revnumber` or `revremark` attributes are set, but `revdate` is not, then `revdate` will be assigned the `docdate` value.
+
+`revremark`::
+Information about this version of the document.
+
+Here's an example of a revision line.
+
+[source]
+----
+include::ex-rev.adoc[tag=base]
+----
+<1> revnumber and revdate must be separated by a comma (`,`).
+<2> revdate can contain words, letters, numbers, and symbols.
+<3> The revremark attribute must be preceded by a colon (`:`), regardless of whether revnumber or revdate are set.
+
+.Result: Rendered revision information displayed on the byline and referenced in the document's body
+====
+image::rev.png[Revision attributes]
+====
+
+The revnumber in the byline is prefixed by the word _Version_; however, when referenced in the body of the document, only the numerical value is displayed.
+The `version-label` attribute controls the version number label in the byline.
+The revision information attributes can also be explicitly set in the header.
+
+[source]
+----
+include::ex-rev.adoc[tag=attr]
+----
+<1> When explicitly set, any characters preceding the version number are *not* dropped.
+<2> The revremark can contain attribute references.
+<3> The version-label attribute is unset so that the word _Version_ does not precede the revnumber in the byline.
+
+.Result: Rendered revision information when revision attributes are explicitly set
+====
+image::rev-long.png[Explicitly set revision attributes]
+====
+
+In the converted document, notice that the _V_ preceding the revnumber is capitalized in the byline but not when the attribute is referenced in the body of the document.
+
+NOTE: Revision extraction information and an extraction example are pending.

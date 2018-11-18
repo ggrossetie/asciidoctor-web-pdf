@@ -1,0 +1,12 @@
+////
+Included in:
+
+- user-manual: Authors
+////
+
+*Asciidoctor* was written by {mojavelinux}[Dan Allen], {graphitefriction}[Sarah White], {erebor}[Ryan Waldron], {lightguard}[Jason Porter], {nickh}[Nick Hengeveld] and {contributors}[other contributors].
+
+The initial code from which Asciidoctor emerged was written by {nickh}[Nick Hengeveld] to process the git man pages for the {gitscm-next}[Git project site].
+Refer to the commit history of {seed-contribution}[asciidoc.rb] to view the initial contributions.
+
+*AsciiDoc* was written by Stuart Rackham and has received contributions from many other individuals.

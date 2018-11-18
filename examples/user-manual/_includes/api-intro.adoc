@@ -1,0 +1,11 @@
+////
+API introduction for Asciidoctor
+This file is included in the user-manual documents
+////
+
+In addition to the command line interface, Asciidoctor provides a Ruby API.
+The API is intended for integration with other software projects and is suitable for server-side applications, such as Rails, Sinatra and GitHub.
+
+Asciidoctor also has a Java API that mirrors the Ruby API.
+The Java API calls through to the Ruby API using an embedded JRuby runtime.
+See the {doc-asciidoctorj}[AsciidoctorJ project] for more information.

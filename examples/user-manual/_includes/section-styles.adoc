@@ -1,0 +1,33 @@
+////
+Included in:
+
+- user-manual: sections: section styles
+////
+
+Asciidoctor provides styles for the frontmatter and backmatter sections commonly found in journal articles, academic papers, and books.
+The styles are:
+
+* colophon
+* abstract
+* preface
+* dedication
+* part introduction
+* appendix
+* glossary
+* bibliography
+* index
+
+These styles are available to the `article` and `book` document types, with the exception of the part introduction style which is exclusive to books.
+
+In general, the section style attribute is set above a level 1 section title or block of text.
+For instance, the example below shows how to label a section as an abstract.
+
+[source]
+----
+[abstract]
+== Documentation Abstract
+
+Documentation is a distillation of many long, squiggly adventures.
+----
+
+The structure and usage rules for each section style is explained in <<structuring-navigating-and-referencing-your-content>>.

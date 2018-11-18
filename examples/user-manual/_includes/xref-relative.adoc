@@ -1,0 +1,39 @@
+////
+Included in:
+
+- writers-guide
+////
+
+Cross references can also be used to create a link to a file relative to the current document.
+For links to another AsciiDoc document, this is the preferred way.
+
+The trailing hash (`#`) means that you refer to the top of the document.
+
+.Cross reference to the top of a relative AsciiDoc document
+[source]
+----
+include::ex-xref.adoc[tag=base-inter-top]
+----
+
+.Converted HTML for cross reference to relative AsciiDoc document
+[source,html]
+----
+Refer to <a href="document-b.html">Document B</a> for more information.
+----
+
+To link directly to a section in the document, append the section's ID after the hash (`#`).
+
+.Cross reference to a specific section of a relative AsciiDoc document
+[source]
+----
+include::ex-xref.adoc[tag=base-inter]
+----
+
+.Converted HTML for cross reference to section of a relative AsciiDoc document
+[source,html]
+----
+Refer to <a href="document-b.html#section-b">Section B</a> for more information.
+----
+
+In both cases, this syntax will also work if you are inside the document you are referring to.
+This is useful if you are sharing the same link across multiple documents.

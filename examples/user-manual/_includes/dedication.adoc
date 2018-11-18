@@ -1,0 +1,12 @@
+////
+Included in:
+
+- user-manual
+////
+
+The dedication page is where the author expresses gratitude toward a person.
+
+[source]
+----
+include::multi-special-ex.adoc[tag=dedicate]
+----

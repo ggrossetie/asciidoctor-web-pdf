@@ -1,0 +1,42 @@
+////
+Included in:
+
+- user-manual: Line breaks
+- writers-guide: Wrapped text and hard line breaks
+////
+
+Since adjacent lines of text are combined into a single paragraph when Asciidoctor converts a document, that means you can wrap paragraph text or put each sentence or phrase on a separate line.
+The line breaks won't appear in the output.
+
+However, if you want the line breaks in a paragraph to be preserved, you can either use a space followed by a plus sign (`{plus}`) or the `hardbreaks` attribute.
+This results in a visible line break (e.g., `<br>`) following each line.
+
+[source]
+.Line breaks preserved using a space followed by the plus sign ({plus})
+----
+include::ex-text.adoc[tag=hb]
+----
+
+====
+include::ex-text.adoc[tag=hb]
+====
+
+[source]
+.Line breaks preserved using the hardbreaks attribute
+----
+include::ex-text.adoc[tag=hb-p]
+----
+
+====
+include::ex-text.adoc[tag=hb-p]
+====
+
+Alternatively, you can preserve line breaks throughout your whole document by adding the `hardbreaks` attribute to the document's header.
+
+.Line breaks preserved throughout the document using the hardbreaks attribute
+[source]
+----
+include::ex-text.adoc[tag=hb-attr]
+----
+
+You can also preserve line breaks using <<user-manual#literal-text-and-blocks,literal blocks>>, <<user-manual#listing-blocks,listing blocks>>, and <<user-manual#verse,verses>>.

@@ -1,0 +1,16 @@
+////
+Included in:
+
+- user-manual: example
+////
+
+.Example syntax
+[source]
+----
+include::ex-example.adoc[tag=base]
+----
+
+.Result: Example block
+--
+include::ex-example.adoc[tag=base]
+--

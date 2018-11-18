@@ -1,0 +1,99 @@
+////
+Included in:
+
+- user-manual: Attributes
+////
+
+// tag::intro[]
+Attributes are one of the features that sets Asciidoctor apart from other lightweight markup languages.
+Attributes can activate features (behaviors, styles, integrations, etc) or hold replacement (i.e., variable) content.
+
+In Asciidoctor, attributes are classified as:
+
+* <<env-attributes,Environment attributes>>
+* <<builtin-attributes,Built-in attributes>>
+* <<charref-attributes,Predefined attributes>>
+* <<glossary,User-defined attributes>>
+* <<attribute-assignment-precedence,API and Command Line Attributes>>
+* <<setting-attributes-on-an-element,Element Attributes>>
+// end::intro[]
+
+// tag::attributesyntax[]
+=== Attribute Restrictions
+
+All attributes have a name and a value (though the value may be implicit).
+
+The attribute name:
+
+* must be at least one character long,
+* must begin with a word character (A-Z, a-z, 0-9 or _) and
+* must only contain word characters and hyphens.
+
+In other words, the name cannot contain dots or spaces.
+
+Although uppercase characters are permitted in an attribute entry (the place where an attribute is defined), the attribute name is converted to lowercase before being stored.
+The attribute name in an attribute reference is also converted to lowercase before the attribute is resolved.
+For example, `URI`, `Uri` and `uRI` are all treated as `uri`.
+(See https://github.com/asciidoctor/asciidoctor/issues/509[issue #509] for a proposed change to this restriction).
+A best practice is to only use lowercase for letters in the name and avoid starting the name with a number.
+
+The attribute value:
+
+* can be any inline content and
+* can only contain line breaks if an explicit line continuation is used.
+
+Certain attributes have a restricted range of allowable values.
+See the entries in the <<attribute-catalog>> for details.
+// end::attributesyntax[]
+
+=== Attribute Assignment Precedence
+// tag::order[]
+The attribute assignment precedence, listed from highest to lowest, is as follows:
+
+* An attribute defined using the API or CLI
+* An attribute defined in the document
+* The default value of the attribute, if applicable
+
+Let's use the `imagesdir` attribute to show how precedence works.
+
+The default value for the `imagesdir` attribute is an empty string.
+Therefore, if the `imagesdir` attribute is not assigned a value (either in the document, API, or CLI), the processor will assign it the default value of empty string.
+If the `imagesdir` attribute is set in the document (meaning assigned a new value, such as `images`), that value will override the default value.
+Finally, if a value is assigned to the `imagesdir` attribute via the API or CLI, that value will override both the default value and the value assigned in the document.
+
+It's possible to alter this order of precedence using a modifier, covered in the next section.
+
+==== Altering the Attribute Assignment Precedence
+
+You can allow the document to reassign an attribute that is defined via the API or CLI by adding the `@` precedence modifier to the end of the attribute value (or, since 1.5.7, the end of the attribute name).
+Adding this modifier lowers the precedence so that an assignment in the document still wins out.
+We sometimes refer to this as "`soft setting`" the attribute.
+This feature can be useful for assigning default values for attribute, but still letting the document control its own fate.
+
+NOTE: The `@` modifier is removed before the assignment is made.
+
+Here's an example that shows how to set the `imagesdir` from the CLI with a lower precedence:
+
+ $ asciidoctor -a imagesdir=images@ doc.adoc
+
+Since 1.5.7, you can place the modifier at the end of the attribute name:
+
+ $ asciidoctor -a imagesdir@=images doc.adoc
+
+It's now possible to override the value of the `imagesdir` attribute from within the document:
+
+[source,asciidoc]
+----
+= Document Title
+:imagesdir: new/path/to/images
+----
+
+Let's update the attribute assignment precedence list defined earlier to reflect this additional rule:
+
+* An attribute passed to the API or CLI
+* An attribute defined in the document
+* An attribute passed to the API or CLI whose value (or, since 1.5.7, name) ends in `@`
+* The default value of the attribute, if applicable
+
+Regardless of whether the precedence modifier is applied, an attribute assignment always overrides the default value.
+// end::order[]

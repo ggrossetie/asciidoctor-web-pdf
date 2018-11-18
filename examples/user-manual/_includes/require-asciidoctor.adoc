@@ -1,0 +1,9 @@
+To use Asciidoctor in your application, you first need to require the gem:
+
+[source,ruby]
+require 'asciidoctor'
+
+This statement makes all of the https://www.rubydoc.info/gems/asciidoctor/Asciidoctor[public APIs in Asciidoctor] available to your script or application.
+You are now ready to start processing AsciiDoc documents.
+
+The main entry points in the Asciidoctor API are the static methods to load or convert AsciiDoc documents, which we'll cover the next two chapters.

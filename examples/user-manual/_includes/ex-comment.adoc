@@ -1,0 +1,18 @@
+////
+Included in:
+
+- user-manual: Comments
+- quick-ref
+////
+
+// tag::line[]
+// A single-line comment.
+// end::line[]
+
+// tag::bl[]
+////
+A multi-line comment.
+
+Notice it's a delimited block.
+////
+// end::bl[]

@@ -1,0 +1,24 @@
+Asciidoctor provides limited support for validating internal cross references.
+Validation occurs when a cross reference is first visited.
+Since there are still some references aren't stored in the parse tree (such as an anchor in the middle of a paragraph), which can lead to false positives, these validations are hidden behind a flag.
+
+You can enable validation of cross references from the CLI by passing the `-v` and from the API by setting the `$VERBOSE` variable to `true`.
+This puts the processor in pedantic mode.
+In this mode, the parser will immediately validate cross references, issuing a warning message if the reference is not valid.
+
+Consider the following example:
+
+----
+See <<foobar>>.
+
+[#foobaz]
+== Foobaz
+----
+
+If you run Asciidoctor in verbose/pedantic mode on this document, it will send the following warning message to the logger.
+
+....
+asciidoctor: WARNING: invalid reference: foobar
+....
+
+Asciidoctor only validates references within the same document (after includes are resolved).

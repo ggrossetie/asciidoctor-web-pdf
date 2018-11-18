@@ -1,0 +1,187 @@
+////
+Included in:
+
+- user-manual: text formatting: monospace
+////
+
+In AsciiDoc, a span of text enclosed in a single set of backtick (`{backtick}`) characters is displayed using a fixed-width (i.e., monospaced) font.
+Monospace text formatting is typically used to represent text shown in computer terminals or code editors (often referred to as a codespan).
+
+Monospaced text can be bold and italicized, as long as the markup sets are entered in the right order.
+The monospace markup must be the outermost set, then the bold set, and the italic markup must always be the innermost set.
+
+As with other types of text formatting, if the text is bounded by characters on either side, it must be enclosed in a double set of backtick characters (`{backtick}{backtick}`) in order for the formatting to be applied.
+
+Here's an example:
+
+[source]
+----
+include::ex-text.adoc[tag=mono]
+----
+
+.Rendered monospace formatted text
+====
+include::ex-text.adoc[tag=mono]
+====
+
+==== Literal Monospace
+
+Unlike other markup languages, monospaced text in AsciiDoc is not synonymous with literal text.
+Instead, it get interpretted just like normal text.
+In other words, it's subject to text substitutions.
+
+This might be surprising at first.
+But there's good reason for this difference.
+In AsciiDoc, you can take advantage of attribute references and inline macros inside of monospaced text span.
+The drawback, of course, is that you have to be careful to escape these special characters if you intend to output them literally.
+
+One way to prevent the processor from interpretting special characters in monospaced text is to escape them using backslash characters, just as you would with normal text.
+However, escaping individual occurrences that way can be tedious.
+That's why AsciiDoc offers a special type of monospace formatting called the literal monospace.
+
+To make a true literal codespan in AsciiDoc, you must enclose the monospaced text in a passthrough.
+Rather than using a single set of backtick characters, you'll use the combination of the backtick and plus characters, where the plus characters fall on the inside of the backtick characters (e.g., `pass:[`+text+`]`).
+
+Here's an example that contains literal, monospaced text.
+
+[source]
+----
+include::ex-text.adoc[tag=literal-mono]
+----
+
+This shorthand syntax can accomodate most of the literal monospace cases.
+The main exception is when the text itself contains plus characters.
+To avoid confusing the processor, you'll need to switch to using the more formal passthrough macro to handle these cases.
+
+Here's an example of literal, monospaced text that contains plus characters.
+
+[source]
+----
+include::ex-text.adoc[tag=literal-mono-with-plus]
+----
+
+Passthroughs are a general purpose utility in AsciiDoc.
+You can learn about the various passthrough options in <<pass-macros>>.
+
+////
+==== Using legacy monospace markup
+
+In Asciidoctor 1.5, the backtick replaces the single and double plus sign for indicating monospace formatting and normal substitutions.
+However, you can forgo this change to the syntax by setting the `compat-mode` attribute either in the document header:
+
+[source]
+----
+:compat-mode:
+----
+
+or by passing the attribute to the API:
+
+[source]
+----
+-a compat-mode
+----
+
+.Why the output behavior of `+` and `++` changed in Asciidoctor 1.5
+****
+The meaning of `+` in the AsciiDoc syntax was inconsistent in AsciiDoc.py and previous Asciidoctor versions.
+// I believe we can make the AsciiDoc syntax easier to understand and remember if we consistently implement `+` as a passthrough (literal) mark.
+
+Where the quad plus (`++++`) and triple plus (`+++`) pass content without any processing, the double plus (`++`) and single plus (`+`) pass content "`as you see it`" (which means escaping special characters).
+Double plus (`++`) is an unconstrained match (can be used anywhere inline, just like double dollar (`$$`)), while single plus (`+`) is a constrained match (can be used at word boundaries). For example:
+
+* +{conf}+ becomes {conf}
+* dev++{conf}++ becomes dev{conf}
+
+TIP: You may recognize that `++` is now equivalent to `$$` (and perhaps easier to read).
+
+Notice that the text is not formatted as monospace.
+To apply monospace formatting to content marked by `+` or `++`, surround it with a set of backticks.
+
+[source]
+----
+
+----
+
+The backtick characters around text only mean that the text should be formatted as monospace. The backtick characters *do not add* passthrough semantics. In most cases, the passthrough semantics aren't necessary, so using the backticks for monospaced formatting is all that's necessary.
+
+* \`literal\` becomes `literal`
+* \`{backend}\` becomes `html5`
+* a\`\`|\`\`b becomes a`|`b
+
+So the question remains, how do you prevent substitutions in text formatted as monospaced (i.e., monospaced literal)? Answer: You either escape the substitution or combine the formatting and the passthrough.
+
+* \`\\{backend}\` becomes `{backend}`
+* \`+{backend}+\` becomes `{backend}`
+
+By not mixing monospace formatting with passthrough (literal) semantics, we are deviating slightly from the behavior of backticks in Markdown. However, that's because AsciiDoc has additional features, such as attribute references, that we want to be able to leverage when formatting text as monospace (just as we would anywhere). As it turns out, the lack of ability for substitutions when creating monospaced text in Markdown is quite limiting (and frustrating).
+
+Let's give this separation of inline passthroughs (using single and double plus) and monospace formatting (using single and double backticks) a try and see how it goes. If we need to remove or reduce the number of subsitution applied when formatting text as monospace, we can entertain the idea once we've given this configuration a trial.
+
+Since we're swapping behavior between two existing formatting marks, we had to introduce a transitional syntax that will work in with both 0.1.4 and 1.5.0 to ease migration. I'll document those options here.
+
+---
+
+**IMPORTANT:** I want to reiterate that you have the option of enabling legacy mode if you don't want to deal with migration. Legacy mode will be supported for the foreseeable future to avoid unnecessary disruption. If that's the option you want to take, simply add the following document attribute at the start of your document, or wherever you want to enable legacy mode.
+
+```
+:compat-mode:
+```
+
+If you want to begin migration to the modern syntax, read on.
+
+---
+
+There are three scenarios that are affected by this syntax change.
+
+* Monospaced normal text (it doesn't contain AsciiDoc syntax, so the text doesn't get interpreted)
+* Monospaced text without substitutions (you want to prevent the text from being interpreted)
+* Monospaced text with substitutions (you want text to be interpreted)
+
+Let's first consider the legacy syntax used in each of these examples.
+
+* pass:[+monospaced normal text+ or `monospaced normal text`]
+* pass:[`Use {asciidoctor-version} to print the version of Asciidoctor`] (attribute is _not_ replaced)
+* pass:[+The version of Asciidoctor is {asciidoctor-version}+] (attribute _is_ replaced)
+
+If you want the previous examples to work in Asciidoctor 1.5.0, you need to switch to the modern syntax, as shown below:
+
+* pass:[`monospaced normal text`]
+* pass:[`+Use {asciidoctor-version} to print the version of Asciidoctor+`] (attribute is _not_ replaced)
+* pass:[`The version of Asciidoctor is {asciidoctor-version}`] (attribute _is_ replaced)
+
+While the previous examples will work in Asciidoctor 1.5.0, the last two are now broken in Asciidoctor 0.1.4. Unfortunately, we can't control when Asciidoctor is upgraded on services like GitHub, so there will be a period of time when you will need to use a syntax that works on both versions. So what do we do? The answer, use the transitional syntax.
+
+To use the transitional syntax, add the role "x-" in front of the legacy syntax to indicate that you want Asciidoctor 1.5.0 to use the old behavior. Of course, Asciidoctor 0.1.4 already understands the old syntax.
+
+* pass:[[x-\]`Use {asciidoctor-version} to print the version of Asciidoctor`] (attribute is _not_ replaced)
+* pass:[[x-\]+The version of Asciidoctor is {asciidoctor-version}+] (attribute _is_ replaced)
+
+By using the "x-" role, you not only enable the legacy behavior, you also mark the locations that need to be migrated to the modern syntax in Asciidoctor 1.5.0 once Asciidoctor has been upgraded everywhere.
+
+If you aren't worried about how the document renders on services like GitHub, you can start using the modern syntax immediately.
+
+
+// The <<user-manual#back-pass,inline literal passthrough>> also applies monospace text formatting.
+
+////
+
+////
+Monospace text formatting is often used to emulate how source code appears in computer terminals, simple text editors, and integrated development environments (IDEs).
+A word or phrase is rendered using a fixed-width font, i.e. monospaced font, when it is enclosed in a single set of plus signs (+{plus}+).
+A character contained within a string of characters must be enclosed in a double set of plus signs (+{plus}{plus}+).
+
+[source]
+----
+include::ex-text.adoc[tag=mono]
+----
+
+Monospaced text can be bold and italicized, as long as the markup sets are entered in the right order.
+The monospace markup must be the outermost set, then the bold set, and the italic markup must always be the innermost set.
+
+.Rendered monospace formatted text
+====
+include::ex-text.adoc[tag=mono]
+====
+
+The <<user-manual#back-pass,inline literal passthrough>> also applies monospace text formatting.
+////

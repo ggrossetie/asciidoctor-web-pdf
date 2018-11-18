@@ -1,0 +1,20 @@
+////
+Included in:
+
+- user-manual
+////
+
+When AsciiDoc is converted to embeddable HTML (i.e., the `header_footer` option is `false`), there are only three valid values for the `toc` attribute:
+
+* auto (or unspecified value)
+* preamble
+* macro
+
+All of the following environments convert AsciiDoc to embeddable HTML:
+
+* the file viewer on GitHub and GitLab
+* the AsciiDoc preview in an editor like Atom, Brackets or AsciidocFX
+* the Asciidoctor browser extensions
+
+IMPORTANT: The side column placement (left or right) isn't available in this mode.
+That's because the embeddable HTML doesn't have the outer framing (or the CSS) necessary to support a side column TOC.

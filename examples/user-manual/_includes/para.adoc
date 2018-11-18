@@ -1,0 +1,24 @@
+////
+Included in:
+
+- user-manual: paragraphs
+- writers-guide: content is king
+////
+
+The bulk of the content in a document is paragraph text.
+This is why Asciidoctor doesn't require any special markup or attributes to specify paragraph content.
+You can just start typing.
+
+In Asciidoctor, adjacent or consecutive lines of text form a paragraph element.
+To start a new paragraph after another element, such as a section title or table, hit the kbd:[RETURN] key twice to insert a blank line, and then continue typing your content.
+
+.Two paragraphs in an AsciiDoc document
+[source]
+----
+include::ex-text.adoc[tag=para]
+----
+
+.The two paragraphs rendered using the default (html5) converter and stylesheet (asciidoctor.css)
+====
+include::ex-text.adoc[tag=para]
+====

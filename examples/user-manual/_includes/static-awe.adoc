@@ -1,0 +1,31 @@
+////
+Included in:
+
+- user-manual: Static website generators: Configuring attributes for Awestruct
+////
+
+Awestruct defines a set of default attributes that it passes to the API in its [.path]_/default-site.yml_ file.
+One of the attributes in that configuration is `imagesdir`.
+The value there is set to [.path]_/images_.
+That means the value in your document is skipped due to the precedence rules.
+
+Fortunately, there is one additional place you can override the attribute.
+This gives you the opportunity to set your own default and to flip the precedence order so that the document wins out.
+If an attribute value that is passed to the API ends with an `@` symbol, it makes that assignment have a lower precedence than an assignment in the document.
+
+You can define attributes you want to pass to the API in the [.path]__config/site.yml_ file.
+Here's an example entry for Asciidoctor:
+
+```yaml
+asciidoctor:
+  :safe: safe
+  :attributes:
+    imagesdir: /assets/images@
+    icons: font
+    ...
+```
+
+NOTE: The second-level keys (safe and attributes, in this case) must have colons on both sides of the key name.
+The rest of the keys only have a colon after the key.
+
+With this configuration added, you should observe that the `imagesdir` attribute in your document is now respected.

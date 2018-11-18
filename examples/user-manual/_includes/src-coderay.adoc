@@ -1,0 +1,129 @@
+////
+Included in:
+
+- user-manual: Source Code Highlighting: CodeRay installation
+////
+
+{coderay-uri}[CodeRay] is an encoding-aware, syntax highlighter that supports the languages listed below.
+
+[cols=3,grid=none,frame=none]
+|===
+
+| C
+| C++
+| Clojure
+
+| CSS
+| Delphi
+| diff
+
+| ERB
+| Go
+| Groovy
+
+| HAML
+| HTML
+| Java
+
+| JavaScript
+| JSON
+| Lua
+
+| PHP
+| Python
+| Ruby
+
+| Sass
+| SQL
+| Taskpaper
+
+| XML
+| YAML
+|
+
+|===
+
+In order to use CodeRay with Asciidoctor, you need the {coderay-gem}[coderay RubyGem].
+You can use one of the following methods to install CodeRay.
+
+Install using `gem` (all systems)::
++
+ $ gem install coderay
+
+Install using `apt-get` (Debian-based systems)::
++
+ $ sudo apt-get install coderay
+
+Install using `dnf` (Fedora-based systems)::
++
+ $ sudo dnf install rubygem-coderay
+
+Once you've installed the RubyGem, assign the `coderay` value to the `source-highlighter` attribute in the document header to activate it.
+
+[source]
+----
+:source-highlighter: coderay
+----
+
+You can further customize the source block output with additional CodeRay attributes.
+
+coderay-css::
+Controls what method is used for applying CSS to the tokens.
+Can be `class` or `style`.
+Default: `class`.
+
+coderay-linenums-mode::
+Controls how line numbers are laid out.
+Can be `table` or `inline`.
+If line wrapping is enabled on preformatted blocks (i.e., `prewrap`), and you want to use line numbering on source blocks, you must set the value of this attribute to `inline` in order for the numbers to line up properly with their target lines.
+Default: `table`.
+
+.Customizing a source block with CodeRay line numbers
+[source]
+....
+:source-highlighter: coderay
+:coderay-linenums-mode: inline
+
+[source,ruby,linenums]
+----
+ORDERED_LIST_KEYWORDS = {
+  'loweralpha' => 'a',
+  'lowerroman' => 'i',
+  'upperalpha' => 'A',
+  'upperroman' => 'I'
+   #'lowergreek' => 'a'
+   #'arabic'     => '1'
+   #'decimal'    => '1'
+}
+----
+....
+
+See the <<user-manual#hl-css,CodeRay stylesheet section>> to learn about the `coderay-css` attribute.
+
+==== Highlight Select Lines
+
+Not to be confused with syntax highlighting, you can configure CodeRay to highlight (i.e., emphasize) select lines in order to call attention to them.
+This feature is activated on a source block if the following conditions are met:
+
+* Line numbering is enabled (i.e., the `linenums` option). (In CodeRay, the highlight feature is coupled with line numbering).
+* The highlight attribute is defined.
+
+The highlight attribute accepts a comma or semi-colon delimited list of line ranges.
+A line range is represented by two numbers separated by a double period (e.g., `2..5`).
+These numbers correspond to the line numbers of the source block, inclusive, where the first line is 1.
+
+.Highlight select lines in a source block
+[source]
+....
+:source-highlighter: coderay
+
+[source,ruby,linenums,highlight=2..5]
+----
+ORDERED_LIST_KEYWORDS = {
+  'loweralpha' => 'a',
+  'lowerroman' => 'i',
+  'upperalpha' => 'A',
+  'upperroman' => 'I',
+}
+----
+....

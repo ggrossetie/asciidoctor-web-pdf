@@ -1,0 +1,63 @@
+////
+Included in:
+
+- user-manual: Attributes: Setting attributes on an element
+////
+
+// tag::intro[]
+An attribute list can apply to blocks, inline quotes text, and macros.
+The attributes and their values contained in the list will take precedence over attribute entries.
+
+.Anatomy of an attribute list
+ [positional_attribute1,positional_attribute2,name_attribute1="value"]
+
+Attribute lists:
+
+. apply to blocks as well as macros and inline quoted text
+. can contain positional and named attributes
+. take precedence over global attributes
+// end::intro[]
+
+==== Positional attribute
+// tag::pos[]
+Positional attributes are un-named values at the start of the attribute list.
+The attribute that they are assigned to depends on the type of the element:
+
+* `icon:` (1) size
+* `image:` and `image::` (1) alt text, (2) width, (3) height
+* Delimited blocks: (1) block name (aka style)
+* Other inline quoted text: (1) role
+
+For example, the following two image macros are equivalent.
+
+[source,asciidoc]
+----
+image::sunset.jpg[Sunset,300,400]
+
+image::sunset.jpg[alt=Sunset,width=300,height=400]
+----
+
+The second macro is just a duplicate of the first macro written out longhand.
+// end::pos[]
+
+==== Named attribute
+// tag::name[]
+A named attribute consists of a name and a value separated by an `=` character (e.g., `name=value`).
+
+If the value contains a space, comma, or quote character, it must be enclosed in double or single quotes (e.g., `name="value with space"`).
+In all other cases, the surrounding quotes are optional.
+If present, the enclosing quotes are dropped from the parsed value.
+
+To undefine a named attribute, set the value to `None` (case sensitive).
+// end::name[]
+
+==== Attribute List Substitutions
+// tag::subs[]
+Attribute references are expanded before the block attribute list is processed.
+Therefore, it's not necessary to force substitutions to be applied if you simply want to use a document attribute reference in a block attributes.
+
+If the attribute name (for a positional attribute) or value (for a named attribute) is enclosed in single quotes (e.g., `+title='Processed by https://asciidoctor.org[Asciidoctor]'+`), <<subs,normal substitutions>> are applied to the value at assignment time (with some exceptions).
+No special processing is performed if the value is not enclosed in quotes or is enclosed in double quotes.
+
+If the attribute value contains the same quote character being used to enclose the value, escape the quote character in the value by prefixing it with a backslash (e.g., `title="\"Dark Horse\" is a song by George Harrison"`).
+// end::subs[]

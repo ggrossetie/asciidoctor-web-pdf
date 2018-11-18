@@ -1,0 +1,109 @@
+////
+Included in:
+
+- user-manual: tables
+////
+
+Tables are one of the most intricate, yet refined areas of the AsciiDoc syntax.
+Armed with a bit of knowledge, you should discover that they are both easy to create and easy to read in raw form.
+Yet, under all that simplicity, they are remarkably sophisticated.
+
+Tables are delimited by `|===` and made up of cells.
+The default table data format is PSV (Prefix Separated Values), which means that the processor creates a new cell each time it encounters a vertical bar (`|`).
+Cells are grouped into rows.
+Each row must share the same number of cells, taking into account any <<user-manual#cell,column or row spans>>.
+Then, each consecutive cell in a row is placed in a separate column.
+
+The simple table example below consists of two columns and three rows.
+
+.Simple table
+[source]
+----
+include::ex-table.adoc[tag=base-co]
+----
+<1> The table's content boundaries are defined by a vertical bar followed by three equal signs (`|===`).
+<2> Inserting a blank line before the first row is a trick to ensure the first row is not treated as the table header.
+<3> The new cell is marked by a vertical bar (`|`).
+<4> Rows can optionally be separated by any number of blank lines.
+
+.Result: Rendered simple table
+include::ex-table.adoc[tag=base-alt]
+
+Like with all blocks, you can add a role to a table using the `role` attribute.
+The role attribute becomes a CSS class when converted to HTML.
+The preferred shorthand for assigning the role attribute is to put the role name in the first position of the block attribute list prefixed with a `.` character, as shown here:
+
+[source]
+----
+include::ex-table.adoc[tag=base-rolename]
+----
+
+Leading and trailing spaces around cell content is stripped and, therefore, don't affect the table's layout when rendered.
+The two examples below illustrate how leading and trailing spaces don't change the rendered table's layout.
+
+.Cell content adjacent to the |
+[source]
+----
+include::ex-table.adoc[tag=cell1]
+----
+
+.Result: Rendered table when cell content was entered adjacent to the |
+[width="90"]
+include::ex-table.adoc[tag=cell1]
+
+.Cell content with varying leading and trailing spaces
+[source]
+----
+include::ex-table.adoc[tag=cell2]
+----
+
+.Result: Rendered table when cell content was bounded by varying leading and trailing spaces
+[width="90"]
+include::ex-table.adoc[tag=cell2]
+
+There are multiple ways to group cells into a row.
+The cells in a row can be placed on:
+
+[loweralpha]
+. the same line
+. consecutive, individual lines
+. a combination of a and b
+
+.Cells on the same line
+[source]
+----
+include::ex-table.adoc[tag=same]
+----
+
+.Result: Rendered table when multiple cells where entered on the same line
+[width="90"]
+include::ex-table.adoc[tag=same]
+
+When the cells of a row are individually entered on consecutive lines, the `cols` attribute is needed to specify the number of columns in the table.
+If the `cols` attribute is not set, the first non-blank line inside the block delimiter (`|===`) determines the number of columns.
+
+.Cells on consecutive, individual lines
+[source]
+----
+include::ex-table.adoc[tag=indv-co]
+----
+<1> The `cols` attribute states that this table has three columns.
+The `*` is a repeat operator which is explained in the <<user-manual#cols-format,column specifiers>> section.
+
+.Result: Rendered table when cells where listed on consecutive, individual lines
+[width="90"]
+include::ex-table.adoc[tag=indv]
+
+Rows can be formed from adjacent lines of individual cells and cells listed on the same line.
+
+.Cells on the same line and individual lines
+[source]
+----
+include::ex-table.adoc[tag=same-indv]
+----
+
+.Result: Cells on the same line and individual lines
+[width="90"]
+include::ex-table.adoc[tag=same-indv]
+
+The next sections describe and demonstrate the variety of ways you can customize table cells, rows and columns.

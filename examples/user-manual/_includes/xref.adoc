@@ -1,0 +1,62 @@
+////
+Included in:
+
+- user-manual: Internal cross references
+- writers-guide
+////
+
+In Asciidoctor, the inline xref macro is used to create cross references (also called in-text or page citations) to content elements (sections, blocks, or phrases) that have an ID (regardless of whether that ID is explicit or auto-generated).
+
+You create a cross reference by enclosing the ID of the target block or section (or the path of another document with an optional anchor) in double angled brackets.
+
+.Cross reference using the ID of the target section
+[source]
+----
+include::ex-xref.adoc[tag=base]
+----
+
+.Rendered cross reference using the ID of the target section
+====
+include::ex-xref.adoc[tag=base]
+====
+
+You can also link to a block or section using the title by referencing its title, referred to as a [.term]_natural cross reference_.
+The title must contain at least one space character or contain at least one uppercase letter.
+(If you are using Ruby < 2.4, that uppercase letter is restricted to the basic Latin charset).
+
+.Cross reference using a section's title
+[source]
+----
+include::ex-xref.adoc[tag=xref-title]
+----
+
+.Rendered cross reference using a section's title
+====
+include::ex-xref.adoc[tag=xref-title]
+====
+
+Converters usually use the reftext of the target as the default text of the link.
+When the document is parsed, attribute references in the reftext are substituted immediately.
+When the reftext is displayed, additional reftext substitutions are applied to the text (specialchars, quotes, and replacements).
+
+You can override the reftext of the target by specifying alternative text at the location of the cross reference.
+After the ID, add a comma and then enter the custom text you want the cross reference to display.
+
+.Cross reference with custom xreflabel text
+[source]
+----
+include::ex-xref.adoc[tag=text]
+----
+
+.Rendered cross reference using custom xreflabel text
+====
+include::ex-xref.adoc[tag=text]
+====
+
+You can also use the inline xref macro as an alternative to the double angled bracket form.
+
+.Inline xref macro
+[source]
+----
+include::ex-xref.adoc[tag=xref-macro]
+----

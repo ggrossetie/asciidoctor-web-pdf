@@ -1,0 +1,14 @@
+////
+Included in:
+
+- user-manual: callouts: Callout icons
+////
+
+The font icons setting also enables callout icons drawn using CSS.
+
+[source]
+----
+include::ex-callout.adoc[tag=co-icon]
+----
+<1> Activates the font-based icons in the HTML5 backend.
+<2> Admonition block that uses a font-based icon.

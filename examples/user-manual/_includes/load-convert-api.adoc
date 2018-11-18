@@ -1,0 +1,31 @@
+////
+Load and convert doc using API
+This file is included in the user-manual document
+////
+
+To parse a file into an `Asciidoctor::Document` object:
+
+[source,ruby]
+doc = Asciidoctor.load_file 'mysample.adoc'
+
+You can get information about the document:
+
+[source,ruby]
+puts doc.doctitle
+puts doc.attributes
+
+More than likely, you will want to convert the document.
+To convert a file containing AsciiDoc markup to HTML 5, use:
+
+[source,ruby]
+Asciidoctor.convert_file 'mysample.adoc'
+
+The command will output to the file [.path]_mysample.html_ in the same directory.
+
+You can convert the file to DocBook 5.0 by setting the `:backend` option to `'docbook'`:
+
+[source,ruby]
+Asciidoctor.convert_file 'mysample.adoc', backend: 'docbook'
+
+The command will output to the file [.path]_mysample.xml_ in the same directory.
+If you're on Linux, you can view the file using {uri-yelp}[Yelp].

@@ -1,0 +1,24 @@
+////
+=== Include files relative to a common source directory
+
+This content is included in the user manual
+////
+
+Asciidoctor expands attributes in the target of the include directive.
+That means you only have to type the unique part of the path when linking to a source file.
+
+Example:
+
+[source]
+....
+:sourcedir: src/main/java
+
+[source,java]
+----
+\include::{sourcedir}/org/asciidoctor/Asciidoctor.java[]
+----
+....
+
+The target of the include resolves to:
+
+ src/main/java/org/asciidoctor/Asciidoctor.java

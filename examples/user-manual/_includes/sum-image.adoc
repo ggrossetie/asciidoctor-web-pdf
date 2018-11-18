@@ -1,0 +1,87 @@
+////
+Included in:
+
+- user-manual: images: Summary
+////
+
+.Block and inline image attributes and values
+[cols="1m,1,2,2"]
+|===
+|Attribute |Value(s) |Example Syntax |Comments
+
+|imagesdir
+|empty, absolute path, relative path or base URL
+|`:imagesdir: media`
+|If the image target is a URL or an absolute path, the `imagesdir` prefix is _not_ added; Default is empty value
+
+|id
+|User defined text
+|`id=sunset-img` +
+(or `+[[sunset-img]]+` or `[#sunset-img]` above block macro)
+|
+
+|alt
+|User defined text in first position of attribute list or named attribute
+|`image::sunset.jpg[Brilliant sunset]` +
+(or `alt=Sunset`)
+|
+
+|title
+|User defined text
+|`title="A mountain sunset"` +
+(or `.A mountain sunset` above block macro)
+|Blocks: title displayed below image; Inline: title displayed as tooltip
+
+|caption
+|User defined text
+|`caption="Figure 8: "`
+|Only applies to block images.
+
+|width
+|User defined size in pixels
+|`image::sunset.jpg[Sunset,300]` +
+(or `width=300`)
+|
+
+|height
+|User defined size in pixels
+|`image::sunset.jpg[Sunset,300,200]` +
+(or `height=200`)
+|
+
+|link
+|User defined location of external URI
+|`link=https://www.flickr.com/photos/javh/5448336655`
+|
+
+|scale
+|A scaling factor to apply to the intrinsic image dimensions
+|`scale=80`
+|DocBook only
+
+|scaledwidth
+|User defined width for block images
+|`scaledwidth=25%`
+|DocBook only
+
+|pdfwidth
+|User defined width for images in a PDF
+|`pdfwidth=80vw`
+|Asciidoctor PDF only
+
+|align
+|left, center, right
+|`align=left`
+|Block images only; Align and float attributes are mutually exclusive
+
+|float
+|left, right
+|`float=right`
+|Block images only; float and align attributes are mutually exclusive; to scope the float, use a <<control-the-float,float group>>.
+
+|role
+|left, right, th, thumb, related, rel
+|`role="thumb right"` +
+(or `[.thumb.right]` above block macro)
+|Inline images can use role to float images left and right; Role shorthand (`.`) can not be used on images
+|===

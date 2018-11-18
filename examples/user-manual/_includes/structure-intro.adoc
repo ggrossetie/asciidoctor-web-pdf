@@ -1,0 +1,8 @@
+////
+Included in:
+
+- user-manual
+////
+
+Asciidoctor provides macros or attributes for the specialized frontmatter and backmatter sections commonly found in journal articles, academic papers, and books.
+In the following sections, you'll learn the dependency, structure, and output rules for the special section macros and attributes and how to use them.

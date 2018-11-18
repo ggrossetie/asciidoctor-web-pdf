@@ -1,0 +1,63 @@
+////
+=== Include content from a URI
+
+This content is included in the user manual
+////
+
+The include directive recognizes when the target is a URI and can include the content referenced by that URI.
+
+.Including content from a URI
+====
+This example demonstrates how to include an AsciiDoc file from a GitHub repo directly into your document.
+
+[source]
+----
+include::ex-include.adoc[tag=uri]
+----
+====
+
+For security reasons, this capability is _not enabled_ by default.
+To allow content to be read from a URI, you must enable the URI read permission by:
+
+. running Asciidoctor in `SERVER` mode or less and
+. setting the `allow-uri-read` attribute securely (i.e., from the CLI or API).
+
+Here's an example that shows how to run Asciidoctor from the console so it can read content from a URI:
+
+ $ asciidoctor -a allow-uri-read filename.adoc
+
+Remember that Asciidoctor executes in SAFE mode by default when run from the command line.
+
+Here's an example that shows how to run Asciidoctor from the API so it can read content from a URI:
+
+[source,ruby]
+----
+Asciidoctor.convert_file 'filename.adoc', safe: :safe, attributes: { 'allow-uri-read' => '' }
+----
+
+WARNING: Including content from sources outside your control carries certain risks, including the potential to introduce malicious behavior into your documentation.
+Because `allow-uri-read` is a potentially dangerous feature, it is forcefully disabled when the safe mode is `SECURE` or higher.
+
+.URI vs URL
+****
+URI stands for https://en.wikipedia.org/wiki/Uniform_Resource_Identifier[Uniform Resource Identifier].
+When we talk about a URI, we're usually talking about a URL, or Uniform Resource Locator.
+A URL is simply a URI that points to a resource over a network, or web address.
+
+As far as Asciidoctor is concerned, all URIs share the same restriction, whether or not it's actually local or remote, or whether it points to a web address (http or https prefix), FTP address (ftp prefix), or some other addressing scheme.
+****
+
+The same restriction described in this section applies when embedding an image referenced from a URI, such as when `data-uri` is set or when converting to PDF using Asciidoctor PDF.
+
+=== Caching URI Content
+
+Reading content from a URI is obviously much slower than reading it from a local file.
+
+Asciidoctor provides a way for the content read from a URI to be cached, which is highly recommended.
+
+To enable the built-in cache, you must:
+
+. Install the `open-uri-cached` gem.
+. Set the `cache-uri` attribute in the document.
+
+When these two conditions are satisfied, Asciidoctor caches content read from a URI according the to {uri-http}[HTTP caching recommendations].

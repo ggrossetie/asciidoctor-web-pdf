@@ -1,0 +1,38 @@
+////
+Included in:
+
+- user-manual: images: Set the images directory
+////
+
+The path to the location of images is controlled by the `imagesdir` document attribute.
+The value of this attribute (empty by default) is added to the beginning of _every_ image target.
+Therefore, you never need to reference this attribute.
+You only need to set it.
+
+.Incorrect
+[source,asciidoc]
+----
+image::{imagesdir}/name-of-image.png[]
+----
+
+.Correct
+[source,asciidoc]
+----
+image::name-of-image.png[]
+----
+
+The resolved location of the image will be: <imagesdir> + <target>.
+
+The benefit of the processor adding the value of the `imagesdir` attribute the the start of all image targets is that you can globally control the folder where images are located per converter.
+We refer to this folder as the image catalog.
+Since different output formats require the images to be in different locations, this attribute makes it possible to accomodate many different scenarios.
+
+We recommend relying on the imagesdir attribute when defining the target of your image to avoid hard-coding that common path in every single image macro.
+Always think about where the image is relative to the image catalog.
+
+The imagesdir attribute value can be an absolute path, relative path or URI.
+By default, the value of the imagesdir attribute is empty, which means these images are resolved relative to the document.
+If the image target is an absolute path or URI, the imagesdir prefix is _not_ added to the path.
+
+TIP: You can set the imagesdir attribute in multiple places in your document, as long as it is not locked by the API.
+This technique is useful if you store images for different parts, chapters, or sections of your document in different locations.

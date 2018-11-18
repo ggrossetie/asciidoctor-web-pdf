@@ -1,0 +1,34 @@
+////
+user manual
+////
+
+== What is Asciidoctor?
+
+////
+{homepage}[Asciidoctor] is an open source text processor and publishing toolchain for transforming AsciiDoc markup into HTML 5, EPUB3, PDF, DocBook 5.0 and 4.5, slidedecks, and other custom formats.
+Asciidoctor is written entirely in Ruby, packaged as a RubyGem and published to {gem}[RubyGems.org].
+There are also Fedora, Debian and Ubuntu packages available for installing Asciidoctor.
+The git repositories for the project are hosted under the {gh-org}[Asciidoctor organization on GitHub].
+////
+
+Asciidoctor is a _fast_ text processor and publishing toolchain for converting AsciiDoc content to HTML5, EPUB3, PDF, DocBook 5 (or 4.5) slidedecks and other formats.
+Asciidoctor is written in Ruby, packaged as a RubyGem and published to {uri-gem}[RubyGems.org].
+The gem is also packaged in several Linux distributions, including Fedora, Debian and Ubuntu.
+Asciidoctor is open source, {uri-repo}[hosted on GitHub], and released under the MIT license.
+
+=== The Big Picture
+
+Asciidoctor reads content written in plain text, as shown in the panel on the left in the image below, and converts it to HTML5, as shown rendered in the right panel.
+Asciidoctor adds a default stylesheet to the HTML5 document, as shown, to provide a pleasant out-of-the-box experience.
+
+image::zen-screenshot.png[Preview of AsciiDoc source and corresponding HTML]
+
+=== Asciidoctor on the JVM
+
+You can run Asciidoctor on the JVM using JRuby.
+You can also use {uri-asciidoctorj}[AsciidoctorJ] to invoke Asciidoctor's APIs from Java and other JVM languages.
+
+=== Asciidoctor.js
+
+Asciidoctor can be used in JavaScript.
+https://opalrb.com[Opal] is used to transcompile the code from Ruby to JavaScript to make {uri-asciidoctorjs}[Asciidoctor.js], which can be used wherever JavaScript runs, such as in a web browser or on Node.js.

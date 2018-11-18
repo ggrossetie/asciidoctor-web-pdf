@@ -1,0 +1,20 @@
+////
+Included in:
+
+- user-manual: Running Asciidoctor Securely: Set the safe mode in the API
+////
+
+The default safe level in the API is `SECURE`.
+
+In the API, you can set the safe mode using a string, symbol or integer value.
+The value must be set in the document constructor using the `:safe` option.
+
+ result = Asciidoctor.convert_file('master.adoc', :safe => 'server')
+
+or
+
+ result = Asciidoctor.convert_file('master.adoc', :safe => :server)
+
+or
+
+ result = Asciidoctor.convert_file('master.adoc', :safe => 10)

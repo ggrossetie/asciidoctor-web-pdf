@@ -1,0 +1,15 @@
+////
+Processing your document
+Introduction
+
+This document is included in:
+
+- convert-documents
+- user-manual
+////
+
+While the AsciiDoc syntax is designed to be readable in raw form, the intended audience for that format are writers and editors.
+Readers aren't going to appreciate the raw text nearly as much.
+Aesthetics matter.
+You'll want to apply nice typography with font sizes that adhere to the golden ratio, colors, icons and images to give it the respect it deserves.
+That's where converters, backends, and themes come into play.

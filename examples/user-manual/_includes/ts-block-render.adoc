@@ -1,0 +1,22 @@
+////
+Included in:
+
+- troubleshoot
+- faq: troubleshooting
+- user-manual: Troubleshooting
+////
+
+Part way through the document, the blocks stop rendering correctly. What went wrong?::
++
+--
+//tag::answer[]
+When content is not rendered as you expect in the later part of a document, it's usually due to a delimited block missing its closing delimiter line.
+The most devious culprit is the <<user-manual#open-blocks,open block>>.
+An open block doesn't have any special styling, but its contents have the same restrictions as other delimited blocks, i.e. it can not contain section titles.
+
+To solve this problem, first look for missing delimiter lines.
+<<user-manual#text-editor,Syntax highlighting in your text editor>> can help with this.
+Also look at the rendered output to see if the block styles are extending past where you intended.
+When working with open blocks, you may need to add custom styles (such as a red border) to the class openblock so you can see its boundaries.
+//end::answer[]
+--

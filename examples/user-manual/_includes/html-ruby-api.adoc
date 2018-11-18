@@ -1,0 +1,28 @@
+////
+HTML output section
+
+== Using the Ruby API
+
+This document is included in convert-documents and the user-manual.
+TODO: expand this section
+////
+
+Asciidoctor also includes a Ruby API that lets you generate an HTML document directly from a Ruby application.
+
+[source,ruby]
+----
+require 'asciidoctor'
+
+Asciidoctor.convert_file 'mysample.adoc'
+----
+
+Alternatively, you can capture the HTML output in a variable instead of writing it to a file.
+
+[source,ruby]
+----
+html = Asciidoctor.convert_file 'mysample.adoc', to_file: false, header_footer: true
+puts html
+----
+
+The convert methods also accept a map of options.
+Use of this map is described in <<user-manual.adoc#ruby-api-options,Ruby API Options>>.

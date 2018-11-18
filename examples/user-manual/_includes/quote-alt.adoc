@@ -1,0 +1,67 @@
+////
+Included in:
+
+- user-manual: quote: Quoted paragraph
+////
+
+==== Quoted paragraph
+
+You can turn a single paragraph into a blockquote by:
+
+. surrounding it with double quotes
+. adding an optional attribution (prefixed with two dashes) below the quoted text
+
+.Quoted paragraph syntax
+[source]
+----
+include::ex-quote.adoc[tag=abbr]
+----
+
+.Result: Quoted paragraph
+====
+include::ex-quote.adoc[tag=abbr]
+====
+
+==== Air quotes
+
+{air-ref}[Air quotes^] are two double quotes on each line, emulating the gesture of making quote marks with two fingers on each hand.
+
+[source]
+----
+include::ex-quote.adoc[tag=air]
+----
+
+.Result: Air quotes
+====
+include::ex-quote.adoc[tag=air]
+====
+
+==== Markdown-style blockquotes
+
+Asciidoctor supports Markdown-style blockquotes.
+
+.Markdown-style blockquote syntax
+[source,markdown]
+----
+include::ex-quote.adoc[tag=md]
+----
+
+.Result: Markdown-style blockquote
+====
+include::ex-quote.adoc[tag=md]
+====
+
+Like Markdown, Asciidoctor supports block content inside the blockquote, including nested blockquotes.
+
+[source,markdown]
+.Markdown-style blockquote containing block content
+....
+include::ex-quote.adoc[tag=md-alt]
+....
+
+Here's how this conversation renders.
+
+.Result: Markdown-style blockquote with block content
+====
+include::ex-quote.adoc[tag=md-alt]
+====

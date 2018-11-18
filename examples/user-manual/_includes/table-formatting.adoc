@@ -1,0 +1,378 @@
+////
+Included in:
+
+- user-manual: tables: header
+////
+
+=== Header Row
+
+The first row of a table is promoted to a header row if the `header` option is set (either explicitly or implicitly).
+
+You can enable the header option by adding the `header` keyword to the comma-separated list of values in the `options` attribute on the table.
+You can also enable the header option by adding the `%header` directive to the table style (the first positional attribute).
+
+In the example below, the table has an attribute list containing an `options` attribute that includes the `header` option.
+
+.Table with the header value assigned to the options attribute
+[source]
+----
+include::ex-table.adoc[tag=opt-h]
+----
+
+.Result: Rendered table when the header value is assigned to the options attribute
+[width=90]
+include::ex-table.adoc[tag=opt-h]
+
+Alternately, you can define the header row based on how you layout the table.
+Asciidoctor use the following conventions to determine when the first row should become the header row:
+
+. The first line of content inside the table block delimiters is not empty.
+. The second line of content inside the table block delimiters is empty.
+. The `options` attribute has not been specified in the block attributes (prior to 1.5.5).
+
+As seen in the result of the example below, if all of these rules hold, then the first row of the table is treated as a header.
+
+.Table that has an implicit header row
+[source]
+----
+include::ex-table.adoc[tag=impl-h]
+----
+
+.Result: Rendered table when the header row was assigned implicitly
+[width=90]
+include::ex-table.adoc[tag=impl-h]
+
+If you want to suppress this implicit behavior of promoting the first row to a header row, set the option value `noheader` (or add the `%noheader` directive to the table style).
+
+Notice that when the implicit method of assigning the header row is used, it's not necessary to set the `cols` attribute.
+That's because the number of columns are determined by the number of cells in the first line if the `cols` attribute is absent.
+
+CAUTION: We're considering using a similar convention for enabling the footer in the future.
+Thus, if you rely on this convention to enable the header row, it's advised that you not put all the cells in the last row on the same line unless you intend on making it the footer row.
+
+=== Footer Row
+
+The last row of a table can be styled as a footer by adding the `footer` keyword to the `options` attribute.
+
+[source]
+----
+include::ex-table.adoc[tag=opt-f]
+----
+
+.Result: Table rendered with a footer
+[width=90]
+include::ex-table.adoc[tag=opt-f]
+
+=== Table Width
+
+By default, a table will span the width of the content area.
+To constrain the width of the table to a fixed value, set the `width` attribute in the table's attribute list.
+The width is an integer percentage value ranging from 1 to 100.
+The `%` sign is optional.
+
+.Table with width set to 75%
+[source]
+----
+[width=75%]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Table rendered with a width of 75%
+[width=75%]
+include::ex-table.adoc[tag=base-h]
+
+Alternately, you can make the width fit the content by setting the `autowidth` option.
+The columns inherit this setting, so individual columns will also be sized according to the content.
+
+.Table using autowidth
+[source]
+----
+[%autowidth]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: The width of the table is sized to accomodate the automatic column widths
+[%autowidth]
+include::ex-table.adoc[tag=base-h]
+
+If you want each column to have an automatic width, but want the table to span the width of the content area, add the `stretch` role to the table or set the `width` attribute to `100%`.
+
+.Full-width table with autowidth columns
+[source]
+----
+[%autowidth.stretch]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Columns are sized to the content, but table spans the width of the page
+[%autowidth.stretch]
+include::ex-table.adoc[tag=base-h]
+
+WARNING: The `autowidth` option is not recognized by the DocBook converter.
+
+If you want to apply autowidth only to certain columns, use the special value `~` as the width of the column.
+In this case, width values are assumed to be a percentage value (i.e., 100-based).
+
+.Table with both fixed and autowidth columns
+[source]
+----
+[cols="25h,~,~"]
+|===
+|small |as big as the column needs to be |the rest
+|===
+----
+
+=== Table Borders
+
+The borders on a table are controlled using the `frame` and `grid` attributes.
+You can combine these two attributes to achieve a variety of border styles for your tables.
+
+==== Frame
+
+The border around a table is controlled using the `frame` attribute.
+By default, the frame attribute is assigned the `all` value, which draws a border on each side of the table.
+If you set the frame attribute, you can override the default value with the values `topbot`, `sides` or `none`.
+
+The `topbot` value draws a border on the top and bottom of the table.
+
+[source]
+----
+[frame=topbot]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Table rendered with frame=topbot
+[width=90, frame=topbot]
+include::ex-table.adoc[tag=base-h]
+
+The `sides` value draws a border on the right and left side of the table.
+
+[source]
+----
+[frame=sides]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Table rendered with frame=sides
+[width=90, frame=sides]
+include::ex-table.adoc[tag=base-h]
+
+The `none` value removes the borders around the table.
+
+[source]
+----
+[frame=none]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Table rendered with frame=none
+[width=90, frame=none]
+include::ex-table.adoc[tag=base-h]
+
+==== Grid
+
+The borders between the cells in a table are controlled using the `grid` attribute.
+By default, the grid attribute is assigned the `all` value, which draws a border between all cells.
+If you set the `grid` attribute, you can override the default value with the values `rows`, `cols` or `none`.
+
+The `rows` value draws a border between the rows of the table.
+
+[source]
+----
+[grid=rows]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Table rendered with grid=rows
+[width=90, grid=rows]
+include::ex-table.adoc[tag=base-h]
+
+The `cols` value draws borders between the columns.
+
+[source]
+----
+[grid=cols]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Table rendered with grid=cols
+[width=90, grid=cols]
+include::ex-table.adoc[tag=base-h]
+
+The `none` value removes all borders between the cells.
+
+[source]
+----
+[grid=none]
+include::ex-table.adoc[tag=base-h]
+----
+
+.Result: Table rendered with grid=none
+[width=90, grid=none]
+include::ex-table.adoc[tag=base-h]
+
+=== Striping
+
+By default, the body rows are stripped (like a zebra).
+You can control this behavior using the `stripes` attribute on the table.
+
+By default, the stripes attribute is assigned the `even` value, which shades even rows in the table body.
+The stripes attribute accepts the following values:
+
+* even - even rows are shaded (default)
+* odd - odd rows are shaded
+* all - all rows are shaded
+* none - no rows are shaded
+
+In the following example, the stripes are disabled.
+
+[source]
+----
+[cols=3*, stripes=none]
+|===
+| A1
+| B1
+| C1
+
+| A2
+| B2
+| C2
+
+| A3
+| B3
+| C3
+|===
+----
+
+Under the covers, the stripes attribute applies the CSS class `stripes-<value>` (e.g., `stripes-none`) to the table tag.
+As a shorthand, you can simply apply the CSS class to the table directly using a role.
+
+[source]
+----
+[.stripes-none,cols=3*]
+|===
+| A1
+| B1
+| C1
+
+| A2
+| B2
+| C2
+
+| A3
+| B3
+| C3
+|===
+----
+
+This feature relies on the necessary styles to be set in the stylesheet.
+The default stylesheet provides these styles.
+
+=== Orientation
+
+A table can be displayed in landscape (rotated 90 degrees counterclockwise) using the `rotate` option (preferred):
+
+[source]
+----
+[%rotate]
+|===
+|a |b
+|c |d
+|===
+----
+
+or the `orientation` attribute:
+
+[source]
+----
+[orientation=landscape]
+|===
+|a |b
+|c |d
+|===
+----
+
+Currently, this is only implemented by the DocBook backend (it sets the attribute `orient="land"`).
+
+=== Nested Tables
+
+Table cells marked with the AsciiDoc table style (`a`) support nested tables in addition to normal block content.
+To distinguish the inner table from the enclosing one, you need to use `!===` as the table delimiter and a cell separator that differs from that used for the enclosing table.
+The default cell separator for a nested table is `!`, though you can choose another character by defining the `separator` attribute on the table.
+
+NOTE: Although nested tables are not technically valid in DocBook 5.0, the DocBook toolchain processes them anyway.
+
+The following example contains a nested table in the last cell.
+Notice the nested table has its own format, independent of that of the outer table:
+
+[source]
+----
+include::ex-table.adoc[tag=nested]
+----
+
+.Result: A nested table
+include::ex-table.adoc[tag=nested]
+
+We recommend using nested tables sparingly.
+There's usually a better way to present the information.
+
+:table-caption: Table
+=== Table Caption
+
+If you specify a title on a table, the title will be used as part of the table's caption.
+Adding a title also designates the table as a [.term]_formal table_.
+
+By default, the title of a formal table is prefixed with the label `Table <n>.` followed by a space, where `<n>` is the 1-based index of all formal tables in the document.
+
+[source]
+----
+.A formal table
+include::ex-table.adoc[tag=impl-h]
+----
+
+.Result: Table rendered with a title
+[width=90]
+.A table with a title
+include::ex-table.adoc[tag=impl-h]
+
+You can customize the caption label by specifying the `caption` attribute.
+If you want a space between the label and the title, you must add a trailing space to the value of the caption attribute.
+(Don't let the name of the attribute mislead you.
+The caption attribute only sets the caption's label, not the whole caption line).
+
+[source]
+----
+[caption="Table A. "]
+.A formal table
+include::ex-table.adoc[tag=impl-h]
+----
+
+.Result: Table rendered with a title and custom label
+[width=90, caption="Table A. "]
+.A formal table
+include::ex-table.adoc[tag=impl-h]
+
+If you want to exclude the caption label altogether, simply assign a blank value to the `caption` attribute.
+
+[source]
+----
+[caption=]
+.A formal table
+include::ex-table.adoc[tag=impl-h]
+----
+
+.Result: Table rendered with a title and no label
+[width=90, caption=]
+.A formal table
+include::ex-table.adoc[tag=impl-h]
+
+:table-caption!:
+
+Alternatively, you can disable the caption label for tables globally by undefining the `table-caption` document attribute.
+
+[source]
+----
+:table-caption!:
+----
+
+//NOTE: At this time, Asciidoctor has not implemented the `align`, `halign`, or `valign` attributes.

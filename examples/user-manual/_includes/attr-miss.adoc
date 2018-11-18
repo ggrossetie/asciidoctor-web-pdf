@@ -1,0 +1,91 @@
+////
+Included in:
+
+- user-manual: Catch a missing or undefined attribute
+////
+
+As a result of a misconfigured document or inadvertent substitution, an attribute reference may point to a non-existent attribute (e.g., `+{does-not-exist}+`).
+It could be that the attribute reference itself undefines the attribute (e.g., `+{set:attribute-no-more!}+`).
+You'll want to think about how you want the processor to handle these situations and configure it accordingly.
+
+AsciiDoc Python simply drops any line that contains a reference to a missing attribute.
+This "`feature`" was designed with AsciiDoc Python's own template language in mind, which is also based on the AsciiDoc syntax.
+However, this behavior was never really intended for use in regular AsciiDoc documents.
+The behavior is frustrating for the author, editor, or reader because it's not immediately obvious when a line goes missing.
+Discovering the absence of certain line often requires a painstaking read-through of the document or section, if it's even noticed at all.
+
+Asciidoctor offers two attributes to alleviate this inconvenience: `attribute-missing` and `attribute-undefined`.
+
+===== Missing attribute
+
+The `attribute-missing` attribute controls how missing (i.e., unresolved) references are handled.
+By default, missing references are left intact so the integrity of the document is preserved (`skip`).
+However, that mode doesn't help the author track down these references.
+
+To help with that task, Asciidoctor can be configured to warn when a missing reference is encountered (`warn`).
+Asciidoctor can also emulate the behavior of AsciiDoc Python (`drop-line`), or offer something in between (`drop`).
+
+Here are the four possible values of the `attribute-missing` attribute:
+
+`skip`:: leaves the reference intact without issuing a warning (default setting)
+`drop`:: drops the reference, but not the whole line
+`drop-line`:: drops the whole line on which the reference occurs (matches behavior of AsciiDoc Python)
+`warn`:: leaves the reference intact, but also prints a warning about the missing attribute (recommended)
+
+Consider the following line of AsciiDoc:
+
+[source]
+----
+Hello, {name}!
+----
+
+Here's how the line is handled in each case, assuming the `name` attribute is not defined:
+
+[horizontal]
+`skip`:: Hello, \{name}!
+`drop`:: Hello, !
+`drop-line`:: {empty}
+`warn`::
++
+----
+asciidoctor: WARNING: skipping reference to missing attribute: name
+----
+
+If you want the processor to fail when the document contains a missing attribute, set the `attribute-missing` attribute to `warn` and pass the `--failure-level=WARN` option to the processor.
+
+ $ asciidoctor -a attribute-missing=warn --failure-level=WARN doc.adoc
+
+When using the API, you can consult the logger for the max severity of all messages reported or look for specific messages in the stack.
+
+There are several exceptions when the `attribute-missing` attribute is not strictly honored.
+One of those cases is the include directive.
+If a missing attribute is found in the target of an include directive, the processor will issue a warning about the missing attribute and drop the include directive.
+This behavior was chosen because showing the unresolved include directive to the reader is messy.
+
+Another case is the block image macro.
+If a missing attribute is found in the target of an include directive, the processor will issue a warning about the missing attribute, but leave the image macro unresolved so as to show it as alt text.
+
+A missing attribute reference can safely be used in an ifeval clause without any side effects (i.e., `drop`) since often the purpose of that statement is to determine whether an attribute resolves to a value.
+
+===== Undefined attribute
+
+The attribute attribute-undefined controls how expressions that undefine an attribute are handled.
+By default, the line is dropped since the expression is a statement, not content.
+
+This attribute has two possible values:
+
+`drop`:: substitute the expression with an empty string after processing it
+`drop-line`:: drop the line that contains this expression (default setting; matches behavior of AsciiDoc Python)
+
+The option `skip` doesn't make sense here since the statement is not intended to produce content.
+
+Consider the following declaration:
+
+```
+{set:name!}
+```
+
+Depending on whether attribute-undefined is `drop` or `drop-line`, either the statement or the line that contains it will be discarded.
+It's reasonable to stick with the compliant behavior, drop-line, in this case.
+
+TIP: We recommend putting any statement that undefines an attribute on a line by itself.

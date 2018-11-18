@@ -1,0 +1,58 @@
+////
+Included in:
+
+- user-manual: images
+////
+
+To include an image on its own line (i.e., a _block image_), use the `image::` prefix in front of the file name and square brackets after it.
+
+[source]
+----
+include::ex-image.adoc[tag=base]
+----
+
+====
+include::ex-image.adoc[tag=base]
+====
+
+If you want to specify alt text, include it inside the square brackets:
+
+[source]
+----
+include::ex-image.adoc[tag=alt]
+----
+
+You can also give the image an id, a title, set its dimensions and make it a link.
+
+[source]
+----
+include::ex-image.adoc[tag=attr-co]
+----
+<1> Assigns an ID to the block; see <<anchordef>>.
+<2> Defines the title of the block image, which gets displayed underneath the image when rendered.
+<3> `link` makes the image a link (this can also be defined inside the attribute list of the block macro)
+<4> The first positional attribute, _Sunset_, is the image's alt text.
+<5> The second and third positional attributes define the width and height, respectively.
+
+.A hyperlinked image with caption
+====
+include::ex-image.adoc[tag=attr]
+====
+
+Block images are prefixed by a caption label (Figure) and number automatically.
+To turn off figure caption labels and numbers, add the `figure-caption` attribute to the document header and unset it.
+
+ :figure-caption!:
+
+If you want to include an image inline, use the `image:` prefix instead (notice there is only one colon):
+
+[source]
+----
+include::ex-image.adoc[tag=in]
+----
+
+====
+include::ex-image.adoc[tag=in]
+====
+
+For inline images, the optional title is displayed as a tooltip.

@@ -1,0 +1,38 @@
+////
+Included in:
+
+- user-manual: Unordered lists: Nested
+- writers guide
+////
+
+To nest an item, just add another asterisk (`{asterisk}`) to the marker, and another for each subsequent level.
+
+[source]
+----
+include::ex-ulist.adoc[tag=nest]
+----
+
+.Rendered nested, unordered list
+====
+include::ex-ulist.adoc[tag=nest]
+====
+
+In Asciidoctor 1.5.7 and earlier you could only have up to six (6) levels of nesting (assuming one level uses the hyphen marker).
+
+Since Asciidoctor 1.5.8, you can nest unordered lists to any depth.
+Keep in mind, however, that some interfaces will begin flatting lists after a certain depth.
+GitHub starts flattening list after 10 levels of nesting.
+
+[source]
+----
+include::ex-ulist.adoc[tag=max]
+----
+
+====
+include::ex-ulist.adoc[tag=max]
+====
+
+While it would seem as though the number of asterisks represents the nesting level, that's not how depth is determined.
+A new level is created for each unique marker encountered.
+However, it's much more intuitive to follow the convention that the number of asterisks equals the level of nesting.
+After all, we're shooting for plain text markup that is readable _as is_.

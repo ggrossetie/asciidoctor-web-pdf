@@ -1,0 +1,44 @@
+////
+Included in:
+
+- user-manual: images: Include images by full URL
+////
+
+Asciidoctor supports remote (i.e., images with a URL target) block and inline images.
+You can reference images served from any URL (e.g., your blog, an image hosting service, your docs server, etc.) and never have to worry about downloading the images and putting them somewhere locally.
+
+Here are a few examples of images that have a URL target:
+
+.Block image with a URL target
+[source]
+----
+include::ex-image.adoc[tag=url]
+----
+
+====
+include::ex-image.adoc[tag=url]
+====
+
+.Inline image with a URL target
+[source]
+----
+include::ex-image.adoc[tag=in-url]
+----
+
+====
+include::ex-image.adoc[tag=in-url]
+====
+
+NOTE: The value of imagesdir is ignored when the image target is a URI.
+
+If you want to avoid typing the URL prefix for every image, and all the images are located on the same server, you can use the `imagesdir` attribute to set the base URL:
+
+.Using a URL as the base URL for images
+[source]
+----
+include::ex-image.adoc[tag=base-url]
+----
+
+This time, the imagesdir _is_ used since the image target is not a URL (the imagesdir just happens to be one).
+
+NOTE: This feature is included in the AsciiDoc compatibility file so that AsciiDoc gets it right too.

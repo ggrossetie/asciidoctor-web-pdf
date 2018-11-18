@@ -1,0 +1,82 @@
+////
+Included in:
+
+- user-manual: Images
+- quick-ref
+////
+
+// tag::base[]
+image::sunset.jpg[]
+// end::base[]
+
+// tag::alt[]
+image::sunset.jpg[Sunset]
+// end::alt[]
+
+// tag::attr-co[]
+[#img-sunset] <1>
+.A mountain sunset <2>
+[link=https://www.flickr.com/photos/javh/5448336655] <3>
+image::sunset.jpg[Sunset,300,200] <4> <5>
+// end::attr-co[]
+
+// tag::attr[]
+.A mountain sunset
+[#img-sunset]
+[caption="Figure 1: ",link=https://www.flickr.com/photos/javh/5448336655]
+image::sunset.jpg[Sunset,300,200]
+// end::attr[]
+
+// tag::in[]
+Click image:icons/play.png[Play, title="Play"] to get the party started.
+
+Click image:icons/pause.png[title="Pause"] when you need a break.
+// end::in[]
+
+// tag::in-role[]
+image:sunset.jpg[Sunset,150,150,role="right"] What a beautiful sunset!
+// end::in-role[]
+
+// tag::role[]
+[.right.text-center]
+image::tiger.png[Tiger,200,200]
+// end::role[]
+
+// tag::float[]
+image::tiger.png[Tiger,200,200,float="right",align="center"]
+// end::float[]
+
+// tag::in-float[]
+image:linux.png[Linux,150,150,float="right"]
+You can find Linux everywhere these days!
+// end::in-float[]
+
+// tag::frame[]
+image:logo.png[role="related thumb right"] Here's text that will wrap around the image to the left.
+// end::frame[]
+
+// tag::url[]
+image::https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg[Tux,250,350]
+// end::url[]
+
+// tag::in-url[]
+You can find image:https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg[Linux,25,35] everywhere these days.
+// end::in-url[]
+
+// tag::base-url[]
+:imagesdir-old: {imagesdir}
+:imagesdir: https://upload.wikimedia.org/wikipedia/commons
+
+image::3/35/Tux.svg[Tux,250,350]
+
+:imagesdir: {imagesdir-old}
+// end::base-url[]
+
+// tag::ab-url[]
+image::https://asciidoctor.org/images/octocat.jpg[GitHub mascot]
+// end::ab-url[]
+
+// tag::data[]
+= Document Title
+:data-uri:
+// end::data[]

@@ -1,0 +1,56 @@
+////
+Included in:
+
+- user-manual: Elements
+////
+
+One or more lines of text in a document are defined as a block element.
+Block elements can be nested within block elements.
+
+A document can include the following block elements:
+
+* Header
+* Title
+* Author Info
+* First Name
+* Middle Name
+* Last Name
+* Email Address
+* Revision Info
+* Revision Number
+* Revision Date
+* Revision Remark
+* Attribute Entry
+* Preamble
+* Section
+* Title
+* Section Body
+* BlockId
+* Block Title
+* Block Macro
+* Block
+* Paragraph
+* Delimited Block
+* Table
+* List
+* Bulleted List
+* Numbered List
+* Description List
+* Callout List
+* List Entry
+* List Label
+* List Item
+* Item Text
+* List Paragraph
+* List Continuation
+
+An inline element performs an operation on a subset of the content within a block element.
+
+Inline elements include:
+
+* Quotes
+* Replacements
+* Special characters
+* Special words
+* Attribute references
+* Inline macros

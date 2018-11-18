@@ -1,0 +1,30 @@
+////
+Included in:
+
+- user-manual: Stylesheet Factory: Applying a stylesheet
+////
+
+Let's practice applying a stylesheet to a simple AsciiDoc file.
+
+. Create an AsciiDoc file like the one below.
+. Save the file as [.path]_mysample.adoc_.
+
+// end
+
+[source]
+----
+= Introduction to AsciiDoc
+Doc Writer <doc@example.com>
+
+A preface about http://asciidoc.org[AsciiDoc].
+
+== First Section
+
+* item 1
+* item 2
+
+[source,ruby]
+puts "Hello, World!"
+----
+
+Next, you'll use the Asciidoctor processor to generate HTML and apply a stylesheet to it from the [.path]_stylesheets/_ directory.

@@ -1,0 +1,57 @@
+////
+Included in:
+
+- user-manual: Ordered lists: Nested
+- writers guide: ordering the things
+////
+
+// tag::basic[]
+You create a nested item by using one or more dots in front of each the item.
+
+[source]
+----
+include::ex-o-list.adoc[tag=nest]
+----
+
+AsciiDoc selects a different number scheme for each level of nesting.
+Here's how the previous list renders:
+
+.A nested ordered list
+====
+include::ex-o-list.adoc[tag=nest]
+====
+// end::basic[]
+
+[TIP]
+====
+Like with the asterisks in an unordered list, the number of dots in an ordered list doesn't represent the nesting level.
+However, it's much more intuitive to follow this convention:
+
+[quote]
+# of dots = level of nesting
+
+Again, we are shooting for plain text markup that is readable _as is_.
+====
+
+You can mix and match the three list types, ordered, <<user-manual#unordered-lists,unordered>>, and <<user-manual#description-list,description>>, within a single hybrid list.
+Asciidoctor works hard to infer the relationships between the items that are most intuitive to us humans.
+
+Here's an example of nesting an unordered list inside of an ordered list:
+
+[source]
+----
+include::ex-o-list.adoc[tag=mix]
+----
+
+====
+include::ex-o-list.adoc[tag=mix]
+====
+
+You can spread the items out and indent the nested lists if that makes it more readable for you:
+
+[source]
+----
+include::ex-o-list.adoc[tag=mix-alt]
+----
+
+The description list section demonstrates how to <<user-manual#three-hybrid,combine all three list types>>.

@@ -1,0 +1,22 @@
+//== Apache Ant
+
+The `asciidoctor-ant` task is an all-in-one solution for running Asciidoctor from Ant.
+It is based on AsciidoctorJ and JRuby, both of which are encapsulated in a single jar file.
+
+Usage is:
+
+[source,xml]
+--
+<project xmlns:asciidoctor="antlib:org.asciidoctor.ant">
+...
+    <target name="doc">
+        <taskdef uri="antlib:org.asciidoctor.ant"
+           resource="org/asciidoctor/ant/antlib.xml"
+           classpath="lib/asciidoctor-ant.jar"/>
+        <asciidoctor:convert sourceDirectory="src/asciidoc" outputDirectory="target"/>
+    </target>
+...
+</project>
+--
+
+For more details, see {uri-anttask}[asciidoctor-ant on GitHub].

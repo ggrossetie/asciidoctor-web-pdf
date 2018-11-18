@@ -1,0 +1,32 @@
+////
+Included in:
+
+- user-manual: verse
+////
+
+When you need to preserve indents and line breaks, use the `verse` block name.
+Verses are defined by setting `verse` on a paragraph or an excerpt block delimited by four underscores (`+____+`).
+
+.Verse paragraph syntax
+[source]
+----
+include::ex-verse.adoc[tag=para]
+----
+
+.Result: Verse paragraph
+====
+include::ex-verse.adoc[tag=para]
+====
+
+When the verse content includes blank or indented lines, enclose it in an excerpt block.
+
+.Verse delimited block syntax
+[source]
+----
+include::ex-verse.adoc[tag=bl]
+----
+
+.Result: verse block
+====
+include::ex-verse.adoc[tag=bl]
+====

@@ -1,0 +1,39 @@
+////
+Processing your document
+Selecting an Output Format
+
+This document is included in convert-documents and the user-manual.
+////
+
+The Asciidoctor processor is typically used to parse an AsciiDoc document and convert it to a variety of formats, such as HTML, DocBook, or PDF.
+This section describes how to specify the output format.
+
+The processor generates the output format using a converter.
+Each converter is mapped to the name of a backend.
+You specify the backend--and, in turn, the converter--using the `-b` (`--backend`) command line option or `backend` API option.
+If no backend is specified, the processor uses the converter for the default backend (`html5`).
+
+Asciidoctor provides several built-in converters, which are mapped to the following backend names:
+
+html (or html5):: HTML 5, styled with CSS3 (default).
+xhtml (or xhtml5):: The XHTML variant of the output from `html5`.
+docbook (or docbook5):: DocBook 5.0 XML.
+docbook45:: DocBook 4.5 XML.
+manpage:: Manual pages for Unix and Unix-like operating systems.
+
+Asciidoctor also has several add-on converters, which can be plugged in by adding the appropriate library to the runtime path (e.g., `-r asciidoctor-pdf`).
+These converters are mapped to the following backend names:
+
+pdf:: PDF, a portable document format.
+Requires the https://rubygems.org/gems/asciidoctor-pdf[asciidoctor-pdf] gem.
+epub3:: EPUB3, a distribution and interchange format standard for digital publications and documents.
+Requires the https://rubygems.org/gems/asciidoctor-epub3[asciidoctor-epub3] gem.
+latex:: LaTeX, a document preparation system for high-quality typesetting.
+Requires the https://rubygems.org/gems/asciidoctor-latex[asciidoctor-latex] gem.
+mallard:: Mallard 1.0 XML.
+Requires the https://github.com/asciidoctor/asciidoctor-mallard[asciidoctor-mallard] gem (not yet released).
+
+There are also converters available for HTML5 presentation systems such as reveal.js and Bespoke.js.
+Those converters are still in development and will be documented once releases become available.
+
+// TODO describe the role of template converters (e.g., asciidoctor-backends)

@@ -1,0 +1,63 @@
+////
+Included in:
+
+- user-manual: Unordered lists: Introduction
+- writers-guide: lists of things
+////
+
+If you were to create a list in an e-mail, how would you do it?
+Chances are, you'd mark list items using the same characters that Asciidoctor uses to find list items.
+
+In the example below, each list item is marked using an asterisk (`{asterisk}`), the AsciiDoc syntax specifying an unordered list item.
+
+[source]
+----
+include::ex-ulist.adoc[tag=base]
+----
+
+A list item's first line of text must be offset from the marker (`{asterisk}`) by at least one space.
+If you prefer, you can indent list items.
+Blank lines are required before and after a list.
+Additionally, blank lines are permitted, but not required, between list items.
+
+.Rendered unordered list
+====
+include::ex-ulist.adoc[tag=base]
+====
+
+You can add a title to a list by prefixing the title with a period (`.`).
+
+[source]
+----
+include::ex-ulist.adoc[tag=base-t]
+----
+
+.Rendered unordered list with a title
+====
+include::ex-ulist.adoc[tag=base-t]
+====
+
+Was your instinct to use a hyphen (`-`) instead of an asterisk to mark list items?
+Guess what?
+That works too!
+
+[source]
+----
+include::ex-ulist.adoc[tag=base-alt]
+----
+
+You should reserve the hyphen for lists that only have a single level because the hyphen marker (`-`) doesn't work for nested lists.
+Now that we've mentioned nested lists, let's go to the next section and learn how to create lists with multiple levels.
+
+[#separating-lists]
+.Separating Lists
+****
+If you have adjacent lists, they have the tendency to want to fuse together.
+To force lists apart, insert a line comment (`//`) surrounded by blank lines between the two lists.
+Here's an example, where the `-` text in the line comment indicates the line serves as an "`end of list`" marker:
+
+[source]
+----
+include::ex-ulist.adoc[tag=divide]
+----
+****

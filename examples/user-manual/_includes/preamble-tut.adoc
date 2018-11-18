@@ -1,0 +1,23 @@
+////
+Preamble
+
+Included in:
+
+- user-manual
+////
+
+Content between the document header and the first section title is called the preamble.
+The preamble is optional.
+
+.Preamble
+[source]
+----
+include::preamble.adoc[]
+----
+
+When using the default Asciidoctor stylesheet, the <<lead-style,`lead` attribute>> is applied to the first paragraph of the preamble.
+
+.Result: Rendered preamble
+====
+image::preamble.png[Preamble with lead attribute applied]
+====

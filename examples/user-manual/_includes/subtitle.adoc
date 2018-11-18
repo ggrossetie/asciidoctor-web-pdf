@@ -1,0 +1,71 @@
+////
+Subtitle partitioning
+
+Included in:
+
+- user-manual
+////
+By default, the document title is separated into a main title and subtitle using the industry standard, a colon followed by a space.
+
+NOTE: As of Asciidoctor 1.5.2, subtitle partitioning is not implemented in the HTML 5 backend.
+
+.A document title that contains a subtitle
+[source]
+----
+= Main Title: Subtitle
+----
+
+The separator is searched from the end of the text.
+Therefore, only the last occurrence of the separator is used for partitioning the title.
+
+.A document title that contains a subtitle and more than one separator
+[source]
+----
+= Main Title: Main Title Continued: Subtitle
+----
+
+You can modify the title separator by specifying the `separator` block attribute explicitly above the document title (since Asciidoctor 1.5.3).
+Note that a space will automatically be appended to the separator value.
+
+.A document title with an explicit title separator
+[source]
+----
+[separator=::]
+= Main Title:: Subtitle
+----
+
+You can also set the separator using a document attribute, either in the document:
+
+.A document title with an explicit title separator
+[source]
+----
+= Main Title:: Subtitle
+:title-separator: ::
+----
+
+or from the API or CLI (shown here):
+
+....
+$ asciidoctor -a title-separator=:: document.adoc
+....
+
+You can partition the title from the API when calling the `doctitle` method on Document:
+
+.Retrieving a partitioned document title
+[source,ruby]
+----
+title_parts = document.doctitle partition: true
+puts title_parts.title
+puts title_parts.subtitle
+----
+
+You can partition the title in an arbitrary way by passing the separator as a value to the partition option.
+In this case, the partition option both activates subtitle partitioning and passes in a custom separator.
+
+.Retrieving a partitioned document title with a custom separator
+[source,ruby]
+----
+title_parts = document.doctitle partition: '::'
+puts title_parts.title
+puts title_parts.subtitle
+----

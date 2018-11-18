@@ -1,0 +1,98 @@
+////
+Included in:
+
+- user-manual: URL: Internal cross References
+- quick-ref
+////
+
+// tag::base[]
+The section <<images>> describes how to insert images into your document.
+// end::base[]
+
+// tag::text[]
+Learn how to <<link-macro-attributes,use attributes within the link macro>>.
+// end::text[]
+
+// tag::xref-macro[]
+Learn how to xref:link-macro-attributes[use attributes within the link macro].
+// end::xref-macro[]
+
+// tag::bad[]
+Refer to link:document-b.html#section-b[Section B] for more information.
+// end::bad[]
+
+// tag::base-inter-top[]
+Refer to <<document-b.adoc#,Document B>> for more information.
+// end::base-inter-top[]
+
+// tag::base-inter[]
+Refer to <<document-b.adoc#section-b,Section B>> for more information.
+// end::base-inter[]
+
+// tag::b-base[]
+See <<paragraphs>> to learn how to write paragraphs.
+
+Learn how to organize the document into <<section-titles,sections>>.
+// end::b-base[]
+
+// tag::b-inter[]
+Refer to <<document-b.adoc#section-b,Section B>> for more information.
+
+See you when you get back from <<document-b#section-b,Section B>>!
+// end::b-inter[]
+
+// tag::block-id-brackets[]
+[[notice]]
+This paragraph gets a lot of attention.
+// end::block-id-brackets[]
+
+// tag::block-id-shorthand[]
+[#notice]
+This paragraph gets a lot of attention.
+// end::block-id-shorthand[]
+
+// tag::anchor[]
+// tag::anchor-brackets[]
+[[bookmark-a]]Inline anchors make arbitrary content referenceable.
+// end::anchor-brackets[]
+
+// tag::anchor-shorthand[]
+[#bookmark-b]#Inline anchors can be applied to a phrase like this one.#
+// end::anchor-shorthand[]
+
+anchor:bookmark-c[]Use a cross reference to link to this location.
+
+[[bookmark-d,last paragraph]]The xreflabel attribute will be used as link text in the cross-reference link.
+// end::anchor[]
+
+// tag::anchor-wrong[]
+[[anchor-point]]* list item text
+// end::anchor-wrong[]
+
+// tag::anchor-list[]
+* Fist item
+* [[step2]]Second item
+* Third item
+// end::anchor-list[]
+
+// tag::anchor-header[]
+=== Version 4.9 [[version-4_9]]
+// end::anchor-header[]
+
+// tag::anchor-header-extra[]
+=== [[current]]Version 4.9 [[version-4_9]]
+// end::anchor-header-extra[]
+
+// tag::anchor-xreflabel[]
+[[tiger-image,Image of a tiger]]
+.This image represents a Bengal tiger also called the Indian tiger
+image::tiger.png[]
+// end::anchor-xreflabel[]
+
+// tag::anchor-macro[]
+anchor:tiger-image[Image of a tiger]
+// end::anchor-macro[]
+
+// tag::xref-title[]
+Refer to <<Internal Cross References>>.
+// end::xref-title[]

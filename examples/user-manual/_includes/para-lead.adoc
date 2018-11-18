@@ -1,0 +1,22 @@
+////
+Included in:
+
+- user-manual: paragraphs: lead
+////
+
+Apply the `lead` style to any paragraph, and it will render using a larger font size.
+The lead style is assigned to the <<user-manual#role,role attribute>>.
+You can set `role` using the long- or shorthand method.
+
+.Setting role using shorthand (`.`) and assigning it the lead value
+[source]
+----
+include::ex-text.adoc[tag=lead]
+----
+
+.Rendered lead paragraph
+====
+include::ex-text.adoc[tag=lead]
+====
+
+When you convert a document to HTML and view it using the default stylesheet, the first paragraph of the preamble is automatically styled as a lead paragraph.
