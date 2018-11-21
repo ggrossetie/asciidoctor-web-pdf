@@ -568,7 +568,7 @@ spec:
     - number: 9000
 ```
 
-Important note: If `ports` not set then it is applied to all ports.
+IMPORTANT: If `ports` not set then it is applied to all ports.
 
 |===
 |	Field | Type | Description
@@ -602,10 +602,12 @@ a| `PrincipalBinding`
 a| Peer or origin identity should be use for principal. USE_PEER by default
 |===
 
+
+
+== End-user Authentication
+
 [.single-block]
 --
-
-=== End-user Authentication
 
 End user authentication (origin authentication) using JWT:
 
@@ -860,3 +862,9 @@ a| "*@redhat.com"
 Last property refers to JWT claim named `iss`.
 Obviously, you can use any other claim for this purpose.
 Usually, you might use `group` claim to allow access to users under a specific group.
+
+== Resources
+
+Istio In Action book:: https://www.manning.com/books/istio-in-action
+Introducing Istio Service Mesh for Microservices:: https://developers.redhat.com/books/introducing-istio-service-mesh-microservices/
+Red Hat Developer Istio-Tutorial:: https://redhat-developer-demos.github.io/istio-tutorial/
