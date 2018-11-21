@@ -1,7 +1,7 @@
-= Service Mesh with Istio
+= Service Mesh with Istio.io
 Alex Soto <https://twitter.com/alexsotob>; Christian Posta <https://twitter.com/christianposta>
 :authorbio_1: Java Champion and SW Engineer at Red Hat
-:authorbio_2: Chief Architect at Red Hat
+:authorbio_2: Author, Speaker, Chief Architect at Red Hat
 :pdf-width: 508mm
 :pdf-height: 361mm
 :version: v1.0.0
@@ -9,35 +9,35 @@ Alex Soto <https://twitter.com/alexsotob>; Christian Posta <https://twitter.com/
 
 == What is Service Mesh and Istio
 
-A *service mesh* is a dedicated infrastructure layer for making service-to-service communication safe, fast, and reliable.
+A *service mesh* is decentralized application networking infrastructure for making service-to-service communication safe, reliable, and understandable. A service mesh uses service proxies (that live with each service) to facilitate this functionality and each application talks through its own, co-located proxy. The proxies form the "mesh". 
 
-Istio is a service mesh which allows you to connect, manage and secure your microservices in an easy and none intrusive way.
+Istio is a service mesh which allows you to connect, secure, and control the traffic for your microservices in an declarative and non-intrusive way. 
 
-Some of the features that offer Istio are:
+Some of the features that Istio enable for cloud-native applications:
 
 * Intelligent routing and load balancing
 * Resilience against network failures
 * Policy enforcement between services
-* Observability of your architecture. Tracing and Metrics
+* Observability of your network communication
 * Securing service to service communication
 
 == Istio Architecture
 
-Istio is composed of two major components:
+Istio follows the typical service-mesh architecture with the following abstractions:
 
-* **Data plane** which is composed of *Envoy* proxies deployed as sidecar container along with your service for managing network along with policy and telemetry features.
-* **Control plane** which is in charge of managing and configuring all *Envoy* proxies.
+* **Data plane** which is composed of *Envoy* service proxies deployed as a sidecar along with your service through which all application traffic flows
+* **Control plane** which manage and configure the data plane (*Envoy* service proxies); additionally the control plane manages back-end infrastructure that complements the data plane (like metrics, policy, and security engines). 
 
-All communication within your *service mesh* happens through *Envoy* proxy, so any network logic to apply is moved from your service into your infrastructure.
+All communication within the *service mesh* happens through each application's *Envoy* proxy. Any network logic (retries, timeouts, circuit breaking, etc) is moved from your service into the service mesh.
 
 == Key Concepts of Istio
 
 == DestinationRule
 
-A *DestinationRule* configures the set of rules to be applied when forwarding traffic to a service.
-Some of the purposes of a *DestinationRule* are describing circuit breakers, load balancer, and TLS settings or define *subsets* (named versions) of the destination host so they can be reused in other Istio elements.
+A *DestinationRule* configures the set of rules to be applied when sending traffic to a service.
+Some of the purposes of a *DestinationRule* are describing circuit breakers, load balancer, and TLS settings or define *subsets* (named versions) of the destination hosts so they can be reused in other Istio elements.
 
-For example to define two services based on the version label of a service with hostname *recommendation* you could do:
+For example, to define two versions of a service named *recommendation* you could do:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -56,11 +56,13 @@ spec:
     name: version-v2
 ```
 
+In this example, the subsets are defined by labels on the services (platform specific; for example, Kubernetes uses labels on its Deployment objects and the labels used in the subsets here would refer to those Deployment labels). 
+
 == VirtualService
 
-A *VirtualService* describes the mapping between one or more user-addressable destinations to the actual destination inside the mesh.
+A *VirtualService* describes the mapping between one or more user-addressable destinations to the actual destination inside the service mesh.
 
-For example, to define two virtual services where the traffic is split between 50% to each one.
+For example, to define a single "virtual service" where the traffic is split between two deployed versions with 90% going to version 1 and 10% going to version 2:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -85,8 +87,7 @@ spec:
 
 == ServiceEntry
 
-A *ServiceEntry* is used to configure traffic to external services of the mesh such as APIs or legacy systems.
-You can use it in conjunction with a *VirtualService* and/or *DestinationRule*.
+A *ServiceEntry* is used to define services that exist outside of the service mesh but need to be made available to services within the mesh. A *ServiceEntry* is a way to add the details of a service into Istio's service registry. You can write  *VirtualService* and/or *DestinationRule* against a *ServiceEntry* just as if it was a mesh-native service.
 
 For example to configure _httpbin_ external service:
 
@@ -107,10 +108,9 @@ spec:
 
 == Gateway
 
-A *Gateway* is used to describe a load balancer operating at the edge of the mesh for incoming/outgoing HTTP/TCP connections.
-You can bind a *Gateway* to a *VirtualService*.
+A *Gateway* is used to describe a load balancer operating at the edge of the mesh for incoming/outgoing HTTP/TCP connections. You can use a  *VirtualService* to define routing rules (using the full power of Istio's routing capabilities) for traffic originating at the edge or destined for external services. 
 
-To configures a load balancer to allow external https traffic for host foo.com into the mesh:
+To configures a *Gateway* to allow external HTTPS traffic for host foo.com into the mesh:
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -145,12 +145,12 @@ First you need to download Istio and register in `PATH`:
 ```bash
 open https://github.com/istio/istio/releases/
 
-cd istio-1.0.2
+cd istio-1.0.3
 export ISTIO_HOME=`pwd`
 export PATH=$ISTIO_HOME/bin:$PATH
 ```
 
-You can install Istio into Kubernetes cluster by either using `helm install` or `helm template`.
+You can install Istio into Kubernetes cluster by either using `helm install` or `helm template`. With `template` we can create all of the resource files explicitly and then apply them like in this example:
 
 ```yaml
 $ helm template install/kubernetes/helm/istio \
@@ -271,7 +271,7 @@ Sending traffic depending on caller labels:
       subset: version-v1
 ```
 
-When caller contains labels `app=preference` and `version=v2` traffic is routed to **subset** `version-v2` if not routed to `version-v1`
+When the calling service contains labels `app=preference` and `version=v2`, traffic is routed to **subset** `version-v2`. Otherwise, traffic is routed to `version-v1`
 
 Mirroring traffic between two versions:
 
@@ -339,6 +339,7 @@ a| Names of the gateways where rule is applied to
 
 == Resilience
 
+=== Retry
 Retry 3 times when things go wrong before throwing the error upstream.
 
 ```yaml
@@ -360,6 +361,7 @@ spec:
         subset: version-v1
 ```
 
+=== Timeout
 You can add timeouts to communications, for example aborting call after 1 second:
 
 ```yaml
@@ -372,9 +374,11 @@ http:
 
 <<<
 
-If the request is forwarded to a certain instance and it fails (e.g. returns a 50x error code), 
-then this instance of an instance/pod is ejected to serve any other client request for an amount of time.
-In next example there must occur 5 consecutive errors before pod is ejected, ejection analysis occurs every 15 seconds, in case of ejection host will be ejected for 2 minutes and any host can be ejected.
+=== Outlier detection/Circuit breaking
+If the request is forwarded to a certain instance and it fails (e.g. returns a 5xx error code), 
+then this instance of an instance/pod can be ejected to serve any other client request for an amount of time (outlier detection).
+
+In next example we see outlier detection after 5 consecutive errors, ejection analysis every 15 seconds, and in the case of host ejection, the host will be ejected for 2 minutes.
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -515,15 +519,17 @@ a| the list operates as a blacklist or a whitelist
 
 == Telemetry, Monitoring and Tracing
 
-Isito comes with observability in mind providing out-of-the-box integration with Prometheus/Graphana and Jaeger.
+Istio comes with observability providing out-of-the-box integration with Prometheus/Grafana and Jaeger (OpenAPI Spec).
 
 == Service to Service Security
 
 You can secure the communication between all services by enabling mutual TLS (peer authentication).
 
+=== Mutual TLS
+
 First, you need to enable mutual TLS.
 
-You can enable it globally:
+You can enable it globally with *MeshPolicy*
 
 ```yaml
 apiVersion: "authentication.istio.io/v1alpha1"
@@ -538,7 +544,7 @@ spec:
 [.single-block]
 --
 
-Or by namespace:
+Or more fine-grained with *Policy*; in this case by namespace:
 
 ```yaml
 apiVersion: "authentication.istio.io/v1alpha1"
@@ -562,7 +568,7 @@ spec:
     - number: 9000
 ```
 
-If `ports` not set then it is applied to all ports.
+Important note: If `ports` not set then it is applied to all ports.
 
 |===
 |	Field | Type | Description
@@ -598,6 +604,8 @@ a| Peer or origin identity should be use for principal. USE_PEER by default
 
 [.single-block]
 --
+
+=== End-user Authentication
 
 End user authentication (origin authentication) using JWT:
 

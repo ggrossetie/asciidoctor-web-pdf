@@ -64,7 +64,7 @@ h1 {
 section.content {
   margin: 0.5cm;
   padding: 0;
-  columns: auto calc((100vw / 3) - 3cm);
+  columns: auto calc((100vw / 2) - 3cm);
 }
 
 .admonitionblock div {
@@ -72,7 +72,7 @@ section.content {
 }
 
 .sect1 {
-  max-width: calc((100vw / 3) - 3cm);
+  max-width: calc((100vw / 2) - 3cm);
   margin-right: 1.2cm;
   margin-left: 1.2cm;
   margin-top: 0.5cm;
