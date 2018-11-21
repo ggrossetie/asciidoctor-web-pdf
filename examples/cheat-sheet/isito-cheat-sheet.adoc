@@ -343,11 +343,6 @@ a| Names of the gateways where rule is applied to
 Retry 3 times when things go wrong before throwing the error upstream.
 
 ```yaml
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: recommendation
-  namespace: tutorial
 spec:
   hosts:
   - recommendation
@@ -365,14 +360,15 @@ spec:
 You can add timeouts to communications, for example aborting call after 1 second:
 
 ```yaml
-http:
-- route:
-  - destination:
-      host: recommendation
-  timeout: 1.000s
+spec:
+  hosts:
+  - recommendation
+  http:
+  - route:
+    - destination:
+        host: recommendation
+    timeout: 1.000s
 ```
-
-<<<
 
 === Outlier detection/Circuit breaking
 If the request is forwarded to a certain instance and it fails (e.g. returns a 5xx error code), 
