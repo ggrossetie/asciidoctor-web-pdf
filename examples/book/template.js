@@ -1,10 +1,10 @@
-module.exports = [{
-  paragraph: (ctx) => `<p class="${ctx.node.getRoles()}">${ctx.node.getContent()}</p>`,
-  section: (ctx) => `<section class="chapter">
-<h2>${ctx.node.getTitle()}</h2>
-${ctx.node.getContent()}
+module.exports = {
+  paragraph: (node) => `<p class="${node.getRoles()}">${node.getContent()}</p>`,
+  section: (node) => `<section class="chapter">
+<h2>${node.getTitle()}</h2>
+${node.getContent()}
 </section>`,
-  document: (ctx) => `<!DOCTYPE html>
+  document: (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -12,10 +12,10 @@ ${ctx.node.getContent()}
 </head>
 <body>
 <div id="cover">
-<h1>${ctx.node.getDocumentTitle()}</h1>
-<h2>by ${ctx.node.getDocument().getAuthor()}</h2>
+<h1>${node.getDocumentTitle()}</h1>
+<h2>by ${node.getDocument().getAuthor()}</h2>
 </div>
-${ctx.node.getContent()}
+${node.getContent()}
 </body>`,
-  image: (ctx) => `<img class="image ${ctx.node.getRoles()}" src="${ctx.node.getImageUri(ctx.node.getAttribute('target'))}"/>`
-}]
+  image: (node) => `<img class="image ${node.getRoles()}" src="${node.getImageUri(node.getAttribute('target'))}"/>`
+}

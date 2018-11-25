@@ -37,9 +37,9 @@ const renderAuthors = function (authors) {
 }
 
 
-module.exports = [{
-  paragraph: (ctx) => `<p class="${ctx.node.getRoles()}">${ctx.node.getContent()}</p>`,
-  document: (ctx) => `<!DOCTYPE html>
+module.exports = {
+  paragraph: (node) => `<p class="${node.getRoles()}">${node.getContent()}</p>`,
+  document: (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -48,16 +48,16 @@ module.exports = [{
 <body>
 <header>
   <img class="wordmark" src="./snyk/assets/wordmark.svg"/>
-  <h1>${ctx.node.getHeader().getTitle()}</h1>
+  <h1>${node.getHeader().getTitle()}</h1>
   <a class="website" href="www.snyk.io">www.snyk.io</a>
   <img class="logo" src="./snyk/assets/logo.svg"/>
 </header>
 <section class="content">
-${ctx.node.getContent()}
+${node.getContent()}
 <div class="sect1 authors">
 <h3>Authors :</h3>
-${renderAuthors(getAuthors(ctx.node))}
+${renderAuthors(getAuthors(node))}
 </div>
 </section>
 </body>`
-}]
+}
