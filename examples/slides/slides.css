@@ -1,0 +1,63 @@
+@import 'https://fonts.googleapis.com/css?family=Noto+Serif';
+@import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css';
+
+@page {
+  size: 1024px 768px;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+html {
+  font-size: 16pt;
+}
+
+.slide {
+  width: 1024px;
+  height: 768px;
+  padding: 10px;
+
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+#title-slide {
+  justify-content: center;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.no-title > h2 {
+  display: none;
+}
+
+.slide > footer {
+  margin-top: auto;
+  align-self: flex-end;
+}
+
+.two-col > .slide-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.two-col > .slide-content > *:first-child {
+  margin-right: 10px;
+  flex: 50%;
+}
+.two-col > .slide-content > *:last-child {
+  margin-left: 10px;
+  flex: 50%;
+}
+
+p {
+  margin-block-end: 0;
+  margin-block-start: 0;
+}

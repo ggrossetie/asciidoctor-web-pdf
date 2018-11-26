@@ -1,0 +1,59 @@
+= Asciidoctor.js PDF Presentation
+Tulse Luper <luper@example.org>
+
+== First Slide
+
+Hello
+
+* one
+* two
+* three
+
+NOTE: AsciiDoc is a powerful & easy to use markup language
+
+// section without a title
+== !
+
+[source,python]
+----
+class property(object):
+    def __init__(self, fget=None, fset=None, fdel=None):
+        self.fget = fget
+        self.fset = fset
+        self.fdel = fdel
+
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        if self.fget is None:
+            raise AttributeError("unreadable attribute")
+        return self.fget(obj)
+
+    def __set__(self, obj, value):
+        if self.fset is None:
+            raise AttributeError("can't set attribute")
+        self.fset(obj, value)
+
+    def __delete__(self, obj):
+        if self.fdel is None:
+            raise AttributeError("can't delete attribute")
+        self.fdel(obj)
+----
+
+
+[.two-col]
+== Two Columns
+
+[source,python]
+----
+class Point(NamedTuple):
+    x: float
+    y: float
+----
+
+--
+`NamedTuple` is cool:
+
+  * `+__str__+`
+  * `+__eq__+` & `+__hash__+`
+--
