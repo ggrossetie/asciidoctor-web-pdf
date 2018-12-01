@@ -16,6 +16,7 @@ html {
 }
 
 .slide {
+  position: relative;
   width: 1024px;
   height: 768px;
   padding: 10px;
@@ -39,8 +40,9 @@ h1, h2 {
 }
 
 .slide > footer {
-  margin-top: auto;
-  align-self: flex-end;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .two-col > .slide-content {

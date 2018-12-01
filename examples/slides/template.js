@@ -7,7 +7,7 @@ module.exports = {
   <div class='slide-content'>
     ${node.getContent()}
   </div>
-  <footer>
+  <footer class="small">
   <p>${node.index + 1} / ${node.parent.blocks.length}</p>
   </footer>
 </section>`,
