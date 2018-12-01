@@ -19,6 +19,8 @@ module.exports = {
 <link href="./asciidoctor.css" rel="stylesheet">
 <link href="./slides.css" rel="stylesheet">
 <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
 <script>

@@ -1,5 +1,6 @@
 = Asciidoctor.js PDF Presentation
 Tulse Luper <luper@example.org>
+:icons: font
 
 == First Slide
 
