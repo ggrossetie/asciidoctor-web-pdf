@@ -1,13 +1,13 @@
 module.exports = {
-  paragraph: (node) => `<p class="${node.getRoles()}">${node.getContent()}</p>`,
+  paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
 
   section: (node) => `
-<section class="slide ${node.getRoles()} ${node.getTitle() == '!' ? 'no-title' : ''}">
+<section class="slide ${node.getRoles().join(' ')} ${node.getTitle() == '!' ? 'no-title' : ''}">
   <h2>${node.getTitle()}</h2>
   <div class='slide-content'>
     ${node.getContent()}
   </div>
-  <footer>
+  <footer class="small">
   <p>${node.index + 1} / ${node.parent.blocks.length}</p>
   </footer>
 </section>`,
@@ -18,6 +18,8 @@ module.exports = {
 <meta charset="UTF-8">
 <link href="./asciidoctor.css" rel="stylesheet">
 <link href="./slides.css" rel="stylesheet">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
@@ -33,5 +35,5 @@ hljs.initHighlightingOnLoad();
 ${node.getContent()}
 </body>`,
 
-  image: (node) => `<img class="image ${node.getRoles()}" src="${node.getImageUri(node.getAttribute('target'))}"/>`
+  image: (node) => `<img class="image ${node.getRoles().join(' ')}" src="${node.getImageUri(node.getAttribute('target'))}"/>`
 }
