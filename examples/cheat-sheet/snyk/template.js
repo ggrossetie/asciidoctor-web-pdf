@@ -38,7 +38,7 @@ const renderAuthors = function (authors) {
 
 
 module.exports = {
-  paragraph: (node) => `<p class="${node.getRoles()}">${node.getContent()}</p>`,
+  paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
   document: (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,5 +1,5 @@
 module.exports = {
-  paragraph: (node) => `<p class="${node.getRoles()}">${node.getContent()}</p>`,
+  paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
   section: (node) => `<section class="chapter">
 <h2>${node.getTitle()}</h2>
 ${node.getContent()}
@@ -17,5 +17,5 @@ ${node.getContent()}
 </div>
 ${node.getContent()}
 </body>`,
-  image: (node) => `<img class="image ${node.getRoles()}" src="${node.getImageUri(node.getAttribute('target'))}"/>`
+  image: (node) => `<img class="image ${node.getRoles().join(' ')}" src="${node.getImageUri(node.getAttribute('target'))}"/>`
 }

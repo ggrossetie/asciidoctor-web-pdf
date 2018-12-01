@@ -1,8 +1,8 @@
 module.exports = {
-  paragraph: (node) => `<p class="${node.getRoles()}">${node.getContent()}</p>`,
+  paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
 
   section: (node) => `
-<section class="slide ${node.getRoles()} ${node.getTitle() == '!' ? 'no-title' : ''}">
+<section class="slide ${node.getRoles().join(' ')} ${node.getTitle() == '!' ? 'no-title' : ''}">
   <h2>${node.getTitle()}</h2>
   <div class='slide-content'>
     ${node.getContent()}
@@ -35,5 +35,5 @@ hljs.initHighlightingOnLoad();
 ${node.getContent()}
 </body>`,
 
-  image: (node) => `<img class="image ${node.getRoles()}" src="${node.getImageUri(node.getAttribute('target'))}"/>`
+  image: (node) => `<img class="image ${node.getRoles().join(' ')}" src="${node.getImageUri(node.getAttribute('target'))}"/>`
 }
