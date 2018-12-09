@@ -1,5 +1,9 @@
 = Asciidoctor.js PDF
 
+ifdef::env-github[]
+image:https://img.shields.io/travis/Mogztter/asciidoctor-pdf.js/master.svg[Travis build status, link=https://travis-ci.org/Mogztter/asciidoctor-pdf.js]
+endif::[]
+
 Convert AsciiDoc document to PDF using Asciidoctor.js and Puppeteer (Headless Chrome)
 
 == About
