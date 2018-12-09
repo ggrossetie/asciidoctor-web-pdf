@@ -1,8 +1,16 @@
 {
   "name": "asciidoctor-pdf.js",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A PDF converter for AsciiDoc based on Asciidoctor.js",
+  "main": "bin/asciidoctorjs-pdf",
+  "engines": {
+    "node": ">=8.11",
+    "npm": ">=5.0.0"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
   "scripts": {
     "test": "./bin/asciidoctorjs-pdf --version"
   },
@@ -12,7 +20,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Mogztter/asciidoctor-pdf.js/issues"
   },
