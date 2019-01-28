@@ -5,6 +5,7 @@ module.exports = (node) => `<!DOCTYPE html>
 <link href="./asciidoctor.css" rel="stylesheet">
 <link href="./document.css" rel="stylesheet">
 <script src="../../lib/paged-0.1.30.js"></script>
+<script src="./repeating-table-headers.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="article">
