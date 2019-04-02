@@ -1,11 +1,14 @@
 {
-  "name": "asciidoctor-pdf.js",
-  "version": "1.0.0",
+  "name": "asciidoctor-pdf",
+  "version": "1.0.0-dev",
   "description": "A PDF converter for AsciiDoc based on Asciidoctor.js",
   "main": "bin/asciidoctorjs-pdf",
   "engines": {
     "node": ">=8.11",
     "npm": ">=5.0.0"
+  },
+  "bin": {
+    "asciidoctor-pdf": "bin/asciidoctorjs-pdf"
   },
   "files": [
     "bin",
