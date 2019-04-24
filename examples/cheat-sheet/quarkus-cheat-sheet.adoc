@@ -1,0 +1,292 @@
+= Quarkus
+Alex Soto <https://twitter.com/alexsotob>;
+:authorbio_1: Java Champion and SW Engineer at Red Hat
+:pdf-width: 508mm
+:pdf-height: 361mm
+:version: v0.13.3
+
+== What is Quarkus?
+
+Quarkus (https://quarkus.io/) is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
+Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.
+
+== Getting Started
+
+Quarkus comes with a Maven archetype to scaffold a very simple starting project.
+
+```bash
+mvn io.quarkus:quarkus-maven-plugin:0.13.3:create \
+    -DprojectGroupId=org.acme \
+    -DprojectArtifactId=getting-started \
+    -DclassName="org.acme.quickstart.GreetingResource" \
+    -Dpath="/hello"
+```
+
+This creates a simple JAX-RS resource called `GreetingResource`.
+
+```java
+@Path("/hello")
+public class GreetingResource {
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() {
+        return "hello";
+    }
+}
+```
+
+== Extensions
+
+Quarkus comes with extensions to integrate with some libraries such as JSON-B, Camel or MicroProfile libraries.
+To list all available extensions just run:
+
+```bash
+./mvnw quarkus:list-extensions
+```
+
+And to register the extensions into build tool:
+
+```bash
+./mvnw quarkus:add-extension -Dextensions=""
+```
+
+== Adding Configuration Parameters
+
+To add configuration to your application, Quarkus relies on MicroProfile Config spec (https://github.com/eclipse/microprofile-config).
+
+```java
+@ConfigProperty(name = "greetings.message")
+String message;
+
+@ConfigProperty(name = "greetings.message", 
+                defaultValue = "Hello")
+String messageWithDefault;
+
+@ConfigProperty(name = "greetings.message")
+Optional<String> optionalMessage;
+```
+
+Properties can be set as environment variable, system property or in `src/main/resources/application.properties`.
+
+```properties
+greetings.message = Hello World
+```
+
+== Injection
+
+Quarkus is based on CDI to implement injection of code.
+
+```java
+@ApplicationScoped
+public class GreetingService {
+
+    public String message(String message) {
+        return message.toUpperCase();
+    }
+}
+```
+
+Scope annotation is mandatory to make the bean discoverable by CDI.
+
+```java
+@Inject
+GreetingService greetingService;
+```
+
+
+Taule CDI?
+
+== JSON Marshalling/Unmarshalling
+
+To work with `JSON-B` you need to add a dependency:
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-resteasy-jsonb"
+```
+
+Any POJO is marshalled/unmarshalled automatically.
+
+```java
+public class Sauce {
+    private String name;
+    private long scovilleHeatUnits;
+
+    // getter/setters
+}
+```
+
+JSON equivalent:
+
+```json
+{
+	"name":"Blair's Ultra Death",
+	"scovilleHeatUnits": 1100000
+}
+```
+
+In a `POST` endpoint example:
+
+```java
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+public Response create(Sauce sauce) {
+    // Create Sauce
+    return Response.created(URI.create(sauce.getId()))
+            .build();
+}
+```
+
+== Persistence
+
+Quarkus works with JPA(Hibernate) as persistence solution.
+But also provides an Active Record pattern (https://en.wikipedia.org/wiki/Active_record_pattern) implementation under Panache project.
+
+To use database access you also need to add Quarkus JDBC drivers instead of the original ones.
+At this time `H2`, `MariaDB` and `PostgreSQL` drivers are supported.
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-hibernate-orm-panache, 
+                io.quarkus:quarkus-jdbc-mariadb"
+```
+
+```java
+@Entity
+public class Developer extends PanacheEntity {
+
+    // id field is implicit
+
+    public String name;
+}
+```
+
+And configuration in `src/main/resources/application.properties`:
+
+```properties
+quarkus.datasource.url=jdbc:mariadb://localhost:3306/mydb
+quarkus.datasource.driver=org.mariadb.jdbc.Driver
+quarkus.datasource.username=developer
+quarkus.datasource.password=developer
+quarkus.hibernate-orm.database.generation=update
+```
+
+Database operations:
+
+```java
+// Insert
+Developer developer = new Developer();
+developer.name = "Alex";
+developer.persist();
+
+// Find All
+Developer.findAll().list();
+
+// Find By Query
+Developer.find("name", "Alex").firstResult();
+
+// Delete
+Developer developer = new Developer();
+developer.id = 1;
+developer.delete();
+
+// Delete By Query
+long numberOfDeleted = Developer.delete("name", "Alex");
+```
+
+Remember to annotate methods with `@Transactional` annotation to make changes persisted in database.
+
+Clarification about queries
+
+*Static Methods*
+
+|===	
+| Field | Parameters | Return
+
+a| `findById`
+a| `Object`
+a| Returns object or null if not found.
+
+a| `find`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Lists of entities meeting given query with parameters set.
+
+a| `find`
+a| `String`, `Sort`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Lists of entities meeting given query with parameters set sorted by `Sort` attribute/s.
+
+a| `findAll`
+a| 
+a| Finds all entities.
+
+a| `findAll`
+a| `Sort`
+a| Finds all entities sorted by `Sort` attribute/s.
+
+a| `stream`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| `java.util.stream.Stream` of entities meeting given query with parameters set.
+
+a| `stream`
+a| `String`, `Sort`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| `java.util.stream.Stream` of entities meeting given query with parameters set sorted by `Sort` attribute/s.
+
+a| `streamAll`
+a| 
+a| `java.util.stream.Stream` of all entities.
+
+a| `streamAll`
+a| `Sort`
+a| `java.util.stream.Stream` of all entities sorted by `Sort` attribute/s.
+
+a| `count`
+a| 
+a| `Number of entities.
+
+a| `count`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Number of entities meeting given query with parameters set.
+
+a| `deleteAll`
+a| 
+a| Number of deleted entities.
+
+a| `delete`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Number of deleted entities meeting given query with parameters set.
+
+a| `persist`
+a| [`Iterable`, `Steram`, `Object...`]
+a| 
+|===
+
+== Rest Client
+
+Quarkus implements MicroProfile Rest Client (https://github.com/eclipse/microprofile-rest-client) spec:
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-rest-client"
+```
+
+To get content from http://worldclockapi.com/api/json/cet/now you need to create a service interface:
+
+```java
+@Path("/api")
+@RegisterRestClient
+public interface WorldClockService {
+
+    @GET @Path("/json/cet/now")
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON) 
+    WorldClock getNow();
+}
+```
+
+And configure the hostname at `application.properties`:
+
+```properties
+org.acme.quickstart.WorldClockService/mp-rest/url=http://worldclockapi.com
+```
+
+xx
