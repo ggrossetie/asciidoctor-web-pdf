@@ -51,6 +51,8 @@ And to register the extensions into build tool:
 ./mvnw quarkus:add-extension -Dextensions=""
 ```
 
+TIP: `extensions` property supports CSV format to register more than one extension.
+
 == Adding Configuration Parameters
 
 To add configuration to your application, Quarkus relies on MicroProfile Config spec (https://github.com/eclipse/microprofile-config).
@@ -75,7 +77,9 @@ greetings.message = Hello World
 
 == Injection
 
-Quarkus is based on CDI to implement injection of code.
+Quarkus is based on CDI 2.0 to implement injection of code.
+It is not fully supported and only a subset of the specification is implemented.
+
 
 ```java
 @ApplicationScoped
@@ -94,8 +98,7 @@ Scope annotation is mandatory to make the bean discoverable by CDI.
 GreetingService greetingService;
 ```
 
-
-Taule CDI?
+IMPORTANT: Quarkus is designed with Substrate VM in mind. For this reason we encourage you to use _package-private_ scope instead of _private_.
 
 == JSON Marshalling/Unmarshalling
 
@@ -197,7 +200,11 @@ long numberOfDeleted = Developer.delete("name", "Alex");
 
 Remember to annotate methods with `@Transactional` annotation to make changes persisted in database.
 
-Clarification about queries
+If queries start with keyword `from` then they are treat as _HQL_ query, if not then next short form is supported:
+
+* `order by` which expands to `from EntityName order by ...`
+* `<columnName>` which expands to `from EntityName where <columnName>=?`
+* `<query>` which is expanded to `from EntityName where <query>`
 
 *Static Methods*
 
@@ -261,6 +268,8 @@ a| [`Iterable`, `Steram`, `Object...`]
 a| 
 |===
 
+INFO: Panache also support _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
+
 == Rest Client
 
 Quarkus implements MicroProfile Rest Client (https://github.com/eclipse/microprofile-rest-client) spec:
@@ -289,4 +298,290 @@ And configure the hostname at `application.properties`:
 org.acme.quickstart.WorldClockService/mp-rest/url=http://worldclockapi.com
 ```
 
-xx
+Injecting the client:
+
+```java
+@Inject
+@RestClient
+WorldClockService worldClockService;
+```
+
+*Customizing headers*
+
+You can customize the headers passed by implementing MicroProfile `ClientHeadersFactory` annotation:
+
+```java
+@RegisterForReflection
+public class BaggageHeadersFactory 
+                implements ClientHeadersFactory {
+    @Override
+    public MultivaluedMap<String, String> update(
+        MultivaluedMap<String, String> incomingHeaders, 
+        MultivaluedMap<String, String> clientOutgoingHeaders) {}
+}
+```
+
+And registering it in the client using `RegisterClientHeaders` annotation.
+
+```java
+@RegisterClientHeaders(BaggageHeadersFactory.class)
+@RegisterRestClient
+public interface WorldClockService {}
+```
+
+Or statically set:
+
+xxxx
+
+== Validator
+
+Quarkus uses Hibernate Validator to validate input/output of of REST services and business services.
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-hibernate-validator"
+```
+
+Annotate POJO objects with validator annotations such as: `@NotNull`, `@Digits`, `@NotBlank`, `@Min`, `@Max`, ...
+
+```java
+public class Sauce {
+
+    @NotBlank(message = "Name may not be blank")
+    private String name;
+    @Min(0)
+    private long scovilleHeatUnits;
+
+    // getter/setters
+}
+
+To validate that an object is valid you need to annotate where is sued with `@Valid` annotation:
+
+```java
+public Response create(@Valid Sauce sauce) {}
+```
+
+TIP: If a validation error is triggered, a violation report is generated and serialized as JSON. If you want to manipulate the output, you need to catch in the code the `ConstraintViolationException` exception.
+
+*Create Your Own Validations*
+
+xxx
+
+*Manual Validation*
+
+You can call the validation process manualy instead of relaying to `@Valid` by injecting `Validator` class.
+
+```java
+@Inject
+Validator validator;
+```
+
+And use it:
+
+```java
+Set<ConstraintViolation<Sauce>> violations = validator.validate(sauce);
+```
+
+== Reactive Programming
+
+Quarkus implements MicroProfile Reactive spec and uses RXJava2 to provide reactive programming model.
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-reactive-streams-operators"
+```
+
+Asynchronous HTTP endpoint is implemented by returning Java `CompletionStage`.
+You can create this class either manually or using MicroProfile Reactive Streams spec:
+
+```java
+@GET
+@Path("/reactive")
+@Produces(MediaType.TEXT_PLAIN)
+public CompletionStage<String> getHello() {
+    return ReactiveStreams.of("h", "e", "l", "l", "o")
+    .map(String::toUpperCase)
+    .toList()
+    .run()
+    .thenApply(list -> list.toString());
+}
+```
+
+Creating streams is also easy, you just need to return `Publisher` object.
+
+```java
+@GET
+@Path("/stream")
+@Produces(MediaType.SERVER_SENT_EVENTS)
+public Publisher<String> publishers() {
+        return Flowable
+        .interval(500, TimeUnit.MILLISECONDS)
+        .map(s -> atomicInteger.getAndIncrement())
+        .map(i -> Integer.toString(i));
+}
+```
+
+== Security
+
+== Observability
+
+*Health Checks*
+
+Quarkus relies on MicroProfile Health spec to provide health checks.
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-health"
+```
+
+By just adding this extension, an endpoint is registered to `/health` providing a default health check.
+
+```json
+{
+    "outcome": "UP",
+    "checks": [
+    ]
+}
+```
+
+To create a custom health check you need to implement the `HealthCheck` interface and annotate it with `@Health` annotation.
+
+```java
+@Health
+public class DatabaseHealthCheck implements HealthCheck {
+    @Override
+    public HealthCheckResponse call() {
+        HealthCheckResponseBuilder responseBuilder = 
+            HealthCheckResponse.named("Database connection");
+
+        try {
+            checkDatabaseConnection();
+            responseBuilder.withData("connection", true);
+            responseBuilder.up();
+        } catch (IOException e) {
+            // cannot access the database
+            responseBuilder.down()
+                    .withData("error", e.getMessage());
+        }
+        return responseBuilder.build();
+    }
+}
+```
+
+Build next output:
+
+```json
+
+{
+    "outcome": "UP",
+    "checks": [
+        {
+            "name": "Database connection",
+            "state": "UP",
+            "data": {
+                "connection": true
+            }
+        }
+    ]
+}
+```
+
+*Metrics*
+
+Quarkus can utilize the MicroProfile Metrics specification to provide metrics support.
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-metrics"
+```
+
+The metrics can be read remotely using JSON format or the OpenMetrics format.
+By just adding the extension, an endpoint is registered at `/metrics` providing default metrics.
+
+MicroProfile Metrics comes with some annotations to add smoe specific monitoring values:
+
+|===	
+| Annotation | Description
+
+a|`@Timed`
+a|Marking a method, constructor, or class as timed.
+
+a|`@Metered`
+a|Marking a method, constructor, or class as metered.
+
+a|`@Counted`
+a|Marking a method, constructor, or class as counted.
+
+a|`@Gauge`
+a|Marking a method or field as a gauge.
+
+a|`@Metric`
+a|Requesting that a metric be injected or registered.
+|===
+
+```java
+@GET
+//...
+@Timed(name = "checksTimer", 
+description = "A measure of how long it takes to perform a hello.", 
+unit = MetricUnits.MILLISECONDS)
+public String hello() {}
+```
+
+`@Gauge` annotation returning a measure as gauge.
+
+```java
+@Gauge(name = "hottestSauce", unit = MetricUnits.NONE, 
+description = "Hottest Sauce so far.")
+public Long hottestSauce() {}
+```
+
+Injecting using `@Metric`.
+
+```java
+@Inject
+@Metric(name = "histogram")
+Histogram historgram;
+```
+
+*Tracing*
+
+Quarkus can utilize the MicroProfile OpenTracing spec to provide tracing support.
+
+```bash
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-opentracing"
+```
+
+By default, requests sent to any endpoint are traced without any code changes being required.
+
+This extensions includes OpenTracing support and `Jaeger` tracer.
+
+Jaeger tracer configuration:
+
+```properties
+quarkus.jaeger.service-name=myservice
+quarkus.jaeger.sampler-type=const
+quarkus.jaeger.sampler-param=1
+quarkus.jaeger.endpoint=http://localhost:14268/api/traces
+```
+
+`@Traced` annotation can be set to disable tracing at class or method level.
+
+`Tracer` class can be injected into class.
+
+```java
+@Inject
+Tracer tracer;
+
+tracer.activeSpan().setBaggageItem("key", "value");
+```
+
+== Cloud
+
+
+
+K8s
+Native
+
+== Testing
