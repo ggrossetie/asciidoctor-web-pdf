@@ -2,20 +2,19 @@
   "name": "asciidoctor-pdf",
   "version": "1.0.0-alpha.1",
   "description": "A PDF converter for AsciiDoc based on Asciidoctor.js",
-  "main": "bin/asciidoctorjs-pdf",
   "engines": {
     "node": ">=8.11",
     "npm": ">=5.0.0"
   },
   "bin": {
-    "asciidoctor-pdf": "bin/asciidoctorjs-pdf"
+    "asciidoctor-pdf": "bin/asciidoctor-pdf"
   },
   "files": [
     "bin",
     "lib"
   ],
   "scripts": {
-    "test": "./bin/asciidoctorjs-pdf --version"
+    "test": "./bin/asciidoctor-pdf --version"
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,7 @@
   },
   "homepage": "https://github.com/Mogztter/asciidoctor-pdf.js#readme",
   "dependencies": {
+    "@asciidoctor/cli": "github:Mogztter/asciidoctor-cli.js#issue-64-cli-api",
     "chokidar": "2.0.4",
     "puppeteer": "1.15.0",
     "yargs": "13.2.2"
