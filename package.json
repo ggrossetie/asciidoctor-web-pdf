@@ -29,9 +29,14 @@
   },
   "homepage": "https://github.com/Mogztter/asciidoctor-pdf.js#readme",
   "dependencies": {
-    "asciidoctor.js": "1.5.9",
     "chokidar": "2.0.4",
     "puppeteer": "1.15.0",
-    "yargs": "11.0.0"
+    "yargs": "13.2.2"
+  },
+  "devDependencies": {
+    "@asciidoctor/core": "^2.0.0-rc.1"
+  },
+  "peerDependencies": {
+    "@asciidoctor/core": "^2.0.0-rc.1"
   }
 }
