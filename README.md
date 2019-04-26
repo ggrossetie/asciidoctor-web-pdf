@@ -13,7 +13,7 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 
 ## Usage
 
-    $ npm i asciidoctor-pdf
+    $ npm i asciidoctor asciidoctor-pdf
 
     $ asciidoctor-pdf document.adoc --template-require ./template.js
 
