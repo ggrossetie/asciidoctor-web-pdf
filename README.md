@@ -28,20 +28,20 @@ We provides a few examples in the `examples` directory:
 
 **Letter**
 
-    ./bin/asciidoctorjs-pdf ./examples/letter/letter.adoc --template-require ./examples/letter/template.js
+    asciidoctor-pdf ./examples/letter/letter.adoc --template-require ./examples/letter/template.js
 
 **Book**
 
-    ./bin/asciidoctorjs-pdf ./examples/book/book.adoc --template-require ./examples/book/template.js
+    sciidoctor-pdf ./examples/book/book.adoc --template-require ./examples/book/template.js
 
 **Document**
 
-    ./bin/asciidoctorjs-pdf ./examples/document/document.adoc --template-require ./examples/document/templates/index.js
+    asciidoctor-pdf ./examples/document/document.adoc --template-require ./examples/document/templates/index.js
 
 **Slides**
 
-    ./bin/asciidoctorjs-pdf ./examples/slides/slides.adoc --template-require ./examples/slides/template.js
+    asciidoctor-pdf ./examples/slides/slides.adoc --template-require ./examples/slides/template.js
 
 **Resume**
 
-    ./bin/asciidoctorjs-pdf ./examples/resume/resume.adoc --template-require ./examples/resume/template.js
+    asciidoctor-pdf ./examples/resume/resume.adoc --template-require ./examples/resume/template.js
