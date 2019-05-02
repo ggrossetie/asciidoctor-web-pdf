@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Mogztter/asciidoctor-pdf.js#readme",
   "dependencies": {
-    "@asciidoctor/cli": "github:Mogztter/asciidoctor-cli.js#issue-64-cli-api",
+    "@asciidoctor/cli": "3.0.0",
     "chokidar": "2.0.4",
     "puppeteer": "1.15.0",
     "yargs": "13.2.2"
