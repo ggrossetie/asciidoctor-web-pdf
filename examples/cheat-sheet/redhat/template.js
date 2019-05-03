@@ -36,7 +36,6 @@ const renderAuthors = function (authors) {
   }).join('\n')
 }
 
-
 module.exports = [{
   paragraph: (ctx) => `<p class="${ctx.node.getRoles()}">${ctx.node.getContent()}</p>`,
   document: (ctx) => `<!DOCTYPE html>
@@ -48,7 +47,7 @@ module.exports = [{
 <body>
 <header>
   <h1>${ctx.node.getHeader().getTitle()}</h1>
-  <img class="logo" src="./redhat/assets/logo.png"/>
+  <img class="logo" src="./redhat/assets/${ctx.node.getAttribute('logo')}"/>
 </header>
 <section class="content">
 ${ctx.node.getContent()}

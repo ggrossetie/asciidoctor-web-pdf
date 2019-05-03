@@ -1,9 +1,10 @@
 = Quarkus
 Alex Soto <https://twitter.com/alexsotob>;
-:authorbio_1: Java Champion and SW Engineer at Red Hat
+:authorbio: Java Champion and SW Engineer at Red Hat
+:logo: quarkus.png
 :pdf-width: 508mm
 :pdf-height: 361mm
-:version: v0.13.3
+:version: v0.14.0
 
 == What is Quarkus?
 
@@ -15,7 +16,7 @@ Also focused on developer experience, making things just work with little to no 
 Quarkus comes with a Maven archetype to scaffold a very simple starting project.
 
 ```bash
-mvn io.quarkus:quarkus-maven-plugin:0.13.3:create \
+mvn io.quarkus:quarkus-maven-plugin:0.14.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
@@ -38,7 +39,7 @@ public class GreetingResource {
 
 == Extensions
 
-Quarkus comes with extensions to integrate with some libraries such as JSON-B, Camel or MicroProfile libraries.
+Quarkus comes with extensions to integrate with some libraries such as JSON-B, Camel or MicroProfile spec.
 To list all available extensions just run:
 
 ```bash
@@ -51,7 +52,9 @@ And to register the extensions into build tool:
 ./mvnw quarkus:add-extension -Dextensions=""
 ```
 
-TIP: `extensions` property supports CSV format to register more than one extension.
+TIP: `extensions` property supports CSV format to register more than one extension at once.
+
+<<<
 
 == Adding Configuration Parameters
 
@@ -78,7 +81,7 @@ greetings.message = Hello World
 == Injection
 
 Quarkus is based on CDI 2.0 to implement injection of code.
-It is not fully supported and only a subset of the specification is implemented.
+It is not fully supported and only a subset of the specification is implemented (https://quarkus.io/guides/cdi-reference).
 
 
 ```java
@@ -98,7 +101,7 @@ Scope annotation is mandatory to make the bean discoverable by CDI.
 GreetingService greetingService;
 ```
 
-IMPORTANT: Quarkus is designed with Substrate VM in mind. For this reason we encourage you to use _package-private_ scope instead of _private_.
+IMPORTANT: Quarkus is designed with Substrate VM in mind. For this reason, we encourage you to use _package-private_ scope instead of _private_.
 
 == JSON Marshalling/Unmarshalling
 
@@ -109,7 +112,7 @@ To work with `JSON-B` you need to add a dependency:
   -Dextensions="io.quarkus:quarkus-resteasy-jsonb"
 ```
 
-Any POJO is marshalled/unmarshalled automatically.
+Any POJO is marshaled/unmarshalled automatically.
 
 ```java
 public class Sauce {
@@ -146,7 +149,7 @@ public Response create(Sauce sauce) {
 Quarkus works with JPA(Hibernate) as persistence solution.
 But also provides an Active Record pattern (https://en.wikipedia.org/wiki/Active_record_pattern) implementation under Panache project.
 
-To use database access you also need to add Quarkus JDBC drivers instead of the original ones.
+To use database access you need to add Quarkus JDBC drivers instead of the original ones.
 At this time `H2`, `MariaDB` and `PostgreSQL` drivers are supported.
 
 ```bash
@@ -198,9 +201,9 @@ developer.delete();
 long numberOfDeleted = Developer.delete("name", "Alex");
 ```
 
-Remember to annotate methods with `@Transactional` annotation to make changes persisted in database.
+Remember to annotate methods with `@Transactional` annotation to make changes persisted in the database.
 
-If queries start with keyword `from` then they are treat as _HQL_ query, if not then next short form is supported:
+If queries start with the keyword `from` then they are treated as _HQL_ query, if not then next short form is supported:
 
 * `order by` which expands to `from EntityName order by ...`
 * `<columnName>` which expands to `from EntityName where <columnName>=?`
@@ -268,7 +271,7 @@ a| [`Iterable`, `Steram`, `Object...`]
 a| 
 |===
 
-INFO: Panache also support _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
+TIP: Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
 
 == Rest Client
 
@@ -287,15 +290,33 @@ To get content from http://worldclockapi.com/api/json/cet/now you need to create
 public interface WorldClockService {
 
     @GET @Path("/json/cet/now")
-    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON) 
+    @Produces(MediaType.APPLICATION_JSON) 
     WorldClock getNow();
+
+    @GET
+    @Path("/json/{where}/now")
+    @Produces(MediaType.APPLICATION_JSON) 
+    WorldClock getSauce(@BeanParam 
+                            WorldClockOptions worldClockOptions);
+
+}
+```
+
+```java
+public class WorldClockOptions {
+    @HeaderParam("Authorization")
+    String auth;
+
+    @PathParam("where")
+    String where;   
 }
 ```
 
 And configure the hostname at `application.properties`:
 
 ```properties
-org.acme.quickstart.WorldClockService/mp-rest/url=http://worldclockapi.com
+org.acme.quickstart.WorldClockService/mp-rest/url=
+        http://worldclockapi.com
 ```
 
 Injecting the client:
@@ -306,7 +327,9 @@ Injecting the client:
 WorldClockService worldClockService;
 ```
 
-*Customizing headers*
+TIP: You can still use the JAX-RS client without any problem `ClientBuilder.newClient().target(...)`
+
+*Adding headers*
 
 You can customize the headers passed by implementing MicroProfile `ClientHeadersFactory` annotation:
 
@@ -331,11 +354,27 @@ public interface WorldClockService {}
 
 Or statically set:
 
-xxxx
+```java
+@GET
+@ClientHeaderParam(name="X-Log-Level", value="ERROR")
+Response getNow();
+```
+
+*Asynchronous*
+
+A method on client interface can return a `CompletionStage` class to be executed asynchronously.
+
+```java
+@GET @Path("/json/cet/now")
+@Produces(MediaType.APPLICATION_JSON) 
+CompletionStage<WorldClock> getNow();
+```
+
+<<<
 
 == Validator
 
-Quarkus uses Hibernate Validator to validate input/output of of REST services and business services.
+Quarkus uses Hibernate Validator (https://hibernate.org/validator/) to validate input/output of REST services and business services using Bean validation spec.
 
 ```bash
 ./mvnw quarkus:add-extension 
@@ -354,8 +393,9 @@ public class Sauce {
 
     // getter/setters
 }
+```
 
-To validate that an object is valid you need to annotate where is sued with `@Valid` annotation:
+To validate that an object is valid you need to annotate where is used with `@Valid` annotation:
 
 ```java
 public Response create(@Valid Sauce sauce) {}
@@ -363,13 +403,55 @@ public Response create(@Valid Sauce sauce) {}
 
 TIP: If a validation error is triggered, a violation report is generated and serialized as JSON. If you want to manipulate the output, you need to catch in the code the `ConstraintViolationException` exception.
 
-*Create Your Own Validations*
+*Create Your Custom Constraints*
 
-xxx
+First you need to create the custom annotation:
+
+```java
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, 
+            PARAMETER, TYPE_USE })
+@Retention(RUNTIME)
+@Documented
+@Constraint(validatedBy = { NotExpiredValidator.class})
+public @interface NotExpired {
+
+    String message() default "Sauce must not be expired";
+    Class<?>[] groups() default { };
+    Class<? extends Payload>[] payload() default { };
+
+}
+```
+
+You need to implement the validator logic in a class that implements `ConstraintValidator`. 
+
+```java
+public class NotExpiredValidator 
+    implements ConstraintValidator<NotExpired, LocalDate> 
+    {
+
+    @Override
+    public boolean isValid(LocalDate value, 
+                            ConstraintValidatorContext context) {
+        if ( value == null ) {
+            return true;
+        }
+        LocalDate today = LocalDate.now();
+        return ChronoUnit.YEARS.between(today, value) > 0;
+    }
+}
+```
+
+And use it normally:
+
+```java
+@NotExpired
+@JsonbDateFormat(value = "yyyy-MM-dd")
+private LocalDate expired;
+```
 
 *Manual Validation*
 
-You can call the validation process manualy instead of relaying to `@Valid` by injecting `Validator` class.
+You can call the validation process manually instead of relaying to `@Valid` by injecting `Validator` class.
 
 ```java
 @Inject
@@ -379,16 +461,18 @@ Validator validator;
 And use it:
 
 ```java
-Set<ConstraintViolation<Sauce>> violations = validator.validate(sauce);
+Set<ConstraintViolation<Sauce>> violations = 
+            validator.validate(sauce);
 ```
 
 == Reactive Programming
 
-Quarkus implements MicroProfile Reactive spec and uses RXJava2 to provide reactive programming model.
+Quarkus implements MicroProfile Reactive spec (https://github.com/eclipse/microprofile-reactive-streams-operators) and uses RXJava2 to provide reactive programming model.
 
 ```bash
 ./mvnw quarkus:add-extension 
-  -Dextensions="io.quarkus:quarkus-smallrye-reactive-streams-operators"
+  -Dextensions="
+    io.quarkus:quarkus-smallrye-reactive-streams-operators"
 ```
 
 Asynchronous HTTP endpoint is implemented by returning Java `CompletionStage`.
@@ -421,13 +505,11 @@ public Publisher<String> publishers() {
 }
 ```
 
-== Security
-
 == Observability
 
 *Health Checks*
 
-Quarkus relies on MicroProfile Health spec to provide health checks.
+Quarkus relies on MicroProfile Health spec (https://github.com/eclipse/microprofile-health) to provide health checks.
 
 ```bash
 ./mvnw quarkus:add-extension 
@@ -452,7 +534,7 @@ public class DatabaseHealthCheck implements HealthCheck {
     @Override
     public HealthCheckResponse call() {
         HealthCheckResponseBuilder responseBuilder = 
-            HealthCheckResponse.named("Database connection");
+            HealthCheckResponse.named("Database conn");
 
         try {
             checkDatabaseConnection();
@@ -468,7 +550,7 @@ public class DatabaseHealthCheck implements HealthCheck {
 }
 ```
 
-Build next output:
+Builds the next output:
 
 ```json
 
@@ -488,7 +570,7 @@ Build next output:
 
 *Metrics*
 
-Quarkus can utilize the MicroProfile Metrics specification to provide metrics support.
+Quarkus can utilize the MicroProfile Metrics spec (https://github.com/eclipse/microprofile-metrics) to provide metrics support.
 
 ```bash
 ./mvnw quarkus:add-extension 
@@ -498,7 +580,7 @@ Quarkus can utilize the MicroProfile Metrics specification to provide metrics su
 The metrics can be read remotely using JSON format or the OpenMetrics format.
 By just adding the extension, an endpoint is registered at `/metrics` providing default metrics.
 
-MicroProfile Metrics comes with some annotations to add smoe specific monitoring values:
+MicroProfile Metrics comes with some annotations to add specific monitoring values:
 
 |===	
 | Annotation | Description
@@ -523,12 +605,13 @@ a|Requesting that a metric be injected or registered.
 @GET
 //...
 @Timed(name = "checksTimer", 
-description = "A measure of how long it takes to perform a hello.", 
+description = "A measure of how long it takes 
+                                to perform a hello.", 
 unit = MetricUnits.MILLISECONDS)
 public String hello() {}
 ```
 
-`@Gauge` annotation returning a measure as gauge.
+`@Gauge` annotation returning a measure as a gauge.
 
 ```java
 @Gauge(name = "hottestSauce", unit = MetricUnits.NONE, 
@@ -536,7 +619,7 @@ description = "Hottest Sauce so far.")
 public Long hottestSauce() {}
 ```
 
-Injecting using `@Metric`.
+Injecting a histogram using `@Metric`.
 
 ```java
 @Inject
@@ -546,7 +629,7 @@ Histogram historgram;
 
 *Tracing*
 
-Quarkus can utilize the MicroProfile OpenTracing spec to provide tracing support.
+Quarkus can utilize the MicroProfile OpenTracing spec (https://github.com/eclipse/microprofile-opentracing) to provide tracing support.
 
 ```bash
 ./mvnw quarkus:add-extension 
@@ -555,7 +638,7 @@ Quarkus can utilize the MicroProfile OpenTracing spec to provide tracing support
 
 By default, requests sent to any endpoint are traced without any code changes being required.
 
-This extensions includes OpenTracing support and `Jaeger` tracer.
+This extension includes OpenTracing support and `Jaeger` tracer.
 
 Jaeger tracer configuration:
 
@@ -568,7 +651,7 @@ quarkus.jaeger.endpoint=http://localhost:14268/api/traces
 
 `@Traced` annotation can be set to disable tracing at class or method level.
 
-`Tracer` class can be injected into class.
+`Tracer` class can be injected into the class.
 
 ```java
 @Inject
@@ -579,9 +662,139 @@ tracer.activeSpan().setBaggageItem("key", "value");
 
 == Cloud
 
+*Native*
 
+You can build a native image by using GraalVM.
+The common use case is creating a Docker image so you can execute the next commands:
 
-K8s
-Native
+```bash
+./mvnw package -Pnative -Dnative-image.docker-build=true
+
+docker build -f src/main/docker/Dockerfile.native 
+                    -t quarkus/getting-started .
+docker run -i --rm -p 8080:8080 quarkus/getting-started
+```
+
+*Kubernetes*
+
+Quarks can use ap4k (https://github.com/ap4k/ap4k) to generate Kubernetes resources.
+
+```bash
+./mvnw quarkus:add-extensions 
+    -Dextensions="io.quarkus:quarkus-kubernetes"
+```
+
+Running `./mvnw package` the Kubernetes resources are created at `target/wiring-classes/META-INF/kubernetes/` directory.
+
+|===	
+| Property | Default | Description
+
+a| `quarkus.kubernetes.group`
+a| Current username
+a| Set Docker Username.
+
+a| `quarkus.application.name`
+a| Current project name
+a| Project name
+|===
+
+== Logging
+
+You can configure how Quarkus logs:
+
+```properties
+quarkus.log.console.enable=true
+quarkus.log.console.level=DEBUG
+quarkus.log.console.color=false
+
+quarkus.log.category."com.lordofthejars".level=DEBUG
+```
+
+Prefix is `quarkus.log`.
+
+|===	
+| Property | Default | Description
+
+a| `console.enable`
+a| `true`
+a| Console logging enabled.
+
+a| `console.format`
+a| `%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n`
+a| Format pattern to use for logging.
+
+a| `console.level`
+a| `INFO`
+a| Minimum log level.
+
+a| `console.color`
+a| `INFO`
+a| Allow color rendering.
+
+a| `file.enable`
+a| `false`
+a| File logging enabled.
+
+a| `file.format`
+a| `%d{yyyy-MM-dd HH:mm:ss,SSS} %h %N[%i] %-5p [%c{3.}] (%t) %s%e%n`
+a| Format pattern to use for logging.
+
+a| `file.level`
+a| `ALL`
+a| Minimum log level.
+
+a| `file.path`
+a| `quarkus.log`
+a| The path to log file.
+
+a| `category."<category-name>".level`
+a| `INFO`
+a| Minimum level category.
+
+a| `level`
+a| `INFO`
+a| Default minimum level.
+|===
 
 == Testing
+
+When you generate the Quarkus project with the archetype, test dependencies with JUnit 5 are registered automatically, but also the Rest-Assured library to test RESt endpoints.
+
+To package and run the application for testing:
+
+```java
+@QuarkusTest
+public class GreetingResourceTest {
+
+    @Test
+    public void testHelloEndpoint() {
+        given()
+          .when().get("/hello")
+          .then()
+             .statusCode(200)
+             .body(is("hello"));
+    }
+}
+```
+
+Test port can be modified by using `quarkus.http.test-port` configuration property.
+
+You can also inject the URL where Quarkus is started:
+
+```java
+@TestHTTPResource("index.html") 
+URL url;
+```
+
+If you need to provide an alternative implementation of a service (for testing purposes) you can do it by using CDI `@Alternative` annotation using it in the test service placed at `src/test/java`:
+
+```java
+@Alternative
+@Priority(1)
+@ApplicationScoped
+public class MockExternalService extends ExternalService {}
+```
+
+IMPORTANT: This does not work when using native image testing.
+
+To test native executables you can annotate the test with `@SubstrateTest`.
