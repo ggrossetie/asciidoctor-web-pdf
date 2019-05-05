@@ -1,0 +1,32 @@
+= Document Title
+Doc Writer <doc@example.com>
+:doctype: book
+:reproducible:
+:source-highlighter: highlight.js
+:listing-caption: Listing
+
+A simple http://asciidoc.org[AsciiDoc] document.
+
+== Introduction
+
+A paragraph followed by an unordered list{empty}footnote:[AsciiDoc supports unordered, ordered, and description lists.] with square bullets.footnote:[You may choose from square, disc, and circle for the bullet style.]
+
+[square]
+* item 1
+* item 2
+
+Here's how you say "`Hello, World!`" in Prawn:
+
+.Create a basic PDF document using Prawn
+[source,ruby]
+----
+require 'prawn'
+
+Prawn::Document.generate 'example.pdf' do
+  text 'Hello, World!'
+end
+----
+
+== Conclusion
+
+That's all, folks!

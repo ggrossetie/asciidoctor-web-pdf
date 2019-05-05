@@ -26,6 +26,11 @@ Puppeteer will then run an headless Chrome to generate a PDF from the HTML 5 pag
 
 We provides a few examples in the `examples` directory:
 
+**Document**
+
+    asciidoctor-pdf ./examples/document/document.adoc
+    asciidoctor-pdf ./examples/document/basic-example.adoc
+
 **Letter**
 
     asciidoctor-pdf ./examples/letter/letter.adoc --template-require ./examples/letter/template.js
@@ -33,10 +38,6 @@ We provides a few examples in the `examples` directory:
 **Book**
 
     sciidoctor-pdf ./examples/book/book.adoc --template-require ./examples/book/template.js
-
-**Document**
-
-    asciidoctor-pdf ./examples/document/document.adoc --template-require ./examples/document/templates/index.js
 
 **Slides**
 
