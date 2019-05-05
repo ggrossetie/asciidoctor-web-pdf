@@ -30,6 +30,7 @@
   "dependencies": {
     "@asciidoctor/cli": "3.0.0",
     "chokidar": "2.0.4",
+    "fs-extra": "7.0.1",
     "pagedjs": "^0.1.34",
     "puppeteer": "1.15.0",
     "yargs": "13.2.2"
