@@ -30,6 +30,7 @@ We provides a few examples in the `examples` directory:
 
     asciidoctor-pdf ./examples/document/document.adoc
     asciidoctor-pdf ./examples/document/basic-example.adoc
+    asciidoctor-pdf ./examples/document/chronicles-example.adoc
 
 **Letter**
 

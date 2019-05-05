@@ -77,20 +77,29 @@ p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-
   font-weight: 200;
   font-size: 2.6rem;
   padding: 0;
-  margin-bottom: 1rem;
+  margin: 0;
+  text-align: end;
 }
 
 #cover h2 {
+  font-size: 2rem;
+  font-style: italic;
+  padding: 0;
+  margin: 0;
+}
+
+#cover h3 {
   font-size: 1.1rem;
   font-weight: 200;
   padding: 0;
-  margin: 0;
+  margin: 1rem 0 0;
 }
 
 h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
   color: #333;
   font-family: 'Noto Serif', serif;
   font-weight: 600;
+  text-align-last: auto;
 }
 
 a {
@@ -153,4 +162,12 @@ tr {
 
 .listingblock {
   page-break-inside: avoid;
+}
+
+.sect1 {
+  page-break-before: always;
+}
+
+.conum[data-value] {
+  text-align-last: auto;
 }
