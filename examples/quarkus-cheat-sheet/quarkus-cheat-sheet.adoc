@@ -351,6 +351,16 @@ Injecting the client:
 WorldClockService worldClockService;
 ----
 
+// tag::update_1[]
+If invokation happens within a JAX-RS resource class, you can propagate headers from incoming request to the outgoing request by using next configuartion property.
+
+[source, properties]
+----
+org.eclipse.microprofile.rest.client.propagateHeaders=
+            Authorization,MyCustomHeader
+----
+// end::update_1[]
+
 TIP: You can still use the JAX-RS client without any problem `ClientBuilder.newClient().target(...)`
 
 *Adding headers*
@@ -398,7 +408,141 @@ A method on client interface can return a `CompletionStage` class to be executed
 CompletionStage<WorldClock> getNow();
 ----
 
+== Fault Tolerance
+// tag::update_1[]
+Quarkus uses MicroProfile Fault Tolerance (https://github.com/eclipse/microprofile-fault-tolerance) spec:
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-fault-tolerance"
+----
+
+MicroProfile Fault Tolerance spec uses CDI interceptor and it can be used in several elements such as CDI bean, JAX-RS resource or MicroProfile Rest Client.
+
+To do automatic *retries* on a method:
+
+[source, java]
+----
+@Path("/api")
+@RegisterRestClient
+public interface WorldClockService {
+    
+    @GET @Path("/json/cet/now")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 2)
+    WorldClock getNow();
+
+}
+----
+
+You can set fallback code in case of an error by using `@Fallback` annotation:
+
+[source, java]
+----
+@Retry(maxRetries = 1)
+@Fallback(fallbackMethod = "fallbackMethod")
+WorldClock getNow(){}
+
+public String fallbackMethod() {
+    return "It could beworse";
+}
+----
+
+`fallbackMethod` must have the same parameters and return type as the annotated method.
+
+You can also set logic into a class that implements `FallbackHandler` interface:
+
+[source, java]
+----
+public class RecoverFallback 
+            implements FallbackHandler<String> {
+    @Override
+    public String handle(ExecutionContext context) {
+        return "It could be worse";
+    }
+}
+----
+
 <<<
+
+And set it in the annotation as value `@Fallback(RecoverFallback.class)`.
+
+In case you want to use *circuit breaker* pattern:
+
+[source, java]
+----
+@CircuitBreaker(requestVolumeThreshold = 4, 
+                failureRatio=0.75, 
+                delay = 1000)
+WorldClock getNow(){}
+----
+
+If 3 `(4 x 0.75)` failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 1000 ms and then be back to half open.
+If the invocation succeeds then the circuit is back to closed again.
+
+You can use *bulkahead* pattern to limit the number of concurrent access to the same resource. 
+If the operation is synchronous it uses a semaphore approach, if it is asynchronous a thread-pool one.
+When a request cannot be processed `BulkheadException` is thrown.
+It can be used together with any other fault tolerance annotation. 
+
+[source, java]
+----
+@Bulkhead(5)
+@Retry(maxRetries = 4, 
+       delay = 1000,
+       retryOn = BulkheadException.class)
+WorldClock getNow(){}
+----
+
+Fault tolerance annotations:
+
+|===	
+| Annotation | Properties
+
+a|`@Timeout`
+a|`unit`
+
+a|`@Retry`
+a|`maxRetries`, `delay`, `delayUnit`, `maxDuration`, `durationUnit`, `jitter`, `jitterDelayUnit`, `retryOn`, `abortOn`
+
+a|`@Fallback`
+a|`fallbackMethod`
+
+a|`@Bulkhead`
+a|`waitingTaskQueue` (only valid in asynchronous)
+
+a|`@CircuitBreaker`
+a|`failOn`, `delay`, `delayUnit`, `requestVolumeThreshold`, `failureRatio`, `successThreshold`
+
+a|`@Asynchronous`
+a|
+|===
+
+<<<
+
+You can override annotation parameters via configuration file using property `[classname/methodname/]annotation/parameter`:
+
+[source, properties]
+----
+org.acme.quickstart.WorldClock/getNow/Retry/maxDuration=30
+# Class scope
+org.acme.quickstart.WorldClock/Retry/maxDuration=3000
+# Global
+Retry/maxDuration=3000
+----
+
+You can also enable/disable policies using special parameter `enabled`.
+
+[source, properties]
+----
+org.acme.quickstart.WorldClock/getNow/Retry/enabled=false
+# Disable everything except fallback
+MP_Fault_Tolerance_NonFallback_Enabled=false
+----
+
+TIP: MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can disable it by setting `MP_Fault_Tolerance_Metrics_Enabled` to false.
+// tag::update_1[]
 
 == Validator
 
@@ -464,7 +608,7 @@ public class NotExpiredValidator
 
     @Override
     public boolean isValid(LocalDate value, 
-                            ConstraintValidatorContext context) {
+                            ConstraintValidatorContext ctx) {
         if ( value == null ) {
             return true;
         }

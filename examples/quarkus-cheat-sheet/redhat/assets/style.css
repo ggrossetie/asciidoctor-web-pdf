@@ -1,0 +1,153 @@
+@import 'https://fonts.googleapis.com/css?family=Roboto:400,500';
+
+@page {
+  size: 508mm 361mm;
+  margin: 0.5cm;
+  padding: 0.5cm;
+}
+
+@page :first {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: #4a4a4a;
+  text-align: justify;
+}
+
+html {
+  font-family: Roboto, 'DejaVu Sans', Arial, sans-serif;
+  font-size: 18px;
+}
+
+header {
+  background-color: #131313;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding: 0.7cm 12em 0.7cm 0.7cm;
+  align-items: center;
+  color: white;
+}
+
+header > a {
+  color: white;
+}
+
+header > .wordmark {
+  max-height: 3em;
+}
+
+header > .website {
+  font-size: 1.4em;
+  font-weight: 400;
+  align-self: end;
+}
+
+header > .logo {
+  position: absolute;
+  top: 1em;
+  right: 3em;
+  max-width: 6em;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0;
+  padding: 0 0 0 1em;
+  font-weight: 400;
+}
+
+section.content {
+  margin: 0.5cm;
+  padding: 0;
+  columns: auto calc((100vw / 3) - 3cm);
+}
+
+.admonitionblock div {
+  font-weight: bold
+}
+
+.sect1 {
+  max-width: calc((100vw / 3) - 3cm);
+  margin-right: 1.2cm;
+  margin-left: 1.2cm;
+  margin-top: 0.5cm;
+  break-inside: avoid-region;
+}
+
+h2 {
+  color: #131313;
+  font-size: 1.4em;
+  font-weight: 500;
+  margin-top: 0;
+}
+
+h3 {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.listingblock pre {
+  background:#fafcfe;
+  border: 1px solid #d5d4d9;
+  color: #4a4a4a;
+}
+
+
+.listingblock pre,.listingblock pre[class] {
+  font-size: 0.8em;
+  line-height: 1.5em;
+  border-radius: 4px;
+  word-wrap: break-word;
+  padding: 1em;
+}
+
+.listingblock {
+  margin-bottom: 2em;
+}
+
+a {
+  color: #131313;
+  text-decoration: none;
+}
+
+.authors {
+  margin-top: auto;
+}
+
+.author {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  padding-bottom: 1em;
+}
+
+.author-avatar > img {
+  border-radius: 50%;
+  max-height: 2em;
+}
+
+.author-avatar {
+  grid-row-start: span 2;
+  padding-right: 1em;
+}
+
+.author-bio {
+  font-size: 0.9em
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+pre {
+  break-inside: avoid;
+}
+
+.single-block {
+  break-inside: avoid-column;
+}
