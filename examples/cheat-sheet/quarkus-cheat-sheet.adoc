@@ -163,7 +163,7 @@ Quarkus works with JPA(Hibernate) as persistence solution.
 But also provides an Active Record pattern (https://en.wikipedia.org/wiki/Active_record_pattern) implementation under Panache project.
 
 To use database access you need to add Quarkus JDBC drivers instead of the original ones.
-At this time `H2`, `MariaDB` and `PostgreSQL` drivers are supported.
+At this time `H2`, `MariaDB`, `Microsoft SQL Server` and `PostgreSQL` drivers are supported.
 
 [source, bash]
 ----
