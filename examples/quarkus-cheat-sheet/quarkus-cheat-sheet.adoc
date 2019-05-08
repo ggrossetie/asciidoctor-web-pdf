@@ -61,6 +61,20 @@ TIP: `extensions` property supports CSV format to register more than one extensi
 
 <<<
 
+== Application Lifecycle
+// tag::update_1_3[]
+You can be notified when the application starts and when stops by observing `StartupEvent` and `ShutdownEvent` events.
+
+[source, java]
+----
+@ApplicationScoped
+public class ApplicationLifecycle {
+    void onStart(@Observes StartupEvent event) {}
+    void onStop(@Observes ShutdownEvent event) {}
+}
+----
+// end::update_1_3[]
+
 == Adding Configuration Parameters
 
 To add configuration to your application, Quarkus relies on MicroProfile Config spec (https://github.com/eclipse/microprofile-config).
@@ -351,7 +365,7 @@ Injecting the client:
 WorldClockService worldClockService;
 ----
 
-// tag::update_1[]
+// tag::update_1_1[]
 If invokation happens within a JAX-RS resource class, you can propagate headers from incoming request to the outgoing request by using next configuartion property.
 
 [source, properties]
@@ -359,7 +373,7 @@ If invokation happens within a JAX-RS resource class, you can propagate headers 
 org.eclipse.microprofile.rest.client.propagateHeaders=
             Authorization,MyCustomHeader
 ----
-// end::update_1[]
+// end::update_1_1[]
 
 TIP: You can still use the JAX-RS client without any problem `ClientBuilder.newClient().target(...)`
 
@@ -409,7 +423,7 @@ CompletionStage<WorldClock> getNow();
 ----
 
 == Fault Tolerance
-// tag::update_1[]
+// tag::update_1_2[]
 Quarkus uses MicroProfile Fault Tolerance (https://github.com/eclipse/microprofile-fault-tolerance) spec:
 
 [source, bash]
@@ -542,7 +556,7 @@ MP_Fault_Tolerance_NonFallback_Enabled=false
 ----
 
 TIP: MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can disable it by setting `MP_Fault_Tolerance_Metrics_Enabled` to false.
-// tag::update_1[]
+// end::update_1_2[]
 
 == Validator
 
