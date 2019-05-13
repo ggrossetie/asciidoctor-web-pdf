@@ -1,0 +1,5 @@
+:logo: quarkus.png
+:version: v0.14.0
+:source-highlighter: highlightjs
+:sectlinks:
+:pdf-download: http://localhost

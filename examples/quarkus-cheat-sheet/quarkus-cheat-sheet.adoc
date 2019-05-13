@@ -1,16 +1,26 @@
-= Quarkus
+= Quarkus Cheat-Sheet
+
+ifndef::site[]
+
 Alex Soto <https://twitter.com/alexsotob>;
 :authorbio: Java Champion and SW Engineer at Red Hat
-:logo: quarkus.png
 :pdf-width: 508mm
 :pdf-height: 361mm
-:version: v0.14.0
-:source-highlighter: highlightjs
+
+include::attributes.adoc[]
+
+endif::site[]
+
+ifdef::site[]
+icon:file-pdf-o[] {pdf-download}[Download the Cheat-Sheet as PDF].
+endif::site[]
 
 == What is Quarkus?
 
 Quarkus (https://quarkus.io/) is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.
+
+Cheat-sheet tested with *Quarkus {version}*.
 
 == Getting Started
 
@@ -659,9 +669,25 @@ Set<ConstraintViolation<Sauce>> violations =
             validator.validate(sauce);
 ----
 
+== Security and JWT
+// tag::update_1_5[]
+Quarkus implements https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC spec].
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-smallrye-jwt"
+----
+
+Minimum JWT required claims: `typ`, `alg`, `kid`, `iss`, `sub`, `exp`, `iat`, `jti`, `upn`, `groups`.
+
+
+
+// end::update_1_5[]
+
 == Reactive Programming
 
-Quarkus implements MicroProfile Reactive spec (https://github.com/eclipse/microprofile-reactive-streams-operators) and uses RXJava2 to provide reactive programming model.
+Quarkus implements https://github.com/eclipse/microprofile-reactive-streams-operators[MicroProfile Reactive spec] and uses RXJava2 to provide reactive programming model.
 
 [source, bash]
 ----
@@ -701,6 +727,93 @@ public Publisher<String> publishers() {
         .map(i -> Integer.toString(i));
 }
 ----
+
+== Reactive Messaging
+// tag::update_1_4[]
+Quarkus relies on MicroProfile Reactive Messaging spec (https://github.com/eclipse/microprofile-reactive-messaging) to implement reactive messaging streams.
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging"
+----
+
+You can just start using in-memory streams by using `@Incoming` to produce data and `@Outgoing` to consume data.
+
+Produce every 5 seconds one piece of data.
+
+[source, java]
+----
+@ApplicationScoped
+public class ProducerData {
+
+    @Outgoing("my-in-memory")
+    public Flowable<Integer> generate() {
+        return Flowable.interval(5, TimeUnit.SECONDS)
+                .map(tick -> random.nextInt(100));
+    }
+}
+----
+
+Consumes generated data from `my-in-memory` stream.
+
+[source, java]
+----
+@ApplicationScoped
+public class ConsumerData {
+    @Incoming("my-in-memory")
+    public void randomNumber(int randomNumber) {
+        System.out.println("Received " + randomNumber);
+    }
+}
+----
+
+You can also inject an strem as field:
+
+[source, java]
+----
+@Inject
+@Stream("my-in-memory") Publisher<Integer> randomRumbers;
+----
+
+Possible return types:
+
+*Kafka*
+
+To integrate with Kafka you need to add next extensions:
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka, 
+                  io.quarkus:quarkus-vert"
+----
+
+Then `@Outgoing`, `@Incoming` or `@Stream` can be set with Kafka streams.
+
+You need also need to configure Kafka connector following next schema: `smallrye.messaging.[sink|source].\{stream-name\}.<property>=<value>` 
+
+[source, properties]
+----
+smallrye.messaging.source.prices.type=
+    io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.source.prices.topic=
+    prices
+smallrye.messaging.source.prices.bootstrap.servers=
+    localhost:9092
+smallrye.messaging.source.prices.key.deserializer=
+    org.apache.kafka.common.serialization.StringDeserializer
+smallrye.messaging.source.prices.value.deserializer=
+    org.apache.kafka.common.serialization.IntegerDeserializer
+smallrye.messaging.source.prices.group.id=
+    my-group-id
+----
+
+A complete list of supported properties are in Kafka site. For https://kafka.apache.org/documentation/#producerconfigs[producer] and for https://kafka.apache.org/documentation/#consumerconfigs[consumer]
+
+IMPORTANT: If stream is not configured then it is assumed to be an in-memory stream.
+
+// end::update_1_4[]
 
 == Observability
 
