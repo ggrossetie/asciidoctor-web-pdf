@@ -1,5 +1,6 @@
 :logo: quarkus.png
-:version: v0.14.0
+:version: v0.15.0
 :source-highlighter: highlightjs
 :sectlinks:
-:pdf-download: http://localhost
+:sectanchors:
+:pdf-download: https://github.com/lordofthejars/asciidoctor-pdf.js/releases/download/v1.0.2/quarkus-cheat-sheet.pdf

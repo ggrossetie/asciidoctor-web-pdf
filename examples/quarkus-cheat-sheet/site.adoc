@@ -41,10 +41,28 @@ include::quarkus-cheat-sheet.adoc[tag=update_1_3]
 include::quarkus-cheat-sheet.adoc[tag=update_1_4]
 ====
 
-.Security and JWT
+.JWT
 [%collapsible]
 ====
 include::quarkus-cheat-sheet.adoc[tag=update_1_5]
+====
+
+.Configuring Native
+[%collapsible]
+====
+include::quarkus-cheat-sheet.adoc[tag=update_1_6]
+====
+
+.Flyway
+[%collapsible]
+====
+include::quarkus-cheat-sheet.adoc[tag=update_1_7]
+====
+
+.Reactive PostgreSQL Client
+[%collapsible]
+====
+include::quarkus-cheat-sheet.adoc[tag=update_1_8]
 ====
 
 :leveloffset: +1

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.9">
-<meta name="author" content="Alex Soto icon:twitter[] &lt;https://twitter.com/alexsotob&gt;">
+<meta name="author" content="Alex Soto">
 <title>Home of Quarkus Cheat-Sheet</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -441,39 +441,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Home of Quarkus Cheat-Sheet</h1>
 <div class="details">
-<span id="author" class="author">Alex Soto icon:twitter[] &lt;https://twitter.com/alexsotob&gt;</span><br>
+<span id="author" class="author">Alex Soto</span><br>
+<span id="email" class="email"><a href="https://twitter.com/alexsotob" class="bare">https://twitter.com/alexsotob</a></span><br>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Posar icona twitter Canviar a ifndef</p>
-</li>
-<li>
-<p>Posar Download if site al cheat-sheet adoc</p>
-</li>
-</ul>
-</div>
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="http://localhost">Download the Cheat-Sheet as PDF</a>.</p>
+<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/asciidoctor-pdf.js/releases/download/v1.0.2/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
 </div>
 <div class="paragraph">
 <p>Quarkus (<a href="https://quarkus.io/" class="bare">https://quarkus.io/</a>) is a Kubernetes Native Java stack tailored for GraalVM &amp; OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
 </div>
 <div class="paragraph">
-<p>In this page you can either read what has been added in each version of the cheat-sheet individually in <a href="#whatsnew">What&#8217;s New in Cheat-Sheet</a> section, see the full cheat-sheet as HTML <span class="icon"><i class="fa fa-html5"></i></span> <a href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a> format or <span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="http://localhost">download the full cheat-sheet as PDF</a>.</p>
+<p>In this page you can either read what has been added in each version of the cheat-sheet individually in <a href="#whatsnew">What&#8217;s New in Cheat-Sheet</a> section, see the full cheat-sheet as HTML <span class="icon"><i class="fa fa-html5"></i></span> <a href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a> format or <span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/asciidoctor-pdf.js/releases/download/v1.0.2/quarkus-cheat-sheet.pdf">download the full cheat-sheet as PDF</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="whatsnew"><a class="link" href="#whatsnew">What&#8217;s New in Cheat-Sheet</a></h2>
+<h2 id="whatsnew"><a class="anchor" href="#whatsnew"></a><a class="link" href="#whatsnew">What&#8217;s New in Cheat-Sheet</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_0_15_0"><a class="link" href="#_version_0_15_0">Version 0.15.0</a></h3>
+<h3 id="_version_0_15_0"><a class="anchor" href="#_version_0_15_0"></a><a class="link" href="#_version_0_15_0">Version 0.15.0</a></h3>
 <details>
 <summary class="title">Headers Propagation</summary>
 <div class="content">
@@ -689,7 +680,7 @@ MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can d
 <summary class="title">Application Lifecycle</summary>
 <div class="content">
 <div class="paragraph">
-<p>You can be notified when the application starts and when stops by observing <code>StartupEvent</code> and <code>ShutdownEvent</code> events.</p>
+<p>You can be notified when the application starts/stops by observing <code>StartupEvent</code> and <code>ShutdownEvent</code> events.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -748,7 +739,7 @@ public class ConsumerData {
 </div>
 </div>
 <div class="paragraph">
-<p>You can also inject an strem as field:</p>
+<p>You can also inject an stream as a field:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -762,29 +753,402 @@ public class ConsumerData {
 <div class="paragraph">
 <p><strong>Kafka</strong></p>
 </div>
+<div class="paragraph">
+<p>To integrate with Kafka you need to add next extensions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
+    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
+                  io.quarkus:quarkus-vert"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be set with Kafka streams.</p>
+</div>
+<div class="paragraph">
+<p>You need also need to configure Kafka connector following next schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">smallrye.messaging.source.prices.type=
+    io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.source.prices.topic=
+    prices
+smallrye.messaging.source.prices.bootstrap.servers=
+    localhost:9092
+smallrye.messaging.source.prices.key.deserializer=
+    org.apache.kafka.common.serialization.StringDeserializer
+smallrye.messaging.source.prices.value.deserializer=
+    org.apache.kafka.common.serialization.IntegerDeserializer
+smallrye.messaging.source.prices.group.id=
+    my-group-id</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If the stream is not configured then it is assumed to be an in-memory stream.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">JWT</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus implements <a href="https://github.com/eclipse/microprofile-jwt-auth">MicroProfile JWT RBAC spec</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
+    -Dextensions="io.quarkus:quarkus-smallrye-jwt"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Minimum JWT required claims: <code>typ</code>, <code>alg</code>, <code>kid</code>, <code>iss</code>, <code>sub</code>, <code>exp</code>, <code>iat</code>, <code>jti</code>, <code>upn</code>, <code>groups</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can inject token by using <code>JsonWebToken</code> or a claim individually by using <code>@Claim</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+JsonWebToken jwt;
+
+@Inject
+@Claim(standard = Claims.preferred_username)
+String name;
+
+@Inject
+@Claim("groups")
+Set&lt;String&gt; groups;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set of supported types: <code>String</code>, <code>Set&lt;String&gt;</code>, <code>Long</code>, <code>Boolean, `javax.json.JsonValue</code>, <code>Optional</code>, <code>org.eclipse.microprofile.jwt.ClaimValue</code>.</p>
+</div>
+<div class="paragraph">
+<p>And configuration in <code>src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">mp.jwt.verify.publickey.location=
+    META-INF/resources/publicKey.pem
+mp.jwt.verify.issuer=
+    https://quarkus.io/using-jwt-rbac</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.enabled</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine if the jwt extension is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.realm-name</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quarkus-JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for security realm.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.auth-mechanism</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MP-JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentication mechanism.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.publickey</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Public Key text itself to be supplied as a string.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.publickey.location</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relative path or URL of a public key.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.issuer</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>iss</code> accepted as valid.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Supported public key formats:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PKCS#8 PEM</p>
+</li>
+<li>
+<p>JWK</p>
+</li>
+<li>
+<p>JWKS</p>
+</li>
+<li>
+<p>JWK Base64 URL</p>
+</li>
+<li>
+<p>JWKS Base64 URL</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To send a token to server-side you should use <code>Authorization</code> header: <code>curl -H "Authorization: Bearer eyJraWQiOi&#8230;&#8203;"</code>.</p>
+</div>
+<div class="paragraph">
+<p>To inject claim values, the bean must be <code>@RequestScoped</code> CDI scoped.
+If you need to inject claim values in scope with a lifetime greater than <code>@RequestScoped</code> then you need to use <code>javax.enterprise.inject.Instance</code> interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+@Claim(standard = Claims.iat)
+private Instance&lt;Long&gt; providerIAT;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>RBAC</strong></p>
+</div>
+<div class="paragraph">
+<p>JWT <code>groups</code> claim is directly mapped to roles to be used in security annotations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RolesAllowed("Subscriber")</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Configuring Native</summary>
+<div class="content">
+<div class="paragraph">
+<p>To configure native application, you can create a <code>config</code> directory at the same place as the native file and place an <code>application.properties</code> file inside. <code>config/application.properties</code>.</p>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Flyway</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus integrates with <a href="https://flywaydb.org/">Flyway</a> to help you on database schema migrations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-flyway"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then place migration files to the migrations folder (<code>classpath:db/migration</code>).</p>
+</div>
+<div class="paragraph">
+<p>You can inject <code>org.flywaydb.core.Flyway</code> to programmatically execute the migration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+Flyway flyway;
+
+flyway.migrate();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or can be automatically executed by setting <code>migrate-at-start</code> property to <code>true</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.flyway.migrate-at-start=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration Properties:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.migrate-at-start</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Execute Flyway migration automatically.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.locations</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>classpath:db/migration</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of locations to scan recursively for migrations. Supported prefixes <code>classpath</code> and <code>filesystem</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.connect-retries</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>0</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of retries when attempting to connect to the database.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.schemas</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>none</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV case-sensitive list of schemas managed by Flyway</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.table</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>flyway_schema_history</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of Flyway’s schema history table.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.sql-migration-prefix</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>V</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The filename prefix for versioned SQL migrations.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.repeatable-sql-migration-prefix</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>R</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The file name prefix for repeatable SQL migrations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title">Reactive PostgreSQL Client</summary>
+<div class="content">
+<div class="paragraph">
+<p>You can use Reactive PostgreSQL to execute queries to PostreSQL database in a reactive way, instead of using JDBC way.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-smallrye-health"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Database configuration is the same as shown in <a href="#_persistence">Persistence</a> section, but URL is different as it is not a <em>jdbc</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=
+    vertx-reactive:postgresql://host:5431/db</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can inject <code>io.reactiverse.axle.pgclient.PgPool</code> class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+PgPool client;
+
+CompletionStage&lt;JsonArray&gt; =
+    client.query("SELECT * FROM table")
+    .thenApply(pgRowSet -&gt; {
+        JsonArray jsonArray = new JsonArray();
+        PgIterator iterator = pgRowSet.iterator();
+        return jsonArray;
+    })</code></pre>
+</div>
+</div>
 </div>
 </details>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="quarkuscheatsheet"><a class="link" href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a></h2>
+<h2 id="quarkuscheatsheet"><a class="anchor" href="#quarkuscheatsheet"></a><a class="link" href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="http://localhost">Download the Cheat-Sheet as PDF</a>.</p>
+<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/asciidoctor-pdf.js/releases/download/v1.0.2/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
 </div>
 <div class="sect2">
-<h3 id="_what_is_quarkus"><a class="link" href="#_what_is_quarkus">What is Quarkus?</a></h3>
+<h3 id="_what_is_quarkus"><a class="anchor" href="#_what_is_quarkus"></a><a class="link" href="#_what_is_quarkus">What is Quarkus?</a></h3>
 <div class="paragraph">
 <p>Quarkus (<a href="https://quarkus.io/" class="bare">https://quarkus.io/</a>) is a Kubernetes Native Java stack tailored for GraalVM &amp; OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
 </div>
 <div class="paragraph">
-<p>Cheat-sheet tested with <strong>Quarkus v0.14.0</strong>.</p>
+<p>Cheat-sheet tested with <strong>Quarkus v0.15.0</strong>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_getting_started"><a class="link" href="#_getting_started">Getting Started</a></h3>
+<h3 id="_getting_started"><a class="anchor" href="#_getting_started"></a><a class="link" href="#_getting_started">Getting Started</a></h3>
 <div class="paragraph">
 <p>Quarkus comes with a Maven archetype to scaffold a very simple starting project.</p>
 </div>
@@ -815,7 +1179,7 @@ public class GreetingResource {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_extensions"><a class="link" href="#_extensions">Extensions</a></h3>
+<h3 id="_extensions"><a class="anchor" href="#_extensions"></a><a class="link" href="#_extensions">Extensions</a></h3>
 <div class="paragraph">
 <p>Quarkus comes with extensions to integrate with some libraries such as JSON-B, Camel or MicroProfile spec.
 To list all available extensions just run:</p>
@@ -848,9 +1212,9 @@ To list all available extensions just run:</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="_application_lifecycle"><a class="link" href="#_application_lifecycle">Application Lifecycle</a></h3>
+<h3 id="_application_lifecycle"><a class="anchor" href="#_application_lifecycle"></a><a class="link" href="#_application_lifecycle">Application Lifecycle</a></h3>
 <div class="paragraph">
-<p>You can be notified when the application starts and when stops by observing <code>StartupEvent</code> and <code>ShutdownEvent</code> events.</p>
+<p>You can be notified when the application starts/stops by observing <code>StartupEvent</code> and <code>ShutdownEvent</code> events.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -863,7 +1227,7 @@ public class ApplicationLifecycle {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_adding_configuration_parameters"><a class="link" href="#_adding_configuration_parameters">Adding Configuration Parameters</a></h3>
+<h3 id="_adding_configuration_parameters"><a class="anchor" href="#_adding_configuration_parameters"></a><a class="link" href="#_adding_configuration_parameters">Adding Configuration Parameters</a></h3>
 <div class="paragraph">
 <p>To add configuration to your application, Quarkus relies on MicroProfile Config spec (<a href="https://github.com/eclipse/microprofile-config" class="bare">https://github.com/eclipse/microprofile-config</a>).</p>
 </div>
@@ -890,7 +1254,7 @@ Optional&lt;String&gt; optionalMessage;</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_injection"><a class="link" href="#_injection">Injection</a></h3>
+<h3 id="_injection"><a class="anchor" href="#_injection"></a><a class="link" href="#_injection">Injection</a></h3>
 <div class="paragraph">
 <p>Quarkus is based on CDI 2.0 to implement injection of code.
 It is not fully supported and only a subset of the specification is implemented (<a href="https://quarkus.io/guides/cdi-reference" class="bare">https://quarkus.io/guides/cdi-reference</a>).</p>
@@ -929,7 +1293,7 @@ Quarkus is designed with Substrate VM in mind. For this reason, we encourage you
 </div>
 </div>
 <div class="sect2">
-<h3 id="_json_marshallingunmarshalling"><a class="link" href="#_json_marshallingunmarshalling">JSON Marshalling/Unmarshalling</a></h3>
+<h3 id="_json_marshallingunmarshalling"><a class="anchor" href="#_json_marshallingunmarshalling"></a><a class="link" href="#_json_marshallingunmarshalling">JSON Marshalling/Unmarshalling</a></h3>
 <div class="paragraph">
 <p>To work with <code>JSON-B</code> you need to add a dependency:</p>
 </div>
@@ -979,7 +1343,7 @@ public Response create(Sauce sauce) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_persistence"><a class="link" href="#_persistence">Persistence</a></h3>
+<h3 id="_persistence"><a class="anchor" href="#_persistence"></a><a class="link" href="#_persistence">Persistence</a></h3>
 <div class="paragraph">
 <p>Quarkus works with JPA(Hibernate) as persistence solution.
 But also provides an Active Record pattern (<a href="https://en.wikipedia.org/wiki/Active_record_pattern" class="bare">https://en.wikipedia.org/wiki/Active_record_pattern</a>) implementation under Panache project.</p>
@@ -1239,9 +1603,125 @@ Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&
 </div>
 </div>
 <div class="sect2">
-<h3 id="_rest_client"><a class="link" href="#_rest_client">Rest Client</a></h3>
+<h3 id="_flyway"><a class="anchor" href="#_flyway"></a><a class="link" href="#_flyway">Flyway</a></h3>
 <div class="paragraph">
-<p>Quarkus implements MicroProfile Rest Client (<a href="https://github.com/eclipse/microprofile-rest-client" class="bare">https://github.com/eclipse/microprofile-rest-client</a>) spec:</p>
+<p>Quarkus integrates with <a href="https://flywaydb.org/">Flyway</a> to help you on database schema migrations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-flyway"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then place migration files to the migrations folder (<code>classpath:db/migration</code>).</p>
+</div>
+<div class="paragraph">
+<p>You can inject <code>org.flywaydb.core.Flyway</code> to programmatically execute the migration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+Flyway flyway;
+
+flyway.migrate();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or can be automatically executed by setting <code>migrate-at-start</code> property to <code>true</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.flyway.migrate-at-start=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration Properties:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.migrate-at-start</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Execute Flyway migration automatically.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.locations</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>classpath:db/migration</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of locations to scan recursively for migrations. Supported prefixes <code>classpath</code> and <code>filesystem</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.connect-retries</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>0</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of retries when attempting to connect to the database.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.schemas</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>none</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV case-sensitive list of schemas managed by Flyway</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.table</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>flyway_schema_history</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of Flyway’s schema history table.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.sql-migration-prefix</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>V</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The filename prefix for versioned SQL migrations.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.flyway.repeatable-sql-migration-prefix</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>R</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The file name prefix for repeatable SQL migrations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_rest_client"><a class="anchor" href="#_rest_client"></a><a class="link" href="#_rest_client">Rest Client</a></h3>
+<div class="paragraph">
+<p>Quarkus implements <a href="https://github.com/eclipse/microprofile-rest-client">MicroProfile Rest Client</a> spec:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1376,7 +1856,7 @@ CompletionStage&lt;WorldClock&gt; getNow();</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_fault_tolerance"><a class="link" href="#_fault_tolerance">Fault Tolerance</a></h3>
+<h3 id="_fault_tolerance"><a class="anchor" href="#_fault_tolerance"></a><a class="link" href="#_fault_tolerance">Fault Tolerance</a></h3>
 <div class="paragraph">
 <p>Quarkus uses MicroProfile Fault Tolerance (<a href="https://github.com/eclipse/microprofile-fault-tolerance" class="bare">https://github.com/eclipse/microprofile-fault-tolerance</a>) spec:</p>
 </div>
@@ -1571,7 +2051,7 @@ MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can d
 </div>
 </div>
 <div class="sect2">
-<h3 id="_validator"><a class="link" href="#_validator">Validator</a></h3>
+<h3 id="_validator"><a class="anchor" href="#_validator"></a><a class="link" href="#_validator">Validator</a></h3>
 <div class="paragraph">
 <p>Quarkus uses Hibernate Validator (<a href="https://hibernate.org/validator/" class="bare">https://hibernate.org/validator/</a>) to validate input/output of REST services and business services using Bean validation spec.</p>
 </div>
@@ -1693,9 +2173,167 @@ Validator validator;</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_reactive_programming"><a class="link" href="#_reactive_programming">Reactive Programming</a></h3>
+<h3 id="_jwt"><a class="anchor" href="#_jwt"></a><a class="link" href="#_jwt">JWT</a></h3>
 <div class="paragraph">
-<p>Quarkus implements MicroProfile Reactive spec (<a href="https://github.com/eclipse/microprofile-reactive-streams-operators" class="bare">https://github.com/eclipse/microprofile-reactive-streams-operators</a>) and uses RXJava2 to provide reactive programming model.</p>
+<p>Quarkus implements <a href="https://github.com/eclipse/microprofile-jwt-auth">MicroProfile JWT RBAC spec</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
+    -Dextensions="io.quarkus:quarkus-smallrye-jwt"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Minimum JWT required claims: <code>typ</code>, <code>alg</code>, <code>kid</code>, <code>iss</code>, <code>sub</code>, <code>exp</code>, <code>iat</code>, <code>jti</code>, <code>upn</code>, <code>groups</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can inject token by using <code>JsonWebToken</code> or a claim individually by using <code>@Claim</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+JsonWebToken jwt;
+
+@Inject
+@Claim(standard = Claims.preferred_username)
+String name;
+
+@Inject
+@Claim("groups")
+Set&lt;String&gt; groups;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set of supported types: <code>String</code>, <code>Set&lt;String&gt;</code>, <code>Long</code>, <code>Boolean, `javax.json.JsonValue</code>, <code>Optional</code>, <code>org.eclipse.microprofile.jwt.ClaimValue</code>.</p>
+</div>
+<div class="paragraph">
+<p>And configuration in <code>src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">mp.jwt.verify.publickey.location=
+    META-INF/resources/publicKey.pem
+mp.jwt.verify.issuer=
+    https://quarkus.io/using-jwt-rbac</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.enabled</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine if the jwt extension is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.realm-name</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quarkus-JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for security realm.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.auth-mechanism</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MP-JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentication mechanism.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.publickey</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Public Key text itself to be supplied as a string.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.publickey.location</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relative path or URL of a public key.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.issuer</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>iss</code> accepted as valid.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Supported public key formats:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PKCS#8 PEM</p>
+</li>
+<li>
+<p>JWK</p>
+</li>
+<li>
+<p>JWKS</p>
+</li>
+<li>
+<p>JWK Base64 URL</p>
+</li>
+<li>
+<p>JWKS Base64 URL</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To send a token to server-side you should use <code>Authorization</code> header: <code>curl -H "Authorization: Bearer eyJraWQiOi&#8230;&#8203;"</code>.</p>
+</div>
+<div class="paragraph">
+<p>To inject claim values, the bean must be <code>@RequestScoped</code> CDI scoped.
+If you need to inject claim values in scope with a lifetime greater than <code>@RequestScoped</code> then you need to use <code>javax.enterprise.inject.Instance</code> interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+@Claim(standard = Claims.iat)
+private Instance&lt;Long&gt; providerIAT;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>RBAC</strong></p>
+</div>
+<div class="paragraph">
+<p>JWT <code>groups</code> claim is directly mapped to roles to be used in security annotations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@RolesAllowed("Subscriber")</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reactive_programming"><a class="anchor" href="#_reactive_programming"></a><a class="link" href="#_reactive_programming">Reactive Programming</a></h3>
+<div class="paragraph">
+<p>Quarkus implements <a href="https://github.com/eclipse/microprofile-reactive-streams-operators">MicroProfile Reactive spec</a> and uses RXJava2 to provide reactive programming model.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1740,7 +2378,7 @@ public Publisher&lt;String&gt; publishers() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_reactive_messaging"><a class="link" href="#_reactive_messaging">Reactive Messaging</a></h3>
+<h3 id="_reactive_messaging"><a class="anchor" href="#_reactive_messaging"></a><a class="link" href="#_reactive_messaging">Reactive Messaging</a></h3>
 <div class="paragraph">
 <p>Quarkus relies on MicroProfile Reactive Messaging spec (<a href="https://github.com/eclipse/microprofile-reactive-messaging" class="bare">https://github.com/eclipse/microprofile-reactive-messaging</a>) to implement reactive messaging streams.</p>
 </div>
@@ -1784,7 +2422,7 @@ public class ConsumerData {
 </div>
 </div>
 <div class="paragraph">
-<p>You can also inject an strem as field:</p>
+<p>You can also inject an stream as a field:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1798,9 +2436,94 @@ public class ConsumerData {
 <div class="paragraph">
 <p><strong>Kafka</strong></p>
 </div>
+<div class="paragraph">
+<p>To integrate with Kafka you need to add next extensions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
+    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
+                  io.quarkus:quarkus-vert"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be set with Kafka streams.</p>
+</div>
+<div class="paragraph">
+<p>You need also need to configure Kafka connector following next schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">smallrye.messaging.source.prices.type=
+    io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.source.prices.topic=
+    prices
+smallrye.messaging.source.prices.bootstrap.servers=
+    localhost:9092
+smallrye.messaging.source.prices.key.deserializer=
+    org.apache.kafka.common.serialization.StringDeserializer
+smallrye.messaging.source.prices.value.deserializer=
+    org.apache.kafka.common.serialization.IntegerDeserializer
+smallrye.messaging.source.prices.group.id=
+    my-group-id</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If the stream is not configured then it is assumed to be an in-memory stream.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_observability"><a class="link" href="#_observability">Observability</a></h3>
+<h3 id="_reactive_postgresql_client"><a class="anchor" href="#_reactive_postgresql_client"></a><a class="link" href="#_reactive_postgresql_client">Reactive PostgreSQL Client</a></h3>
+<div class="paragraph">
+<p>You can use Reactive PostgreSQL to execute queries to PostreSQL database in a reactive way, instead of using JDBC way.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-smallrye-health"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Database configuration is the same as shown in <a href="#_persistence">Persistence</a> section, but URL is different as it is not a <em>jdbc</em>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.datasource.url=
+    vertx-reactive:postgresql://host:5431/db</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can inject <code>io.reactiverse.axle.pgclient.PgPool</code> class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+PgPool client;
+
+CompletionStage&lt;JsonArray&gt; =
+    client.query("SELECT * FROM table")
+    .thenApply(pgRowSet -&gt; {
+        JsonArray jsonArray = new JsonArray();
+        PgIterator iterator = pgRowSet.iterator();
+        return jsonArray;
+    })</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_observability"><a class="anchor" href="#_observability"></a><a class="link" href="#_observability">Observability</a></h3>
 <div class="paragraph">
 <p><strong>Health Checks</strong></p>
 </div>
@@ -2019,7 +2742,7 @@ tracer.activeSpan().setBaggageItem("key", "value");</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cloud"><a class="link" href="#_cloud">Cloud</a></h3>
+<h3 id="_cloud"><a class="anchor" href="#_cloud"></a><a class="link" href="#_cloud">Cloud</a></h3>
 <div class="paragraph">
 <p><strong>Native</strong></p>
 </div>
@@ -2035,6 +2758,9 @@ docker build -f src/main/docker/Dockerfile.native
                     -t quarkus/getting-started .
 docker run -i --rm -p 8080:8080 quarkus/getting-started</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>To configure native application, you can create a <code>config</code> directory at the same place as the native file and place an <code>application.properties</code> file inside. <code>config/application.properties</code>.</p>
 </div>
 <div class="paragraph">
 <p><strong>Kubernetes</strong></p>
@@ -2091,7 +2817,7 @@ docker run -i --rm -p 8080:8080 quarkus/getting-started</code></pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_logging"><a class="link" href="#_logging">Logging</a></h3>
+<h3 id="_logging"><a class="anchor" href="#_logging"></a><a class="link" href="#_logging">Logging</a></h3>
 <div class="paragraph">
 <p>You can configure how Quarkus logs:</p>
 </div>
@@ -2235,7 +2961,7 @@ quarkus.log.category."com.lordofthejars".level=DEBUG</code></pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_testing"><a class="link" href="#_testing">Testing</a></h3>
+<h3 id="_testing"><a class="anchor" href="#_testing"></a><a class="link" href="#_testing">Testing</a></h3>
 <div class="paragraph">
 <p>When you generate the Quarkus project with the archetype, test dependencies with JUnit 5 are registered automatically, but also the Rest-Assured library to test RESt endpoints.</p>
 </div>
@@ -2298,7 +3024,7 @@ This does not work when using native image testing.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_resources"><a class="link" href="#_resources">Resources</a></h3>
+<h3 id="_resources"><a class="anchor" href="#_resources"></a><a class="link" href="#_resources">Resources</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2315,7 +3041,7 @@ This does not work when using native image testing.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-05-10 19:25:43 +0200
+Last updated 2019-05-14 18:51:07 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

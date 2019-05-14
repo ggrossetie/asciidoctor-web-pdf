@@ -5,8 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.9">
-<meta name="author" content="Alex Soto">
-<title>Quarkus</title>
+<title>Quarkus Cheat-Sheet</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,13 +437,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Quarkus</h1>
-<div class="details">
-<span id="author" class="author">Alex Soto</span><br>
-<span id="email" class="email"><a href="https://twitter.com/alexsotob" class="bare">https://twitter.com/alexsotob</a></span><br>
-</div>
+<h1>Quarkus Cheat-Sheet</h1>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alex Soto &lt;<a href="https://twitter.com/alexsotob&gt;" class="bare">https://twitter.com/alexsotob&gt;</a>;
+:authorbio: Java Champion and SW Engineer at Red Hat
+:pdf-width: 508mm
+:pdf-height: 361mm</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_what_is_quarkus"><a class="link" href="#_what_is_quarkus">What is Quarkus?</a></h2>
 <div class="sectionbody">
@@ -529,7 +534,7 @@ To list all available extensions just run:</p>
 <h2 id="_application_lifecycle"><a class="link" href="#_application_lifecycle">Application Lifecycle</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can be notified when the application starts and when stops by observing <code>StartupEvent</code> and <code>ShutdownEvent</code> events.</p>
+<p>You can be notified when the application starts/stops by observing <code>StartupEvent</code> and <code>ShutdownEvent</code> events.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1387,10 +1392,170 @@ Validator validator;</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_jwt"><a class="link" href="#_jwt">JWT</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Quarkus implements <a href="https://github.com/eclipse/microprofile-jwt-auth">MicroProfile JWT RBAC spec</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">mvn quarkus:add-extension
+    -Dextensions="io.quarkus:quarkus-smallrye-jwt"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Minimum JWT required claims: <code>typ</code>, <code>alg</code>, <code>kid</code>, <code>iss</code>, <code>sub</code>, <code>exp</code>, <code>iat</code>, <code>jti</code>, <code>upn</code>, <code>groups</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can inject token by using <code>JsonWebToken</code> or a claim individually by using <code>@Claim</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Inject
+JsonWebToken jwt;
+
+@Inject
+@Claim(standard = Claims.preferred_username)
+String name;
+
+@Inject
+@Claim("groups")
+Set&lt;String&gt; groups;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set of supported types: <code>String</code>, <code>Set&lt;String&gt;</code>, <code>Long</code>, <code>Boolean, `javax.json.JsonValue</code>, <code>Optional</code>, <code>org.eclipse.microprofile.jwt.ClaimValue</code>.</p>
+</div>
+<div class="paragraph">
+<p>And configuration in <code>src/main/resources/application.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-properties" data-lang="properties">mp.jwt.verify.publickey.location=
+    META-INF/resources/publicKey.pem
+mp.jwt.verify.issuer=
+    https://quarkus.io/using-jwt-rbac</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.enabled</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determine if the jwt extension is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.realm-name</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quarkus-JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name to use for security realm.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>quarkus.smallrye-jwt.auth-mechanism</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MP-JWT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentication mechanism.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.publickey</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Public Key text itself to be supplied as a string.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.publickey.location</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relative path or URL of a public key.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mp.jwt.verify.issuer</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>iss</code> accepted as valid.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Supported public key formats:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PKCS#8 PEM</p>
+</li>
+<li>
+<p>JWK</p>
+</li>
+<li>
+<p>JWKS</p>
+</li>
+<li>
+<p>JWK Base64 URL</p>
+</li>
+<li>
+<p>JWKS Base64 URL</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To send a token to server-side you should use <code>Authorization</code> header: <code>curl -H "Authorization: Bearer eyJraWQiOi&#8230;&#8203;"</code>.</p>
+</div>
+<div class="paragraph">
+<p>To inject claim values, the bean must be <code>@RequestScoped</code> CDI scoped.
+If you need to inject claim values in scope with a lifetime greater than <code>@RequestScoped</code> then you need to use <code>javax.enterprise.inject.Instance</code> interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Inject
+@Claim(standard = Claims.iat)
+private Instance&lt;Long&gt; providerIAT;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>RBAC</strong></p>
+</div>
+<div class="paragraph">
+<p>JWT <code>groups</code> claim is directly mapped to roles to be used in security annotations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@RolesAllowed("Subscriber")</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_reactive_programming"><a class="link" href="#_reactive_programming">Reactive Programming</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Quarkus implements MicroProfile Reactive spec (<a href="https://github.com/eclipse/microprofile-reactive-streams-operators" class="bare">https://github.com/eclipse/microprofile-reactive-streams-operators</a>) and uses RXJava2 to provide reactive programming model.</p>
+<p>Quarkus implements <a href="https://github.com/eclipse/microprofile-reactive-streams-operators">MicroProfile Reactive spec</a> and uses RXJava2 to provide reactive programming model.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1481,7 +1646,7 @@ public class ConsumerData {
 </div>
 </div>
 <div class="paragraph">
-<p>You can also inject an strem as field:</p>
+<p>You can also inject an stream as a field:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1494,6 +1659,53 @@ public class ConsumerData {
 </div>
 <div class="paragraph">
 <p><strong>Kafka</strong></p>
+</div>
+<div class="paragraph">
+<p>To integrate with Kafka you need to add next extensions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">mvn quarkus:add-extension
+    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
+                  io.quarkus:quarkus-vert"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be set with Kafka streams.</p>
+</div>
+<div class="paragraph">
+<p>You need also need to configure Kafka connector following next schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-properties" data-lang="properties">smallrye.messaging.source.prices.type=
+    io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.source.prices.topic=
+    prices
+smallrye.messaging.source.prices.bootstrap.servers=
+    localhost:9092
+smallrye.messaging.source.prices.key.deserializer=
+    org.apache.kafka.common.serialization.StringDeserializer
+smallrye.messaging.source.prices.value.deserializer=
+    org.apache.kafka.common.serialization.IntegerDeserializer
+smallrye.messaging.source.prices.group.id=
+    my-group-id</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+If the stream is not configured then it is assumed to be an in-memory stream.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -2021,7 +2233,7 @@ This does not work when using native image testing.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-05-09 16:03:13 +0200
+Last updated 2019-05-14 11:14:43 +0200
 </div>
 </div>
 </body>

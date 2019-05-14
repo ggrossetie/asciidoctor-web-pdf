@@ -73,7 +73,7 @@ TIP: `extensions` property supports CSV format to register more than one extensi
 
 == Application Lifecycle
 // tag::update_1_3[]
-You can be notified when the application starts and when stops by observing `StartupEvent` and `ShutdownEvent` events.
+You can be notified when the application starts/stops by observing `StartupEvent` and `ShutdownEvent` events.
 
 [source, java]
 ----
@@ -314,9 +314,73 @@ a|
 
 TIP: Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
 
+== Flyway
+// tag::update_1_7[]
+Quarkus integrates with https://flywaydb.org/[Flyway] to help you on database schema migrations.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-flyway"
+----
+
+Then place migration files to the migrations folder (`classpath:db/migration`).
+
+You can inject `org.flywaydb.core.Flyway` to programmatically execute the migration.
+
+[source, java]
+----
+@Inject
+Flyway flyway;
+
+flyway.migrate();
+----
+
+Or can be automatically executed by setting `migrate-at-start` property to `true`.
+
+[source, properties]
+----
+quarkus.flyway.migrate-at-start=true
+----
+
+Configuration Properties:
+
+|===	
+| Parameter | Default | Description
+
+a|`quarkus.flyway.migrate-at-start`
+a|`false`
+|Execute Flyway migration automatically.
+
+a|`quarkus.flyway.locations`
+a|`classpath:db/migration`
+|CSV of locations to scan recursively for migrations. Supported prefixes `classpath` and `filesystem`.
+
+a|`quarkus.flyway.connect-retries`
+a|0
+|The maximum number of retries when attempting to connect to the database.
+
+a|`quarkus.flyway.schemas`
+a|none
+|CSV case-sensitive list of schemas managed by Flyway
+
+a|`quarkus.flyway.table`
+a|`flyway_schema_history`
+|The name of Flyway’s schema history table.
+
+a|`quarkus.flyway.sql-migration-prefix`
+a|`V`
+|The filename prefix for versioned SQL migrations. 
+
+a|`quarkus.flyway.repeatable-sql-migration-prefix`
+a|`R`
+|The file name prefix for repeatable SQL migrations.
+|===
+// end::update_1_7[]
+
 == Rest Client
 
-Quarkus implements MicroProfile Rest Client (https://github.com/eclipse/microprofile-rest-client) spec:
+Quarkus implements https://github.com/eclipse/microprofile-rest-client[MicroProfile Rest Client] spec:
 
 [source, bash]
 ----
@@ -669,7 +733,7 @@ Set<ConstraintViolation<Sauce>> violations =
             validator.validate(sauce);
 ----
 
-== Security and JWT
+== JWT
 // tag::update_1_5[]
 Quarkus implements https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC spec].
 
@@ -681,8 +745,92 @@ mvn quarkus:add-extension
 
 Minimum JWT required claims: `typ`, `alg`, `kid`, `iss`, `sub`, `exp`, `iat`, `jti`, `upn`, `groups`.
 
+You can inject token by using `JsonWebToken` or a claim individually by using `@Claim`.
 
+[source, java]
+----
+@Inject
+JsonWebToken jwt;
 
+@Inject
+@Claim(standard = Claims.preferred_username)
+String name;
+
+@Inject
+@Claim("groups")
+Set<String> groups;
+----
+
+Set of supported types: `String`, `Set<String>`, `Long`, `Boolean, `javax.json.JsonValue`, `Optional`, `org.eclipse.microprofile.jwt.ClaimValue`.
+
+And configuration in `src/main/resources/application.properties`:
+
+[source, properties]
+----
+mp.jwt.verify.publickey.location=
+    META-INF/resources/publicKey.pem
+mp.jwt.verify.issuer=
+    https://quarkus.io/using-jwt-rbac
+----
+
+Configuration options:
+
+|===	
+| Parameter | Default | Description
+
+a|`quarkus.smallrye-jwt.enabled`
+a|`true`
+|Determine if the jwt extension is enabled.
+
+a|`quarkus.smallrye-jwt.realm-name`
+|Quarkus-JWT
+|Name to use for security realm.
+
+a|`quarkus.smallrye-jwt.auth-mechanism`
+|MP-JWT
+|Authentication mechanism.
+
+a|`mp.jwt.verify.publickey`
+|none
+|Public Key text itself to be supplied as a string.
+
+a|`mp.jwt.verify.publickey.location`
+|none
+|Relative path or URL of a public key.
+
+a|`mp.jwt.verify.issuer`
+|none
+a|`iss` accepted as valid.
+|===
+
+Supported public key formats:
+
+* PKCS#8 PEM
+* JWK
+* JWKS
+* JWK Base64 URL
+* JWKS Base64 URL
+
+To send a token to server-side you should use `Authorization` header: `curl -H "Authorization: Bearer eyJraWQiOi..."`.
+
+To inject claim values, the bean must be `@RequestScoped` CDI scoped.
+If you need to inject claim values in scope with a lifetime greater than `@RequestScoped` then you need to use `javax.enterprise.inject.Instance` interface.
+
+[source, java]
+----
+@Inject
+@Claim(standard = Claims.iat)
+private Instance<Long> providerIAT;
+----
+
+*RBAC*
+
+JWT `groups` claim is directly mapped to roles to be used in security annotations.
+
+[source, java]
+----
+@RolesAllowed("Subscriber")
+----
 // end::update_1_5[]
 
 == Reactive Programming
@@ -768,7 +916,7 @@ public class ConsumerData {
 }
 ----
 
-You can also inject an strem as field:
+You can also inject an stream as a field:
 
 [source, java]
 ----
@@ -811,9 +959,43 @@ smallrye.messaging.source.prices.group.id=
 
 A complete list of supported properties are in Kafka site. For https://kafka.apache.org/documentation/#producerconfigs[producer] and for https://kafka.apache.org/documentation/#consumerconfigs[consumer]
 
-IMPORTANT: If stream is not configured then it is assumed to be an in-memory stream.
-
+IMPORTANT: If the stream is not configured then it is assumed to be an in-memory stream.
 // end::update_1_4[]
+
+== Reactive PostgreSQL Client
+// tag::update_1_8[]
+You can use Reactive PostgreSQL to execute queries to PostreSQL database in a reactive way, instead of using JDBC way.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-health"
+----
+
+Database configuration is the same as shown in <<Persistence>> section, but URL is different as it is not a _jdbc_.
+
+[source, properties]
+----
+quarkus.datasource.url=
+    vertx-reactive:postgresql://host:5431/db
+----
+
+Then you can inject `io.reactiverse.axle.pgclient.PgPool` class.
+
+[source, java]
+----
+@Inject
+PgPool client;
+
+CompletionStage<JsonArray> = 
+    client.query("SELECT * FROM table")  
+    .thenApply(pgRowSet -> {
+        JsonArray jsonArray = new JsonArray();
+        PgIterator iterator = pgRowSet.iterator();
+        return jsonArray;
+    })
+----
+// end::update_1_8[]
 
 == Observability
 
@@ -997,6 +1179,10 @@ docker build -f src/main/docker/Dockerfile.native
 docker run -i --rm -p 8080:8080 quarkus/getting-started
 ----
 
+// tag::update_1_6[]
+To configure native application, you can create a `config` directory at the same place as the native file and place an `application.properties` file inside. `config/application.properties`.
+// end::update_1_6[]
+
 *Kubernetes*
 
 Quarks can use ap4k (https://github.com/ap4k/ap4k) to generate Kubernetes resources.
@@ -1012,13 +1198,13 @@ Running `./mvnw package` the Kubernetes resources are created at `target/wiring-
 |===	
 | Property | Default | Description
 
-a| `quarkus.kubernetes.group`
-a| Current username
-a| Set Docker Username.
+a|`quarkus.kubernetes.group`
+a|Current username
+a|Set Docker Username.
 
-a| `quarkus.application.name`
-a| Current project name
-a| Project name
+a|`quarkus.application.name`
+a|Current project name
+a|Project name
 |===
 
 == Logging
@@ -1039,45 +1225,45 @@ Prefix is `quarkus.log`.
 |===	
 | Property | Default | Description
 
-a| `console.enable`
-a| `true`
-a| Console logging enabled.
+a|`console.enable`
+a|`true`
+a|Console logging enabled.
 
-a| `console.format`
-a| `%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n`
-a| Format pattern to use for logging.
+a|`console.format`
+a|`%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n`
+a|Format pattern to use for logging.
 
-a| `console.level`
-a| `INFO`
-a| Minimum log level.
+a|`console.level`
+a|`INFO`
+a|Minimum log level.
 
-a| `console.color`
-a| `INFO`
-a| Allow color rendering.
+a|`console.color`
+a|`INFO`
+a|Allow color rendering.
 
-a| `file.enable`
-a| `false`
-a| File logging enabled.
+a|`file.enable`
+a|`false`
+a|File logging enabled.
 
-a| `file.format`
-a| `%d{yyyy-MM-dd HH:mm:ss,SSS} %h %N[%i] %-5p [%c{3.}] (%t) %s%e%n`
-a| Format pattern to use for logging.
+a|`file.format`
+a|`%d{yyyy-MM-dd HH:mm:ss,SSS} %h %N[%i] %-5p [%c{3.}] (%t) %s%e%n`
+a|Format pattern to use for logging.
 
-a| `file.level`
-a| `ALL`
-a| Minimum log level.
+a|`file.level`
+a|`ALL`
+a|Minimum log level.
 
-a| `file.path`
-a| `quarkus.log`
-a| The path to log file.
+a|`file.path`
+a|`quarkus.log`
+a|The path to log file.
 
-a| `category."<category-name>".level`
-a| `INFO`
-a| Minimum level category.
+a|`category."<category-name>".level`
+a|`INFO`
+a|Minimum level category.
 
-a| `level`
-a| `INFO`
-a| Default minimum level.
+a|`level`
+a|`INFO`
+a|Default minimum level.
 |===
 
 == Testing
