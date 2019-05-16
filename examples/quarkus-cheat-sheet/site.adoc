@@ -65,6 +65,12 @@ include::quarkus-cheat-sheet.adoc[tag=update_1_7]
 include::quarkus-cheat-sheet.adoc[tag=update_1_8]
 ====
 
+.Keycloak
+[%collapsible]
+====
+include::quarkus-cheat-sheet.adoc[tag=update_1_9]
+====
+
 :leveloffset: +1
 [[quarkuscheatsheet]]
 include::quarkus-cheat-sheet.adoc[]

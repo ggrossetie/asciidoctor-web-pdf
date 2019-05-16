@@ -17,7 +17,7 @@ endif::site[]
 
 == What is Quarkus?
 
-Quarkus (https://quarkus.io/) is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
+https://quarkus.io/[Quarkus] is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.
 
 Cheat-sheet tested with *Quarkus {version}*.
@@ -184,7 +184,7 @@ public Response create(Sauce sauce) {
 == Persistence
 
 Quarkus works with JPA(Hibernate) as persistence solution.
-But also provides an Active Record pattern (https://en.wikipedia.org/wiki/Active_record_pattern) implementation under Panache project.
+But also provides an https://en.wikipedia.org/wiki/Active_record_pattern[Active Record pattern] implementation under Panache project.
 
 To use database access you need to add Quarkus JDBC drivers instead of the original ones.
 At this time `H2`, `MariaDB` and `PostgreSQL` drivers are supported.
@@ -498,7 +498,7 @@ CompletionStage<WorldClock> getNow();
 
 == Fault Tolerance
 // tag::update_1_2[]
-Quarkus uses MicroProfile Fault Tolerance (https://github.com/eclipse/microprofile-fault-tolerance) spec:
+Quarkus uses https://github.com/eclipse/microprofile-fault-tolerance[MicroProfile Fault Tolerance spec:
 
 [source, bash]
 ----
@@ -634,7 +634,7 @@ TIP: MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You 
 
 == Validator
 
-Quarkus uses Hibernate Validator (https://hibernate.org/validator/) to validate input/output of REST services and business services using Bean validation spec.
+Quarkus uses https://hibernate.org/validator/[Hibernate Validator] to validate input/output of REST services and business services using Bean validation spec.
 
 [source, bash]
 ----
@@ -833,6 +833,50 @@ JWT `groups` claim is directly mapped to roles to be used in security annotation
 ----
 // end::update_1_5[]
 
+== Keycloak
+// tag::update_1_9[]
+Quarkus can use https://www.keycloak.org/[Keycloak] to protect resources using bearer token issued by Keycloak server.
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-keycloak"
+----
+
+You can get token information by injecting `KeycloakSecurityContext` object.
+
+[source, java]
+----
+@Inject
+KeycloakSecurityContext keycloakSecurityContext;
+----
+
+You can also protect resources with security annotations.
+
+[source, java]
+----
+@GET
+@RolesAllowed("admin")
+----
+
+Configure application to Keycloak service in `application.properties` file.
+
+[source, properties]
+----
+quarkus.keycloak.realm=quarkus
+quarkus.keycloak.auth-server-url=http://localhost:8180/auth
+quarkus.keycloak.resource=backend-service
+quarkus.keycloak.bearer-only=true
+quarkus.keycloak.credentials.secret=secret
+quarkus.keycloak.policy-enforcer.enable=true
+quarkus.keycloak.policy-enforcer.enforcement-mode=PERMISSIVE
+----
+
+You can see all possible https://www.keycloak.org/docs/latest/securing_apps/index.html#_java_adapter_config[Configuration parameters here].
+
+TIP: you can also use `src/main/resources/keycloak.json` standard Keycloak configuration file.
+// end::update_1_9[]
+
 == Reactive Programming
 
 Quarkus implements https://github.com/eclipse/microprofile-reactive-streams-operators[MicroProfile Reactive spec] and uses RXJava2 to provide reactive programming model.
@@ -1001,7 +1045,7 @@ CompletionStage<JsonArray> =
 
 *Health Checks*
 
-Quarkus relies on MicroProfile Health spec (https://github.com/eclipse/microprofile-health) to provide health checks.
+Quarkus relies on https://github.com/eclipse/microprofile-health[MicroProfile Health] spec to provide health checks.
 
 [source, bash]
 ----
@@ -1066,7 +1110,7 @@ Builds the next output:
 
 *Metrics*
 
-Quarkus can utilize the MicroProfile Metrics spec (https://github.com/eclipse/microprofile-metrics) to provide metrics support.
+Quarkus can utilize the https://github.com/eclipse/microprofile-metrics[MicroProfile Metrics spec] to provide metrics support.
 
 [source, bash]
 ----
@@ -1129,7 +1173,7 @@ Histogram historgram;
 
 *Tracing*
 
-Quarkus can utilize the MicroProfile OpenTracing spec (https://github.com/eclipse/microprofile-opentracing) to provide tracing support.
+Quarkus can utilize the https://github.com/eclipse/microprofile-opentracing[MicroProfile OpenTracing] spec to provide tracing support.
 
 [source, bash]
 ----
@@ -1185,7 +1229,7 @@ To configure native application, you can create a `config` directory at the same
 
 *Kubernetes*
 
-Quarks can use ap4k (https://github.com/ap4k/ap4k) to generate Kubernetes resources.
+Quarks can use https://github.com/ap4k/ap4k[ap4k] to generate Kubernetes resources.
 
 [source, bash]
 ----
