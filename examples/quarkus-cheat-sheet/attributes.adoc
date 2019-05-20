@@ -3,4 +3,4 @@
 :source-highlighter: highlightjs
 :sectlinks:
 :sectanchors:
-:pdf-download: https://github.com/lordofthejars/asciidoctor-pdf.js/releases/download/v1.0.2/quarkus-cheat-sheet.pdf
+:pdf-download: https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.2/quarkus-cheat-sheet.pdf
