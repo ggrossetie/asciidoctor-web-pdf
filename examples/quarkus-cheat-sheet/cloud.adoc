@@ -1,0 +1,90 @@
+== Cloud
+
+*Native*
+
+You can build a native image by using GraalVM.
+The common use case is creating a Docker image so you can execute the next commands:
+
+[source, bash]
+----
+./mvnw package -Pnative -Dnative-image.docker-build=true
+
+docker build -f src/main/docker/Dockerfile.native 
+                    -t quarkus/getting-started .
+docker run -i --rm -p 8080:8080 quarkus/getting-started
+----
+
+// tag::update_1_6[]
+To configure native application, you can create a `config` directory at the same place as the native file and place an `application.properties` file inside. `config/application.properties`.
+// end::update_1_6[]
+
+*Kubernetes*
+
+Quarks can use https://github.com/ap4k/ap4k[ap4k] to generate Kubernetes resources.
+
+[source, bash]
+----
+./mvnw quarkus:add-extensions 
+    -Dextensions="io.quarkus:quarkus-kubernetes"
+----
+
+Running `./mvnw package` the Kubernetes resources are created at `target/wiring-classes/META-INF/kubernetes/` directory.
+
+|===	
+| Property | Default | Description
+
+a|`quarkus.kubernetes.group`
+a|Current username
+a|Set Docker Username.
+
+a|`quarkus.application.name`
+a|Current project name
+a|Project name
+|===
+
+== Amazon Lambda
+// tag::update_1_10[]
+Quarkus integrates with Amazon Lambda.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-amazon-lambda"
+----
+
+And then implement `com.amazonaws.services.lambda.runtime.RequestHandler` interface.
+
+[source, java]
+----
+public class TestLambda implements RequestHandler<MyInput, MyOutput> {
+    @Override
+    public MyInput handleRequest(MyOutput input, Context context) {
+        // ...
+    }
+}
+----
+
+*Test*
+
+You can write tests for Amazon lambdas:
+
+[source, xml]
+----
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-test-amazon-lambda</artifactId>
+  <scope>test</scope>
+</dependency>
+----
+
+[source, java]
+----
+@Test
+public void testLambda() {
+    MyInput in = new MyInput();
+    in.setGreeting("Hello");
+    in.setName("Stu");
+    MyOutput out = LambdaClient.invoke(MyOutput.class, in);
+}
+----
+// end::update_1_10[]

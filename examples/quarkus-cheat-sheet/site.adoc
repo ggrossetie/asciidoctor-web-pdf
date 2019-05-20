@@ -20,55 +20,61 @@ In this page you can either read what has been added in each version of the chea
 .Headers Propagation
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_1]
+include::core.adoc[tag=update_1_1]
 ====
 
 .Fault Tolerance
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_2]
+include::network.adoc[tag=update_1_2]
 ====
 
 .Application Lifecycle
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_3]
+include::core.adoc[tag=update_1_3]
 ====
 
 .Reactive Messaging
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_4]
+include::reactive.adoc[tag=update_1_4]
 ====
 
 .JWT
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_5]
+include::security.adoc[tag=update_1_5]
 ====
 
 .Configuring Native
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_6]
+include::cloud.adoc[tag=update_1_6]
 ====
 
 .Flyway
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_7]
+include::persistence.adoc[tag=update_1_7]
 ====
 
 .Reactive PostgreSQL Client
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_8]
+include::reactive.adoc[tag=update_1_8]
 ====
 
 .Keycloak
 [%collapsible]
 ====
-include::quarkus-cheat-sheet.adoc[tag=update_1_9]
+include::security.adoc[tag=update_1_9]
+====
+
+.Amazon Lambda
+[%collapsible]
+====
+include::cloud.adoc[tag=update_1_10]
 ====
 
 :leveloffset: +1

@@ -1,0 +1,143 @@
+== JWT
+// tag::update_1_5[]
+Quarkus implements https://github.com/eclipse/microprofile-jwt-auth[MicroProfile JWT RBAC spec].
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-smallrye-jwt"
+----
+
+Minimum JWT required claims: `typ`, `alg`, `kid`, `iss`, `sub`, `exp`, `iat`, `jti`, `upn`, `groups`.
+
+You can inject token by using `JsonWebToken` or a claim individually by using `@Claim`.
+
+[source, java]
+----
+@Inject
+JsonWebToken jwt;
+
+@Inject
+@Claim(standard = Claims.preferred_username)
+String name;
+
+@Inject
+@Claim("groups")
+Set<String> groups;
+----
+
+Set of supported types: `String`, `Set<String>`, `Long`, `Boolean, `javax.json.JsonValue`, `Optional`, `org.eclipse.microprofile.jwt.ClaimValue`.
+
+And configuration in `src/main/resources/application.properties`:
+
+[source, properties]
+----
+mp.jwt.verify.publickey.location=
+    META-INF/resources/publicKey.pem
+mp.jwt.verify.issuer=
+    https://quarkus.io/using-jwt-rbac
+----
+
+Configuration options:
+
+|===	
+| Parameter | Default | Description
+
+a|`quarkus.smallrye-jwt.enabled`
+a|`true`
+|Determine if the jwt extension is enabled.
+
+a|`quarkus.smallrye-jwt.realm-name`
+|Quarkus-JWT
+|Name to use for security realm.
+
+a|`quarkus.smallrye-jwt.auth-mechanism`
+|MP-JWT
+|Authentication mechanism.
+
+a|`mp.jwt.verify.publickey`
+|none
+|Public Key text itself to be supplied as a string.
+
+a|`mp.jwt.verify.publickey.location`
+|none
+|Relative path or URL of a public key.
+
+a|`mp.jwt.verify.issuer`
+|none
+a|`iss` accepted as valid.
+|===
+
+Supported public key formats:
+
+* PKCS#8 PEM
+* JWK
+* JWKS
+* JWK Base64 URL
+* JWKS Base64 URL
+
+To send a token to server-side you should use `Authorization` header: `curl -H "Authorization: Bearer eyJraWQiOi..."`.
+
+To inject claim values, the bean must be `@RequestScoped` CDI scoped.
+If you need to inject claim values in scope with a lifetime greater than `@RequestScoped` then you need to use `javax.enterprise.inject.Instance` interface.
+
+[source, java]
+----
+@Inject
+@Claim(standard = Claims.iat)
+private Instance<Long> providerIAT;
+----
+
+*RBAC*
+
+JWT `groups` claim is directly mapped to roles to be used in security annotations.
+
+[source, java]
+----
+@RolesAllowed("Subscriber")
+----
+// end::update_1_5[]
+
+== Keycloak
+// tag::update_1_9[]
+Quarkus can use https://www.keycloak.org/[Keycloak] to protect resources using bearer token issued by Keycloak server.
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-keycloak"
+----
+
+You can get token information by injecting `KeycloakSecurityContext` object.
+
+[source, java]
+----
+@Inject
+KeycloakSecurityContext keycloakSecurityContext;
+----
+
+You can also protect resources with security annotations.
+
+[source, java]
+----
+@GET
+@RolesAllowed("admin")
+----
+
+Configure application to Keycloak service in `application.properties` file.
+
+[source, properties]
+----
+quarkus.keycloak.realm=quarkus
+quarkus.keycloak.auth-server-url=http://localhost:8180/auth
+quarkus.keycloak.resource=backend-service
+quarkus.keycloak.bearer-only=true
+quarkus.keycloak.credentials.secret=secret
+quarkus.keycloak.policy-enforcer.enable=true
+quarkus.keycloak.policy-enforcer.enforcement-mode=PERMISSIVE
+----
+
+You can see all possible https://www.keycloak.org/docs/latest/securing_apps/index.html#_java_adapter_config[Configuration parameters here].
+
+TIP: you can also use `src/main/resources/keycloak.json` standard Keycloak configuration file.
+// end::update_1_9[]

@@ -1,0 +1,163 @@
+== Reactive Programming
+
+Quarkus implements https://github.com/eclipse/microprofile-reactive-streams-operators[MicroProfile Reactive spec] and uses RXJava2 to provide reactive programming model.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="
+    io.quarkus:quarkus-smallrye-reactive-streams-operators"
+----
+
+Asynchronous HTTP endpoint is implemented by returning Java `CompletionStage`.
+You can create this class either manually or using MicroProfile Reactive Streams spec:
+
+[source, java]
+----
+@GET
+@Path("/reactive")
+@Produces(MediaType.TEXT_PLAIN)
+public CompletionStage<String> getHello() {
+    return ReactiveStreams.of("h", "e", "l", "l", "o")
+    .map(String::toUpperCase)
+    .toList()
+    .run()
+    .thenApply(list -> list.toString());
+}
+----
+
+Creating streams is also easy, you just need to return `Publisher` object.
+
+[source, java]
+----
+@GET
+@Path("/stream")
+@Produces(MediaType.SERVER_SENT_EVENTS)
+public Publisher<String> publishers() {
+        return Flowable
+        .interval(500, TimeUnit.MILLISECONDS)
+        .map(s -> atomicInteger.getAndIncrement())
+        .map(i -> Integer.toString(i));
+}
+----
+
+== Reactive Messaging
+// tag::update_1_4[]
+Quarkus relies on MicroProfile Reactive Messaging spec (https://github.com/eclipse/microprofile-reactive-messaging) to implement reactive messaging streams.
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging"
+----
+
+You can just start using in-memory streams by using `@Incoming` to produce data and `@Outgoing` to consume data.
+
+Produce every 5 seconds one piece of data.
+
+[source, java]
+----
+@ApplicationScoped
+public class ProducerData {
+
+    @Outgoing("my-in-memory")
+    public Flowable<Integer> generate() {
+        return Flowable.interval(5, TimeUnit.SECONDS)
+                .map(tick -> random.nextInt(100));
+    }
+}
+----
+
+Consumes generated data from `my-in-memory` stream.
+
+[source, java]
+----
+@ApplicationScoped
+public class ConsumerData {
+    @Incoming("my-in-memory")
+    public void randomNumber(int randomNumber) {
+        System.out.println("Received " + randomNumber);
+    }
+}
+----
+
+You can also inject an stream as a field:
+
+[source, java]
+----
+@Inject
+@Stream("my-in-memory") Publisher<Integer> randomRumbers;
+----
+
+Possible return types:
+
+*Kafka*
+
+To integrate with Kafka you need to add next extensions:
+
+[source, bash]
+----
+mvn quarkus:add-extension 
+    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka, 
+                  io.quarkus:quarkus-vert"
+----
+
+Then `@Outgoing`, `@Incoming` or `@Stream` can be set with Kafka streams.
+
+You need also need to configure Kafka connector following next schema: `smallrye.messaging.[sink|source].\{stream-name\}.<property>=<value>` 
+
+[source, properties]
+----
+smallrye.messaging.source.prices.type=
+    io.smallrye.reactive.messaging.kafka.Kafka
+smallrye.messaging.source.prices.topic=
+    prices
+smallrye.messaging.source.prices.bootstrap.servers=
+    localhost:9092
+smallrye.messaging.source.prices.key.deserializer=
+    org.apache.kafka.common.serialization.StringDeserializer
+smallrye.messaging.source.prices.value.deserializer=
+    org.apache.kafka.common.serialization.IntegerDeserializer
+smallrye.messaging.source.prices.group.id=
+    my-group-id
+----
+
+A complete list of supported properties are in Kafka site. For https://kafka.apache.org/documentation/#producerconfigs[producer] and for https://kafka.apache.org/documentation/#consumerconfigs[consumer]
+
+IMPORTANT: If the stream is not configured then it is assumed to be an in-memory stream.
+// end::update_1_4[]
+
+== Reactive PostgreSQL Client
+// tag::update_1_8[]
+You can use Reactive PostgreSQL to execute queries to PostreSQL database in a reactive way, instead of using JDBC way.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-health"
+----
+
+Database configuration is the same as shown in <<Persistence>> section, but URL is different as it is not a _jdbc_.
+
+[source, properties]
+----
+quarkus.datasource.url=
+    vertx-reactive:postgresql://host:5431/db
+----
+
+Then you can inject `io.reactiverse.axle.pgclient.PgPool` class.
+
+[source, java]
+----
+@Inject
+PgPool client;
+
+CompletionStage<JsonArray> = 
+    client.query("SELECT * FROM table")  
+    .thenApply(pgRowSet -> {
+        JsonArray jsonArray = new JsonArray();
+        PgIterator iterator = pgRowSet.iterator();
+        return jsonArray;
+    })
+----
+// end::update_1_8[]

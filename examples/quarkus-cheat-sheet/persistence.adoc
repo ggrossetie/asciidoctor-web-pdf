@@ -1,0 +1,196 @@
+== Persistence
+
+Quarkus works with JPA(Hibernate) as persistence solution.
+But also provides an https://en.wikipedia.org/wiki/Active_record_pattern[Active Record pattern] implementation under Panache project.
+
+To use database access you need to add Quarkus JDBC drivers instead of the original ones.
+At this time `H2`, `MariaDB`, `MSSQL` and `PostgreSQL` drivers are supported.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-hibernate-orm-panache, 
+                io.quarkus:quarkus-jdbc-mariadb"
+----
+
+[source, java]
+----
+@Entity
+public class Developer extends PanacheEntity {
+
+    // id field is implicit
+
+    public String name;
+}
+----
+
+And configuration in `src/main/resources/application.properties`:
+
+[source, properties]
+----
+quarkus.datasource.url=jdbc:mariadb://localhost:3306/mydb
+quarkus.datasource.driver=org.mariadb.jdbc.Driver
+quarkus.datasource.username=developer
+quarkus.datasource.password=developer
+quarkus.hibernate-orm.database.generation=update
+----
+
+Database operations:
+
+[source, java]
+----
+// Insert
+Developer developer = new Developer();
+developer.name = "Alex";
+developer.persist();
+
+// Find All
+Developer.findAll().list();
+
+// Find By Query
+Developer.find("name", "Alex").firstResult();
+
+// Delete
+Developer developer = new Developer();
+developer.id = 1;
+developer.delete();
+
+// Delete By Query
+long numberOfDeleted = Developer.delete("name", "Alex");
+----
+
+Remember to annotate methods with `@Transactional` annotation to make changes persisted in the database.
+
+If queries start with the keyword `from` then they are treated as _HQL_ query, if not then next short form is supported:
+
+* `order by` which expands to `from EntityName order by ...`
+* `<columnName>` which expands to `from EntityName where <columnName>=?`
+* `<query>` which is expanded to `from EntityName where <query>`
+
+*Static Methods*
+
+|===	
+| Field | Parameters | Return
+
+a| `findById`
+a| `Object`
+a| Returns object or null if not found.
+
+a| `find`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Lists of entities meeting given query with parameters set.
+
+a| `find`
+a| `String`, `Sort`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Lists of entities meeting given query with parameters set sorted by `Sort` attribute/s.
+
+a| `findAll`
+a| 
+a| Finds all entities.
+
+a| `findAll`
+a| `Sort`
+a| Finds all entities sorted by `Sort` attribute/s.
+
+a| `stream`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| `java.util.stream.Stream` of entities meeting given query with parameters set.
+
+a| `stream`
+a| `String`, `Sort`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| `java.util.stream.Stream` of entities meeting given query with parameters set sorted by `Sort` attribute/s.
+
+a| `streamAll`
+a| 
+a| `java.util.stream.Stream` of all entities.
+
+a| `streamAll`
+a| `Sort`
+a| `java.util.stream.Stream` of all entities sorted by `Sort` attribute/s.
+
+a| `count`
+a| 
+a| `Number of entities.
+
+a| `count`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Number of entities meeting given query with parameters set.
+
+a| `deleteAll`
+a| 
+a| Number of deleted entities.
+
+a| `delete`
+a| `String`, [`Object...`, `Map<String, Object>`, `Parameters`]
+a| Number of deleted entities meeting given query with parameters set.
+
+a| `persist`
+a| [`Iterable`, `Steram`, `Object...`]
+a| 
+|===
+
+TIP: Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
+
+== Flyway
+// tag::update_1_7[]
+Quarkus integrates with https://flywaydb.org/[Flyway] to help you on database schema migrations.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-flyway"
+----
+
+Then place migration files to the migrations folder (`classpath:db/migration`).
+
+You can inject `org.flywaydb.core.Flyway` to programmatically execute the migration.
+
+[source, java]
+----
+@Inject
+Flyway flyway;
+
+flyway.migrate();
+----
+
+Or can be automatically executed by setting `migrate-at-start` property to `true`.
+
+[source, properties]
+----
+quarkus.flyway.migrate-at-start=true
+----
+
+Configuration Properties:
+
+|===	
+| Parameter | Default | Description
+
+a|`quarkus.flyway.migrate-at-start`
+a|`false`
+|Execute Flyway migration automatically.
+
+a|`quarkus.flyway.locations`
+a|`classpath:db/migration`
+|CSV of locations to scan recursively for migrations. Supported prefixes `classpath` and `filesystem`.
+
+a|`quarkus.flyway.connect-retries`
+a|0
+|The maximum number of retries when attempting to connect to the database.
+
+a|`quarkus.flyway.schemas`
+a|none
+|CSV case-sensitive list of schemas managed by Flyway
+
+a|`quarkus.flyway.table`
+a|`flyway_schema_history`
+|The name of Flyway’s schema history table.
+
+a|`quarkus.flyway.sql-migration-prefix`
+a|`V`
+|The filename prefix for versioned SQL migrations. 
+
+a|`quarkus.flyway.repeatable-sql-migration-prefix`
+a|`R`
+|The file name prefix for repeatable SQL migrations.
+|===
+// end::update_1_7[]

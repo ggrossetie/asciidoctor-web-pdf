@@ -1,0 +1,301 @@
+== Fault Tolerance
+// tag::update_1_2[]
+Quarkus uses https://github.com/eclipse/microprofile-fault-tolerance[MicroProfile Fault Tolerance spec:
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-fault-tolerance"
+----
+
+MicroProfile Fault Tolerance spec uses CDI interceptor and it can be used in several elements such as CDI bean, JAX-RS resource or MicroProfile Rest Client.
+
+To do automatic *retries* on a method:
+
+[source, java]
+----
+@Path("/api")
+@RegisterRestClient
+public interface WorldClockService {
+    
+    @GET @Path("/json/cet/now")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Retry(maxRetries = 2)
+    WorldClock getNow();
+
+}
+----
+
+You can set fallback code in case of an error by using `@Fallback` annotation:
+
+[source, java]
+----
+@Retry(maxRetries = 1)
+@Fallback(fallbackMethod = "fallbackMethod")
+WorldClock getNow(){}
+
+public String fallbackMethod() {
+    return "It could beworse";
+}
+----
+
+`fallbackMethod` must have the same parameters and return type as the annotated method.
+
+You can also set logic into a class that implements `FallbackHandler` interface:
+
+[source, java]
+----
+public class RecoverFallback 
+            implements FallbackHandler<String> {
+    @Override
+    public String handle(ExecutionContext context) {
+        return "It could be worse";
+    }
+}
+----
+
+<<<
+
+And set it in the annotation as value `@Fallback(RecoverFallback.class)`.
+
+In case you want to use *circuit breaker* pattern:
+
+[source, java]
+----
+@CircuitBreaker(requestVolumeThreshold = 4, 
+                failureRatio=0.75, 
+                delay = 1000)
+WorldClock getNow(){}
+----
+
+If 3 `(4 x 0.75)` failures occur among the rolling window of 4 consecutive invocations then the circuit is opened for 1000 ms and then be back to half open.
+If the invocation succeeds then the circuit is back to closed again.
+
+You can use *bulkahead* pattern to limit the number of concurrent access to the same resource. 
+If the operation is synchronous it uses a semaphore approach, if it is asynchronous a thread-pool one.
+When a request cannot be processed `BulkheadException` is thrown.
+It can be used together with any other fault tolerance annotation. 
+
+[source, java]
+----
+@Bulkhead(5)
+@Retry(maxRetries = 4, 
+       delay = 1000,
+       retryOn = BulkheadException.class)
+WorldClock getNow(){}
+----
+
+Fault tolerance annotations:
+
+|===	
+| Annotation | Properties
+
+a|`@Timeout`
+a|`unit`
+
+a|`@Retry`
+a|`maxRetries`, `delay`, `delayUnit`, `maxDuration`, `durationUnit`, `jitter`, `jitterDelayUnit`, `retryOn`, `abortOn`
+
+a|`@Fallback`
+a|`fallbackMethod`
+
+a|`@Bulkhead`
+a|`waitingTaskQueue` (only valid in asynchronous)
+
+a|`@CircuitBreaker`
+a|`failOn`, `delay`, `delayUnit`, `requestVolumeThreshold`, `failureRatio`, `successThreshold`
+
+a|`@Asynchronous`
+a|
+|===
+
+<<<
+
+You can override annotation parameters via configuration file using property `[classname/methodname/]annotation/parameter`:
+
+[source, properties]
+----
+org.acme.quickstart.WorldClock/getNow/Retry/maxDuration=30
+# Class scope
+org.acme.quickstart.WorldClock/Retry/maxDuration=3000
+# Global
+Retry/maxDuration=3000
+----
+
+You can also enable/disable policies using special parameter `enabled`.
+
+[source, properties]
+----
+org.acme.quickstart.WorldClock/getNow/Retry/enabled=false
+# Disable everything except fallback
+MP_Fault_Tolerance_NonFallback_Enabled=false
+----
+
+TIP: MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can disable it by setting `MP_Fault_Tolerance_Metrics_Enabled` to false.
+// end::update_1_2[]
+
+== Observability
+
+*Health Checks*
+
+Quarkus relies on https://github.com/eclipse/microprofile-health[MicroProfile Health] spec to provide health checks.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-health"
+----
+
+By just adding this extension, an endpoint is registered to `/health` providing a default health check.
+
+[source, json]
+----
+{
+    "outcome": "UP",
+    "checks": [
+    ]
+}
+----
+
+To create a custom health check you need to implement the `HealthCheck` interface and annotate it with `@Health` annotation.
+
+[source, java]
+----
+@Health
+public class DatabaseHealthCheck implements HealthCheck {
+    @Override
+    public HealthCheckResponse call() {
+        HealthCheckResponseBuilder responseBuilder = 
+            HealthCheckResponse.named("Database conn");
+
+        try {
+            checkDatabaseConnection();
+            responseBuilder.withData("connection", true);
+            responseBuilder.up();
+        } catch (IOException e) {
+            // cannot access the database
+            responseBuilder.down()
+                    .withData("error", e.getMessage());
+        }
+        return responseBuilder.build();
+    }
+}
+----
+
+Builds the next output:
+
+[source, json]
+----
+
+{
+    "outcome": "UP",
+    "checks": [
+        {
+            "name": "Database connection",
+            "state": "UP",
+            "data": {
+                "connection": true
+            }
+        }
+    ]
+}
+----
+
+*Metrics*
+
+Quarkus can utilize the https://github.com/eclipse/microprofile-metrics[MicroProfile Metrics spec] to provide metrics support.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-metrics"
+----
+
+The metrics can be read remotely using JSON format or the OpenMetrics format.
+By just adding the extension, an endpoint is registered at `/metrics` providing default metrics.
+
+MicroProfile Metrics comes with some annotations to add specific monitoring values:
+
+|===	
+| Annotation | Description
+
+a|`@Timed`
+a|Marking a method, constructor, or class as timed.
+
+a|`@Metered`
+a|Marking a method, constructor, or class as metered.
+
+a|`@Counted`
+a|Marking a method, constructor, or class as counted.
+
+a|`@Gauge`
+a|Marking a method or field as a gauge.
+
+a|`@Metric`
+a|Requesting that a metric be injected or registered.
+|===
+
+[source, java]
+----
+@GET
+//...
+@Timed(name = "checksTimer", 
+description = "A measure of how long it takes 
+                                to perform a hello.", 
+unit = MetricUnits.MILLISECONDS)
+public String hello() {}
+----
+
+`@Gauge` annotation returning a measure as a gauge.
+
+[source, java]
+----
+@Gauge(name = "hottestSauce", unit = MetricUnits.NONE, 
+description = "Hottest Sauce so far.")
+public Long hottestSauce() {}
+----
+
+Injecting a histogram using `@Metric`.
+
+[source, java]
+----
+@Inject
+@Metric(name = "histogram")
+Histogram historgram;
+----
+
+*Tracing*
+
+Quarkus can utilize the https://github.com/eclipse/microprofile-opentracing[MicroProfile OpenTracing] spec to provide tracing support.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-smallrye-opentracing"
+----
+
+By default, requests sent to any endpoint are traced without any code changes being required.
+
+This extension includes OpenTracing support and `Jaeger` tracer.
+
+Jaeger tracer configuration:
+
+[source, properties]
+----
+quarkus.jaeger.service-name=myservice
+quarkus.jaeger.sampler-type=const
+quarkus.jaeger.sampler-param=1
+quarkus.jaeger.endpoint=http://localhost:14268/api/traces
+----
+
+`@Traced` annotation can be set to disable tracing at class or method level.
+
+`Tracer` class can be injected into the class.
+
+[source, java]
+----
+@Inject
+Tracer tracer;
+
+tracer.activeSpan().setBaggageItem("key", "value");
+----
