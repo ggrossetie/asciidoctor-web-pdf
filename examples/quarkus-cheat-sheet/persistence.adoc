@@ -59,6 +59,8 @@ developer.delete();
 long numberOfDeleted = Developer.delete("name", "Alex");
 ----
 
+<<<
+
 Remember to annotate methods with `@Transactional` annotation to make changes persisted in the database.
 
 If queries start with the keyword `from` then they are treated as _HQL_ query, if not then next short form is supported:
@@ -153,6 +155,8 @@ Flyway flyway;
 flyway.migrate();
 ----
 
+<<<
+
 Or can be automatically executed by setting `migrate-at-start` property to `true`.
 
 [source, properties]
@@ -160,37 +164,39 @@ Or can be automatically executed by setting `migrate-at-start` property to `true
 quarkus.flyway.migrate-at-start=true
 ----
 
-Configuration Properties:
+List of Flyway parameters
+
+`quarkus.` as prefix is skipped in the next table.
 
 |===	
-| Parameter | Default | Description
+|Parameter | Default | Description
 
-a|`quarkus.flyway.migrate-at-start`
+a|`flyway.migrate-at-start`
 a|`false`
-|Execute Flyway migration automatically.
+|Flyway migration automatically.
 
-a|`quarkus.flyway.locations`
+a|`flyway.locations`
 a|`classpath:db/migration`
-|CSV of locations to scan recursively for migrations. Supported prefixes `classpath` and `filesystem`.
+|CSV locations to scan recursively for migrations. Supported prefixes `classpath` and `filesystem`.
 
-a|`quarkus.flyway.connect-retries`
+a|`flyway.connect-retries`
 a|0
-|The maximum number of retries when attempting to connect to the database.
+|The maximum number of retries when attempting to connect.
 
-a|`quarkus.flyway.schemas`
+a|`flyway.schemas`
 a|none
-|CSV case-sensitive list of schemas managed by Flyway
+|CSV case-sensitive list of schemas managed.
 
-a|`quarkus.flyway.table`
+a|`flyway.table`
 a|`flyway_schema_history`
 |The name of Flyway’s schema history table.
 
-a|`quarkus.flyway.sql-migration-prefix`
+a|`flyway.sql-migration-prefix`
 a|`V`
-|The filename prefix for versioned SQL migrations. 
+|Prefix for versioned SQL migrations. 
 
-a|`quarkus.flyway.repeatable-sql-migration-prefix`
+a|`flyway.repeatable-sql-migration-prefix`
 a|`R`
-|The file name prefix for repeatable SQL migrations.
+|Prefix for repeatable SQL migrations.
 |===
 // end::update_1_7[]

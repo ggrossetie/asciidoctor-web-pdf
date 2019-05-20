@@ -1,14 +1,10 @@
 = Quarkus Cheat-Sheet
-
 ifndef::site[]
-
 Alex Soto <https://twitter.com/alexsotob>;
 :authorbio: Java Champion and SW Engineer at Red Hat
 :pdf-width: 508mm
 :pdf-height: 361mm
-
 include::attributes.adoc[]
-
 endif::site[]
 
 ifdef::site[]

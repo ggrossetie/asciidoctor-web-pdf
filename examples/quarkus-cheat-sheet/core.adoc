@@ -45,8 +45,6 @@ And to register the extensions into build tool:
 
 TIP: `extensions` property supports CSV format to register more than one extension at once.
 
-<<<
-
 == Application Lifecycle
 // tag::update_1_3[]
 You can be notified when the application starts/stops by observing `StartupEvent` and `ShutdownEvent` events.
@@ -344,7 +342,7 @@ public interface WorldClockService {
     @Path("/json/{where}/now")
     @Produces(MediaType.APPLICATION_JSON) 
     WorldClock getSauce(@BeanParam 
-                            WorldClockOptions worldClockOptions);
+                    WorldClockOptions worldClockOptions);
 
 }
 ----
@@ -361,8 +359,6 @@ public class WorldClockOptions {
 ----
 
 And configure the hostname at `application.properties`:
-
-<<<
 
 [source, proeprties]
 ----
@@ -403,7 +399,7 @@ public class BaggageHeadersFactory
     @Override
     public MultivaluedMap<String, String> update(
         MultivaluedMap<String, String> incomingHeaders, 
-        MultivaluedMap<String, String> clientOutgoingHeaders) {}
+        MultivaluedMap<String, String> outgoingHeaders) {}
 }
 ----
 
@@ -458,6 +454,8 @@ public class GreetingResourceTest {
 }
 ----
 
+<<< 
+    
 Test port can be modified by using `quarkus.http.test-port` configuration property.
 
 You can also inject the URL where Quarkus is started:

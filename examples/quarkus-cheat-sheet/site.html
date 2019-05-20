@@ -996,6 +996,7 @@ Flyway flyway;
 flyway.migrate();</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Or can be automatically executed by setting <code>migrate-at-start</code> property to <code>true</code>.</p>
 </div>
@@ -1005,7 +1006,10 @@ flyway.migrate();</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Configuration Properties:</p>
+<p>List of Flyway parameters</p>
+</div>
+<div class="paragraph">
+<p><code>quarkus.</code> as prefix is skipped in the next table.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1023,43 +1027,43 @@ flyway.migrate();</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.migrate-at-start</code></p>
+<p><code>flyway.migrate-at-start</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>false</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Execute Flyway migration automatically.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flyway migration automatically.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.locations</code></p>
+<p><code>flyway.locations</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>classpath:db/migration</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of locations to scan recursively for migrations. Supported prefixes <code>classpath</code> and <code>filesystem</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV locations to scan recursively for migrations. Supported prefixes <code>classpath</code> and <code>filesystem</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.connect-retries</code></p>
+<p><code>flyway.connect-retries</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>0</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of retries when attempting to connect to the database.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of retries when attempting to connect.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.schemas</code></p>
+<p><code>flyway.schemas</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>none</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CSV case-sensitive list of schemas managed by Flyway</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV case-sensitive list of schemas managed.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.table</code></p>
+<p><code>flyway.table</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>flyway_schema_history</code></p>
@@ -1068,21 +1072,21 @@ flyway.migrate();</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.sql-migration-prefix</code></p>
+<p><code>flyway.sql-migration-prefix</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>V</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The filename prefix for versioned SQL migrations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prefix for versioned SQL migrations.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.repeatable-sql-migration-prefix</code></p>
+<p><code>flyway.repeatable-sql-migration-prefix</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>R</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The file name prefix for repeatable SQL migrations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prefix for repeatable SQL migrations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1140,6 +1144,7 @@ CompletionStage&lt;JsonArray&gt; =
     -Dextensions="io.quarkus:quarkus-keycloak"</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>You can get token information by injecting <code>KeycloakSecurityContext</code> object.</p>
 </div>
@@ -1206,9 +1211,11 @@ you can also use <code>src/main/resources/keycloak.json</code> standard Keycloak
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class TestLambda implements RequestHandler&lt;MyInput, MyOutput&gt; {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class TestLambda
+        implements RequestHandler&lt;MyInput, MyOutput&gt; {
     @Override
-    public MyInput handleRequest(MyOutput input, Context context) {
+    public MyInput handleRequest(MyOutput input,
+                                    Context context) {
         // ...
     }
 }</code></pre>
@@ -1232,7 +1239,7 @@ you can also use <code>src/main/resources/keycloak.json</code> standard Keycloak
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Test
-public void testLambda() throws Exception {
+public void testLambda() {
     MyInput in = new MyInput();
     in.setGreeting("Hello");
     in.setName("Stu");
@@ -1323,7 +1330,6 @@ To list all available extensions just run:</p>
 </tr>
 </table>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="_application_lifecycle"><a class="anchor" href="#_application_lifecycle"></a><a class="link" href="#_application_lifecycle">Application Lifecycle</a></h3>
@@ -1750,7 +1756,7 @@ public interface WorldClockService {
     @Path("/json/{where}/now")
     @Produces(MediaType.APPLICATION_JSON)
     WorldClock getSauce(@BeanParam
-                            WorldClockOptions worldClockOptions);
+                    WorldClockOptions worldClockOptions);
 
 }</code></pre>
 </div>
@@ -1769,7 +1775,6 @@ public interface WorldClockService {
 <div class="paragraph">
 <p>And configure the hostname at <code>application.properties</code>:</p>
 </div>
-<div style="page-break-after: always;"></div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="proeprties" class="language-proeprties hljs">org.acme.quickstart.WorldClockService/mp-rest/url=
@@ -1821,7 +1826,7 @@ public class BaggageHeadersFactory
     @Override
     public MultivaluedMap&lt;String, String&gt; update(
         MultivaluedMap&lt;String, String&gt; incomingHeaders,
-        MultivaluedMap&lt;String, String&gt; clientOutgoingHeaders) {}
+        MultivaluedMap&lt;String, String&gt; outgoingHeaders) {}
 }</code></pre>
 </div>
 </div>
@@ -1883,6 +1888,7 @@ public class GreetingResourceTest {
 }</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Test port can be modified by using <code>quarkus.http.test-port</code> configuration property.</p>
 </div>
@@ -1988,6 +1994,7 @@ developer.delete();
 long numberOfDeleted = Developer.delete("name", "Alex");</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Remember to annotate methods with <code>@Transactional</code> annotation to make changes persisted in the database.</p>
 </div>
@@ -2208,6 +2215,7 @@ Flyway flyway;
 flyway.migrate();</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Or can be automatically executed by setting <code>migrate-at-start</code> property to <code>true</code>.</p>
 </div>
@@ -2217,7 +2225,10 @@ flyway.migrate();</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Configuration Properties:</p>
+<p>List of Flyway parameters</p>
+</div>
+<div class="paragraph">
+<p><code>quarkus.</code> as prefix is skipped in the next table.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2235,43 +2246,43 @@ flyway.migrate();</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.migrate-at-start</code></p>
+<p><code>flyway.migrate-at-start</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>false</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Execute Flyway migration automatically.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flyway migration automatically.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.locations</code></p>
+<p><code>flyway.locations</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>classpath:db/migration</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of locations to scan recursively for migrations. Supported prefixes <code>classpath</code> and <code>filesystem</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV locations to scan recursively for migrations. Supported prefixes <code>classpath</code> and <code>filesystem</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.connect-retries</code></p>
+<p><code>flyway.connect-retries</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>0</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of retries when attempting to connect to the database.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of retries when attempting to connect.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.schemas</code></p>
+<p><code>flyway.schemas</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>none</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CSV case-sensitive list of schemas managed by Flyway</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV case-sensitive list of schemas managed.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.table</code></p>
+<p><code>flyway.table</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>flyway_schema_history</code></p>
@@ -2280,21 +2291,21 @@ flyway.migrate();</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.sql-migration-prefix</code></p>
+<p><code>flyway.sql-migration-prefix</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>V</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The filename prefix for versioned SQL migrations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prefix for versioned SQL migrations.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><code>quarkus.flyway.repeatable-sql-migration-prefix</code></p>
+<p><code>flyway.repeatable-sql-migration-prefix</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><code>R</code></p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The file name prefix for repeatable SQL migrations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prefix for repeatable SQL migrations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2662,6 +2673,7 @@ private Instance&lt;Long&gt; providerIAT;</code></pre>
     -Dextensions="io.quarkus:quarkus-keycloak"</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>You can get token information by injecting <code>KeycloakSecurityContext</code> object.</p>
 </div>
@@ -2990,11 +3002,11 @@ public class DatabaseHealthCheck implements HealthCheck {
 </div>
 </div>
 <div class="paragraph">
-<p>The metrics can be read remotely using JSON format or the OpenMetrics format.
-By just adding the extension, an endpoint is registered at <code>/metrics</code> providing default metrics.</p>
+<p>The metrics can be read with JSON or the OpenMetrics format.
+An endpoint is registered automatically at <code>/metrics</code> providing default metrics.</p>
 </div>
 <div class="paragraph">
-<p>MicroProfile Metrics comes with some annotations to add specific monitoring values:</p>
+<p>MicroProfile Metrics annotations:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -3013,7 +3025,7 @@ By just adding the extension, an endpoint is registered at <code>/metrics</code>
 <p><code>@Timed</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Marking a method, constructor, or class as timed.</p>
+<p>Method, constructor, or class as timed.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -3021,7 +3033,7 @@ By just adding the extension, an endpoint is registered at <code>/metrics</code>
 <p><code>@Metered</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Marking a method, constructor, or class as metered.</p>
+<p>Method, constructor, or class as metered.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -3029,7 +3041,7 @@ By just adding the extension, an endpoint is registered at <code>/metrics</code>
 <p><code>@Counted</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Marking a method, constructor, or class as counted.</p>
+<p>Method, constructor, or class as counted.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -3037,7 +3049,7 @@ By just adding the extension, an endpoint is registered at <code>/metrics</code>
 <p><code>@Gauge</code></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Marking a method or field as a gauge.</p>
+<p>Method or field as a gauge.</p>
 </div></div></td>
 </tr>
 <tr>
@@ -3110,6 +3122,7 @@ quarkus.jaeger.sampler-param=1
 quarkus.jaeger.endpoint=http://localhost:14268/api/traces</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><code>@Traced</code> annotation can be set to disable tracing at class or method level.</p>
 </div>
@@ -3217,9 +3230,11 @@ docker run -i --rm -p 8080:8080 quarkus/getting-started</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class TestLambda implements RequestHandler&lt;MyInput, MyOutput&gt; {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class TestLambda
+        implements RequestHandler&lt;MyInput, MyOutput&gt; {
     @Override
-    public MyInput handleRequest(MyOutput input, Context context) {
+    public MyInput handleRequest(MyOutput input,
+                                    Context context) {
         // ...
     }
 }</code></pre>
@@ -3243,7 +3258,7 @@ docker run -i --rm -p 8080:8080 quarkus/getting-started</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Test
-public void testLambda() throws Exception {
+public void testLambda() {
     MyInput in = new MyInput();
     in.setGreeting("Hello");
     in.setName("Stu");
@@ -3270,7 +3285,7 @@ public void testLambda() throws Exception {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-05-16 12:58:50 +0200
+Last updated 2019-05-20 10:43:45 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -56,9 +56,11 @@ And then implement `com.amazonaws.services.lambda.runtime.RequestHandler` interf
 
 [source, java]
 ----
-public class TestLambda implements RequestHandler<MyInput, MyOutput> {
+public class TestLambda 
+        implements RequestHandler<MyInput, MyOutput> {
     @Override
-    public MyInput handleRequest(MyOutput input, Context context) {
+    public MyInput handleRequest(MyOutput input, 
+                                    Context context) {
         // ...
     }
 }

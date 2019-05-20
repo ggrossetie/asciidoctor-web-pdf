@@ -108,6 +108,8 @@ mvn quarkus:add-extension
     -Dextensions="io.quarkus:quarkus-keycloak"
 ----
 
+<<<
+
 You can get token information by injecting `KeycloakSecurityContext` object.
 
 [source, java]

@@ -211,25 +211,25 @@ Quarkus can utilize the https://github.com/eclipse/microprofile-metrics[MicroPro
   -Dextensions="io.quarkus:quarkus-smallrye-metrics"
 ----
 
-The metrics can be read remotely using JSON format or the OpenMetrics format.
-By just adding the extension, an endpoint is registered at `/metrics` providing default metrics.
+The metrics can be read with JSON or the OpenMetrics format.
+An endpoint is registered automatically at `/metrics` providing default metrics.
 
-MicroProfile Metrics comes with some annotations to add specific monitoring values:
+MicroProfile Metrics annotations:
 
 |===	
 | Annotation | Description
 
 a|`@Timed`
-a|Marking a method, constructor, or class as timed.
+a|Method, constructor, or class as timed.
 
 a|`@Metered`
-a|Marking a method, constructor, or class as metered.
+a|Method, constructor, or class as metered.
 
 a|`@Counted`
-a|Marking a method, constructor, or class as counted.
+a|Method, constructor, or class as counted.
 
 a|`@Gauge`
-a|Marking a method or field as a gauge.
+a|Method or field as a gauge.
 
 a|`@Metric`
 a|Requesting that a metric be injected or registered.
@@ -287,6 +287,8 @@ quarkus.jaeger.sampler-type=const
 quarkus.jaeger.sampler-param=1
 quarkus.jaeger.endpoint=http://localhost:14268/api/traces
 ----
+
+<<<
 
 `@Traced` annotation can be set to disable tracing at class or method level.
 
