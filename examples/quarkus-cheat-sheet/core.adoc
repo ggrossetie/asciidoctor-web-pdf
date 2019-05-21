@@ -4,7 +4,7 @@ Quarkus comes with a Maven archetype to scaffold a very simple starting project.
 
 [source, bash]
 ----
-mvn io.quarkus:quarkus-maven-plugin:0.14.0:create \
+mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
