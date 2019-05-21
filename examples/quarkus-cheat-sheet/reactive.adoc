@@ -48,7 +48,8 @@ Quarkus relies on MicroProfile Reactive Messaging spec (https://github.com/eclip
 [source, bash]
 ----
 mvn quarkus:add-extension 
-    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging"
+    -Dextensions="
+        io.quarkus:quarkus-smallrye-reactive-messaging"
 ----
 
 You can just start using in-memory streams by using `@Incoming` to produce data and `@Outgoing` to consume data.
@@ -98,13 +99,14 @@ To integrate with Kafka you need to add next extensions:
 [source, bash]
 ----
 mvn quarkus:add-extension 
-    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka, 
-                  io.quarkus:quarkus-vert"
+    -Dextensions="
+    io.quarkus:quarkus-smallrye-reactive-messaging-kafka, 
+    io.quarkus:quarkus-vertx"
 ----
 
-Then `@Outgoing`, `@Incoming` or `@Stream` can be set with Kafka streams.
+Then `@Outgoing`, `@Incoming` or `@Stream` can be used.
 
-You need also need to configure Kafka connector following next schema: `smallrye.messaging.[sink|source].\{stream-name\}.<property>=<value>` 
+Kafka configuration schema: `smallrye.messaging.[sink|source].\{stream-name\}.<property>=<value>` 
 
 [source, properties]
 ----

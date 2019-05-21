@@ -2,9 +2,9 @@
 
 Quarkus comes with a Maven archetype to scaffold a very simple starting project.
 
-[source, bash]
+[source, bash, subs=attributes+]
 ----
-mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
+mvn io.quarkus:quarkus-maven-plugin:{version}:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
@@ -81,7 +81,7 @@ Properties can be set as:
 * Environment variables.
 * System properties.
 * Resources `src/main/resources/application.properties`.
-* External config directory under the current working directory: `config/application.properties`
+* External config directory under the current working directory: `config/application.properties`.
 
 [source, properties]
 ----
@@ -224,7 +224,7 @@ public class NotExpiredValidator
 
     @Override
     public boolean isValid(LocalDate value, 
-                            ConstraintValidatorContext ctx) {
+                        ConstraintValidatorContext ctx) {
         if ( value == null ) {
             return true;
         }
@@ -261,6 +261,7 @@ Set<ConstraintViolation<Sauce>> violations =
             validator.validate(sauce);
 ----
 
+<<<
 
 == Logging
 
@@ -271,7 +272,6 @@ You can configure how Quarkus logs:
 quarkus.log.console.enable=true
 quarkus.log.console.level=DEBUG
 quarkus.log.console.color=false
-
 quarkus.log.category."com.lordofthejars".level=DEBUG
 ----
 
@@ -439,7 +439,7 @@ CompletionStage<WorldClock> getNow();
 
 == Testing
 
-When you generate the Quarkus project with the archetype, test dependencies with JUnit 5 are registered automatically, but also the Rest-Assured library to test RESt endpoints.
+Quarkus archetype adds test dependencies with JUnit 5 and Rest-Assured library to test REST endpoints.
 
 To package and run the application for testing:
 

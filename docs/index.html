@@ -702,7 +702,8 @@ public class ApplicationLifecycle {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
-    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging"</code></pre>
+    -Dextensions="
+        io.quarkus:quarkus-smallrye-reactive-messaging"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -759,15 +760,16 @@ public class ConsumerData {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
-    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
-                  io.quarkus:quarkus-vert"</code></pre>
+    -Dextensions="
+    io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
+    io.quarkus:quarkus-vertx"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be set with Kafka streams.</p>
+<p>Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be used.</p>
 </div>
 <div class="paragraph">
-<p>You need also need to configure Kafka connector following next schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
+<p>Kafka configuration schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1265,7 +1267,7 @@ public void testLambda() {
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
 </div>
 <div class="paragraph">
-<p>Cheat-sheet tested with <strong>Quarkus v0.15.0</strong>.</p>
+<p>Cheat-sheet tested with <strong>Quarkus 0.15.0</strong>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1365,7 +1367,23 @@ Optional&lt;String&gt; optionalMessage;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Properties can be set as environment variable, system property or in <code>src/main/resources/application.properties</code>.</p>
+<p>Properties can be set as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Environment variables.</p>
+</li>
+<li>
+<p>System properties.</p>
+</li>
+<li>
+<p>Resources <code>src/main/resources/application.properties</code>.</p>
+</li>
+<li>
+<p>External config directory under the current working directory: <code>config/application.properties</code>.</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1542,7 +1560,7 @@ public @interface NotExpired {
 
     @Override
     public boolean isValid(LocalDate value,
-                            ConstraintValidatorContext ctx) {
+                        ConstraintValidatorContext ctx) {
         if ( value == null ) {
             return true;
         }
@@ -1583,6 +1601,7 @@ Validator validator;</code></pre>
             validator.validate(sauce);</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="_logging"><a class="anchor" href="#_logging"></a><a class="link" href="#_logging">Logging</a></h3>
@@ -1594,7 +1613,6 @@ Validator validator;</code></pre>
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.log.console.enable=true
 quarkus.log.console.level=DEBUG
 quarkus.log.console.color=false
-
 quarkus.log.category."com.lordofthejars".level=DEBUG</code></pre>
 </div>
 </div>
@@ -1867,7 +1885,7 @@ CompletionStage&lt;WorldClock&gt; getNow();</code></pre>
 <div class="sect2">
 <h3 id="_testing"><a class="anchor" href="#_testing"></a><a class="link" href="#_testing">Testing</a></h3>
 <div class="paragraph">
-<p>When you generate the Quarkus project with the archetype, test dependencies with JUnit 5 are registered automatically, but also the Rest-Assured library to test RESt endpoints.</p>
+<p>Quarkus archetype adds test dependencies with JUnit 5 and Rest-Assured library to test REST endpoints.</p>
 </div>
 <div class="paragraph">
 <p>To package and run the application for testing:</p>
@@ -2366,7 +2384,8 @@ public Publisher&lt;String&gt; publishers() {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
-    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging"</code></pre>
+    -Dextensions="
+        io.quarkus:quarkus-smallrye-reactive-messaging"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2423,15 +2442,16 @@ public class ConsumerData {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
-    -Dextensions="io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
-                  io.quarkus:quarkus-vert"</code></pre>
+    -Dextensions="
+    io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
+    io.quarkus:quarkus-vertx"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be set with Kafka streams.</p>
+<p>Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be used.</p>
 </div>
 <div class="paragraph">
-<p>You need also need to configure Kafka connector following next schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
+<p>Kafka configuration schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3281,11 +3301,6 @@ public void testLambda() {
 </div>
 </div>
 </div>
-</div>
-</div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-05-20 10:43:45 +0200
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

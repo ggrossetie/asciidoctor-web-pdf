@@ -1,6 +1,7 @@
 :logo: quarkus.png
-:version: v0.15.0
+:version: 0.15.0
 :source-highlighter: highlightjs
 :sectlinks:
 :sectanchors:
+:nofooter:
 :pdf-download: https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.2/quarkus-cheat-sheet.pdf

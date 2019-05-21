@@ -36,9 +36,9 @@ const renderAuthors = function (authors) {
   }).join('\n')
 }
 
-module.exports = [{
-  paragraph: (ctx) => `<p class="${ctx.node.getRoles()}">${ctx.node.getContent()}</p>`,
-  document: (ctx) => `<!DOCTYPE html>
+module.exports = {
+    paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
+    document: (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -46,19 +46,19 @@ module.exports = [{
 </head>
 <body>
 <header>
-  <h1>${ctx.node.getHeader().getTitle()}</h1>
-  <img class="logo" src="./redhat/assets/${ctx.node.getAttribute('logo')}"/>
+  <h1>${node.getHeader().getTitle()}</h1>
+  <img class="logo" src="./redhat/assets/${node.getAttribute('logo')}"/>
 </header>
 <section class="content">
-${ctx.node.getContent()}
+${node.getContent()}
 <div class="sect1 authors">
 <h3>Authors :</h3>
-${renderAuthors(getAuthors(ctx.node))}
-<div class="author-bio">${ctx.node.getAttribute('version')}</div>
+${renderAuthors(getAuthors(node))}
+<div class="author-bio">${node.getAttribute('version')}</div>
 <img src="./redhat/assets/by-nc-sa.png"/>
 </div>
 
 </section>
 </body>`,
   page_break: () => `<div class="page-break"></div>`
-}]
+}
