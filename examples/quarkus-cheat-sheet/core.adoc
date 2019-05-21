@@ -76,7 +76,12 @@ String messageWithDefault;
 Optional<String> optionalMessage;
 ----
 
-Properties can be set as environment variable, system property or in `src/main/resources/application.properties`.
+Properties can be set as:
+
+* Environment variables.
+* System properties.
+* Resources `src/main/resources/application.properties`.
+* External config directory under the current working directory: `config/application.properties`
 
 [source, properties]
 ----
