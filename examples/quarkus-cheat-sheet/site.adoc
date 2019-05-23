@@ -15,6 +15,14 @@ In this page you can either read what has been added in each version of the chea
 [[whatsnew]]
 == What's New in Cheat-Sheet
 
+=== Version 0.16.0
+
+.Apache Camel
+[%collapsible]
+====
+include::misc.adoc[tag=update_2_1]
+====
+
 === Version 0.15.0
 
 .Headers Propagation

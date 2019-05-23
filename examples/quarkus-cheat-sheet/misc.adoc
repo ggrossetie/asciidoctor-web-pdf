@@ -1,0 +1,85 @@
+== Apache Camel
+// tag::update_2_1[]
+Quarkus integrates wih https://camel.apache.org[Apache Camel].
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-camel-core"
+----
+
+You can inject `CamelRuntime` and `CamelContext` instances:
+
+[source, java]
+----
+@Inject
+CamelRuntime runtime;
+    
+@Inject
+CamelContext context;
+----
+
+And also observing Camel events `InitializingEvent`, `InitializedEvent`, `StartingEvent`, `StartedEvent`. `StoppingEvent`, `StoppedEvent`.
+
+[source, java]
+----
+public void initializing(@Observes InitializingEvent event) {
+    runtime.getContext()
+            .setUuidGenerator(new DefaultUuidGenerator());
+}
+----
+
+You can create `RouteBuilder` for routing rules:
+
+[source, java]
+----
+public class CamelRoute extends RouteBuilder {
+
+    @Override
+    public void configure() {
+        from("timer:keep-alive?" +
+                "period={{camel.timer-route.period}}")
+        .id("timer-route")
+        .setBody(constant(""))
+        .to("log:keep-alive");
+    }
+}
+----
+
+Custom properties are set in `application.properties`.
+
+[source, properties]
+----
+camel.timer-route.period=1s
+----
+
+List of Camel parameters.
+
+`quarkus.` as prefix is skipped in the next table.
+
+|===	
+|Parameter | Default | Description
+
+a|`camel.routesUris`
+|
+|Uri to an xml with camel routes to load and initializ at build time.
+
+a|`camel.deferInitPhase`
+a|`false`
+|Defer context initialization phase until runtime.
+
+a|`camel.disableJaxb`
+a|`false`
+|Disable jaxb support at runtime. Useful when routes loaded at build time.
+
+a|`camel.disableXml`
+a|`false`
+|Disable XML support in various parts of Camel.
+
+a|`camel.dumpRoutes`
+a|`false`
+|Dump loaded routes .
+|===
+
+Quarkus also comes with support for Camel in form of next extensions: `camel-aws-s3`, `camel-aws-sqs`, `camel-infinispan`, `camel-netty4-http`, `camel-salesforce`.
+// end::update_2_1[]

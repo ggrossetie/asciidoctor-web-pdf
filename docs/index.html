@@ -464,6 +464,139 @@ Also focused on developer experience, making things just work with little to no 
 <h2 id="whatsnew"><a class="anchor" href="#whatsnew"></a><a class="link" href="#whatsnew">What&#8217;s New in Cheat-Sheet</a></h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="_version_0_16_0"><a class="anchor" href="#_version_0_16_0"></a><a class="link" href="#_version_0_16_0">Version 0.16.0</a></h3>
+<details>
+<summary class="title">Apache Camel</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus integrates wih <a href="https://camel.apache.org">Apache Camel</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-camel-core"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can inject <code>CamelRuntime</code> and <code>CamelContext</code> instances:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+CamelRuntime runtime;
+
+@Inject
+CamelContext context;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And also observing Camel events <code>InitializingEvent</code>, <code>InitializedEvent</code>, <code>StartingEvent</code>, <code>StartedEvent</code>. <code>StoppingEvent</code>, <code>StoppedEvent</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public void initializing(@Observes InitializingEvent event) {
+    runtime.getContext()
+            .setUuidGenerator(new DefaultUuidGenerator());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create <code>RouteBuilder</code> for routing rules:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class CamelRoute extends RouteBuilder {
+
+    @Override
+    public void configure() {
+        from("timer:keep-alive?period={{camel.timer-route.period}}")
+        .id("timer-route")
+        .setBody(constant(""))
+        .to("log:keep-alive");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Custom properties are set in <code>application.properties</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">camel.timer-route.period=1s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List of Camel parameters.</p>
+</div>
+<div class="paragraph">
+<p><code>quarkus.</code> as prefix is skipped in the next table.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.routesUris</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an xml with camel routes to load and initializ at build time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.deferInitPhase</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defer context initialization phase until runtime.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableJaxb</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable jaxb support at runtime. Useful when routes loaded at build time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableXml</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable XML support in various parts of Camel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.dumpRoutes</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dump loaded routes .</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Quarkus also comes with support for Camel in form of next extensions: <code>camel-aws-s3</code>, <code>camel-aws-sqs</code>, <code>camel-infinispan</code>, <code>camel-netty4-http</code>, <code>camel-salesforce</code>.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect2">
 <h3 id="_version_0_15_0"><a class="anchor" href="#_version_0_15_0"></a><a class="link" href="#_version_0_15_0">Version 0.15.0</a></h3>
 <details>
 <summary class="title">Headers Propagation</summary>
@@ -3285,6 +3418,135 @@ public void testLambda() {
     MyOutput out = LambdaClient.invoke(MyOutput.class, in);
 }</code></pre>
 </div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_apache_camel"><a class="anchor" href="#_apache_camel"></a><a class="link" href="#_apache_camel">Apache Camel</a></h3>
+<div class="paragraph">
+<p>Quarkus integrates wih <a href="https://camel.apache.org">Apache Camel</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-camel-core"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can inject <code>CamelRuntime</code> and <code>CamelContext</code> instances:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+CamelRuntime runtime;
+
+@Inject
+CamelContext context;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And also observing Camel events <code>InitializingEvent</code>, <code>InitializedEvent</code>, <code>StartingEvent</code>, <code>StartedEvent</code>. <code>StoppingEvent</code>, <code>StoppedEvent</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public void initializing(@Observes InitializingEvent event) {
+    runtime.getContext()
+            .setUuidGenerator(new DefaultUuidGenerator());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create <code>RouteBuilder</code> for routing rules:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class CamelRoute extends RouteBuilder {
+
+    @Override
+    public void configure() {
+        from("timer:keep-alive?period={{camel.timer-route.period}}")
+        .id("timer-route")
+        .setBody(constant(""))
+        .to("log:keep-alive");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Custom properties are set in <code>application.properties</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">camel.timer-route.period=1s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List of Camel parameters.</p>
+</div>
+<div class="paragraph">
+<p><code>quarkus.</code> as prefix is skipped in the next table.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.routesUris</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an xml with camel routes to load and initializ at build time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.deferInitPhase</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defer context initialization phase until runtime.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableJaxb</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable jaxb support at runtime. Useful when routes loaded at build time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableXml</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable XML support in various parts of Camel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.dumpRoutes</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dump loaded routes .</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Quarkus also comes with support for Camel in form of next extensions: <code>camel-aws-s3</code>, <code>camel-aws-sqs</code>, <code>camel-infinispan</code>, <code>camel-netty4-http</code>, <code>camel-salesforce</code>.</p>
 </div>
 </div>
 <div class="sect2">
