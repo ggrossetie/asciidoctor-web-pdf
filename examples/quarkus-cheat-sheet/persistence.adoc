@@ -164,7 +164,7 @@ Or can be automatically executed by setting `migrate-at-start` property to `true
 quarkus.flyway.migrate-at-start=true
 ----
 
-List of Flyway parameters
+List of Flyway parameters.
 
 `quarkus.` as prefix is skipped in the next table.
 
