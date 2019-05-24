@@ -1640,7 +1640,7 @@ CamelContext context;</code></pre>
 </div>
 </div>
 <p class="">List of Camel parameters.</p>
-<p class=""><code>quarkus.</code> as prefix is skipped in the next table.</p>
+<p class=""><code>quarkus.</code> as a prefix is skipped in the next table.</p>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1658,7 +1658,7 @@ CamelContext context;</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>camel.routesUris</code></p></div></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an xml with camel routes to load and initializ at build time.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an MXL with camel routes to load and initialize at build time.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>camel.deferInitPhase</code></p></div></td>
@@ -1716,6 +1716,26 @@ public class ChatSocket {
     public void onMessage(...) {}
 
 }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_openapi"><a class="anchor" href="#_openapi"></a><a class="link" href="#_openapi">OpenAPI</a></h2>
+<div class="sectionbody">
+<p class="">Quarkus can expose its API description as <a href="https://swagger.io/specification/">OpenAPI</a> spec and test it using <a href="https://swagger.io/tools/swagger-ui/">Swagger UI</a>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-smallrye-openapi"</code></pre>
+</div>
+</div>
+<p class="">Then you only need to access to <code>/openapi</code> to get OpenAPI v3 spec of services.</p>
+<p class="">Also, in case of starting Quarkus application in <code>dev</code> or <code>test</code> mode, Swagger UI is accessible at <code>/swagger-ui</code>.</p>
+<p class="">You can update the Swagger UI path by setting <code>quarkus.swagger-ui.path</code> property.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.swagger-ui.path=/my-custom-path</code></pre>
 </div>
 </div>
 </div>
