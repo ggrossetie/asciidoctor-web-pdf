@@ -23,6 +23,12 @@ In this page you can either read what has been added in each version of the chea
 include::misc.adoc[tag=update_2_1]
 ====
 
+.WebSockets
+[%collapsible]
+====
+include::misc.adoc[tag=update_2_2]
+====
+
 === Version 0.15.0
 
 .Headers Propagation

@@ -83,3 +83,38 @@ a|`false`
 
 Quarkus also comes with support for Camel in form of next extensions: `camel-aws-s3`, `camel-aws-sqs`, `camel-infinispan`, `camel-netty4-http`, `camel-salesforce`.
 // end::update_2_1[]
+
+== WebSockets
+// tag::update_2_2[]
+Quarkus can be used to handling web sockets.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-undertow-websockets"
+----
+
+And web sockets classes can be used:
+
+[source, java]
+----
+@ServerEndpoint("/chat/{username}")
+@ApplicationScoped
+public class ChatSocket {
+
+    @OnOpen
+    public void onOpen(Session session, 
+                @PathParam("username") String username) {}
+
+    @OnClose
+    public void onClose(..) {}
+
+    @OnError
+    public void onError(..., Throwable throwable) {}
+
+    @OnMessage
+    public void onMessage(...) {}
+
+}
+----
+// end::update_2_2[]

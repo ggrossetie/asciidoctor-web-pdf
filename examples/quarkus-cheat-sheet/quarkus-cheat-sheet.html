@@ -773,7 +773,7 @@ flyway.migrate();</code></pre>
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.flyway.migrate-at-start=true</code></pre>
 </div>
 </div>
-<p class="">List of Flyway parameters</p>
+<p class="">List of Flyway parameters.</p>
 <p class=""><code>quarkus.</code> as prefix is skipped in the next table.</p>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1624,7 +1624,8 @@ CamelContext context;</code></pre>
 
     @Override
     public void configure() {
-        from("timer:keep-alive?period={{camel.timer-route.period}}")
+        from("timer:keep-alive?" +
+                "period={{camel.timer-route.period}}")
         .id("timer-route")
         .setBody(constant(""))
         .to("log:keep-alive");
@@ -1682,6 +1683,41 @@ CamelContext context;</code></pre>
 </tbody>
 </table>
 <p class="">Quarkus also comes with support for Camel in form of next extensions: <code>camel-aws-s3</code>, <code>camel-aws-sqs</code>, <code>camel-infinispan</code>, <code>camel-netty4-http</code>, <code>camel-salesforce</code>.</p>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_websockets"><a class="anchor" href="#_websockets"></a><a class="link" href="#_websockets">WebSockets</a></h2>
+<div class="sectionbody">
+<p class="">Quarkus can be used to handling web sockets.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-undertow-websockets"</code></pre>
+</div>
+</div>
+<p class="">And web sockets classes can be used:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ServerEndpoint("/chat/{username}")
+@ApplicationScoped
+public class ChatSocket {
+
+    @OnOpen
+    public void onOpen(Session session,
+                @PathParam("username") String username) {}
+
+    @OnClose
+    public void onClose(..) {}
+
+    @OnError
+    public void onError(..., Throwable throwable) {}
+
+    @OnMessage
+    public void onMessage(...) {}
+
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
