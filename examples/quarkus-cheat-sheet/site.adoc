@@ -35,6 +35,12 @@ include::misc.adoc[tag=update_2_2]
 include::misc.adoc[tag=update_2_3]
 ====
 
+.Maven List Extensions
+[%collapsible]
+====
+include::core.adoc[tag=update_2_4]
+====
+
 === Version 0.15.0
 
 .Headers Propagation

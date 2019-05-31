@@ -36,6 +36,10 @@ To list all available extensions just run:
 ./mvnw quarkus:list-extensions
 ----
 
+// tag::update_2_4[]
+TIP: You can use `-DsearchPattern=panache` to filter out all extensions except the ones matching the expression.
+// end::update_2_4[]
+
 And to register the extensions into build tool:
 
 [source, bash]
