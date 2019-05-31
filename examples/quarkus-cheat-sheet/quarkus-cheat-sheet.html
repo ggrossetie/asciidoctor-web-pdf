@@ -15,7 +15,7 @@
 <div class="sectionbody">
 <p class=""><a href="https://quarkus.io/">Quarkus</a> is a Kubernetes Native Java stack tailored for GraalVM &amp; OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
-<p class="">Cheat-sheet tested with <strong>Quarkus 0.15.0</strong>.</p>
+<p class="">Cheat-sheet tested with <strong>Quarkus 0.16.0</strong>.</p>
 </div>
 </div>
 <div class="sect1">
@@ -24,7 +24,7 @@ Also focused on developer experience, making things just work with little to no 
 <p class="">Quarkus comes with a Maven archetype to scaffold a very simple starting project.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn io.quarkus:quarkus-maven-plugin:0.16.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
@@ -1623,7 +1623,7 @@ CamelContext context;</code></pre>
 <p class="">And also observing Camel events <code>InitializingEvent</code>, <code>InitializedEvent</code>, <code>StartingEvent</code>, <code>StartedEvent</code>. <code>StoppingEvent</code>, <code>StoppedEvent</code>.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public void initializing(@Observes InitializingEvent event) {
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public void init(@Observes InitializingEvent event) {
     runtime.getContext()
             .setUuidGenerator(new DefaultUuidGenerator());
 }</code></pre>
@@ -1670,7 +1670,7 @@ CamelContext context;</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>camel.routesUris</code></p></div></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an MXL with camel routes to load and initialize at build time.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an XML with camel routes.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>camel.deferInitPhase</code></p></div></td>
@@ -1730,6 +1730,7 @@ public class ChatSocket {
 }</code></pre>
 </div>
 </div>
+<div class="page-break"></div>
 </div>
 </div>
 <div class="sect1">
@@ -1750,6 +1751,181 @@ public class ChatSocket {
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.swagger-ui.path=/my-custom-path</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mail_sender"><a class="anchor" href="#_mail_sender"></a><a class="link" href="#_mail_sender">Mail Sender</a></h2>
+<div class="sectionbody">
+<p class="">You can send emails by using Quarkus Mailer extension:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-mailer"</code></pre>
+</div>
+</div>
+<p class="">You can inject two possible classes <code>io.quarkus.mailer.Mailer</code> for synchronous API or <code>io.quarkus.mailer.ReactiveMailer</code> for asynchronous API.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+Mailer mailer;
+
+@Inject
+ReactiveMailer reactiveMailer;</code></pre>
+</div>
+</div>
+<p class="">And then you can use them to send an email:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">mailer.send(
+    Mail.withText("to@acme.org", "Subject", "Body")
+);
+
+CompletionStage&lt;Void&gt; stage =
+    reactiveMailer.send(
+        Mail.withText("to@acme.org", "Subject", "Body")
+    );</code></pre>
+</div>
+</div>
+<p class=""><code>Mail</code> class contains methods to add <code>cc</code>, <code>bcc</code>, <code>headers</code>, <code>bounce address</code>, <code>reply to</code>, <code>attachments</code>, <code>inline attachments</code> and <code>html body</code>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">mailer.send(Mail.withHtml("to@acme.org", "Subject", body)
+      .addInlineAttachment("quarkus.png",
+            new File("quarkus.png"),
+            "image/png", "&lt;my-image@quarkus.io&gt;"));</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+If you need deep control you can inject Vert.x mail client <code>@Inject  MailClient client;</code>
+</td>
+</tr>
+</table>
+</div>
+<p class="">You need to configure SMTP properties to be able to send an email:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.mailer.from=test@quarkus.io
+quarkus.mailer.host=smtp.sendgrid.net
+quarkus.mailer.port=465
+quarkus.mailer.ssl=true
+quarkus.mailer.username=....
+quarkus.mailer.password=....</code></pre>
+</div>
+</div>
+<p class="">List of Mailer parameters.
+<code>quarkus.</code> as a prefix is skipped in the next table.</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.from</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Default address.</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.mock</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Emails not sent, just printed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.bounce-address</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default address.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.host</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><em>mandatory</em></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SMTP host.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.port</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SMTP port.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.username</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The username.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.password</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.ssl</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>false</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables SSL.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.trust-all</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trust all certificates.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.max-pool-size</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of open connections .</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.own-host-name</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Hostname for <code>HELO/EHLO</code> and <code>Message-ID</code></p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.keep-alive</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>true</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connection pool enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.disable-esmtp</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>false</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ESMTP.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.start-tls</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>OPTIONAL</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">TLS security mode. <code>NONE</code>, <code>OPTIONAL</code>, <code>REQUIRED</code>.</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.login</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>NONE</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Login mode. <code>NONE</code>, <code>OPTIONAL</code>, <code>REQUIRED</code>.</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.auth-methods</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All methods.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Space-separated list.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.key-store</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path of the key store.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.key-store-password</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key store password.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect1">
@@ -1775,7 +1951,7 @@ public class ChatSocket {
 <div class="author-bio">Java Champion and SW Engineer at Red Hat</div>
 </div>
 
-<div class="author-bio">0.15.0</div>
+<div class="author-bio">0.16.0</div>
 <img src="./redhat/assets/by-nc-sa.png"/>
 </div>
 

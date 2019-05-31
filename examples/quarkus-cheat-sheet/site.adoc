@@ -41,6 +41,12 @@ include::misc.adoc[tag=update_2_3]
 include::core.adoc[tag=update_2_4]
 ====
 
+.Mail Sender
+[%collapsible]
+====
+include::misc.adoc[tag=update_2_5]
+====
+
 === Version 0.15.0
 
 .Headers Propagation

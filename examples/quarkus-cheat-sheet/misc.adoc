@@ -23,7 +23,7 @@ And also observing Camel events `InitializingEvent`, `InitializedEvent`, `Starti
 
 [source, java]
 ----
-public void initializing(@Observes InitializingEvent event) {
+public void init(@Observes InitializingEvent event) {
     runtime.getContext()
             .setUuidGenerator(new DefaultUuidGenerator());
 }
@@ -62,7 +62,7 @@ List of Camel parameters.
 
 a|`camel.routesUris`
 |
-|Uri to an MXL with camel routes to load and initialize at build time.
+|Uri to an XML with camel routes.
 
 a|`camel.deferInitPhase`
 a|`false`
@@ -119,6 +119,8 @@ public class ChatSocket {
 ----
 // end::update_2_2[]
 
+<<<
+
 == OpenAPI
 // tag::update_2_3[]
 Quarkus can expose its API description as https://swagger.io/specification/[OpenAPI] spec and test it using https://swagger.io/tools/swagger-ui/[Swagger UI].
@@ -140,3 +142,142 @@ You can update the Swagger UI path by setting `quarkus.swagger-ui.path` property
 quarkus.swagger-ui.path=/my-custom-path
 ----
 // end::update_2_3[]
+
+== Mail Sender
+// tag::update_2_5[]
+You can send emails by using Quarkus Mailer extension:
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="io.quarkus:quarkus-mailer"
+----
+
+You can inject two possible classes `io.quarkus.mailer.Mailer` for synchronous API or `io.quarkus.mailer.ReactiveMailer` for asynchronous API.
+
+[source, java]
+----
+@Inject
+Mailer mailer;
+
+@Inject
+ReactiveMailer reactiveMailer;
+----
+
+And then you can use them to send an email:
+
+[source, java]
+----
+mailer.send(
+    Mail.withText("to@acme.org", "Subject", "Body")
+);
+
+CompletionStage<Void> stage = 
+    reactiveMailer.send(
+        Mail.withText("to@acme.org", "Subject", "Body")
+    );
+----
+
+`Mail` class contains methods to add `cc`, `bcc`, `headers`, `bounce address`, `reply to`, `attachments`, `inline attachments` and `html body`.
+
+[source, java]
+----
+mailer.send(Mail.withHtml("to@acme.org", "Subject", body)
+      .addInlineAttachment("quarkus.png",
+            new File("quarkus.png"),
+            "image/png", "<my-image@quarkus.io>"));
+----
+
+TIP: If you need deep control you can inject Vert.x mail client `@Inject  MailClient client;`
+
+You need to configure SMTP properties to be able to send an email:
+
+[source, properties]
+----
+quarkus.mailer.from=test@quarkus.io
+quarkus.mailer.host=smtp.sendgrid.net
+quarkus.mailer.port=465
+quarkus.mailer.ssl=true
+quarkus.mailer.username=....
+quarkus.mailer.password=....
+----
+
+List of Mailer parameters.
+`quarkus.` as a prefix is skipped in the next table.
+
+|===	
+|Parameter | Default | Description
+
+a|`mailer.from`
+|
+a|Default address.
+
+a|`mailer.mock`
+|false
+|Emails not sent, just printed.
+
+a|`mailer.bounce-address`
+|
+|Default address.
+
+a|`mailer.host`
+a|_mandatory_
+|SMTP host.
+
+a|`mailer.port`
+|25
+|SMTP port.
+
+a|`mailer.username`
+|
+|The username.
+
+a|`mailer.password`
+|
+|The password.
+
+a|`mailer.ssl`
+a|`false`
+|Enables SSL.
+
+a|`mailer.trust-all`
+|false
+|Trust all certificates.
+
+a|`mailer.max-pool-size`
+|10
+|Maximum number of open connections .
+
+a|`mailer.own-host-name`
+|
+a|Hostname for `HELO/EHLO` and `Message-ID`
+
+a|`mailer.keep-alive`
+a|`true`
+|Connection pool enabled.
+
+a|`mailer.disable-esmtp`
+a|`false`
+|Disable ESMTP.
+
+a|`mailer.start-tls`
+a|`OPTIONAL`
+a|TLS security mode. `NONE`, `OPTIONAL`, `REQUIRED`.
+
+a|`mailer.login`
+a|`NONE`
+a|Login mode. `NONE`, `OPTIONAL`, `REQUIRED`.
+
+a|`mailer.auth-methods`
+|All methods.
+|Space-separated list.
+
+a|`mailer.key-store`
+|
+|Path of the key store.
+
+a|`mailer.key-store-password`
+|
+|Key store password.
+|===
+// end::update_2_5[]
