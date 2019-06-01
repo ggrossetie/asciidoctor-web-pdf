@@ -47,6 +47,24 @@ include::core.adoc[tag=update_2_4]
 include::misc.adoc[tag=update_2_5]
 ====
 
+.Custom ConfigSource
+[%collapsible]
+====
+include::core.adoc[tag=update_2_6]
+====
+
+.Array config converters
+[%collapsible]
+====
+include::core.adoc[tag=update_2_7]
+====
+
+.Custom config converters
+[%collapsible]
+====
+include::core.adoc[tag=update_2_8]
+====
+
 === Version 0.15.0
 
 .Headers Propagation

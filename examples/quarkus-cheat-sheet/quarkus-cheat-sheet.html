@@ -143,13 +143,99 @@ Optional&lt;String&gt; optionalMessage;</code></pre>
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">greetings.message = Hello World</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<code>Array</code>, <code>List</code> and <code>Set</code> are supported. The delimiter is comma (<code>,</code>) char and <code>\</code> is the escape char.
+</td>
+</tr>
+</table>
+</div>
+<p class=""><strong>Custom Loader</strong></p>
+<p class="">You can implement your own <code>ConfigSource</code> to load configuration from different places than the default ones provided by Quarkus.
+For example, database, custom XML, REST Endpoints, &#8230;&#8203;</p>
+<p class="">You need to create a new class and implement <code>ConfigSource</code> interface:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme.config;
+
+public class InMemoryConfig implements ConfigSource {
+
+    private Map&lt;String, String&gt; prop = new HashMap&lt;&gt;();
+
+    public InMemoryConfig() {
+        // Init properties
+    }
+
+    @Override
+    public int getOrdinal() {
+        // The highest ordinal takes precedence
+        // Over other ConfigSource
+        return 900;
+    }
+
+    @Override
+    public Map&lt;String, String&gt; getProperties() {
+        return prop;
+    }
+
+    @Override
+    public String getValue(String propertyName) {
+        return prop.get(propertyName);
+    }
+
+    @Override
+    public String getName() {
+        return "MemoryConfigSource";
+    }
+}</code></pre>
+</div>
+</div>
+<p class="">Then you need to register the <code>ConfigSource</code> as Java service.
+Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource</code> with next content:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.acme.config.InMemoryConfig</code></pre>
+</div>
+</div>
+<p class=""><strong>Custom Converters</strong></p>
+<p class="">You can implement your own conversion types from String to custom type.
+You need to implement <code>org.eclipse.microprofile.config.spi.Converter</code> interface:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Priority(DEFAULT_QUARKUS_CONVERTER_PRIORITY + 100)
+public class CustomInstantConverter
+    implements Converter&lt;Instant&gt; {
+
+    @Override
+    public Instant convert(String value) {
+        if ("now".equals(value.trim())) {
+            return Instant.now();
+        }
+        return Instant.parse(value);
+    }
+}</code></pre>
+</div>
+</div>
+<p class=""><code>@Priority</code> annotation is used to override the default <code>InstantConverter</code>.</p>
+<p class="">Then you need to register the <code>Converter</code> as Java service.
+Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.Converter</code> with next content:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.acme.config.CustomInstantConverter</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_injection"><a class="anchor" href="#_injection"></a><a class="link" href="#_injection">Injection</a></h2>
 <div class="sectionbody">
 <p class="">Quarkus is based on CDI 2.0 to implement injection of code.
-It is not fully supported and only a subset of the specification is implemented (<a href="https://quarkus.io/guides/cdi-reference" class="bare">https://quarkus.io/guides/cdi-reference</a>).</p>
+It is not fully supported and only a subset of the <a href="https://quarkus.io/guides/cdi-reference">specification is implemented</a>.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
@@ -161,7 +247,7 @@ public class GreetingService {
 }</code></pre>
 </div>
 </div>
-<p class="">Scope annotation is mandatory to make the bean discoverable by CDI.</p>
+<p class="">Scope annotation is mandatory to make the bean discoverable.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
@@ -296,9 +382,7 @@ public @interface NotExpired {
     @Override
     public boolean isValid(LocalDate value,
                         ConstraintValidatorContext ctx) {
-        if ( value == null ) {
-            return true;
-        }
+        if ( value == null ) return true;
         LocalDate today = LocalDate.now();
         return ChronoUnit.YEARS.between(today, value) &gt; 0;
     }
@@ -328,7 +412,6 @@ Validator validator;</code></pre>
             validator.validate(sauce);</code></pre>
 </div>
 </div>
-<div class="page-break"></div>
 </div>
 </div>
 <div class="sect1">
@@ -410,6 +493,7 @@ quarkus.log.category."com.lordofthejars".level=DEBUG</code></pre>
 </tr>
 </tbody>
 </table>
+<div class="page-break"></div>
 </div>
 </div>
 <div class="sect1">
@@ -468,7 +552,7 @@ public interface WorldClockService {
 WorldClockService worldClockService;</code></pre>
 </div>
 </div>
-<p class="">If invokation happens within a JAX-RS resource class, you can propagate headers from incoming request to the outgoing request by using next configuartion property.</p>
+<p class="">If invokation happens within JAX-RS, you can propagate headers from incoming to outgoing by using next property.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">org.eclipse.microprofile.rest.client.propagateHeaders=
@@ -549,7 +633,6 @@ public class GreetingResourceTest {
 }</code></pre>
 </div>
 </div>
-<div class="page-break"></div>
 <p class="">Test port can be modified by using <code>quarkus.http.test-port</code> configuration property.</p>
 <p class="">You can also inject the URL where Quarkus is started:</p>
 <div class="listingblock">
