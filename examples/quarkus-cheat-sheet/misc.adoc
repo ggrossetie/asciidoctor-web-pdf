@@ -134,6 +134,7 @@ Quarkus can expose its API description as https://swagger.io/specification/[Open
 Then you only need to access to `/openapi` to get OpenAPI v3 spec of services.
 
 Also, in case of starting Quarkus application in `dev` or `test` mode, Swagger UI is accessible at `/swagger-ui`.
+If you want to use it in production mode you need to set `quarkus.swagger-ui.always-include` property to `true`.
 
 You can update the Swagger UI path by setting `quarkus.swagger-ui.path` property.
 
