@@ -65,6 +65,12 @@ include::core.adoc[tag=update_2_7]
 include::core.adoc[tag=update_2_8]
 ====
 
+.Configuration Profiles
+[%collapsible]
+====
+include::core.adoc[tag=update_2_9]
+====
+
 === Version 0.15.0
 
 .Headers Propagation

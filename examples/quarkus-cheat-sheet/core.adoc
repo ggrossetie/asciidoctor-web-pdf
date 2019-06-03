@@ -96,6 +96,38 @@ greetings.message = Hello World
 TIP: `Array`, `List` and `Set` are supported. The delimiter is comma (`,`) char and `\` is the escape char.
 // end::update_2_7[]
 
+// tag::update_2_9[]
+*Configuration Profiles*
+
+Quarkus allow you to have multiple configuration in the same file (`application.properties`).
+
+The syntax for this is `%{profile}.config.key=value`.
+
+[source, properties]
+----
+quarkus.http.port=9090
+%dev.quarkus.http.port=8181
+----
+
+HTTP port will be 9090, unless the 'dev' profile is active.
+
+Default profiles are:
+
+* `dev`: Activated when in development mode (`quarkus:dev`).
+* `test`: Activated when running tests.
+* `prod`: The default profile when not running in development or test mode
+
+You can create custom profile names by enabling the profile either setting `quarkus-profile` system property or `QUARKUS_PROFILE` environment variable.
+
+[source, properties]
+----
+quarkus.http.port=9090
+%staging.quarkus.http.port=9999
+----
+
+And enable it `quarkus-profile=staging`.
+// end::update_2_9[]
+
 // tag::update_2_6[]
 *Custom Loader*
 
@@ -107,7 +139,6 @@ You need to create a new class and implement `ConfigSource` interface:
 [source, java]
 ----
 package com.acme.config;
-
 public class InMemoryConfig implements ConfigSource {
     
     private Map<String, String> prop = new HashMap<>();
@@ -119,7 +150,6 @@ public class InMemoryConfig implements ConfigSource {
     @Override
     public int getOrdinal() {
         // The highest ordinal takes precedence
-        // Over other ConfigSource
         return 900;
     }
 
@@ -152,8 +182,8 @@ com.acme.config.InMemoryConfig
 // tag::update_2_8[]
 *Custom Converters*
 
-You can implement your own conversion types from String to custom type.
-You need to implement `org.eclipse.microprofile.config.spi.Converter` interface:
+You can implement your own conversion types from String.
+Implement `org.eclipse.microprofile.config.spi.Converter` interface:
 
 [source, java]
 ----

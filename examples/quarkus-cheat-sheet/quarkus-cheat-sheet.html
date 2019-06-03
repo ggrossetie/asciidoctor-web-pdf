@@ -155,6 +155,38 @@ Optional&lt;String&gt; optionalMessage;</code></pre>
 </tr>
 </table>
 </div>
+<p class=""><strong>Configuration Profiles</strong></p>
+<p class="">Quarkus allow you to have multiple configuration in the same file (<code>application.properties</code>).</p>
+<p class="">The syntax for this is <code>%{profile}.config.key=value</code>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%dev.quarkus.http.port=8181</code></pre>
+</div>
+</div>
+<p class="">HTTP port will be 9090, unless the 'dev' profile is active.</p>
+<p class="">Default profiles are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>dev</code>: Activated when in development mode (<code>quarkus:dev</code>).</p>
+</li>
+<li>
+<p><code>test</code>: Activated when running tests.</p>
+</li>
+<li>
+<p><code>prod</code>: The default profile when not running in development or test mode</p>
+</li>
+</ul>
+</div>
+<p class="">You can create custom profile names by enabling the profile either setting <code>quarkus-profile</code> system property or <code>QUARKUS_PROFILE</code> environment variable.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%staging.quarkus.http.port=9999</code></pre>
+</div>
+</div>
+<p class="">And enable it <code>quarkus-profile=staging</code>.</p>
 <p class=""><strong>Custom Loader</strong></p>
 <p class="">You can implement your own <code>ConfigSource</code> to load configuration from different places than the default ones provided by Quarkus.
 For example, database, custom XML, REST Endpoints, &#8230;&#8203;</p>
@@ -162,7 +194,6 @@ For example, database, custom XML, REST Endpoints, &#8230;&#8203;</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme.config;
-
 public class InMemoryConfig implements ConfigSource {
 
     private Map&lt;String, String&gt; prop = new HashMap&lt;&gt;();
@@ -174,7 +205,6 @@ public class InMemoryConfig implements ConfigSource {
     @Override
     public int getOrdinal() {
         // The highest ordinal takes precedence
-        // Over other ConfigSource
         return 900;
     }
 
@@ -203,8 +233,8 @@ Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.Confi
 </div>
 </div>
 <p class=""><strong>Custom Converters</strong></p>
-<p class="">You can implement your own conversion types from String to custom type.
-You need to implement <code>org.eclipse.microprofile.config.spi.Converter</code> interface:</p>
+<p class="">You can implement your own conversion types from String.
+Implement <code>org.eclipse.microprofile.config.spi.Converter</code> interface:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Priority(DEFAULT_QUARKUS_CONVERTER_PRIORITY + 100)
