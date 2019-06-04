@@ -1197,7 +1197,7 @@ Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.Conve
 <summary class="title">DAO pattern</summary>
 <div class="content">
 <div class="paragraph">
-<p>Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface to be implemented by your <em>repository</em> class.</p>
+<p>Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3100,23 +3100,6 @@ long numberOfDeleted = Developer.delete("name", "Alex");</code></pre>
 </tbody>
 </table>
 <div class="paragraph">
-<p><strong>DAO pattern</strong></p>
-</div>
-<div class="paragraph">
-<p>Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface to be implemented by your <em>repository</em> class.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
-public class DeveloperRepository
-    implements PanacheRepository&lt;Person&gt; {
-   public Person findByName(String name){
-     return find("name", name).firstResult();
-   }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
 <p>If entities are defined in external JAR, you need to enable in these projects the <code>Jandex</code> plugin in project.</p>
 </div>
 <div class="listingblock">
@@ -3141,6 +3124,23 @@ public class DeveloperRepository
         &lt;/dependency&gt;
     &lt;/dependencies&gt;
 &lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>DAO pattern</strong></p>
+</div>
+<div class="paragraph">
+<p>Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class DeveloperRepository
+    implements PanacheRepository&lt;Person&gt; {
+   public Person findByName(String name){
+     return find("name", name).firstResult();
+   }
+}</code></pre>
 </div>
 </div>
 </div>

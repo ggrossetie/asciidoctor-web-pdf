@@ -162,7 +162,7 @@ If entities are defined in external JAR, you need to enable in these projects th
 *DAO pattern*
 
 // tag::update_2_12[]
-Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
+Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface.
 
 [source, java]
 ----
