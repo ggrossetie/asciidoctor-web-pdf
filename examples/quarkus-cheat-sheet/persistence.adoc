@@ -131,23 +131,6 @@ a| [`Iterable`, `Steram`, `Object...`]
 a| 
 |===
 
-*DAO pattern*
-
-// tag::update_2_12[]
-Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
-
-[source, java]
-----
-@ApplicationScoped
-public class DeveloperRepository 
-    implements PanacheRepository<Person> {
-   public Person findByName(String name){
-     return find("name", name).firstResult();
-   }
-}
-----
-// end::update_2_12[]
-
 // tag::update_2_10[]
 If entities are defined in external JAR, you need to enable in these projects the `Jandex` plugin in project.
 
@@ -175,6 +158,23 @@ If entities are defined in external JAR, you need to enable in these projects th
 </plugin>
 ----
 // end::update_2_10[]
+
+*DAO pattern*
+
+// tag::update_2_12[]
+Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
+
+[source, java]
+----
+@ApplicationScoped
+public class DeveloperRepository 
+    implements PanacheRepository<Person> {
+   public Person findByName(String name){
+     return find("name", name).firstResult();
+   }
+}
+----
+// end::update_2_12[]
 
 == Flyway
 // tag::update_1_7[]
