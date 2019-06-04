@@ -9,6 +9,8 @@ endif::site[]
 
 ifdef::site[]
 icon:file-pdf-o[] {pdf-download}[Download the Cheat-Sheet as PDF].
+
+toc::[]
 endif::site[]
 
 == What is Quarkus?
