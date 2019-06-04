@@ -36,6 +36,10 @@ To list all available extensions just run:
 ./mvnw quarkus:list-extensions
 ----
 
+// tag::update_2_4[]
+TIP: You can use `-DsearchPattern=panache` to filter out all extensions except the ones matching the expression.
+// end::update_2_4[]
+
 And to register the extensions into build tool:
 
 [source, bash]
@@ -88,11 +92,130 @@ Properties can be set as:
 greetings.message = Hello World
 ----
 
+// tag::update_2_7[]
+TIP: `Array`, `List` and `Set` are supported. The delimiter is comma (`,`) char and `\` is the escape char.
+// end::update_2_7[]
+
+// tag::update_2_9[]
+*Configuration Profiles*
+
+Quarkus allow you to have multiple configuration in the same file (`application.properties`).
+
+The syntax for this is `%{profile}.config.key=value`.
+
+[source, properties]
+----
+quarkus.http.port=9090
+%dev.quarkus.http.port=8181
+----
+
+HTTP port will be 9090, unless the 'dev' profile is active.
+
+Default profiles are:
+
+* `dev`: Activated when in development mode (`quarkus:dev`).
+* `test`: Activated when running tests.
+* `prod`: The default profile when not running in development or test mode
+
+You can create custom profile names by enabling the profile either setting `quarkus-profile` system property or `QUARKUS_PROFILE` environment variable.
+
+[source, properties]
+----
+quarkus.http.port=9090
+%staging.quarkus.http.port=9999
+----
+
+And enable it `quarkus-profile=staging`.
+// end::update_2_9[]
+
+// tag::update_2_6[]
+*Custom Loader*
+
+You can implement your own `ConfigSource` to load configuration from different places than the default ones provided by Quarkus. 
+For example, database, custom XML, REST Endpoints, ...
+
+You need to create a new class and implement `ConfigSource` interface:
+
+[source, java]
+----
+package com.acme.config;
+public class InMemoryConfig implements ConfigSource {
+    
+    private Map<String, String> prop = new HashMap<>();
+    
+    public InMemoryConfig() {
+        // Init properties
+    }
+
+    @Override
+    public int getOrdinal() {
+        // The highest ordinal takes precedence
+        return 900;
+    }
+
+    @Override
+    public Map<String, String> getProperties() {
+        return prop;
+    }
+
+    @Override
+    public String getValue(String propertyName) {
+        return prop.get(propertyName);
+    }
+
+    @Override
+    public String getName() {
+        return "MemoryConfigSource";
+    }
+}
+----
+
+Then you need to register the `ConfigSource` as Java service. 
+Create a file `/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource` with next content:
+
+[source]
+----
+com.acme.config.InMemoryConfig
+----
+// end::update_2_6[]
+
+// tag::update_2_8[]
+*Custom Converters*
+
+You can implement your own conversion types from String.
+Implement `org.eclipse.microprofile.config.spi.Converter` interface:
+
+[source, java]
+----
+@Priority(DEFAULT_QUARKUS_CONVERTER_PRIORITY + 100)
+public class CustomInstantConverter 
+    implements Converter<Instant> {
+
+    @Override
+    public Instant convert(String value) {
+        if ("now".equals(value.trim())) {
+            return Instant.now();
+        }
+        return Instant.parse(value);
+    }
+}
+----
+
+`@Priority` annotation is used to override the default `InstantConverter`.
+
+Then you need to register the `Converter` as Java service. 
+Create a file `/META-INF/services/org.eclipse.microprofile.config.spi.Converter` with next content:
+
+[source]
+----
+com.acme.config.CustomInstantConverter
+----
+// end::update_2_8[]
+
 == Injection
 
 Quarkus is based on CDI 2.0 to implement injection of code.
-It is not fully supported and only a subset of the specification is implemented (https://quarkus.io/guides/cdi-reference).
-
+It is not fully supported and only a subset of the https://quarkus.io/guides/cdi-reference[specification is implemented].
 
 [source, java]
 ----
@@ -105,7 +228,7 @@ public class GreetingService {
 }
 ----
 
-Scope annotation is mandatory to make the bean discoverable by CDI.
+Scope annotation is mandatory to make the bean discoverable.
 
 [source, java]
 ----
@@ -225,9 +348,7 @@ public class NotExpiredValidator
     @Override
     public boolean isValid(LocalDate value, 
                         ConstraintValidatorContext ctx) {
-        if ( value == null ) {
-            return true;
-        }
+        if ( value == null ) return true;
         LocalDate today = LocalDate.now();
         return ChronoUnit.YEARS.between(today, value) > 0;
     }
@@ -260,8 +381,6 @@ And use it:
 Set<ConstraintViolation<Sauce>> violations = 
             validator.validate(sauce);
 ----
-
-<<<
 
 == Logging
 
@@ -320,6 +439,8 @@ a|`level`
 a|`INFO`
 a|Default minimum level.
 |===
+
+<<<
 
 == Rest Client
 
@@ -381,7 +502,7 @@ WorldClockService worldClockService;
 ----
 
 // tag::update_1_1[]
-If invokation happens within a JAX-RS resource class, you can propagate headers from incoming request to the outgoing request by using next configuartion property.
+If invokation happens within JAX-RS, you can propagate headers from incoming to outgoing by using next property.
 
 [source, properties]
 ----
@@ -458,8 +579,6 @@ public class GreetingResourceTest {
     }
 }
 ----
-
-<<< 
     
 Test port can be modified by using `quarkus.http.test-port` configuration property.
 

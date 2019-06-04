@@ -35,6 +35,9 @@ include::network.adoc[]
 <<<
 include::cloud.adoc[]
 
+<<<
+include::misc.adoc[]
+
 == Resources
 
 * https://quarkus.io/guides/

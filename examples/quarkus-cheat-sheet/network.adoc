@@ -1,3 +1,39 @@
+== CORS Filter
+// tag::update_2_11[]
+Quarkus comes with a CORS filter that can be enabled via configuration:
+
+[source, properties]
+----
+quarkus.http.cors=true
+----
+
+Prefix is `quarkus.http`.
+
+|===	
+| Property | Default | Description
+
+a|`cors`
+a|`false`
+|Enable CORS.
+
+a|origins
+a|Any request valid.
+|CSV of origins allowed.
+
+a|`methods`
+|Any method valid.
+|CSV of methods valid.
+
+a|`headers`
+|Any requested header valid.
+|CSV of valid allowed headers.
+
+a|`exposed-headers`
+|
+|CSV of valid exposed headers.
+|===
+// end::update_2_11[]
+
 == Fault Tolerance
 // tag::update_1_2[]
 Quarkus uses https://github.com/eclipse/microprofile-fault-tolerance[MicroProfile Fault Tolerance spec:

@@ -449,14 +449,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.2/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
+<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.3/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
 </div>
 <div class="paragraph">
 <p>Quarkus (<a href="https://quarkus.io/" class="bare">https://quarkus.io/</a>) is a Kubernetes Native Java stack tailored for GraalVM &amp; OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
 </div>
 <div class="paragraph">
-<p>In this page you can either read what has been added in each version of the cheat-sheet individually in <a href="#whatsnew">What&#8217;s New in Cheat-Sheet</a> section, see the full cheat-sheet as HTML <span class="icon"><i class="fa fa-html5"></i></span> <a href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a> format or <span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.2/quarkus-cheat-sheet.pdf">download the full cheat-sheet as PDF</a>.</p>
+<p>In this page you can either read what has been added in each version of the cheat-sheet individually in <a href="#whatsnew">What&#8217;s New in Cheat-Sheet</a> section, see the full cheat-sheet as HTML <span class="icon"><i class="fa fa-html5"></i></span> <a href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a> format or <span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.3/quarkus-cheat-sheet.pdf">download the full cheat-sheet as PDF</a>.</p>
 </div>
 </div>
 </div>
@@ -464,12 +464,762 @@ Also focused on developer experience, making things just work with little to no 
 <h2 id="whatsnew"><a class="anchor" href="#whatsnew"></a><a class="link" href="#whatsnew">What&#8217;s New in Cheat-Sheet</a></h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="_version_0_16_0"><a class="anchor" href="#_version_0_16_0"></a><a class="link" href="#_version_0_16_0">Version 0.16.0</a></h3>
+<details>
+<summary class="title">Apache Camel</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus integrates wih <a href="https://camel.apache.org">Apache Camel</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-camel-core"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can inject <code>CamelRuntime</code> and <code>CamelContext</code> instances:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+CamelRuntime runtime;
+
+@Inject
+CamelContext context;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And also observing Camel events <code>InitializingEvent</code>, <code>InitializedEvent</code>, <code>StartingEvent</code>, <code>StartedEvent</code>. <code>StoppingEvent</code>, <code>StoppedEvent</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public void init(@Observes InitializingEvent event) {
+    runtime.getContext()
+            .setUuidGenerator(new DefaultUuidGenerator());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create <code>RouteBuilder</code> for routing rules:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class CamelRoute extends RouteBuilder {
+
+    @Override
+    public void configure() {
+        from("timer:keep-alive?" +
+                "period={{camel.timer-route.period}}")
+        .id("timer-route")
+        .setBody(constant(""))
+        .to("log:keep-alive");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Custom properties are set in <code>application.properties</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">camel.timer-route.period=1s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List of Camel parameters.</p>
+</div>
+<div class="paragraph">
+<p><code>quarkus.</code> as a prefix is skipped in the next table.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.routesUris</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an XML with camel routes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.deferInitPhase</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defer context initialization phase until runtime.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableJaxb</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable jaxb support at runtime. Useful when routes loaded at build time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableXml</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable XML support in various parts of Camel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.dumpRoutes</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dump loaded routes .</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Quarkus also comes with support for Camel in form of next extensions: <code>camel-aws-s3</code>, <code>camel-aws-sqs</code>, <code>camel-infinispan</code>, <code>camel-netty4-http</code>, <code>camel-salesforce</code>.</p>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">WebSockets</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus can be used to handling web sockets.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-undertow-websockets"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And web sockets classes can be used:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ServerEndpoint("/chat/{username}")
+@ApplicationScoped
+public class ChatSocket {
+
+    @OnOpen
+    public void onOpen(Session session,
+                @PathParam("username") String username) {}
+
+    @OnClose
+    public void onClose(..) {}
+
+    @OnError
+    public void onError(..., Throwable throwable) {}
+
+    @OnMessage
+    public void onMessage(...) {}
+
+}</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">OpenAPI</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus can expose its API description as <a href="https://swagger.io/specification/">OpenAPI</a> spec and test it using <a href="https://swagger.io/tools/swagger-ui/">Swagger UI</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-smallrye-openapi"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you only need to access to <code>/openapi</code> to get OpenAPI v3 spec of services.</p>
+</div>
+<div class="paragraph">
+<p>Also, in case of starting Quarkus application in <code>dev</code> or <code>test</code> mode, Swagger UI is accessible at <code>/swagger-ui</code>.
+If you want to use it in production mode you need to set <code>quarkus.swagger-ui.always-include</code> property to <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can update the Swagger UI path by setting <code>quarkus.swagger-ui.path</code> property.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.swagger-ui.path=/my-custom-path</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Maven List Extensions</summary>
+<div class="content">
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can use <code>-DsearchPattern=panache</code> to filter out all extensions except the ones matching the expression.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Mail Sender</summary>
+<div class="content">
+<div class="paragraph">
+<p>You can send emails by using Quarkus Mailer extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-mailer"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can inject two possible classes <code>io.quarkus.mailer.Mailer</code> for synchronous API or <code>io.quarkus.mailer.ReactiveMailer</code> for asynchronous API.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+Mailer mailer;
+
+@Inject
+ReactiveMailer reactiveMailer;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then you can use them to send an email:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">mailer.send(
+    Mail.withText("to@acme.org", "Subject", "Body")
+);
+
+CompletionStage&lt;Void&gt; stage =
+    reactiveMailer.send(
+        Mail.withText("to@acme.org", "Subject", "Body")
+    );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>Mail</code> class contains methods to add <code>cc</code>, <code>bcc</code>, <code>headers</code>, <code>bounce address</code>, <code>reply to</code>, <code>attachments</code>, <code>inline attachments</code> and <code>html body</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">mailer.send(Mail.withHtml("to@acme.org", "Subject", body)
+      .addInlineAttachment("quarkus.png",
+            new File("quarkus.png"),
+            "image/png", "&lt;my-image@quarkus.io&gt;"));</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you need deep control you can inject Vert.x mail client <code>@Inject  MailClient client;</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You need to configure SMTP properties to be able to send an email:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.mailer.from=test@quarkus.io
+quarkus.mailer.host=smtp.sendgrid.net
+quarkus.mailer.port=465
+quarkus.mailer.ssl=true
+quarkus.mailer.username=....
+quarkus.mailer.password=....</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List of Mailer parameters.
+<code>quarkus.</code> as a prefix is skipped in the next table.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.from</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Default address.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.mock</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Emails not sent, just printed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.bounce-address</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default address.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.host</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><em>mandatory</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SMTP host.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.port</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SMTP port.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.username</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The username.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.password</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.ssl</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables SSL.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.trust-all</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trust all certificates.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.max-pool-size</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of open connections .</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.own-host-name</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Hostname for <code>HELO/EHLO</code> and <code>Message-ID</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.keep-alive</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connection pool enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.disable-esmtp</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ESMTP.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.start-tls</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>OPTIONAL</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TLS security mode. <code>NONE</code>, <code>OPTIONAL</code>, <code>REQUIRED</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.login</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>NONE</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Login mode. <code>NONE</code>, <code>OPTIONAL</code>, <code>REQUIRED</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.auth-methods</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All methods.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Space-separated list.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.key-store</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path of the key store.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.key-store-password</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key store password.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title">Custom ConfigSource</summary>
+<div class="content">
+<div class="paragraph">
+<p><strong>Custom Loader</strong></p>
+</div>
+<div class="paragraph">
+<p>You can implement your own <code>ConfigSource</code> to load configuration from different places than the default ones provided by Quarkus.
+For example, database, custom XML, REST Endpoints, &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>You need to create a new class and implement <code>ConfigSource</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme.config;
+public class InMemoryConfig implements ConfigSource {
+
+    private Map&lt;String, String&gt; prop = new HashMap&lt;&gt;();
+
+    public InMemoryConfig() {
+        // Init properties
+    }
+
+    @Override
+    public int getOrdinal() {
+        // The highest ordinal takes precedence
+        return 900;
+    }
+
+    @Override
+    public Map&lt;String, String&gt; getProperties() {
+        return prop;
+    }
+
+    @Override
+    public String getValue(String propertyName) {
+        return prop.get(propertyName);
+    }
+
+    @Override
+    public String getName() {
+        return "MemoryConfigSource";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you need to register the <code>ConfigSource</code> as Java service.
+Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource</code> with next content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.acme.config.InMemoryConfig</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Array config converters</summary>
+<div class="content">
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<code>Array</code>, <code>List</code> and <code>Set</code> are supported. The delimiter is comma (<code>,</code>) char and <code>\</code> is the escape char.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Custom config converters</summary>
+<div class="content">
+<div class="paragraph">
+<p><strong>Custom Converters</strong></p>
+</div>
+<div class="paragraph">
+<p>You can implement your own conversion types from String.
+Implement <code>org.eclipse.microprofile.config.spi.Converter</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Priority(DEFAULT_QUARKUS_CONVERTER_PRIORITY + 100)
+public class CustomInstantConverter
+    implements Converter&lt;Instant&gt; {
+
+    @Override
+    public Instant convert(String value) {
+        if ("now".equals(value.trim())) {
+            return Instant.now();
+        }
+        return Instant.parse(value);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>@Priority</code> annotation is used to override the default <code>InstantConverter</code>.</p>
+</div>
+<div class="paragraph">
+<p>Then you need to register the <code>Converter</code> as Java service.
+Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.Converter</code> with next content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.acme.config.CustomInstantConverter</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">Configuration Profiles</summary>
+<div class="content">
+<div class="paragraph">
+<p><strong>Configuration Profiles</strong></p>
+</div>
+<div class="paragraph">
+<p>Quarkus allow you to have multiple configuration in the same file (<code>application.properties</code>).</p>
+</div>
+<div class="paragraph">
+<p>The syntax for this is <code>%{profile}.config.key=value</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%dev.quarkus.http.port=8181</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HTTP port will be 9090, unless the 'dev' profile is active.</p>
+</div>
+<div class="paragraph">
+<p>Default profiles are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>dev</code>: Activated when in development mode (<code>quarkus:dev</code>).</p>
+</li>
+<li>
+<p><code>test</code>: Activated when running tests.</p>
+</li>
+<li>
+<p><code>prod</code>: The default profile when not running in development or test mode</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can create custom profile names by enabling the profile either setting <code>quarkus-profile</code> system property or <code>QUARKUS_PROFILE</code> environment variable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%staging.quarkus.http.port=9999</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And enable it <code>quarkus-profile=staging</code>.</p>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">ORM entities in external JAR</summary>
+<div class="content">
+<div class="paragraph">
+<p>If entities are defined in external JAR, you need to enable in these projects the <code>Jandex</code> plugin in project.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
+    &lt;groupId&gt;org.jboss.jandex&lt;/groupId&gt;
+    &lt;artifactId&gt;jandex-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;1.0.3&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;make-index&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;jandex&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss&lt;/groupId&gt;
+            &lt;artifactId&gt;jandex&lt;/artifactId&gt;
+            &lt;version&gt;2.1.1.Final&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">CORS Filter</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus comes with a CORS filter that can be enabled via configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.cors=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Prefix is <code>quarkus.http</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>cors</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable CORS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>origins</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Any request valid.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of origins allowed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>methods</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any method valid.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of methods valid.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>headers</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any requested header valid.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of valid allowed headers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>exposed-headers</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of valid exposed headers.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="title">DAO pattern</summary>
+<div class="content">
+<div class="paragraph">
+<p>Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface to be implemented by your <em>repository</em> class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class DeveloperRepository
+    implements PanacheRepository&lt;Person&gt; {
+   public Person findByName(String name){
+     return find("name", name).firstResult();
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</details>
+</div>
+<div class="sect2">
 <h3 id="_version_0_15_0"><a class="anchor" href="#_version_0_15_0"></a><a class="link" href="#_version_0_15_0">Version 0.15.0</a></h3>
 <details>
 <summary class="title">Headers Propagation</summary>
 <div class="content">
 <div class="paragraph">
-<p>If invokation happens within a JAX-RS resource class, you can propagate headers from incoming request to the outgoing request by using next configuartion property.</p>
+<p>If invokation happens within JAX-RS, you can propagate headers from incoming to outgoing by using next property.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -998,7 +1748,6 @@ Flyway flyway;
 flyway.migrate();</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Or can be automatically executed by setting <code>migrate-at-start</code> property to <code>true</code>.</p>
 </div>
@@ -1008,7 +1757,7 @@ flyway.migrate();</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>List of Flyway parameters</p>
+<p>List of Flyway parameters.</p>
 </div>
 <div class="paragraph">
 <p><code>quarkus.</code> as prefix is skipped in the next table.</p>
@@ -1258,7 +2007,7 @@ public void testLambda() {
 <h2 id="quarkuscheatsheet"><a class="anchor" href="#quarkuscheatsheet"></a><a class="link" href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.2/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
+<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.3/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
 </div>
 <div class="sect2">
 <h3 id="_what_is_quarkus"><a class="anchor" href="#_what_is_quarkus"></a><a class="link" href="#_what_is_quarkus">What is Quarkus?</a></h3>
@@ -1267,7 +2016,7 @@ public void testLambda() {
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
 </div>
 <div class="paragraph">
-<p>Cheat-sheet tested with <strong>Quarkus 0.15.0</strong>.</p>
+<p>Cheat-sheet tested with <strong>Quarkus 0.16.0</strong>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1277,7 +2026,7 @@ Also focused on developer experience, making things just work with little to no 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn io.quarkus:quarkus-maven-plugin:0.15.0:create \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn io.quarkus:quarkus-maven-plugin:0.16.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
@@ -1311,6 +2060,18 @@ To list all available extensions just run:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:list-extensions</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can use <code>-DsearchPattern=panache</code> to filter out all extensions except the ones matching the expression.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>And to register the extensions into build tool:</p>
@@ -1390,12 +2151,158 @@ Optional&lt;String&gt; optionalMessage;</code></pre>
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">greetings.message = Hello World</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<code>Array</code>, <code>List</code> and <code>Set</code> are supported. The delimiter is comma (<code>,</code>) char and <code>\</code> is the escape char.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><strong>Configuration Profiles</strong></p>
+</div>
+<div class="paragraph">
+<p>Quarkus allow you to have multiple configuration in the same file (<code>application.properties</code>).</p>
+</div>
+<div class="paragraph">
+<p>The syntax for this is <code>%{profile}.config.key=value</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%dev.quarkus.http.port=8181</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HTTP port will be 9090, unless the 'dev' profile is active.</p>
+</div>
+<div class="paragraph">
+<p>Default profiles are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>dev</code>: Activated when in development mode (<code>quarkus:dev</code>).</p>
+</li>
+<li>
+<p><code>test</code>: Activated when running tests.</p>
+</li>
+<li>
+<p><code>prod</code>: The default profile when not running in development or test mode</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can create custom profile names by enabling the profile either setting <code>quarkus-profile</code> system property or <code>QUARKUS_PROFILE</code> environment variable.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.port=9090
+%staging.quarkus.http.port=9999</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And enable it <code>quarkus-profile=staging</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Custom Loader</strong></p>
+</div>
+<div class="paragraph">
+<p>You can implement your own <code>ConfigSource</code> to load configuration from different places than the default ones provided by Quarkus.
+For example, database, custom XML, REST Endpoints, &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>You need to create a new class and implement <code>ConfigSource</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">package com.acme.config;
+public class InMemoryConfig implements ConfigSource {
+
+    private Map&lt;String, String&gt; prop = new HashMap&lt;&gt;();
+
+    public InMemoryConfig() {
+        // Init properties
+    }
+
+    @Override
+    public int getOrdinal() {
+        // The highest ordinal takes precedence
+        return 900;
+    }
+
+    @Override
+    public Map&lt;String, String&gt; getProperties() {
+        return prop;
+    }
+
+    @Override
+    public String getValue(String propertyName) {
+        return prop.get(propertyName);
+    }
+
+    @Override
+    public String getName() {
+        return "MemoryConfigSource";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you need to register the <code>ConfigSource</code> as Java service.
+Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource</code> with next content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.acme.config.InMemoryConfig</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Custom Converters</strong></p>
+</div>
+<div class="paragraph">
+<p>You can implement your own conversion types from String.
+Implement <code>org.eclipse.microprofile.config.spi.Converter</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Priority(DEFAULT_QUARKUS_CONVERTER_PRIORITY + 100)
+public class CustomInstantConverter
+    implements Converter&lt;Instant&gt; {
+
+    @Override
+    public Instant convert(String value) {
+        if ("now".equals(value.trim())) {
+            return Instant.now();
+        }
+        return Instant.parse(value);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>@Priority</code> annotation is used to override the default <code>InstantConverter</code>.</p>
+</div>
+<div class="paragraph">
+<p>Then you need to register the <code>Converter</code> as Java service.
+Create a file <code>/META-INF/services/org.eclipse.microprofile.config.spi.Converter</code> with next content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">com.acme.config.CustomInstantConverter</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_injection"><a class="anchor" href="#_injection"></a><a class="link" href="#_injection">Injection</a></h3>
 <div class="paragraph">
 <p>Quarkus is based on CDI 2.0 to implement injection of code.
-It is not fully supported and only a subset of the specification is implemented (<a href="https://quarkus.io/guides/cdi-reference" class="bare">https://quarkus.io/guides/cdi-reference</a>).</p>
+It is not fully supported and only a subset of the <a href="https://quarkus.io/guides/cdi-reference">specification is implemented</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1409,7 +2316,7 @@ public class GreetingService {
 </div>
 </div>
 <div class="paragraph">
-<p>Scope annotation is mandatory to make the bean discoverable by CDI.</p>
+<p>Scope annotation is mandatory to make the bean discoverable.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1561,9 +2468,7 @@ public @interface NotExpired {
     @Override
     public boolean isValid(LocalDate value,
                         ConstraintValidatorContext ctx) {
-        if ( value == null ) {
-            return true;
-        }
+        if ( value == null ) return true;
         LocalDate today = LocalDate.now();
         return ChronoUnit.YEARS.between(today, value) &gt; 0;
     }
@@ -1601,7 +2506,6 @@ Validator validator;</code></pre>
             validator.validate(sauce);</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="_logging"><a class="anchor" href="#_logging"></a><a class="link" href="#_logging">Logging</a></h3>
@@ -1745,6 +2649,7 @@ quarkus.log.category."com.lordofthejars".level=DEBUG</code></pre>
 </tr>
 </tbody>
 </table>
+<div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="_rest_client"><a class="anchor" href="#_rest_client"></a><a class="link" href="#_rest_client">Rest Client</a></h3>
@@ -1810,7 +2715,7 @@ WorldClockService worldClockService;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If invokation happens within a JAX-RS resource class, you can propagate headers from incoming request to the outgoing request by using next configuartion property.</p>
+<p>If invokation happens within JAX-RS, you can propagate headers from incoming to outgoing by using next property.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1906,7 +2811,6 @@ public class GreetingResourceTest {
 }</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Test port can be modified by using <code>quarkus.http.test-port</code> configuration property.</p>
 </div>
@@ -2195,17 +3099,49 @@ long numberOfDeleted = Developer.delete("name", "Alex");</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface to be implemented by your <em>repository</em> class.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p><strong>DAO pattern</strong></p>
+</div>
+<div class="paragraph">
+<p>Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface to be implemented by your <em>repository</em> class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class DeveloperRepository
+    implements PanacheRepository&lt;Person&gt; {
+   public Person findByName(String name){
+     return find("name", name).firstResult();
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If entities are defined in external JAR, you need to enable in these projects the <code>Jandex</code> plugin in project.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
+    &lt;groupId&gt;org.jboss.jandex&lt;/groupId&gt;
+    &lt;artifactId&gt;jandex-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;1.0.3&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;make-index&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;jandex&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss&lt;/groupId&gt;
+            &lt;artifactId&gt;jandex&lt;/artifactId&gt;
+            &lt;version&gt;2.1.1.Final&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -2233,7 +3169,6 @@ Flyway flyway;
 flyway.migrate();</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Or can be automatically executed by setting <code>migrate-at-start</code> property to <code>true</code>.</p>
 </div>
@@ -2243,7 +3178,7 @@ flyway.migrate();</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>List of Flyway parameters</p>
+<p>List of Flyway parameters.</p>
 </div>
 <div class="paragraph">
 <p><code>quarkus.</code> as prefix is skipped in the next table.</p>
@@ -2742,6 +3677,75 @@ you can also use <code>src/main/resources/keycloak.json</code> standard Keycloak
 </table>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_cors_filter"><a class="anchor" href="#_cors_filter"></a><a class="link" href="#_cors_filter">CORS Filter</a></h3>
+<div class="paragraph">
+<p>Quarkus comes with a CORS filter that can be enabled via configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.cors=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Prefix is <code>quarkus.http</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>cors</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable CORS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>origins</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Any request valid.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of origins allowed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>methods</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any method valid.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of methods valid.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>headers</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any requested header valid.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of valid allowed headers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>exposed-headers</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of valid exposed headers.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_fault_tolerance"><a class="anchor" href="#_fault_tolerance"></a><a class="link" href="#_fault_tolerance">Fault Tolerance</a></h3>
@@ -3286,6 +4290,442 @@ public void testLambda() {
 }</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_apache_camel"><a class="anchor" href="#_apache_camel"></a><a class="link" href="#_apache_camel">Apache Camel</a></h3>
+<div class="paragraph">
+<p>Quarkus integrates wih <a href="https://camel.apache.org">Apache Camel</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-camel-core"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can inject <code>CamelRuntime</code> and <code>CamelContext</code> instances:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+CamelRuntime runtime;
+
+@Inject
+CamelContext context;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And also observing Camel events <code>InitializingEvent</code>, <code>InitializedEvent</code>, <code>StartingEvent</code>, <code>StartedEvent</code>. <code>StoppingEvent</code>, <code>StoppedEvent</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public void init(@Observes InitializingEvent event) {
+    runtime.getContext()
+            .setUuidGenerator(new DefaultUuidGenerator());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can create <code>RouteBuilder</code> for routing rules:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class CamelRoute extends RouteBuilder {
+
+    @Override
+    public void configure() {
+        from("timer:keep-alive?" +
+                "period={{camel.timer-route.period}}")
+        .id("timer-route")
+        .setBody(constant(""))
+        .to("log:keep-alive");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Custom properties are set in <code>application.properties</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">camel.timer-route.period=1s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List of Camel parameters.</p>
+</div>
+<div class="paragraph">
+<p><code>quarkus.</code> as a prefix is skipped in the next table.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.routesUris</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uri to an XML with camel routes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.deferInitPhase</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defer context initialization phase until runtime.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableJaxb</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable jaxb support at runtime. Useful when routes loaded at build time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.disableXml</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable XML support in various parts of Camel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>camel.dumpRoutes</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dump loaded routes .</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Quarkus also comes with support for Camel in form of next extensions: <code>camel-aws-s3</code>, <code>camel-aws-sqs</code>, <code>camel-infinispan</code>, <code>camel-netty4-http</code>, <code>camel-salesforce</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_websockets"><a class="anchor" href="#_websockets"></a><a class="link" href="#_websockets">WebSockets</a></h3>
+<div class="paragraph">
+<p>Quarkus can be used to handling web sockets.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-undertow-websockets"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And web sockets classes can be used:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ServerEndpoint("/chat/{username}")
+@ApplicationScoped
+public class ChatSocket {
+
+    @OnOpen
+    public void onOpen(Session session,
+                @PathParam("username") String username) {}
+
+    @OnClose
+    public void onClose(..) {}
+
+    @OnError
+    public void onError(..., Throwable throwable) {}
+
+    @OnMessage
+    public void onMessage(...) {}
+
+}</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_openapi"><a class="anchor" href="#_openapi"></a><a class="link" href="#_openapi">OpenAPI</a></h3>
+<div class="paragraph">
+<p>Quarkus can expose its API description as <a href="https://swagger.io/specification/">OpenAPI</a> spec and test it using <a href="https://swagger.io/tools/swagger-ui/">Swagger UI</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-smallrye-openapi"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you only need to access to <code>/openapi</code> to get OpenAPI v3 spec of services.</p>
+</div>
+<div class="paragraph">
+<p>Also, in case of starting Quarkus application in <code>dev</code> or <code>test</code> mode, Swagger UI is accessible at <code>/swagger-ui</code>.
+If you want to use it in production mode you need to set <code>quarkus.swagger-ui.always-include</code> property to <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can update the Swagger UI path by setting <code>quarkus.swagger-ui.path</code> property.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.swagger-ui.path=/my-custom-path</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mail_sender"><a class="anchor" href="#_mail_sender"></a><a class="link" href="#_mail_sender">Mail Sender</a></h3>
+<div class="paragraph">
+<p>You can send emails by using Quarkus Mailer extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="io.quarkus:quarkus-mailer"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can inject two possible classes <code>io.quarkus.mailer.Mailer</code> for synchronous API or <code>io.quarkus.mailer.ReactiveMailer</code> for asynchronous API.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+Mailer mailer;
+
+@Inject
+ReactiveMailer reactiveMailer;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then you can use them to send an email:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">mailer.send(
+    Mail.withText("to@acme.org", "Subject", "Body")
+);
+
+CompletionStage&lt;Void&gt; stage =
+    reactiveMailer.send(
+        Mail.withText("to@acme.org", "Subject", "Body")
+    );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>Mail</code> class contains methods to add <code>cc</code>, <code>bcc</code>, <code>headers</code>, <code>bounce address</code>, <code>reply to</code>, <code>attachments</code>, <code>inline attachments</code> and <code>html body</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">mailer.send(Mail.withHtml("to@acme.org", "Subject", body)
+      .addInlineAttachment("quarkus.png",
+            new File("quarkus.png"),
+            "image/png", "&lt;my-image@quarkus.io&gt;"));</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you need deep control you can inject Vert.x mail client <code>@Inject  MailClient client;</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You need to configure SMTP properties to be able to send an email:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.mailer.from=test@quarkus.io
+quarkus.mailer.host=smtp.sendgrid.net
+quarkus.mailer.port=465
+quarkus.mailer.ssl=true
+quarkus.mailer.username=....
+quarkus.mailer.password=....</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List of Mailer parameters.
+<code>quarkus.</code> as a prefix is skipped in the next table.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top"> Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.from</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Default address.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.mock</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Emails not sent, just printed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.bounce-address</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default address.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.host</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><em>mandatory</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SMTP host.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.port</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SMTP port.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.username</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The username.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.password</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.ssl</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables SSL.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.trust-all</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trust all certificates.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.max-pool-size</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of open connections .</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.own-host-name</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Hostname for <code>HELO/EHLO</code> and <code>Message-ID</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.keep-alive</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>true</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connection pool enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.disable-esmtp</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>false</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable ESMTP.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.start-tls</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>OPTIONAL</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TLS security mode. <code>NONE</code>, <code>OPTIONAL</code>, <code>REQUIRED</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.login</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>NONE</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Login mode. <code>NONE</code>, <code>OPTIONAL</code>, <code>REQUIRED</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.auth-methods</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All methods.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Space-separated list.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.key-store</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path of the key store.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>mailer.key-store-password</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key store password.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_resources"><a class="anchor" href="#_resources"></a><a class="link" href="#_resources">Resources</a></h3>

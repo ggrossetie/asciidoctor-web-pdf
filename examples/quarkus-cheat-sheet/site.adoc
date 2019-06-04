@@ -15,6 +15,80 @@ In this page you can either read what has been added in each version of the chea
 [[whatsnew]]
 == What's New in Cheat-Sheet
 
+=== Version 0.16.0
+
+.Apache Camel
+[%collapsible]
+====
+include::misc.adoc[tag=update_2_1]
+====
+
+.WebSockets
+[%collapsible]
+====
+include::misc.adoc[tag=update_2_2]
+====
+
+.OpenAPI
+[%collapsible]
+====
+include::misc.adoc[tag=update_2_3]
+====
+
+.Maven List Extensions
+[%collapsible]
+====
+include::core.adoc[tag=update_2_4]
+====
+
+.Mail Sender
+[%collapsible]
+====
+include::misc.adoc[tag=update_2_5]
+====
+
+.Custom ConfigSource
+[%collapsible]
+====
+include::core.adoc[tag=update_2_6]
+====
+
+.Array config converters
+[%collapsible]
+====
+include::core.adoc[tag=update_2_7]
+====
+
+.Custom config converters
+[%collapsible]
+====
+include::core.adoc[tag=update_2_8]
+====
+
+.Configuration Profiles
+[%collapsible]
+====
+include::core.adoc[tag=update_2_9]
+====
+
+.ORM entities in external JAR
+[%collapsible]
+====
+include::persistence.adoc[tag=update_2_10]
+====
+
+.CORS Filter
+[%collapsible]
+====
+include::network.adoc[tag=update_2_11]
+====
+
+.DAO pattern
+[%collapsible]
+====
+include::persistence.adoc[tag=update_2_12]
+====
+
 === Version 0.15.0
 
 .Headers Propagation
