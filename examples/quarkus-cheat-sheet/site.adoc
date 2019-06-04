@@ -71,6 +71,24 @@ include::core.adoc[tag=update_2_8]
 include::core.adoc[tag=update_2_9]
 ====
 
+.ORM entities in external JAR
+[%collapsible]
+====
+include::persistence.adoc[tag=update_2_10]
+====
+
+.CORS Filter
+[%collapsible]
+====
+include::network.adoc[tag=update_2_11]
+====
+
+.DAO pattern
+[%collapsible]
+====
+include::persistence.adoc[tag=update_2_12]
+====
+
 === Version 0.15.0
 
 .Headers Propagation

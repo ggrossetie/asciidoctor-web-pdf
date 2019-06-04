@@ -131,7 +131,50 @@ a| [`Iterable`, `Steram`, `Object...`]
 a| 
 |===
 
-TIP: Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
+*DAO pattern*
+
+// tag::update_2_12[]
+Panache also supports _DAO_ pattern by providing `PanacheRepository<TYPE>` interface to be implemented by your _repository_ class.
+
+[source, java]
+----
+@ApplicationScoped
+public class DeveloperRepository 
+    implements PanacheRepository<Person> {
+   public Person findByName(String name){
+     return find("name", name).firstResult();
+   }
+}
+----
+// end::update_2_12[]
+
+// tag::update_2_10[]
+If entities are defined in external JAR, you need to enable in these projects the `Jandex` plugin in project.
+
+[source, xml]
+----
+<plugin>
+    <groupId>org.jboss.jandex</groupId>
+    <artifactId>jandex-maven-plugin</artifactId>
+    <version>1.0.3</version>
+    <executions>
+        <execution>
+            <id>make-index</id>
+            <goals>
+                <goal>jandex</goal>
+            </goals>
+        </execution>
+    </executions>
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jandex</artifactId>
+            <version>2.1.1.Final</version>
+        </dependency>
+    </dependencies>
+</plugin>
+----
+// end::update_2_10[]
 
 == Flyway
 // tag::update_1_7[]
@@ -154,8 +197,6 @@ Flyway flyway;
 
 flyway.migrate();
 ----
-
-<<<
 
 Or can be automatically executed by setting `migrate-at-start` property to `true`.
 

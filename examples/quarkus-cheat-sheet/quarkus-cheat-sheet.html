@@ -857,17 +857,43 @@ long numberOfDeleted = Developer.delete("name", "Alex");</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Tip</div>
-</td>
-<td class="content">
-Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface to be implemented by your <em>repository</em> class.
-</td>
-</tr>
-</table>
+<p class=""><strong>DAO pattern</strong></p>
+<p class="">Panache also supports <em>DAO</em> pattern by providing <code>PanacheRepository&lt;TYPE&gt;</code> interface to be implemented by your <em>repository</em> class.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class DeveloperRepository
+    implements PanacheRepository&lt;Person&gt; {
+   public Person findByName(String name){
+     return find("name", name).firstResult();
+   }
+}</code></pre>
+</div>
+</div>
+<p class="">If entities are defined in external JAR, you need to enable in these projects the <code>Jandex</code> plugin in project.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="xml" class="language-xml hljs">&lt;plugin&gt;
+    &lt;groupId&gt;org.jboss.jandex&lt;/groupId&gt;
+    &lt;artifactId&gt;jandex-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;1.0.3&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;make-index&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;jandex&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss&lt;/groupId&gt;
+            &lt;artifactId&gt;jandex&lt;/artifactId&gt;
+            &lt;version&gt;2.1.1.Final&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -891,7 +917,6 @@ Flyway flyway;
 flyway.migrate();</code></pre>
 </div>
 </div>
-<div class="page-break"></div>
 <p class="">Or can be automatically executed by setting <code>migrate-at-start</code> property to <code>true</code>.</p>
 <div class="listingblock">
 <div class="content">
@@ -1294,6 +1319,59 @@ you can also use <code>src/main/resources/keycloak.json</code> standard Keycloak
 </table>
 </div>
 <div class="page-break"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cors_filter"><a class="anchor" href="#_cors_filter"></a><a class="link" href="#_cors_filter">CORS Filter</a></h2>
+<div class="sectionbody">
+<p class="">Quarkus comes with a CORS filter that can be enabled via configuration:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.http.cors=true</code></pre>
+</div>
+</div>
+<p class="">Prefix is <code>quarkus.http</code>.</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>cors</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>false</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable CORS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">origins</p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Any request valid.</p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of origins allowed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>methods</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any method valid.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of methods valid.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>headers</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any requested header valid.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of valid allowed headers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>exposed-headers</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV of valid exposed headers.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect1">
