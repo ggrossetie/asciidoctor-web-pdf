@@ -312,22 +312,25 @@ public class LibraryResource {
     EntityManager em;
 
     @Transactional
-    public List<Author> searchAuthors(@QueryParam("pattern") String pattern) { 
+    public List<Author> searchAuthors(
+        @QueryParam("pattern") String pattern) { 
         return Search.getSearchSession(em)
             .search(Author.class)
             .predicate(f ->
-                pattern == null || pattern.trim().isEmpty() ?
+                pattern == null || pattern.isEmpty() ?
                     f.matchAll() :
                     f.simpleQueryString()
-                        .onFields("firstName", "lastName", "books.title")
+                        .onFields("firstName", 
+                            "lastName", "books.title")
                         .matching(pattern)
                 )
-            .sort(f -> f.byField("lastName_sort").then().byField("firstName_sort"))
+            .sort(f -> f.byField("lastName_sort")
+            .then().byField("firstName_sort"))
             .fetchHits();
     }
 ----
 
-IMPORTANT: If you are importing data without using Hibernate ORM, you need to index data by using `Search.getSearchSession(em).createIndexer().startAndWait()` at startup time.
+*IMPORTANT* If you are importing data without using Hibernate ORM, you need to index data by using `Search.getSearchSession(em).createIndexer()` `.startAndWait()` at startup time.
 
 You need to configure the extension in `application.properties`:
 

@@ -549,32 +549,26 @@ You only need to implement <code>ElasticsearchAnalysisConfigurer</code> interfac
     EntityManager em;
 
     @Transactional
-    public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern) {
+    public List&lt;Author&gt; searchAuthors(
+        @QueryParam("pattern") String pattern) {
         return Search.getSearchSession(em)
             .search(Author.class)
             .predicate(f -&gt;
-                pattern == null || pattern.trim().isEmpty() ?
+                pattern == null || pattern.isEmpty() ?
                     f.matchAll() :
                     f.simpleQueryString()
-                        .onFields("firstName", "lastName", "books.title")
+                        .onFields("firstName",
+                            "lastName", "books.title")
                         .matching(pattern)
                 )
-            .sort(f -&gt; f.byField("lastName_sort").then().byField("firstName_sort"))
+            .sort(f -&gt; f.byField("lastName_sort")
+            .then().byField("firstName_sort"))
             .fetchHits();
     }</code></pre>
 </div>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are importing data without using Hibernate ORM, you need to index data by using <code>Search.getSearchSession(em).createIndexer().startAndWait()</code> at startup time.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong> If you are importing data without using Hibernate ORM, you need to index data by using <code>Search.getSearchSession(em).createIndexer()</code> <code>.startAndWait()</code> at startup time.</p>
 </div>
 <div class="paragraph">
 <p>You need to configure the extension in <code>application.properties</code>:</p>
@@ -3745,32 +3739,26 @@ You only need to implement <code>ElasticsearchAnalysisConfigurer</code> interfac
     EntityManager em;
 
     @Transactional
-    public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern) {
+    public List&lt;Author&gt; searchAuthors(
+        @QueryParam("pattern") String pattern) {
         return Search.getSearchSession(em)
             .search(Author.class)
             .predicate(f -&gt;
-                pattern == null || pattern.trim().isEmpty() ?
+                pattern == null || pattern.isEmpty() ?
                     f.matchAll() :
                     f.simpleQueryString()
-                        .onFields("firstName", "lastName", "books.title")
+                        .onFields("firstName",
+                            "lastName", "books.title")
                         .matching(pattern)
                 )
-            .sort(f -&gt; f.byField("lastName_sort").then().byField("firstName_sort"))
+            .sort(f -&gt; f.byField("lastName_sort")
+            .then().byField("firstName_sort"))
             .fetchHits();
     }</code></pre>
 </div>
 </div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-If you are importing data without using Hibernate ORM, you need to index data by using <code>Search.getSearchSession(em).createIndexer().startAndWait()</code> at startup time.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p><strong>IMPORTANT</strong> If you are importing data without using Hibernate ORM, you need to index data by using <code>Search.getSearchSession(em).createIndexer()</code> <code>.startAndWait()</code> at startup time.</p>
 </div>
 <div class="paragraph">
 <p>You need to configure the extension in <code>application.properties</code>:</p>
