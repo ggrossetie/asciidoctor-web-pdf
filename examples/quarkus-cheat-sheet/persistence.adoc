@@ -241,3 +241,208 @@ a|`R`
 |Prefix for repeatable SQL migrations.
 |===
 // end::update_1_7[]
+
+== Hibernate Search
+// tag::update_3_1[]
+
+Quarkus integrates with https://www.elastic.co/products/elasticsearch[Elasticsearch] to provide a full-featured full-text search using https://hibernate.org/search/[Hibernate Search] API. 
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="quarkus-hibernate-search-elasticsearch"
+----
+
+You need to annotate your model with Hibernate Search API to index it:
+
+[source, java]
+----
+@Entity
+@Indexed
+public class Author extends PanacheEntity {
+
+    @FullTextField(analyzer = "english")
+    public String bio;
+
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "firstName_sort", 
+        sortable = Sortable.YES, 
+        normalizer = "sort")
+    public String firstName;
+
+    @OneToMany
+    @IndexedEmbedded
+    public List<Book> books;
+
+}
+----
+
+IMPORTANT: It is not mandatory to use Panache.
+
+You need to define the analyzers and normalizers defined in annotations.
+You only need to implement `ElasticsearchAnalysisConfigurer` interface and configure it.
+
+[source, java]
+----
+public class MyQuarkusAnalysisConfigurer 
+            implements ElasticsearchAnalysisConfigurer {
+
+    @Override
+    public void configure(
+        ElasticsearchAnalysisDefinitionContainerContext ctx) 
+    {
+            ctx.analyzer("english").custom()
+                .withTokenizer("standard")
+                .withTokenFilters("asciifolding", 
+                    "lowercase", "porter_stem");
+
+        ctx.normalizer("sort").custom() 
+            .withTokenFilters("asciifolding", "lowercase");
+    }
+}
+----
+
+Use Hibernate Search in REST service:
+
+[source, java]
+----
+public class LibraryResource {
+
+    @Inject
+    EntityManager em;
+
+    @Transactional
+    public List<Author> searchAuthors(@QueryParam("pattern") String pattern) { 
+        return Search.getSearchSession(em)
+            .search(Author.class)
+            .predicate(f ->
+                pattern == null || pattern.trim().isEmpty() ?
+                    f.matchAll() :
+                    f.simpleQueryString()
+                        .onFields("firstName", "lastName", "books.title")
+                        .matching(pattern)
+                )
+            .sort(f -> f.byField("lastName_sort").then().byField("firstName_sort"))
+            .fetchHits();
+    }
+----
+
+IMPORTANT: If you are importing data without using Hibernate ORM, you need to index data by using `Search.getSearchSession(em).createIndexer().startAndWait()` at startup time.
+
+You need to configure the extension in `application.properties`:
+
+[source, properties]
+----
+quarkus.hibernate-search.elasticsearch.version=7
+quarkus.hibernate-search.elasticsearch.
+    analysis-configurer=MyQuarkusAnalysisConfigurer
+quarkus.hibernate-search.elasticsearch.
+    automatic-indexing.synchronization-strategy=searchable
+quarkus.hibernate-search.elasticsearch.
+    index-defaults.lifecycle.strategy=drop-and-create
+quarkus.hibernate-search.elasticsearch.
+    index-defaults.lifecycle.required-status=yellow
+----
+
+List of Hibernate-Elasticsearch properties prefixed with `quarkus.hibernate-search.elasticsearch`:
+
+|===	
+|Parameter | Description
+
+a|`backends`
+|Map of configuration of additional backends.
+
+a|`version`
+|Version of Elasticsearch
+
+a|`analysis-configurer`
+|Class or name of the neab used to configure.
+
+a|`hosts`
+|List of Elasticsearch servers hosts.
+
+a|`username`
+|Username for auth.
+
+a|`password`
+|Password for auth.
+
+a|`connection-timeout`
+|Duration of connection timeout.
+
+a|`max-connections`
+|Max number of connections to servers.
+
+a|`max-connections-per-route`
+|Max number of connections to server.
+
+a|`indexes`
+|Per-index specific configuration.
+
+a|`discovery.enabled`
+|Enables automatic discovery.
+
+a|`discovery.refresh-interval`
+|Refresh interval of node list.
+
+a|`discovery.default-scheme`
+|Scheme to be used for the new nodes.
+
+a|`automatic-indexing.synchronization-strategy`
+a|Status for which you wait before considering the operation completed (`queued`,`committed` or `searchable`).
+
+a|`automatic-indexing.enable-dirty-check`
+|When enabled, re-indexing of is skipped if the changes are on properties that are not used when indexing. 
+
+a|`index-defaults.lifecycle.strategy`
+a|Index lifecycle (`none`, `validate`, `update`, `create`, `drop-and-create`, `drop-abd-create-drop`)
+
+a|`index-defaults.lifecycle.required-status`
+a|Minimal cluster status (`green`, `yellow`, `red`)
+
+a|`index-defaults.lifecycle.required-status-wait-timeout`
+|Waiting time before failing the bootstrap.
+
+a|`index-defaults.refresh-after-write`
+|Set if index should be refreshed after writes.
+|===
+
+Possible annotations:
+
+|===	
+|Parameter | Description
+
+a|`@Indexed`
+|Register entity as full text index
+
+a|`@FullTextField`
+|Full text search. Need to set an analyzer to split tokens.
+
+a|`@KeywordField`
+|The string is kept as one single token but can be normalized.
+
+a|`IndexedEmbedded`
+|Include the Book fields into the Author index.
+
+a|`@ContainerExtraction`
+a|Sets how to extract a value from container, e.g from a `Map`.
+
+a|`@DocumentId`
+| Map an unusual entity identifier to a document identifier.
+
+a|`@GenericField`
+|Full text index for any supported type.
+
+a|`@IdentifierBridgeRef`
+a|Reference to the identifier bridge to use for a `@DocumentId`.
+
+a|`@IndexingDependency`
+|How a dependency of the indexing process to a property should affect automatic reindexing.
+
+a|`@ObjectPath`
+|
+
+a|`@ScaledNumberField`
+a| For `java.math.BigDecimal` or `java.math.BigInteger` that you need higher precision.
+|===
+// end::update_3_1[]

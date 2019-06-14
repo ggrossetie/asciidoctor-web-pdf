@@ -53,12 +53,10 @@ To do automatic *retries* on a method:
 @Path("/api")
 @RegisterRestClient
 public interface WorldClockService {
-    
     @GET @Path("/json/cet/now")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 2)
     WorldClock getNow();
-
 }
 ----
 
@@ -89,8 +87,6 @@ public class RecoverFallback
     }
 }
 ----
-
-<<<
 
 And set it in the annotation as value `@Fallback(RecoverFallback.class)`.
 
@@ -144,8 +140,6 @@ a|`failOn`, `delay`, `delayUnit`, `requestVolumeThreshold`, `failureRatio`, `suc
 a|`@Asynchronous`
 a|
 |===
-
-<<<
 
 You can override annotation parameters via configuration file using property `[classname/methodname/]annotation/parameter`:
 
@@ -302,7 +296,7 @@ Histogram historgram;
 
 *Tracing*
 
-Quarkus can utilize the https://github.com/eclipse/microprofile-opentracing[MicroProfile OpenTracing] spec to provide tracing support.
+Quarkus can utilize the https://github.com/eclipse/microprofile-opentracing[MicroProfile OpenTracing] spec.
 
 [source, bash]
 ----
@@ -310,7 +304,7 @@ Quarkus can utilize the https://github.com/eclipse/microprofile-opentracing[Micr
   -Dextensions="io.quarkus:quarkus-smallrye-opentracing"
 ----
 
-By default, requests sent to any endpoint are traced without any code changes being required.
+Requests sent to any endpoint are traced automatically.
 
 This extension includes OpenTracing support and `Jaeger` tracer.
 
@@ -323,8 +317,6 @@ quarkus.jaeger.sampler-type=const
 quarkus.jaeger.sampler-param=1
 quarkus.jaeger.endpoint=http://localhost:14268/api/traces
 ----
-
-<<<
 
 `@Traced` annotation can be set to disable tracing at class or method level.
 

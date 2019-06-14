@@ -976,6 +976,275 @@ flyway.migrate();</code></pre>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_hibernate_search"><a class="anchor" href="#_hibernate_search"></a><a class="link" href="#_hibernate_search">Hibernate Search</a></h2>
+<div class="sectionbody">
+<p class="">Quarkus integrates with <a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a> to provide a full-featured full-text search using <a href="https://hibernate.org/search/">Hibernate Search</a> API.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="quarkus-hibernate-search-elasticsearch"</code></pre>
+</div>
+</div>
+<p class="">You need to annotate your model with Hibernate Search API to index it:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Entity
+@Indexed
+public class Author extends PanacheEntity {
+
+    @FullTextField(analyzer = "english")
+    public String bio;
+
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "firstName_sort",
+        sortable = Sortable.YES,
+        normalizer = "sort")
+    public String firstName;
+
+    @OneToMany
+    @IndexedEmbedded
+    public List&lt;Book&gt; books;
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+It is not mandatory to use Panache.
+</td>
+</tr>
+</table>
+</div>
+<p class="">You need to define the analyzers and normalizers defined in annotations.
+You only need to implement <code>ElasticsearchAnalysisConfigurer</code> interface and configure it.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class MyQuarkusAnalysisConfigurer
+            implements ElasticsearchAnalysisConfigurer {
+
+    @Override
+    public void configure(
+        ElasticsearchAnalysisDefinitionContainerContext ctx)
+    {
+            ctx.analyzer("english").custom()
+                .withTokenizer("standard")
+                .withTokenFilters("asciifolding",
+                    "lowercase", "porter_stem");
+
+        ctx.normalizer("sort").custom()
+            .withTokenFilters("asciifolding", "lowercase");
+    }
+}</code></pre>
+</div>
+</div>
+<p class="">Use Hibernate Search in REST service:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class LibraryResource {
+
+    @Inject
+    EntityManager em;
+
+    @Transactional
+    public List&lt;Author&gt; searchAuthors(@QueryParam("pattern") String pattern) {
+        return Search.getSearchSession(em)
+            .search(Author.class)
+            .predicate(f -&gt;
+                pattern == null || pattern.trim().isEmpty() ?
+                    f.matchAll() :
+                    f.simpleQueryString()
+                        .onFields("firstName", "lastName", "books.title")
+                        .matching(pattern)
+                )
+            .sort(f -&gt; f.byField("lastName_sort").then().byField("firstName_sort"))
+            .fetchHits();
+    }</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+If you are importing data without using Hibernate ORM, you need to index data by using <code>Search.getSearchSession(em).createIndexer().startAndWait()</code> at startup time.
+</td>
+</tr>
+</table>
+</div>
+<p class="">You need to configure the extension in <code>application.properties</code>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">quarkus.hibernate-search.elasticsearch.version=7
+quarkus.hibernate-search.elasticsearch.
+    analysis-configurer=MyQuarkusAnalysisConfigurer
+quarkus.hibernate-search.elasticsearch.
+    automatic-indexing.synchronization-strategy=searchable
+quarkus.hibernate-search.elasticsearch.
+    index-defaults.lifecycle.strategy=drop-and-create
+quarkus.hibernate-search.elasticsearch.
+    index-defaults.lifecycle.required-status=yellow</code></pre>
+</div>
+</div>
+<p class="">List of Hibernate-Elasticsearch properties prefixed with <code>quarkus.hibernate-search.elasticsearch</code>:</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>backends</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Map of configuration of additional backends.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>version</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Version of Elasticsearch</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>analysis-configurer</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Class or name of the neab used to configure.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>hosts</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Elasticsearch servers hosts.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>username</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username for auth.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>password</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password for auth.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>connection-timeout</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Duration of connection timeout.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>max-connections</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Max number of connections to servers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>max-connections-per-route</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Max number of connections to server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>indexes</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Per-index specific configuration.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>discovery.enabled</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables automatic discovery.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>discovery.refresh-interval</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Refresh interval of node list.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>discovery.default-scheme</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scheme to be used for the new nodes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>automatic-indexing.synchronization-strategy</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Status for which you wait before considering the operation completed (<code>queued</code>,<code>committed</code> or <code>searchable</code>).</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>automatic-indexing.enable-dirty-check</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">When enabled, re-indexing of is skipped if the changes are on properties that are not used when indexing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>index-defaults.lifecycle.strategy</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Index lifecycle (<code>none</code>, <code>validate</code>, <code>update</code>, <code>create</code>, <code>drop-and-create</code>, <code>drop-abd-create-drop</code>)</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>index-defaults.lifecycle.required-status</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Minimal cluster status (<code>green</code>, <code>yellow</code>, <code>red</code>)</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>index-defaults.lifecycle.required-status-wait-timeout</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Waiting time before failing the bootstrap.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>index-defaults.refresh-after-write</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if index should be refreshed after writes.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="">Possible annotations:</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@Indexed</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Register entity as full text index</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@FullTextField</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Full text search. Need to set an analyzer to split tokens.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@KeywordField</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The string is kept as one single token but can be normalized.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>IndexedEmbedded</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include the Book fields into the Author index.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@ContainerExtraction</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Sets how to extract a value from container, e.g from a <code>Map</code>.</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@DocumentId</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Map an unusual entity identifier to a document identifier.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@GenericField</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Full text index for any supported type.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@IdentifierBridgeRef</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">Reference to the identifier bridge to use for a <code>@DocumentId</code>.</p></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@IndexingDependency</code></p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">How a dependency of the indexing process to a property should affect automatic reindexing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@ObjectPath</code></p></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>@ScaledNumberField</code></p></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">For <code>java.math.BigDecimal</code> or <code>java.math.BigInteger</code> that you need higher precision.</p></div></td>
+</tr>
+</tbody>
+</table>
 <div class="page-break"></div>
 </div>
 </div>
@@ -1391,12 +1660,10 @@ you can also use <code>src/main/resources/keycloak.json</code> standard Keycloak
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Path("/api")
 @RegisterRestClient
 public interface WorldClockService {
-
     @GET @Path("/json/cet/now")
     @Produces(MediaType.APPLICATION_JSON)
     @Retry(maxRetries = 2)
     WorldClock getNow();
-
 }</code></pre>
 </div>
 </div>
@@ -1425,7 +1692,6 @@ public String fallbackMethod() {
 }</code></pre>
 </div>
 </div>
-<div class="page-break"></div>
 <p class="">And set it in the annotation as value <code>@Fallback(RecoverFallback.class)</code>.</p>
 <p class="">In case you want to use <strong>circuit breaker</strong> pattern:</p>
 <div class="listingblock">
@@ -1490,7 +1756,6 @@ WorldClock getNow(){}</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="page-break"></div>
 <p class="">You can override annotation parameters via configuration file using property <code>[classname/methodname/]annotation/parameter</code>:</p>
 <div class="listingblock">
 <div class="content">
@@ -1658,14 +1923,14 @@ Histogram historgram;</code></pre>
 </div>
 </div>
 <p class=""><strong>Tracing</strong></p>
-<p class="">Quarkus can utilize the <a href="https://github.com/eclipse/microprofile-opentracing">MicroProfile OpenTracing</a> spec to provide tracing support.</p>
+<p class="">Quarkus can utilize the <a href="https://github.com/eclipse/microprofile-opentracing">MicroProfile OpenTracing</a> spec.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
   -Dextensions="io.quarkus:quarkus-smallrye-opentracing"</code></pre>
 </div>
 </div>
-<p class="">By default, requests sent to any endpoint are traced without any code changes being required.</p>
+<p class="">Requests sent to any endpoint are traced automatically.</p>
 <p class="">This extension includes OpenTracing support and <code>Jaeger</code> tracer.</p>
 <p class="">Jaeger tracer configuration:</p>
 <div class="listingblock">
@@ -1676,7 +1941,6 @@ quarkus.jaeger.sampler-param=1
 quarkus.jaeger.endpoint=http://localhost:14268/api/traces</code></pre>
 </div>
 </div>
-<div class="page-break"></div>
 <p class=""><code>@Traced</code> annotation can be set to disable tracing at class or method level.</p>
 <p class=""><code>Tracer</code> class can be injected into the class.</p>
 <div class="listingblock">

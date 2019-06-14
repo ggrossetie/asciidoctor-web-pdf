@@ -15,6 +15,14 @@ In this page you can either read what has been added in each version of the chea
 [[whatsnew]]
 == What's New in Cheat-Sheet
 
+=== Version 0.17.0
+
+.Hibernate Search
+[%collapsible]
+====
+include::persistence.adoc[tag=update_3_1]
+====
+
 === Version 0.16.0
 
 .Apache Camel
