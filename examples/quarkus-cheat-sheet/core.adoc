@@ -486,7 +486,7 @@ public class WorldClockOptions {
 
 And configure the hostname at `application.properties`:
 
-[source, proeprties]
+[source, properties]
 ----
 org.acme.quickstart.WorldClockService/mp-rest/url=
         http://worldclockapi.com

@@ -29,6 +29,12 @@ include::persistence.adoc[tag=update_3_1]
 include::misc.adoc[tag=update_3_2]
 ====
 
+.HTTP Filters
+[%collapsible]
+====
+include::network.adoc[tag=update_3_3]
+====
+
 === Version 0.16.0
 
 .Apache Camel

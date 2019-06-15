@@ -843,11 +843,44 @@ void morningTask() {}</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And configure the property into <code>application.properties</code></p>
+<p>And configure the property into <code>application.properties</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">morning.check.cron.expr=0 15 10 * * ?</code></pre>
+</div>
+</div>
+</div>
+</details>
+<details>
+<summary class="title">HTTP Filters</summary>
+<div class="content">
+<div class="paragraph">
+<p>HTTP request and response can be intercepted to manipulate the metadata (ie headers, parameters, media type, &#8230;&#8203;) or abort a request.
+You only need to implement the next <code>ContainerRequestFilter</code> and <code>ContainerResponseFilter</code> JAX-RS interfaces respectively.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Provider
+public class LoggingFilter
+        implements ContainerRequestFilter {
+
+    @Context
+    UriInfo info;
+
+    @Context
+    HttpServletRequest request;
+
+    @Override
+    public void filter(ContainerRequestContext context) {
+        final String method = context.getMethod();
+        final String path = info.getPath();
+        final String address = request.getRemoteAddr();
+        System.out.println("Request %s %s from IP %s",
+                method, path, address);
+    }
+
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1675,7 +1708,6 @@ public String fallbackMethod() {
             implements FallbackHandler&lt;String&gt; {
     @Override
     public String handle(ExecutionContext context) {
-        return "It could be worse";
     }
 }</code></pre>
 </div>
@@ -2426,6 +2458,7 @@ public void testLambda() {
 <li><a href="#_reactive_postgresql_client">Reactive PostgreSQL Client</a></li>
 <li><a href="#_jwt">JWT</a></li>
 <li><a href="#_keycloak">Keycloak</a></li>
+<li><a href="#_http_filters">HTTP Filters</a></li>
 <li><a href="#_cors_filter">CORS Filter</a></li>
 <li><a href="#_fault_tolerance">Fault Tolerance</a></li>
 <li><a href="#_observability">Observability</a></li>
@@ -3132,7 +3165,7 @@ public interface WorldClockService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="proeprties" class="language-proeprties hljs">org.acme.quickstart.WorldClockService/mp-rest/url=
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">org.acme.quickstart.WorldClockService/mp-rest/url=
         http://worldclockapi.com</code></pre>
 </div>
 </div>
@@ -4458,6 +4491,37 @@ you can also use <code>src/main/resources/keycloak.json</code> standard Keycloak
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
+<h3 id="_http_filters"><a class="anchor" href="#_http_filters"></a><a class="link" href="#_http_filters">HTTP Filters</a></h3>
+<div class="paragraph">
+<p>HTTP request and response can be intercepted to manipulate the metadata (ie headers, parameters, media type, &#8230;&#8203;) or abort a request.
+You only need to implement the next <code>ContainerRequestFilter</code> and <code>ContainerResponseFilter</code> JAX-RS interfaces respectively.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Provider
+public class LoggingFilter
+        implements ContainerRequestFilter {
+
+    @Context
+    UriInfo info;
+
+    @Context
+    HttpServletRequest request;
+
+    @Override
+    public void filter(ContainerRequestContext context) {
+        final String method = context.getMethod();
+        final String path = info.getPath();
+        final String address = request.getRemoteAddr();
+        System.out.println("Request %s %s from IP %s",
+                method, path, address);
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_cors_filter"><a class="anchor" href="#_cors_filter"></a><a class="link" href="#_cors_filter">CORS Filter</a></h3>
 <div class="paragraph">
 <p>Quarkus comes with a CORS filter that can be enabled via configuration:</p>
@@ -4581,7 +4645,6 @@ public String fallbackMethod() {
             implements FallbackHandler&lt;String&gt; {
     @Override
     public String handle(ExecutionContext context) {
-        return "It could be worse";
     }
 }</code></pre>
 </div>
@@ -5529,7 +5592,7 @@ void morningTask() {}</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And configure the property into <code>application.properties</code></p>
+<p>And configure the property into <code>application.properties</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">

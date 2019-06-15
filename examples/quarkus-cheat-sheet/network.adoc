@@ -1,3 +1,33 @@
+== HTTP Filters
+// tag::update_3_3[]
+HTTP request and response can be intercepted to manipulate the metadata (ie headers, parameters, media type, ...) or abort a request.
+You only need to implement the next `ContainerRequestFilter` and `ContainerResponseFilter` JAX-RS interfaces respectively.
+
+[source, java]
+----
+@Provider
+public class LoggingFilter 
+        implements ContainerRequestFilter {
+
+    @Context
+    UriInfo info;
+
+    @Context
+    HttpServletRequest request;
+
+    @Override
+    public void filter(ContainerRequestContext context) {
+        final String method = context.getMethod();
+        final String path = info.getPath();
+        final String address = request.getRemoteAddr();
+        System.out.println("Request %s %s from IP %s", 
+                method, path, address);
+    }
+
+}
+----
+// end::update_3_3[]
+
 == CORS Filter
 // tag::update_2_11[]
 Quarkus comes with a CORS filter that can be enabled via configuration:
@@ -83,7 +113,6 @@ public class RecoverFallback
             implements FallbackHandler<String> {
     @Override
     public String handle(ExecutionContext context) {
-        return "It could be worse";
     }
 }
 ----
