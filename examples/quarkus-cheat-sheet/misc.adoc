@@ -282,3 +282,36 @@ a|`mailer.key-store-password`
 |Key store password.
 |===
 // end::update_2_5[]
+
+== Scheduled Tasks
+// tag::update_3_2[]
+You can schedule periodic tasks with Quarkus.
+
+[source, java]
+----
+@ApplicationScoped
+public class CounterBean {
+
+    @Scheduled(every="10s")
+    void increment() {}
+
+    @Scheduled(cron="0 15 10 * * ?")
+    void morningTask() {}
+}
+----
+
+`every` and `cron` parameters can be surrounded with `{}` and the value is used as config property to get the value. 
+
+[source java]
+----
+@Scheduled(cron = "{morning.check.cron.expr}")
+void morningTask() {}
+----
+
+And configure the property into `application.properties`:
+
+[source, properties]
+----
+morning.check.cron.expr=0 15 10 * * ?
+----
+// end::update_3_2[]

@@ -23,6 +23,12 @@ In this page you can either read what has been added in each version of the chea
 include::persistence.adoc[tag=update_3_1]
 ====
 
+.Scheduled Tasks
+[%collapsible]
+====
+include::misc.adoc[tag=update_3_2]
+====
+
 === Version 0.16.0
 
 .Apache Camel

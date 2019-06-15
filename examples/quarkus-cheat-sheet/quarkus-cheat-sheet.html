@@ -2377,6 +2377,39 @@ quarkus.mailer.password=....</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_scheduled_tasks"><a class="anchor" href="#_scheduled_tasks"></a><a class="link" href="#_scheduled_tasks">Scheduled Tasks</a></h2>
+<div class="sectionbody">
+<p class="">You can schedule periodic tasks with Quarkus.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class CounterBean {
+
+    @Scheduled(every="10s")
+    void increment() {}
+
+    @Scheduled(cron="0 15 10 * * ?")
+    void morningTask() {}
+}</code></pre>
+</div>
+</div>
+<p class=""><code>every</code> and <code>cron</code> parameters can be surrounded with <code>{}</code> and the value is used as config property to get the value.</p>
+<div class="listingblock">
+<div class="content">
+<pre>@Scheduled(cron = "{morning.check.cron.expr}")
+void morningTask() {}</pre>
+</div>
+</div>
+<p class="">And configure the property into <code>application.properties</code></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">morning.check.cron.expr=0 15 10 * * ?</code></pre>
+</div>
+</div>
+<div class="page-break"></div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_resources"><a class="anchor" href="#_resources"></a><a class="link" href="#_resources">Resources</a></h2>
 <div class="sectionbody">
 <div class="ulist">
