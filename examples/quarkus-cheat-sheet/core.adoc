@@ -82,8 +82,8 @@ Optional<String> optionalMessage;
 
 Properties can be set as:
 
-* Environment variables.
-* System properties.
+* Environment variables (`GREETINGS_MESSAGE`).
+* System properties (`-Dgreetings.message`).
 * Resources `src/main/resources/application.properties`.
 * External config directory under the current working directory: `config/application.properties`.
 
