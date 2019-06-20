@@ -35,6 +35,12 @@ include::misc.adoc[tag=update_3_2]
 include::network.adoc[tag=update_3_3]
 ====
 
+.MicroProfile Health 2.0
+[%collapsible]
+====
+include::network.adoc[tag=update_3_4]
+====
+
 === Version 0.16.0
 
 .Apache Camel
