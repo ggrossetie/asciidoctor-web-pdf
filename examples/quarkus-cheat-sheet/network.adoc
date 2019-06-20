@@ -284,7 +284,10 @@ public class DatabaseHealthCheck {
     }
 }
 ----
+
+You can ping liveness or readiness health checks individually by querying `/health/live` or `/health/ready`.
 // end::update_3_4[]
+
 *Metrics*
 
 Quarkus can utilize the https://github.com/eclipse/microprofile-metrics[MicroProfile Metrics spec] to provide metrics support.
