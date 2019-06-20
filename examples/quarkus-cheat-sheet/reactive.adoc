@@ -136,7 +136,7 @@ You can use Reactive PostgreSQL to execute queries to PostreSQL database in a re
 [source, bash]
 ----
 ./mvnw quarkus:add-extension 
-  -Dextensions="io.quarkus:quarkus-smallrye-health"
+  -Dextensions="io.quarkus:quarkus-reactive-pg-client"
 ----
 
 Database configuration is the same as shown in <<Persistence>> section, but URL is different as it is not a _jdbc_.
