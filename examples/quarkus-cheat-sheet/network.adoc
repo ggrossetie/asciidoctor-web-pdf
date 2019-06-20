@@ -210,17 +210,17 @@ By just adding this extension, an endpoint is registered to `/health` providing 
 [source, json]
 ----
 {
-    "outcome": "UP",
+    "status": "UP",
     "checks": [
     ]
 }
 ----
 
-To create a custom health check you need to implement the `HealthCheck` interface and annotate it with `@Health` annotation.
+To create a custom health check you need to implement the `HealthCheck` interface and annotate either with `@Readiness` (ready to process requests) or `@Liveness` (is running) annotations.
 
 [source, java]
 ----
-@Health
+@Readiness
 public class DatabaseHealthCheck implements HealthCheck {
     @Override
     public HealthCheckResponse call() {
@@ -245,18 +245,43 @@ Builds the next output:
 
 [source, json]
 ----
-
 {
-    "outcome": "UP",
+    "status": "UP",
     "checks": [
         {
-            "name": "Database connection",
-            "state": "UP",
+            "name": "Database conn",
+            "status": "UP",
             "data": {
                 "connection": true
             }
         }
     ]
+}
+----
+
+Since health checks are CDI beans, you can do:
+
+[source, java]
+----
+@ApplicationScoped
+public class DatabaseHealthCheck {
+    
+    @Produces
+    @ApplicationScoped
+    @Liveness
+    HealthCheck check1() {
+      return () -> HealthCheckResponse
+                    .named("successful-live").up()
+                    .build();
+    }
+    @Produces
+    @ApplicationScoped
+    @Readiness
+    HealthCheck check2() {
+      return () -> HealthCheckResponse
+                    .named("successful-read").up()
+                    .build();
+    }
 }
 ----
 
