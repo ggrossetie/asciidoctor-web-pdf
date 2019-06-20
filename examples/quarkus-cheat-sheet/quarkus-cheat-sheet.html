@@ -125,10 +125,10 @@ Optional&lt;String&gt; optionalMessage;</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Environment variables.</p>
+<p>Environment variables (<code>GREETINGS_MESSAGE</code>).</p>
 </li>
 <li>
-<p>System properties.</p>
+<p>System properties (<code>-Dgreetings.message</code>).</p>
 </li>
 <li>
 <p>Resources <code>src/main/resources/application.properties</code>.</p>
@@ -671,6 +671,7 @@ public class GreetingResourceTest {
 URL url;</code></pre>
 </div>
 </div>
+<p class=""><strong>Mocking</strong></p>
 <p class="">If you need to provide an alternative implementation of a service (for testing purposes) you can do it by using CDI <code>@Alternative</code> annotation using it in the test service placed at <code>src/test/java</code>:</p>
 <div class="listingblock">
 <div class="content">
@@ -692,6 +693,8 @@ This does not work when using native image testing.
 </tr>
 </table>
 </div>
+<p class="">A stereotype annotation <code>io.quarkus.test.Mock</code> is provided  declaring <code>@Alternative</code>, <code>@Priority(1)</code> and <code>@Dependent</code>.</p>
+<p class=""><strong>Native Testing</strong></p>
 <p class="">To test native executables you can annotate the test with <code>@SubstrateTest</code>.</p>
 <div class="page-break"></div>
 </div>
@@ -1379,7 +1382,7 @@ If the stream is not configured then it is assumed to be an in-memory stream.
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
-  -Dextensions="io.quarkus:quarkus-smallrye-health"</code></pre>
+  -Dextensions="io.quarkus:quarkus-reactive-pg-client"</code></pre>
 </div>
 </div>
 <p class="">Database configuration is the same as shown in <a href="#_persistence">Persistence</a> section, but URL is different as it is not a <em>jdbc</em>.</p>
@@ -1813,8 +1816,8 @@ MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can d
 <div class="sect1">
 <h2 id="_observability"><a class="anchor" href="#_observability"></a><a class="link" href="#_observability">Observability</a></h2>
 <div class="sectionbody">
-<p class=""><strong>Health Checks</strong></p>
-<p class="">Quarkus relies on <a href="https://github.com/eclipse/microprofile-health">MicroProfile Health</a> spec to provide health checks.</p>
+<p class=""><strong>Health Checks</strong>
+Quarkus relies on <a href="https://github.com/eclipse/microprofile-health">MicroProfile Health</a> spec to provide health checks.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
@@ -1825,16 +1828,16 @@ MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can d
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
-    "outcome": "UP",
+    "status": "UP",
     "checks": [
     ]
 }</code></pre>
 </div>
 </div>
-<p class="">To create a custom health check you need to implement the <code>HealthCheck</code> interface and annotate it with <code>@Health</code> annotation.</p>
+<p class="">To create a custom health check you need to implement the <code>HealthCheck</code> interface and annotate either with <code>@Readiness</code> (ready to process requests) or <code>@Liveness</code> (is running) annotations.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Health
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Readiness
 public class DatabaseHealthCheck implements HealthCheck {
     @Override
     public HealthCheckResponse call() {
@@ -1859,16 +1862,41 @@ public class DatabaseHealthCheck implements HealthCheck {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="json" class="language-json hljs">{
-    "outcome": "UP",
+    "status": "UP",
     "checks": [
         {
-            "name": "Database connection",
-            "state": "UP",
+            "name": "Database conn",
+            "status": "UP",
             "data": {
                 "connection": true
             }
         }
     ]
+}</code></pre>
+</div>
+</div>
+<p class="">Since health checks are CDI beans, you can do:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class DatabaseHealthCheck {
+
+    @Produces
+    @ApplicationScoped
+    @Liveness
+    HealthCheck check1() {
+      return () -&gt; HealthCheckResponse
+                    .named("successful-live").up()
+                    .build();
+    }
+    @Produces
+    @ApplicationScoped
+    @Readiness
+    HealthCheck check2() {
+      return () -&gt; HealthCheckResponse
+                    .named("successful-read").up()
+                    .build();
+    }
 }</code></pre>
 </div>
 </div>
@@ -2221,6 +2249,7 @@ public class ChatSocket {
 </div>
 </div>
 <p class="">Then you only need to access to <code>/openapi</code> to get OpenAPI v3 spec of services.</p>
+<p class="">You can update the OpenApi path by setting <code>quarkus.smallrye-openapi.path</code> property.</p>
 <p class="">Also, in case of starting Quarkus application in <code>dev</code> or <code>test</code> mode, Swagger UI is accessible at <code>/swagger-ui</code>.
 If you want to use it in production mode you need to set <code>quarkus.swagger-ui.always-include</code> property to <code>true</code>.</p>
 <p class="">You can update the Swagger UI path by setting <code>quarkus.swagger-ui.path</code> property.</p>

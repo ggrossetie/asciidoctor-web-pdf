@@ -41,6 +41,18 @@ include::network.adoc[tag=update_3_3]
 include::network.adoc[tag=update_3_4]
 ====
 
+.Custom OpenAPI path
+[%collapsible]
+====
+include::misc.adoc[tag=update_3_5]
+====
+
+.Mock annotaiton
+[%collapsible]
+====
+include::core.adoc[tag=update_3_6]
+====
+
 === Version 0.16.0
 
 .Apache Camel
