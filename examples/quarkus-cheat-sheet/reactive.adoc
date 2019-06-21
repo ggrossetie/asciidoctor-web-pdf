@@ -69,6 +69,8 @@ public class ProducerData {
 }
 ----
 
+If you want to dispatch to all subscribers you can annotate the method with `@Broadcast`.
+
 Consumes generated data from `my-in-memory` stream.
 
 [source, java]
@@ -90,7 +92,13 @@ You can also inject an stream as a field:
 @Stream("my-in-memory") Publisher<Integer> randomRumbers;
 ----
 
-Possible return types:
+// tag::update_3_8[]
+
+Possible implementations are:
+
+*In-Memory*
+
+If the stream is not configured then it is assumed to be an in-memory stream, if not then stream type is defined by `connector` field.
 
 *Kafka*
 
@@ -100,33 +108,115 @@ To integrate with Kafka you need to add next extensions:
 ----
 mvn quarkus:add-extension 
     -Dextensions="
-    io.quarkus:quarkus-smallrye-reactive-messaging-kafka, 
-    io.quarkus:quarkus-vertx"
+    io.quarkus:quarkus-smallrye-reactive-messaging-kafka"
 ----
 
 Then `@Outgoing`, `@Incoming` or `@Stream` can be used.
 
-Kafka configuration schema: `smallrye.messaging.[sink|source].\{stream-name\}.<property>=<value>` 
+Kafka configuration schema: `mp.messaging.[outgoing|incoming].\{stream-name\}.<property>=<value>`.
+
+The `connector` type is `smallrye-kafka`.
 
 [source, properties]
 ----
-smallrye.messaging.source.prices.type=
-    io.smallrye.reactive.messaging.kafka.Kafka
-smallrye.messaging.source.prices.topic=
+mp.messaging.outgoing.generated-price.connector=
+    smallrye-kafka
+mp.messaging.outgoing.generated-price.topic=
     prices
-smallrye.messaging.source.prices.bootstrap.servers=
+mp.messaging.outgoing.generated-price.bootstrap.servers=
     localhost:9092
-smallrye.messaging.source.prices.key.deserializer=
-    org.apache.kafka.common.serialization.StringDeserializer
-smallrye.messaging.source.prices.value.deserializer=
+mp.messaging.outgoing.generated-price.value.serializer=
+    org.apache.kafka.common.serialization.IntegerSerializer
+
+mp.messaging.incoming.prices.connector=
+    smallrye-kafka
+mp.messaging.incoming.prices.value.deserializer=
     org.apache.kafka.common.serialization.IntegerDeserializer
-smallrye.messaging.source.prices.group.id=
-    my-group-id
 ----
 
 A complete list of supported properties are in Kafka site. For https://kafka.apache.org/documentation/#producerconfigs[producer] and for https://kafka.apache.org/documentation/#consumerconfigs[consumer]
 
-IMPORTANT: If the stream is not configured then it is assumed to be an in-memory stream.
+*AMQP*
+
+To integrate with AMQP you need to add next extensions:
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+    -Dextensions="reactive-messaging-amqp"
+----
+
+Then `@Outgoing`, `@Incoming` or `@Stream` can be used.
+
+AMQP configuration schema: `mp.messaging.[outgoing|incoming].\{stream-name\}.<property>=<value>`.
+Special properties `amqp-username` and `amqp-password` are used to configure AMQP broker credentials.
+
+The connector type is `smallrye-amqp`.
+
+[source, properties]
+----
+amqp-username=quarkus
+amqp-password=quarkus
+
+mp.messaging.outgoing.generated-price.connector=
+    smallrye-amqp
+mp.messaging.outgoing.generated-price.address=
+    prices
+mp.messaging.outgoing.generated-price.durable=
+    true
+
+mp.messaging.incoming.prices.connector=
+    smallrye-amqp
+mp.messaging.incoming.prices.durable=
+    true
+----
+
+A complete list of supported properties for https://smallrye.io/smallrye-reactive-messaging/#_interacting_using_amqp[AMQP].
+
+*MQTT*
+
+To integrate with MQTT you need to add next extensions:
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+    -Dextensions="vertx, smallrye-reactive-streams-operators
+        smallrye-reactive-messaging"
+----
+
+And add `io.smallrye.reactive:smallrye-reactive-messaging-mqtt-1.0:0.0.10` dependency in your build tool.
+
+Then `@Outgoing`, `@Incoming` or `@Stream` can be used.
+
+MQTT configuration schema: `mp.messaging.[outgoing|incoming].\{stream-name\}.<property>=<value>`.
+
+The connector type is `smallrye-mqtt`.
+
+[source, properties]
+----
+mp.messaging.outgoing.topic-price.type=
+    smallrye-mqtt
+mp.messaging.outgoing.topic-price.topic=
+    prices
+mp.messaging.outgoing.topic-price.host=
+    localhost
+mp.messaging.outgoing.topic-price.port=
+    1883
+mp.messaging.outgoing.topic-price.auto-generated-client-id=
+    true
+
+mp.messaging.incoming.prices.type=
+    smallrye-mqtt
+mp.messaging.incoming.prices.topic=
+    prices
+mp.messaging.incoming.prices.host=
+    localhost
+mp.messaging.incoming.prices.port=
+    1883
+mp.messaging.incoming.prices.auto-generated-client-id=
+    true
+----
+// end::update_3_8[]
 // end::update_1_4[]
 
 == Reactive PostgreSQL Client

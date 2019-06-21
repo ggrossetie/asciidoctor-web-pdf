@@ -42,6 +42,8 @@ a|Current project name
 a|Project name
 |===
 
+Generated resource is integrated with <<Observability, MicroProfile Health annotations>>.
+
 == Amazon Lambda
 // tag::update_1_10[]
 Quarkus integrates with Amazon Lambda.

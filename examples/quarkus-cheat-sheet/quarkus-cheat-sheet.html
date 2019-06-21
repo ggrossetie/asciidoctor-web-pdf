@@ -1312,6 +1312,7 @@ public class ProducerData {
 }</code></pre>
 </div>
 </div>
+<p class="">If you want to dispatch to all subscribers you can annotate the method with <code>@Broadcast</code>.</p>
 <p class="">Consumes generated data from <code>my-in-memory</code> stream.</p>
 <div class="listingblock">
 <div class="content">
@@ -1331,47 +1332,107 @@ public class ConsumerData {
 @Stream("my-in-memory") Publisher&lt;Integer&gt; randomRumbers;</code></pre>
 </div>
 </div>
-<p class="">Possible return types:</p>
+<p class="">Possible implementations are:</p>
+<p class=""><strong>In-Memory</strong></p>
+<p class="">If the stream is not configured then it is assumed to be an in-memory stream, if not then stream type is defined by <code>connector</code> field.</p>
 <p class=""><strong>Kafka</strong></p>
 <p class="">To integrate with Kafka you need to add next extensions:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn quarkus:add-extension
     -Dextensions="
-    io.quarkus:quarkus-smallrye-reactive-messaging-kafka,
-    io.quarkus:quarkus-vertx"</code></pre>
+    io.quarkus:quarkus-smallrye-reactive-messaging-kafka"</code></pre>
 </div>
 </div>
 <p class="">Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be used.</p>
-<p class="">Kafka configuration schema: <code>smallrye.messaging.[sink|source].{stream-name}.&lt;property&gt;=&lt;value&gt;</code></p>
+<p class="">Kafka configuration schema: <code>mp.messaging.[outgoing|incoming].{stream-name}.&lt;property&gt;=&lt;value&gt;</code>.</p>
+<p class="">The <code>connector</code> type is <code>smallrye-kafka</code>.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">smallrye.messaging.source.prices.type=
-    io.smallrye.reactive.messaging.kafka.Kafka
-smallrye.messaging.source.prices.topic=
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">mp.messaging.outgoing.generated-price.connector=
+    smallrye-kafka
+mp.messaging.outgoing.generated-price.topic=
     prices
-smallrye.messaging.source.prices.bootstrap.servers=
+mp.messaging.outgoing.generated-price.bootstrap.servers=
     localhost:9092
-smallrye.messaging.source.prices.key.deserializer=
-    org.apache.kafka.common.serialization.StringDeserializer
-smallrye.messaging.source.prices.value.deserializer=
-    org.apache.kafka.common.serialization.IntegerDeserializer
-smallrye.messaging.source.prices.group.id=
-    my-group-id</code></pre>
+mp.messaging.outgoing.generated-price.value.serializer=
+    org.apache.kafka.common.serialization.IntegerSerializer
+
+mp.messaging.incoming.prices.connector=
+    smallrye-kafka
+mp.messaging.incoming.prices.value.deserializer=
+    org.apache.kafka.common.serialization.IntegerDeserializer</code></pre>
 </div>
 </div>
 <p class="">A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Important</div>
-</td>
-<td class="content">
-If the stream is not configured then it is assumed to be an in-memory stream.
-</td>
-</tr>
-</table>
+<p class=""><strong>AMQP</strong></p>
+<p class="">To integrate with AMQP you need to add next extensions:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+    -Dextensions="reactive-messaging-amqp"</code></pre>
+</div>
+</div>
+<p class="">Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be used.</p>
+<p class="">AMQP configuration schema: <code>mp.messaging.[outgoing|incoming].{stream-name}.&lt;property&gt;=&lt;value&gt;</code>.
+Special properties <code>amqp-username</code> and <code>amqp-password</code> are used to configure AMQP broker credentials.</p>
+<p class="">The connector type is <code>smallrye-amqp</code>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">amqp-username=quarkus
+amqp-password=quarkus
+
+mp.messaging.outgoing.generated-price.connector=
+    smallrye-amqp
+mp.messaging.outgoing.generated-price.address=
+    prices
+mp.messaging.outgoing.generated-price.durable=
+    true
+
+mp.messaging.incoming.prices.connector=
+    smallrye-amqp
+mp.messaging.incoming.prices.durable=
+    true</code></pre>
+</div>
+</div>
+<p class="">A complete list of supported properties for <a href="https://smallrye.io/smallrye-reactive-messaging/#_interacting_using_amqp">AMQP</a>.</p>
+<p class=""><strong>MQTT</strong></p>
+<p class="">To integrate with MQTT you need to add next extensions:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+    -Dextensions="vertx, smallrye-reactive-streams-operators
+        smallrye-reactive-messaging"</code></pre>
+</div>
+</div>
+<p class="">And add <code>io.smallrye.reactive:smallrye-reactive-messaging-mqtt-1.0:0.0.10</code> dependency in your build tool.</p>
+<p class="">Then <code>@Outgoing</code>, <code>@Incoming</code> or <code>@Stream</code> can be used.</p>
+<p class="">MQTT configuration schema: <code>mp.messaging.[outgoing|incoming].{stream-name}.&lt;property&gt;=&lt;value&gt;</code>.</p>
+<p class="">The connector type is <code>smallrye-mqtt</code>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">mp.messaging.outgoing.topic-price.type=
+    smallrye-mqtt
+mp.messaging.outgoing.topic-price.topic=
+    prices
+mp.messaging.outgoing.topic-price.host=
+    localhost
+mp.messaging.outgoing.topic-price.port=
+    1883
+mp.messaging.outgoing.topic-price.auto-generated-client-id=
+    true
+
+mp.messaging.incoming.prices.type=
+    smallrye-mqtt
+mp.messaging.incoming.prices.topic=
+    prices
+mp.messaging.incoming.prices.host=
+    localhost
+mp.messaging.incoming.prices.port=
+    1883
+mp.messaging.incoming.prices.auto-generated-client-id=
+    true</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1816,8 +1877,8 @@ MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You can d
 <div class="sect1">
 <h2 id="_observability"><a class="anchor" href="#_observability"></a><a class="link" href="#_observability">Observability</a></h2>
 <div class="sectionbody">
-<p class=""><strong>Health Checks</strong>
-Quarkus relies on <a href="https://github.com/eclipse/microprofile-health">MicroProfile Health</a> spec to provide health checks.</p>
+<p class=""><strong>Health Checks</strong></p>
+<p class="">Quarkus relies on <a href="https://github.com/eclipse/microprofile-health">MicroProfile Health</a> spec to provide health checks.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
@@ -1900,6 +1961,7 @@ public class DatabaseHealthCheck {
 }</code></pre>
 </div>
 </div>
+<p class="">You can ping liveness or readiness health checks individually by querying <code>/health/live</code> or <code>/health/ready</code>.</p>
 <p class=""><strong>Metrics</strong></p>
 <p class="">Quarkus can utilize the <a href="https://github.com/eclipse/microprofile-metrics">MicroProfile Metrics spec</a> to provide metrics support.</p>
 <div class="listingblock">
@@ -2055,6 +2117,7 @@ docker run -i --rm -p 8080:8080 quarkus/getting-started</code></pre>
 </tr>
 </tbody>
 </table>
+<p class="">Generated resource is integrated with <a href="#_observability">MicroProfile Health annotations</a>.</p>
 </div>
 </div>
 <div class="sect1">
@@ -2348,8 +2411,8 @@ quarkus.mailer.password=....</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.mock</code></p></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Emails not sent, just printed.</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><p class="">false in <code>prod</code>, true in <code>dev</code> and <code>test</code>.</p></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Emails not sent, just printed and stored in a <code>MockMailbox</code> bean.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><p class=""><code>mailer.bounce-address</code></p></div></td>
@@ -2433,6 +2496,22 @@ quarkus.mailer.password=....</code></pre>
 </tr>
 </tbody>
 </table>
+<p class=""><strong>Testing</strong></p>
+<p class="">If <code>quarkus.mailer.mock</code> is set to <code>true</code>, which is the default value in <code>dev</code> and <code>test</code> mode, you can inject <code>MockMailbox</code> to get the sent messages.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject
+MockMailbox mailbox;
+
+@BeforeEach
+void init() {
+    mailbox.clear();
+}
+
+List&lt;Mail&gt; sent = mailbox
+                    .getMessagesSentTo("to@acme.org");</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">

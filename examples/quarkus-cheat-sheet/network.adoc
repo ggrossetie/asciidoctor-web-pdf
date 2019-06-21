@@ -196,6 +196,7 @@ TIP: MicroProfile Fault Tolerance integrats with MicroProfile Metrics spec. You 
 == Observability
 
 *Health Checks*
+
 // tag::update_3_4[]
 Quarkus relies on https://github.com/eclipse/microprofile-health[MicroProfile Health] spec to provide health checks.
 

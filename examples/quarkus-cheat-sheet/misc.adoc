@@ -218,8 +218,8 @@ a|`mailer.from`
 a|Default address.
 
 a|`mailer.mock`
-|false
-|Emails not sent, just printed.
+a|false in `prod`, true in `dev` and `test`.
+|Emails not sent, just printed and stored in a `MockMailbox` bean.
 
 a|`mailer.bounce-address`
 |
@@ -285,6 +285,28 @@ a|`mailer.key-store-password`
 |
 |Key store password.
 |===
+
+// tag::update_3_7[]
+
+*Testing*
+
+If `quarkus.mailer.mock` is set to `true`, which is the default value in `dev` and `test` mode, you can inject `MockMailbox` to get the sent messages.
+
+[source, java]
+----
+@Inject
+MockMailbox mailbox;
+
+@BeforeEach
+void init() {
+    mailbox.clear();
+}
+
+List<Mail> sent = mailbox
+                    .getMessagesSentTo("to@acme.org");
+----
+// end::update_3_7[]
+
 // end::update_2_5[]
 
 == Scheduled Tasks
