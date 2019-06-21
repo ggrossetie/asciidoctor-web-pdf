@@ -1176,6 +1176,23 @@ mp.messaging.incoming.prices.auto-generated-client-id=
 </div>
 </div>
 </details>
+<details>
+<summary class="title">Kogito</summary>
+<div class="content">
+<div class="paragraph">
+<p>Quarkus integrates with <a href="http://www.kiegroup.org/">Kogito</a>, a next generation business automation toolkit from Drools and jBPM projects for adding businesss automation capabilities.</p>
+</div>
+<div class="paragraph">
+<p>To start using it you only need to add next extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="kogito"</code></pre>
+</div>
+</div>
+</div>
+</details>
 </div>
 <div class="sect2">
 <h3 id="_version_0_16_0"><a class="anchor" href="#_version_0_16_0"></a><a class="link" href="#_version_0_16_0">Version 0.16.0</a></h3>
@@ -2878,6 +2895,7 @@ public void testLambda() {
 <li><a href="#_openapi">OpenAPI</a></li>
 <li><a href="#_mail_sender">Mail Sender</a></li>
 <li><a href="#_scheduled_tasks">Scheduled Tasks</a></li>
+<li><a href="#_kogito">Kogito</a></li>
 <li><a href="#_resources">Resources</a></li>
 </ul>
 </li>
@@ -6166,6 +6184,21 @@ void morningTask() {}</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">morning.check.cron.expr=0 15 10 * * ?</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kogito"><a class="anchor" href="#_kogito"></a><a class="link" href="#_kogito">Kogito</a></h3>
+<div class="paragraph">
+<p>Quarkus integrates with <a href="http://www.kiegroup.org/">Kogito</a>, a next generation business automation toolkit from Drools and jBPM projects for adding businesss automation capabilities.</p>
+</div>
+<div class="paragraph">
+<p>To start using it you only need to add next extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="kogito"</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>

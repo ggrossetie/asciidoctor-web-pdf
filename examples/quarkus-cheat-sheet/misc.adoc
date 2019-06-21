@@ -341,3 +341,17 @@ And configure the property into `application.properties`:
 morning.check.cron.expr=0 15 10 * * ?
 ----
 // end::update_3_2[]
+
+== Kogito
+// tag::update_3_9[]
+Quarkus integrates with http://www.kiegroup.org/[Kogito], a next generation business automation toolkit from Drools and jBPM projects for adding businesss automation capabilities.
+
+To start using it you only need to add next extension:
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="kogito"
+----
+
+// end::update_3_9[]
