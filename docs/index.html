@@ -1193,6 +1193,60 @@ mp.messaging.incoming.prices.auto-generated-client-id=
 </div>
 </div>
 </details>
+<details>
+<summary class="title">Kafka Streams</summary>
+<div class="content">
+<div class="paragraph">
+<p>Create streaming queries with the Kafka Streams API.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="kafka-streams"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You need to initialize <code>org.apache.kafka.streams.KafkaStreams</code> on startup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">private KafkaStreams streams;
+
+void onStart(@Observes StartupEvent ev) {
+    Properties props = new Properties();
+    // ...
+    StreamsBuilder builder = new StreamsBuilder();
+    // ...
+    streams = new KafkaStreams(builder.build(), props);
+
+    executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -&gt; {
+        waitForTopicsToBeCreated(bootstrapServers);
+        streams.start();
+    });
+}
+
+void onStop(@Observes ShutdownEvent ev) {
+    streams.close();
+    executor.shutdown();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then you can use it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public List getData() {
+    return streams.allMetadataForStore("")
+                .stream()
+                .map()
+                .collect()
+}</code></pre>
+</div>
+</div>
+</div>
+</details>
 </div>
 <div class="sect2">
 <h3 id="_version_0_16_0"><a class="anchor" href="#_version_0_16_0"></a><a class="link" href="#_version_0_16_0">Version 0.16.0</a></h3>
@@ -2881,6 +2935,7 @@ public void testLambda() {
 <li><a href="#_hibernate_search">Hibernate Search</a></li>
 <li><a href="#_reactive_programming">Reactive Programming</a></li>
 <li><a href="#_reactive_messaging">Reactive Messaging</a></li>
+<li><a href="#_kafka_streams">Kafka Streams</a></li>
 <li><a href="#_reactive_postgresql_client">Reactive PostgreSQL Client</a></li>
 <li><a href="#_jwt">JWT</a></li>
 <li><a href="#_keycloak">Keycloak</a></li>
@@ -4758,6 +4813,58 @@ mp.messaging.incoming.prices.port=
     1883
 mp.messaging.incoming.prices.auto-generated-client-id=
     true</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kafka_streams"><a class="anchor" href="#_kafka_streams"></a><a class="link" href="#_kafka_streams">Kafka Streams</a></h3>
+<div class="paragraph">
+<p>Create streaming queries with the Kafka Streams API.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+  -Dextensions="kafka-streams"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You need to initialize <code>org.apache.kafka.streams.KafkaStreams</code> on startup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">private KafkaStreams streams;
+
+void onStart(@Observes StartupEvent ev) {
+    Properties props = new Properties();
+    // ...
+    StreamsBuilder builder = new StreamsBuilder();
+    // ...
+    streams = new KafkaStreams(builder.build(), props);
+
+    executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -&gt; {
+        waitForTopicsToBeCreated(bootstrapServers);
+        streams.start();
+    });
+}
+
+void onStop(@Observes ShutdownEvent ev) {
+    streams.close();
+    executor.shutdown();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then you can use it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public List getData() {
+    return streams.allMetadataForStore("")
+                .stream()
+                .map()
+                .collect()
+}</code></pre>
 </div>
 </div>
 </div>

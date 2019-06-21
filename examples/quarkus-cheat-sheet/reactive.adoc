@@ -219,6 +219,56 @@ mp.messaging.incoming.prices.auto-generated-client-id=
 // end::update_3_8[]
 // end::update_1_4[]
 
+== Kafka Streams
+// tag::update_3_10[]
+Create streaming queries with the Kafka Streams API.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+  -Dextensions="kafka-streams"
+----
+
+You need to initialize `org.apache.kafka.streams.KafkaStreams` on startup:
+
+[source, java]
+----
+private KafkaStreams streams;
+
+void onStart(@Observes StartupEvent ev) {
+    Properties props = new Properties();
+    // ...
+    StreamsBuilder builder = new StreamsBuilder();
+    // ...
+    streams = new KafkaStreams(builder.build(), props);
+
+    executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -> {
+        waitForTopicsToBeCreated(bootstrapServers);
+        streams.start();
+    });
+}
+
+void onStop(@Observes ShutdownEvent ev) {
+    streams.close();
+    executor.shutdown();
+}
+----
+
+And then you can use it.
+
+[source, java]
+----
+public List getData() {
+    return streams.allMetadataForStore("")
+                .stream()
+                .map()
+                .collect()
+}
+
+----
+// end::update_3_10[]
+
 == Reactive PostgreSQL Client
 // tag::update_1_8[]
 You can use Reactive PostgreSQL to execute queries to PostreSQL database in a reactive way, instead of using JDBC way.

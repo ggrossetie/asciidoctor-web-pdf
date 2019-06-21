@@ -71,6 +71,12 @@ include::reactive.adoc[tag=update_3_8]
 include::misc.adoc[tag=update_3_9]
 ====
 
+.Kafka Streams
+[%collapsible]
+====
+include::reactive.adoc[tag=update_3_10]
+====
+
 === Version 0.16.0
 
 .Apache Camel
