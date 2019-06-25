@@ -39,9 +39,4 @@ include::cloud.adoc[]
 
 <<<
 include::misc.adoc[]
-
-<<<
-== Resources
-
-* https://quarkus.io/guides/
-* https://www.youtube.com/user/lordofthejars
+include::resources.adoc[]

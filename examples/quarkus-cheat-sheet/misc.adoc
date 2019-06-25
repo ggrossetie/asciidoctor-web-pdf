@@ -309,6 +309,8 @@ List<Mail> sent = mailbox
 
 // end::update_2_5[]
 
+<<<
+
 == Scheduled Tasks
 // tag::update_3_2[]
 You can schedule periodic tasks with Quarkus.
@@ -344,9 +346,9 @@ morning.check.cron.expr=0 15 10 * * ?
 
 == Kogito
 // tag::update_3_9[]
-Quarkus integrates with http://www.kiegroup.org/[Kogito], a next generation business automation toolkit from Drools and jBPM projects for adding businesss automation capabilities.
+Quarkus integrates with http://www.kiegroup.org/[Kogito], a next-generation business automation toolkit from Drools and jBPM projects for adding business automation capabilities.
 
-To start using it you only need to add next extension:
+To start using it you only need to add the next extension:
 
 [source, bash]
 ----

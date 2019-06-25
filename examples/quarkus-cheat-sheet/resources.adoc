@@ -1,0 +1,4 @@
+== Resources
+
+* https://quarkus.io/guides/
+* https://www.youtube.com/user/lordofthejars

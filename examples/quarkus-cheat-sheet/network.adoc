@@ -343,6 +343,8 @@ description = "Hottest Sauce so far.")
 public Long hottestSauce() {}
 ----
 
+<<<
+
 Injecting a histogram using `@Metric`.
 
 [source, java]

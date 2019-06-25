@@ -94,8 +94,6 @@ You can also inject an stream as a field:
 
 // tag::update_3_8[]
 
-Or also inject `io.smallrye.reactive.messaging.annotations.Emitter` to emit a value synchronously.
-
 [source, java]
 ----
 @Inject @Stream("generated-price")
@@ -111,17 +109,18 @@ _REST API -> Message_
 @Inject @Stream(“in”)
 Emitter<String> emitter;
 
-// …
 emitter.send(message);
 ----
 
 _Message -> Message_
 
+[source, java]
+----
 @Incoming(“in”)
 @Outgoing(“out”)
 public String process(String in) {
-    // ...
 }
+----
 
 _Message -> SSE_
 
@@ -145,7 +144,6 @@ _Message -> Business Logic_
 public class ReceiverMessages {
     @Incoming("prices")
     public void print(String price) {
-        // ...
     }
 }
 ----
@@ -190,11 +188,11 @@ mp.messaging.incoming.prices.value.deserializer=
     org.apache.kafka.common.serialization.IntegerDeserializer
 ----
 
-A complete list of supported properties are in Kafka site. For https://kafka.apache.org/documentation/#producerconfigs[producer] and for https://kafka.apache.org/documentation/#consumerconfigs[consumer]
+A complete list of supported properties are in Kafka site. For the https://kafka.apache.org/documentation/#producerconfigs[producer] and for https://kafka.apache.org/documentation/#consumerconfigs[consumer]
 
 _JSON-B Serializer/Deserializer_
 
-You can use JSON-B to serialize/deserialize objects and send it to Kafka.
+You can use JSON-B to serialize/deserialize objects.
 
 [source, bash]
 ----

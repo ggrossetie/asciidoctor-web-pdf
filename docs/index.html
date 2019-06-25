@@ -449,14 +449,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.3/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
+<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.4/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
 </div>
 <div class="paragraph">
 <p>Quarkus (<a href="https://quarkus.io/" class="bare">https://quarkus.io/</a>) is a Kubernetes Native Java stack tailored for GraalVM &amp; OpenJDK HotSpot, crafted from the best of breed Java libraries and standards.
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
 </div>
 <div class="paragraph">
-<p>In this page you can either read what has been added in each version of the cheat-sheet individually in <a href="#whatsnew">What&#8217;s New in Cheat-Sheet</a> section, see the full cheat-sheet as HTML <span class="icon"><i class="fa fa-html5"></i></span> <a href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a> format or <span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.3/quarkus-cheat-sheet.pdf">download the full cheat-sheet as PDF</a>.</p>
+<p>In this page you can either read what has been added in each version of the cheat-sheet individually in <a href="#whatsnew">What&#8217;s New in Cheat-Sheet</a> section, see the full cheat-sheet as HTML <span class="icon"><i class="fa fa-html5"></i></span> <a href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a> format or <span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.4/quarkus-cheat-sheet.pdf">download the full cheat-sheet as PDF</a>.</p>
 </div>
 </div>
 </div>
@@ -1030,9 +1030,6 @@ List&lt;Mail&gt; sent = mailbox
 <details>
 <summary class="title">Refactor on configuration properties and Kafka, AMQP, MQTT support</summary>
 <div class="content">
-<div class="paragraph">
-<p>Or also inject <code>io.smallrye.reactive.messaging.annotations.Emitter</code> to emit a value synchronously.</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream("generated-price")
@@ -1050,19 +1047,19 @@ Emitter&lt;String&gt; emitter;</code></pre>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“in”)
 Emitter&lt;String&gt; emitter;
 
-// …
 emitter.send(message);</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><em>Message &#8594; Message</em></p>
 </div>
-<div class="paragraph">
-<p>@Incoming(“in”)
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Incoming(“in”)
 @Outgoing(“out”)
 public String process(String in) {
-    // &#8230;&#8203;
-}</p>
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><em>Message &#8594; SSE</em></p>
@@ -1088,7 +1085,6 @@ public Publisher&lt;String&gt; stream() {
 public class ReceiverMessages {
     @Incoming("prices")
     public void print(String price) {
-        // ...
     }
 }</code></pre>
 </div>
@@ -1145,10 +1141,10 @@ mp.messaging.incoming.prices.value.deserializer=
 <p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
 </div>
 <div class="paragraph">
-<p><em>JSON-B Serializer Deserializer</em></p>
+<p><em>JSON-B Serializer/Deserializer</em></p>
 </div>
 <div class="paragraph">
-<p>You can use JSON-B to serialize/deserialize objects and send it to Kafka.</p>
+<p>You can use JSON-B to serialize/deserialize objects.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2399,9 +2395,6 @@ public class ConsumerData {
 @Stream("my-in-memory") Publisher&lt;Integer&gt; randomRumbers;</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Or also inject <code>io.smallrye.reactive.messaging.annotations.Emitter</code> to emit a value synchronously.</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream("generated-price")
@@ -2419,19 +2412,19 @@ Emitter&lt;String&gt; emitter;</code></pre>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“in”)
 Emitter&lt;String&gt; emitter;
 
-// …
 emitter.send(message);</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><em>Message &#8594; Message</em></p>
 </div>
-<div class="paragraph">
-<p>@Incoming(“in”)
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Incoming(“in”)
 @Outgoing(“out”)
 public String process(String in) {
-    // &#8230;&#8203;
-}</p>
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><em>Message &#8594; SSE</em></p>
@@ -2457,7 +2450,6 @@ public Publisher&lt;String&gt; stream() {
 public class ReceiverMessages {
     @Incoming("prices")
     public void print(String price) {
-        // ...
     }
 }</code></pre>
 </div>
@@ -2514,10 +2506,10 @@ mp.messaging.incoming.prices.value.deserializer=
 <p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
 </div>
 <div class="paragraph">
-<p><em>JSON-B Serializer Deserializer</em></p>
+<p><em>JSON-B Serializer/Deserializer</em></p>
 </div>
 <div class="paragraph">
-<p>You can use JSON-B to serialize/deserialize objects and send it to Kafka.</p>
+<p>You can use JSON-B to serialize/deserialize objects.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3091,7 +3083,7 @@ public void testLambda() {
 <h2 id="quarkuscheatsheet"><a class="anchor" href="#quarkuscheatsheet"></a><a class="link" href="#quarkuscheatsheet">Quarkus Cheat-Sheet</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.3/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
+<p><span class="icon"><i class="fa fa-file-pdf-o"></i></span> <a href="https://github.com/lordofthejars/quarkus-cheat-sheet/releases/download/1.0.4/quarkus-cheat-sheet.pdf">Download the Cheat-Sheet as PDF</a>.</p>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle" class="title">Table of Contents</div>
@@ -3149,7 +3141,7 @@ public void testLambda() {
 Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.</p>
 </div>
 <div class="paragraph">
-<p>Cheat-sheet tested with <strong>Quarkus 0.16.0</strong>.</p>
+<p>Cheat-sheet tested with <strong>Quarkus 0.17.0</strong>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3159,7 +3151,7 @@ Also focused on developer experience, making things just work with little to no 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn io.quarkus:quarkus-maven-plugin:0.16.0:create \
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">mvn io.quarkus:quarkus-maven-plugin:0.17.0:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -DclassName="org.acme.quickstart.GreetingResource" \
@@ -4857,9 +4849,6 @@ public class ConsumerData {
 @Stream("my-in-memory") Publisher&lt;Integer&gt; randomRumbers;</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Or also inject <code>io.smallrye.reactive.messaging.annotations.Emitter</code> to emit a value synchronously.</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream("generated-price")
@@ -4877,19 +4866,19 @@ Emitter&lt;String&gt; emitter;</code></pre>
 <pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“in”)
 Emitter&lt;String&gt; emitter;
 
-// …
 emitter.send(message);</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><em>Message &#8594; Message</em></p>
 </div>
-<div class="paragraph">
-<p>@Incoming(“in”)
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Incoming(“in”)
 @Outgoing(“out”)
 public String process(String in) {
-    // &#8230;&#8203;
-}</p>
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><em>Message &#8594; SSE</em></p>
@@ -4915,7 +4904,6 @@ public Publisher&lt;String&gt; stream() {
 public class ReceiverMessages {
     @Incoming("prices")
     public void print(String price) {
-        // ...
     }
 }</code></pre>
 </div>
@@ -4972,10 +4960,10 @@ mp.messaging.incoming.prices.value.deserializer=
 <p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
 </div>
 <div class="paragraph">
-<p><em>JSON-B Serializer Deserializer</em></p>
+<p><em>JSON-B Serializer/Deserializer</em></p>
 </div>
 <div class="paragraph">
-<p>You can use JSON-B to serialize/deserialize objects and send it to Kafka.</p>
+<p>You can use JSON-B to serialize/deserialize objects.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5890,6 +5878,7 @@ description = "Hottest Sauce so far.")
 public Long hottestSauce() {}</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Injecting a histogram using <code>@Metric</code>.</p>
 </div>
@@ -6536,6 +6525,7 @@ List&lt;Mail&gt; sent = mailbox
                     .getMessagesSentTo("to@acme.org");</code></pre>
 </div>
 </div>
+<div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="_scheduled_tasks"><a class="anchor" href="#_scheduled_tasks"></a><a class="link" href="#_scheduled_tasks">Scheduled Tasks</a></h3>
@@ -6587,7 +6577,6 @@ void morningTask() {}</pre>
   -Dextensions="kogito"</code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="_resources"><a class="anchor" href="#_resources"></a><a class="link" href="#_resources">Resources</a></h3>
