@@ -1031,6 +1031,69 @@ List&lt;Mail&gt; sent = mailbox
 <summary class="title">Refactor on configuration properties and Kafka, AMQP, MQTT support</summary>
 <div class="content">
 <div class="paragraph">
+<p>Or also inject <code>io.smallrye.reactive.messaging.annotations.Emitter</code> to emit a value synchronously.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream("generated-price")
+Emitter&lt;String&gt; emitter;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Patterns</strong></p>
+</div>
+<div class="paragraph">
+<p><em>REST API &#8594; Message</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“in”)
+Emitter&lt;String&gt; emitter;
+
+// …
+emitter.send(message);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; Message</em></p>
+</div>
+<div class="paragraph">
+<p>@Incoming(“in”)
+@Outgoing(“out”)
+public String process(String in) {
+    // &#8230;&#8203;
+}</p>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; SSE</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“out”)
+Publisher&lt;String&gt; result;
+
+@GET
+@Produces(SERVER_SENT_EVENTS)
+public Publisher&lt;String&gt; stream() {
+    return result;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; Business Logic</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class ReceiverMessages {
+    @Incoming("prices")
+    public void print(String price) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Possible implementations are:</p>
 </div>
 <div class="paragraph">
@@ -1082,6 +1145,36 @@ mp.messaging.incoming.prices.value.deserializer=
 <p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
 </div>
 <div class="paragraph">
+<p><em>JSON-B Serializer Deserializer</em></p>
+</div>
+<div class="paragraph">
+<p>You can use JSON-B to serialize/deserialize objects and send it to Kafka.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+    -Dextensions="quarkus-kafka-client"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To serialize you can use <code>io.quarkus.kafka.client.serialization.JsonbSerializer</code>.</p>
+</div>
+<div class="paragraph">
+<p>To deserialize you need to extend <code>io.quarkus.kafka.client.serialization.JsonbDeserializer</code> and provide a type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class BeerDeserializer
+    extends JsonbDeserializer&lt;Beer&gt; {
+
+    public BeerDeserializer() {
+        super(Beer.class);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p><strong>AMQP</strong></p>
 </div>
 <div class="paragraph">
@@ -1107,14 +1200,14 @@ Special properties <code>amqp-username</code> and <code>amqp-password</code> are
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">amqp-username=quarkus
 amqp-password=quarkus
-
+# write
 mp.messaging.outgoing.generated-price.connector=
     smallrye-amqp
 mp.messaging.outgoing.generated-price.address=
     prices
 mp.messaging.outgoing.generated-price.durable=
     true
-
+# read
 mp.messaging.incoming.prices.connector=
     smallrye-amqp
 mp.messaging.incoming.prices.durable=
@@ -2307,6 +2400,69 @@ public class ConsumerData {
 </div>
 </div>
 <div class="paragraph">
+<p>Or also inject <code>io.smallrye.reactive.messaging.annotations.Emitter</code> to emit a value synchronously.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream("generated-price")
+Emitter&lt;String&gt; emitter;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Patterns</strong></p>
+</div>
+<div class="paragraph">
+<p><em>REST API &#8594; Message</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“in”)
+Emitter&lt;String&gt; emitter;
+
+// …
+emitter.send(message);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; Message</em></p>
+</div>
+<div class="paragraph">
+<p>@Incoming(“in”)
+@Outgoing(“out”)
+public String process(String in) {
+    // &#8230;&#8203;
+}</p>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; SSE</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“out”)
+Publisher&lt;String&gt; result;
+
+@GET
+@Produces(SERVER_SENT_EVENTS)
+public Publisher&lt;String&gt; stream() {
+    return result;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; Business Logic</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class ReceiverMessages {
+    @Incoming("prices")
+    public void print(String price) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Possible implementations are:</p>
 </div>
 <div class="paragraph">
@@ -2358,6 +2514,36 @@ mp.messaging.incoming.prices.value.deserializer=
 <p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
 </div>
 <div class="paragraph">
+<p><em>JSON-B Serializer Deserializer</em></p>
+</div>
+<div class="paragraph">
+<p>You can use JSON-B to serialize/deserialize objects and send it to Kafka.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+    -Dextensions="quarkus-kafka-client"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To serialize you can use <code>io.quarkus.kafka.client.serialization.JsonbSerializer</code>.</p>
+</div>
+<div class="paragraph">
+<p>To deserialize you need to extend <code>io.quarkus.kafka.client.serialization.JsonbDeserializer</code> and provide a type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class BeerDeserializer
+    extends JsonbDeserializer&lt;Beer&gt; {
+
+    public BeerDeserializer() {
+        super(Beer.class);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p><strong>AMQP</strong></p>
 </div>
 <div class="paragraph">
@@ -2383,14 +2569,14 @@ Special properties <code>amqp-username</code> and <code>amqp-password</code> are
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">amqp-username=quarkus
 amqp-password=quarkus
-
+# write
 mp.messaging.outgoing.generated-price.connector=
     smallrye-amqp
 mp.messaging.outgoing.generated-price.address=
     prices
 mp.messaging.outgoing.generated-price.durable=
     true
-
+# read
 mp.messaging.incoming.prices.connector=
     smallrye-amqp
 mp.messaging.incoming.prices.durable=
@@ -4672,6 +4858,69 @@ public class ConsumerData {
 </div>
 </div>
 <div class="paragraph">
+<p>Or also inject <code>io.smallrye.reactive.messaging.annotations.Emitter</code> to emit a value synchronously.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream("generated-price")
+Emitter&lt;String&gt; emitter;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Patterns</strong></p>
+</div>
+<div class="paragraph">
+<p><em>REST API &#8594; Message</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“in”)
+Emitter&lt;String&gt; emitter;
+
+// …
+emitter.send(message);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; Message</em></p>
+</div>
+<div class="paragraph">
+<p>@Incoming(“in”)
+@Outgoing(“out”)
+public String process(String in) {
+    // &#8230;&#8203;
+}</p>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; SSE</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“out”)
+Publisher&lt;String&gt; result;
+
+@GET
+@Produces(SERVER_SENT_EVENTS)
+public Publisher&lt;String&gt; stream() {
+    return result;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Message &#8594; Business Logic</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class ReceiverMessages {
+    @Incoming("prices")
+    public void print(String price) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Possible implementations are:</p>
 </div>
 <div class="paragraph">
@@ -4723,6 +4972,36 @@ mp.messaging.incoming.prices.value.deserializer=
 <p>A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
 </div>
 <div class="paragraph">
+<p><em>JSON-B Serializer Deserializer</em></p>
+</div>
+<div class="paragraph">
+<p>You can use JSON-B to serialize/deserialize objects and send it to Kafka.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+    -Dextensions="quarkus-kafka-client"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To serialize you can use <code>io.quarkus.kafka.client.serialization.JsonbSerializer</code>.</p>
+</div>
+<div class="paragraph">
+<p>To deserialize you need to extend <code>io.quarkus.kafka.client.serialization.JsonbDeserializer</code> and provide a type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class BeerDeserializer
+    extends JsonbDeserializer&lt;Beer&gt; {
+
+    public BeerDeserializer() {
+        super(Beer.class);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p><strong>AMQP</strong></p>
 </div>
 <div class="paragraph">
@@ -4748,14 +5027,14 @@ Special properties <code>amqp-username</code> and <code>amqp-password</code> are
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">amqp-username=quarkus
 amqp-password=quarkus
-
+# write
 mp.messaging.outgoing.generated-price.connector=
     smallrye-amqp
 mp.messaging.outgoing.generated-price.address=
     prices
 mp.messaging.outgoing.generated-price.durable=
     true
-
+# read
 mp.messaging.incoming.prices.connector=
     smallrye-amqp
 mp.messaging.incoming.prices.durable=

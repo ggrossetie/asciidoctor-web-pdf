@@ -94,6 +94,62 @@ You can also inject an stream as a field:
 
 // tag::update_3_8[]
 
+Or also inject `io.smallrye.reactive.messaging.annotations.Emitter` to emit a value synchronously.
+
+[source, java]
+----
+@Inject @Stream("generated-price")
+Emitter<String> emitter;
+----
+
+*Patterns*
+
+_REST API -> Message_
+
+[source, java]
+----
+@Inject @Stream(“in”)
+Emitter<String> emitter;
+
+// …
+emitter.send(message);
+----
+
+_Message -> Message_
+
+@Incoming(“in”)
+@Outgoing(“out”)
+public String process(String in) {
+    // ...
+}
+
+_Message -> SSE_
+
+[source, java]
+----
+@Inject @Stream(“out”)
+Publisher<String> result;
+
+@GET
+@Produces(SERVER_SENT_EVENTS)
+public Publisher<String> stream() {
+    return result;
+}
+----
+
+_Message -> Business Logic_
+
+[source, java]
+----
+@ApplicationScoped
+public class ReceiverMessages {
+    @Incoming("prices")
+    public void print(String price) {
+        // ...
+    }
+}
+----
+
 Possible implementations are:
 
 *In-Memory*
@@ -136,6 +192,32 @@ mp.messaging.incoming.prices.value.deserializer=
 
 A complete list of supported properties are in Kafka site. For https://kafka.apache.org/documentation/#producerconfigs[producer] and for https://kafka.apache.org/documentation/#consumerconfigs[consumer]
 
+_JSON-B Serializer/Deserializer_
+
+You can use JSON-B to serialize/deserialize objects and send it to Kafka.
+
+[source, bash]
+----
+./mvnw quarkus:add-extension 
+    -Dextensions="quarkus-kafka-client"
+----
+
+To serialize you can use `io.quarkus.kafka.client.serialization.JsonbSerializer`.
+
+To deserialize you need to extend `io.quarkus.kafka.client.serialization.JsonbDeserializer` and provide a type.
+
+[source, java]
+----
+public class BeerDeserializer 
+    extends JsonbDeserializer<Beer> {
+
+    public BeerDeserializer() {
+        super(Beer.class);
+    }
+
+}
+----
+
 *AMQP*
 
 To integrate with AMQP you need to add next extensions:
@@ -157,14 +239,14 @@ The connector type is `smallrye-amqp`.
 ----
 amqp-username=quarkus
 amqp-password=quarkus
-
+# write
 mp.messaging.outgoing.generated-price.connector=
     smallrye-amqp
 mp.messaging.outgoing.generated-price.address=
     prices
 mp.messaging.outgoing.generated-price.durable=
     true
-
+# read
 mp.messaging.incoming.prices.connector=
     smallrye-amqp
 mp.messaging.incoming.prices.durable=

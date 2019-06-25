@@ -1332,6 +1332,55 @@ public class ConsumerData {
 @Stream("my-in-memory") Publisher&lt;Integer&gt; randomRumbers;</code></pre>
 </div>
 </div>
+<p class="">Or also inject <code>io.smallrye.reactive.messaging.annotations.Emitter</code> to emit a value synchronously.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream("generated-price")
+Emitter&lt;String&gt; emitter;</code></pre>
+</div>
+</div>
+<p class=""><strong>Patterns</strong></p>
+<p class=""><em>REST API &#8594; Message</em></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“in”)
+Emitter&lt;String&gt; emitter;
+
+// …
+emitter.send(message);</code></pre>
+</div>
+</div>
+<p class=""><em>Message &#8594; Message</em></p>
+<p class="">@Incoming(“in”)
+@Outgoing(“out”)
+public String process(String in) {
+    // &#8230;&#8203;
+}</p>
+<p class=""><em>Message &#8594; SSE</em></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@Inject @Stream(“out”)
+Publisher&lt;String&gt; result;
+
+@GET
+@Produces(SERVER_SENT_EVENTS)
+public Publisher&lt;String&gt; stream() {
+    return result;
+}</code></pre>
+</div>
+</div>
+<p class=""><em>Message &#8594; Business Logic</em></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">@ApplicationScoped
+public class ReceiverMessages {
+    @Incoming("prices")
+    public void print(String price) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
 <p class="">Possible implementations are:</p>
 <p class=""><strong>In-Memory</strong></p>
 <p class="">If the stream is not configured then it is assumed to be an in-memory stream, if not then stream type is defined by <code>connector</code> field.</p>
@@ -1365,6 +1414,28 @@ mp.messaging.incoming.prices.value.deserializer=
 </div>
 </div>
 <p class="">A complete list of supported properties are in Kafka site. For <a href="https://kafka.apache.org/documentation/#producerconfigs">producer</a> and for <a href="https://kafka.apache.org/documentation/#consumerconfigs">consumer</a></p>
+<p class=""><em>JSON-B Serializer Deserializer</em></p>
+<p class="">You can use JSON-B to serialize/deserialize objects and send it to Kafka.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">./mvnw quarkus:add-extension
+    -Dextensions="quarkus-kafka-client"</code></pre>
+</div>
+</div>
+<p class="">To serialize you can use <code>io.quarkus.kafka.client.serialization.JsonbSerializer</code>.</p>
+<p class="">To deserialize you need to extend <code>io.quarkus.kafka.client.serialization.JsonbDeserializer</code> and provide a type.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">public class BeerDeserializer
+    extends JsonbDeserializer&lt;Beer&gt; {
+
+    public BeerDeserializer() {
+        super(Beer.class);
+    }
+
+}</code></pre>
+</div>
+</div>
 <p class=""><strong>AMQP</strong></p>
 <p class="">To integrate with AMQP you need to add next extensions:</p>
 <div class="listingblock">
@@ -1381,14 +1452,14 @@ Special properties <code>amqp-username</code> and <code>amqp-password</code> are
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">amqp-username=quarkus
 amqp-password=quarkus
-
+# write
 mp.messaging.outgoing.generated-price.connector=
     smallrye-amqp
 mp.messaging.outgoing.generated-price.address=
     prices
 mp.messaging.outgoing.generated-price.durable=
     true
-
+# read
 mp.messaging.incoming.prices.connector=
     smallrye-amqp
 mp.messaging.incoming.prices.durable=
