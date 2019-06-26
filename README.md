@@ -37,7 +37,7 @@ We provides a few examples in the `examples` directory:
 
 **Book**
 
-    sciidoctor-pdf ./examples/book/book.adoc --template-require ./examples/book/template.js
+    asciidoctor-pdf ./examples/book/book.adoc --template-require ./examples/book/template.js
 
 **Slides**
 
