@@ -14,7 +14,9 @@
     "lib"
   ],
   "scripts": {
-    "test": "./bin/asciidoctor-pdf --version"
+    "test": "./bin/asciidoctor-pdf --version",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -33,12 +35,14 @@
     "fs-extra": "7.0.1",
     "pagedjs": "^0.1.34",
     "puppeteer": "1.15.0",
-    "yargs": "13.2.2"
+    "yargs": "13.2.2",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@asciidoctor/core": "^2.0.0-rc.1"
   },
   "peerDependencies": {
     "@asciidoctor/core": "^2.0.0-rc.1"
-  }
+  },
+  "snyk": true
 }
