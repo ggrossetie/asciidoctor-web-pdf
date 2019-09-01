@@ -14,7 +14,10 @@
     "lib"
   ],
   "scripts": {
-    "test": "./bin/asciidoctor-pdf --version"
+    "test": "npm run test:smoke && npm run test:js",
+    "test:smoke": "./bin/asciidoctor-pdf --version",
+    "test:js": "mocha test/**_test.js",
+    "lint": "standard lib/**.js test/**.js"
   },
   "repository": {
     "type": "git",
@@ -31,15 +34,19 @@
     "@asciidoctor/cli": "3.0.1",
     "chokidar": "2.0.4",
     "fs-extra": "7.0.1",
-    "pagedjs": "^0.1.34",
+    "pagedjs": "0.1.34",
     "puppeteer": "1.15.0",
     "yargs": "13.2.2"
   },
   "devDependencies": {
-    "@asciidoctor/core": "^2.0.0-rc.1"
+    "@asciidoctor/core": "^2.0.0-rc.1",
+    "chai": "4.2.0",
+    "cheerio": "^1.0.0-rc.3",
+    "dirty-chai": "2.0.1",
+    "mocha": "6.2.0",
+    "standard": "14.1.0"
   },
   "peerDependencies": {
     "@asciidoctor/core": "^2.0.0-rc.1"
-  },
-  "snyk": true
+  }
 }
