@@ -1,0 +1,31 @@
+@page :right {
+  @bottom-right {
+    content: counter(page);
+    font-size: 0.8rem;
+    padding: 10pt 0 0 0;
+    margin: 10pt 10pt 30pt 10pt;
+    border-top: .1pt solid #d2d2d2;
+  }
+  @bottom-left {
+    margin: 10pt 0 30pt 0;
+    border-top: .1pt solid #d2d2d2;
+  }
+}
+
+@page :left {
+  @bottom-right {
+    margin: 10pt 0 30pt 0;
+    border-top: .1pt solid #d2d2d2;
+  }
+  @bottom-left {
+    content: counter(page);
+    font-size: 0.8rem;
+    padding: 10pt 0 0 0;
+    margin: 10pt 10pt 30pt 10pt;
+    border-top: .1pt solid #d2d2d2;
+  }
+}
+
+.pagedjs_page.pagedjs_first_page {
+  counter-increment: page 1;
+}

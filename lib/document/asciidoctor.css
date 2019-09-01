@@ -455,7 +455,7 @@ blockquote {
 blockquote cite {
   display: block;
   font-size: .9375em;
-  color: rgba(0, 0, 0, .6)
+  color: rgba(0, 0, 0, .75)
 }
 
 blockquote cite:before {
@@ -463,7 +463,7 @@ blockquote cite:before {
 }
 
 blockquote cite a, blockquote cite a:visited {
-  color: rgba(0, 0, 0, .6)
+  color: rgba(0, 0, 0, .75)
 }
 
 blockquote, blockquote p {
@@ -709,7 +709,7 @@ p a > code:hover {
   padding-top: .25em;
   padding-bottom: .25em;
   padding-left: .25em;
-  color: rgba(0, 0, 0, .6);
+  color: rgba(0, 0, 0, .75);
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -1017,7 +1017,7 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p {
   padding-left: 1.125em;
   padding-right: 1.25em;
   border-left: 1px solid #ddddd8;
-  color: rgba(0, 0, 0, .6)
+  color: rgba(0, 0, 0, .75)
 }
 
 .admonitionblock > table td.content > :last-child > :last-child {
@@ -1242,7 +1242,7 @@ table.pyhltable .linenodiv {
   margin-left: 0;
   margin-right: 0;
   padding: .5em 0;
-  border-left: 3px solid rgba(0, 0, 0, .6)
+  border-left: 3px solid rgba(0, 0, 0, .75)
 }
 
 .quoteblock .quoteblock blockquote {
@@ -1287,7 +1287,7 @@ table.pyhltable .linenodiv {
 .quoteblock .attribution cite, .verseblock .attribution cite {
   display: block;
   letter-spacing: -.025em;
-  color: rgba(0, 0, 0, .6)
+  color: rgba(0, 0, 0, .75)
 }
 
 .quoteblock.abstract {
@@ -1895,10 +1895,6 @@ b.conum * {
 
 dt, th.tableblock, td.content, div.footnote {
   text-rendering: optimizeLegibility
-}
-
-h1, h2, p, td.content, span.alt {
-  letter-spacing: -.01em
 }
 
 p strong, td.content strong, div.footnote strong {
