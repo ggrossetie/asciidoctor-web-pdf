@@ -38,13 +38,13 @@ Guillaume Grossetie
   })
 
   it('should not include a title page if the document title is empty', () => {
-    const doc = asciidoctor.load(`Hello world!`, { attributes: { 'title-page': '' } })
+    const doc = asciidoctor.load('Hello world!', { attributes: { 'title-page': '' } })
     const $ = cheerio.load(templates.document(doc))
     expect($('.title-page > h1').length).to.equal(0)
   })
 
   it('should not include a document title if the document title is empty', () => {
-    const doc = asciidoctor.load(`Hello world!`)
+    const doc = asciidoctor.load('Hello world!')
     const $ = cheerio.load(templates.document(doc))
     expect($('.title-document > h1').length).to.equal(0)
   })
