@@ -1,146 +1,145 @@
-@import 'https://fonts.googleapis.com/css?family=Noto+Serif';
-@import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css';
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif');
 
+/* page */
 @page {
   margin: 0.15in 0.67in 0.5in 0.67in;
   size: A4;
 }
 
-html {
-  font: 10.5pt/1.15 'Noto Serif', serif;
-  text-align: justify;
-}
+@media print {
+  html {
+    font: 10.5pt/1.15 'Noto Serif', serif;
+    text-align: justify;
+  }
 
-p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-split-to],
-.sectionbody, [data-split-original] {
-  text-align-last: left !important;
-}
+  p, blockquote, dt, td.content {
+    font-size: 0.975rem;
+  }
 
-h1 {
-  font-size: 2.6em;
-}
+  p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-split-to], .sectionbody, [data-split-original] {
+    text-align-last: left !important;
+  }
 
-h2 {
-  font-size: 2em;
-}
+  .pagedjs_page.pagedjs_first_page {
+    counter-increment: page 1;
+  }
 
-h3, #toctitle, .sidebarblock > .content > .title {
-  font-size: 1.4em;
-}
+  .subheader, .admonitionblock td.content > .title, .audioblock > .title, .exampleblock > .title, .imageblock > .title, .listingblock > .title, .literalblock > .title, .stemblock > .title, .openblock > .title, .paragraph > .title, .quoteblock > .title, table.tableblock > .title, .verseblock > .title, .videoblock > .title, .dlist > .title, .olist > .title, .ulist > .title, .qlist > .title, .hdlist > .title {
+    color: #333;
+  }
 
-h4 {
-  font-size: 1.3em;
-}
+  p {
+    margin-bottom: 1rem;
+  }
 
-h5 {
-  font-size: 1.2em;
-}
+  /* use cell borders instead of table border, see https://github.com/asciidoctor/asciidoctor/issues/3387 */
+  table.frame-all {
+    border-width: 0;
+    border-collapse: collapse;
+  }
 
-h6 {
-  font-size: 1.1em;
-}
+  table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
+    line-height: 1.25rem;
+    font-size: 0.9rem;
+  }
 
-#cover {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100vh;
-  page-break-after: always;
-  align-items: flex-end;
-}
+  table.grid-all > thead > tr > .tableblock, table.grid-all > tbody > tr > .tableblock {
+    border-width: 1px 1px 1px 1px;
+    border-collapse: collapse;
+  }
 
-.pagedjs_page.pagedjs_first_page {
-  counter-increment: page 1;
-}
+  .table.tableblock {
+    border-collapse: collapse;
+  }
 
-#cover h1 {
-  color: #999;
-  font-weight: 200;
-  font-size: 2.6rem;
-  padding: 0;
-  margin-bottom: 1rem;
-}
+  table.grid-all > * > tr > .tableblock:last-child, table.grid-cols > * > tr > .tableblock:last-child {
+    border-right-width: 1px;
+  }
 
-#cover h2 {
-  font-size: 1.1rem;
-  font-weight: 200;
-  padding: 0;
-  margin: 0;
-}
+  table.grid-all > tbody > tr:last-child > .tableblock, table.grid-all > thead:last-child > tr > .tableblock, table.grid-rows > tbody > tr:last-child > .tableblock, table.grid-rows > thead:last-child > tr > .tableblock {
+    border-bottom-width: 1px;
+  }
 
-h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
-  color: #333;
-  font-family: 'Noto Serif', serif;
-  font-weight: 600;
-}
+  /* avoid page break */
+  table {
+    page-break-inside: avoid;
+  }
 
-a {
-  color: #2986e7;
-  text-decoration: none;
-  line-height: inherit;
-}
+  tr {
+    page-break-inside: avoid;
+  }
 
-p, blockquote, dt, td.content, span.alt {
-  font-size: 0.95rem;
-}
+  .listingblock {
+    page-break-inside: avoid;
+  }
 
-.admonitionblock > table td.icon .title {
-  font-family: 'Noto Serif', serif;
-}
+  /* titles */
+  h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
+    color: #333;
+    font-family: 'Noto Serif', serif;
+    font-weight: 600;
+  }
 
-.subheader, .admonitionblock td.content > .title, .audioblock > .title, .exampleblock > .title, .imageblock > .title, .listingblock > .title, .literalblock > .title, .stemblock > .title, .openblock > .title, .paragraph > .title, .quoteblock > .title, table.tableblock > .title, .verseblock > .title, .videoblock > .title, .dlist > .title, .olist > .title, .ulist > .title, .qlist > .title, .hdlist > .title {
-  color: #333;
-}
+  .admonitionblock > table td.icon .title {
+    font-family: 'Noto Serif', serif;
+  }
 
-p {
-  margin-bottom: 1rem;
-}
+  h1 {
+    font-size: 2.6em;
+  }
 
-table.frame-all {
-  border-width: 0;
-  border-collapse: collapse;
-}
+  h2 {
+    font-size: 2em;
+  }
 
-table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
-  line-height: 1.25rem;
-  font-size: 0.9rem;
-}
+  h3, #toctitle, .sidebarblock > .content > .title {
+    font-size: 1.4em;
+  }
 
-table.grid-all > thead > tr > .tableblock, table.grid-all > tbody > tr > .tableblock {
-  border-width: 1px 1px 1px 1px;
-  border-collapse: collapse;
-}
+  h4 {
+    font-size: 1.3em;
+  }
 
-.table.tableblock {
-  border-collapse: collapse;
-}
+  h5 {
+    font-size: 1.2em;
+  }
 
-table.grid-all > * > tr > .tableblock:last-child, table.grid-cols > * > tr > .tableblock:last-child {
-  border-right-width: 1px;
-}
+  h6 {
+    font-size: 1.1em;
+  }
 
-table.grid-all > tbody > tr:last-child > .tableblock, table.grid-all > thead:last-child > tr > .tableblock, table.grid-rows > tbody > tr:last-child > .tableblock, table.grid-rows > thead:last-child > tr > .tableblock {
-  border-bottom-width: 1px;
-}
+  /* title document */
+  .title-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    page-break-after: always;
+    align-items: flex-end;
+  }
 
-table {
-  page-break-inside: avoid;
-}
+  .title-page > h1 {
+    color: #999;
+    font-weight: 200;
+    font-size: 2.6em;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
 
-tr {
-  page-break-inside: avoid;
-}
+  .title-page > h2 {
+    font-size: 1.1rem;
+    font-weight: 200;
+    padding: 0;
+    margin: 0;
+  }
 
-.listingblock {
-  page-break-inside: avoid;
-}
+  .title-document {
+    padding-right: 1.25em;
+    padding-left: 1.25em;
+    text-align: center;
+  }
 
-.title-document {
-  padding-right: 1.25em;
-  padding-left: 1.25em;
-  text-align: center;
-}
-
-.title-document h1 {
-  font-size: 2.6rem;
+  .title-document h1 {
+    font-size: 2.6em;
+  }
 }
