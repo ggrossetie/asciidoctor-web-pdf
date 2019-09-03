@@ -48,4 +48,10 @@ Guillaume Grossetie
     const $ = cheerio.load(templates.document(doc))
     expect($('.title-document > h1').length).to.equal(0)
   })
+
+  it('should include a custom stylesheet', () => {
+    const doc = asciidoctor.load('[.greetings]#Hello world#', { attributes: { stylesheet: `${__dirname}/fixtures/custom.css` } })
+    const $ = cheerio.load(templates.document(doc))
+    expect($('head > style').html()).to.have.string('.greetings{color: #fecbcb;}')
+  })
 })
