@@ -1853,7 +1853,7 @@ a span.icon > .fa {
 }
 
 .conum[data-value] {
-  display: inline-block;
+  display: inline-flex;
   color: #fff !important;
   background-color: rgba(0, 0, 0, .8);
   -webkit-border-radius: 100px;

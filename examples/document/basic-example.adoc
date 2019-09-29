@@ -23,9 +23,10 @@ Here's how you say "`Hello, World!`" in Prawn:
 require 'prawn'
 
 Prawn::Document.generate 'example.pdf' do
-  text 'Hello, World!'
+  text 'Hello, World!' // <1>
 end
 ----
+<1> Add `Hello, World!` as text
 
 == Equations and Formulas
 
@@ -44,6 +45,31 @@ sqrt(4) = 2
 
 Water (stem:[H_2O]) is a critical component.
 --
+
+== Icons
+
+:icons: font
+//:icontype: svg
+
+.Size & title
+Do you want to drink a small icon:cocktail[sm] or a tall icon:beer[2x,title=pint] ?
+
+.Fixed-width
+icon:ruler-vertical[fw] vertical ruler +
+icon:ruler-horizontal[fw] horizontal ruler
+
+.Rotate
+icon:flag[rotate=90] +
+icon:flag[rotate=180] +
+icon:flag[rotate=270] +
+icon:flag[flip=horizontal] +
+icon:flag[flip=vertical]
+
+.Roles
+icon:heart[role=is-primary] icon:heart[role=is-success] icon:heart[role=is-warning] icon:heart[role=is-danger]
+
+.Set
+icon:address-book[set=far] icon:address-book[] icon:chrome@fab[]
 
 == Conclusion
 
