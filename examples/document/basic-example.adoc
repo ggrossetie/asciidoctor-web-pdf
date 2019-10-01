@@ -65,11 +65,11 @@ icon:flag[rotate=270] +
 icon:flag[flip=horizontal] +
 icon:flag[flip=vertical]
 
-.Roles
-icon:heart[role=is-primary] icon:heart[role=is-success] icon:heart[role=is-warning] icon:heart[role=is-danger]
+.Octicons
+You can icon:repo-forked[set=octicons] me on icon:mark-github[set=octicons]... bip bip bop icon:hubot@octicons[]
 
-.Set
-icon:address-book[set=far] icon:address-book[] icon:chrome@fab[]
+.FontAwesome solid (default), regular and brand
+icon:address-book[] icon:address-book[set=far] icon:chrome@fab[]
 
 == Conclusion
 
