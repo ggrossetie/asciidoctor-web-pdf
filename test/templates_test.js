@@ -54,4 +54,30 @@ Guillaume Grossetie
     const $ = cheerio.load(templates.document(doc))
     expect($('head > style').html()).to.have.string('.greetings{color: #fecbcb;}')
   })
+
+  it('should include MathML when stem is set', () => {
+    const doc = asciidoctor.load(`= Title
+:stem:
+
+== Section`)
+    const $ = cheerio.load(templates.document(doc))
+    expect($('script[type=\'text/x-mathjax-config\']').length).to.equal(1)
+  })
+
+  it('should not include MathML when stem is not set', () => {
+    const doc = asciidoctor.load(`= Title
+:stem!:
+
+== Section`)
+    const $ = cheerio.load(templates.document(doc))
+    expect($('script[type=\'text/x-mathjax-config\']').length).to.equal(0)
+  })
+
+  it('should not include MathML when stem is not present', () => {
+    const doc = asciidoctor.load(`= Title
+
+== Section`)
+    const $ = cheerio.load(templates.document(doc))
+    expect($('script[type=\'text/x-mathjax-config\']').length).to.equal(0)
+  })
 })
