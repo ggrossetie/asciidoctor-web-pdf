@@ -17,7 +17,9 @@
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
-    "lint": "standard lib/**.js test/**.js"
+    "lint": "standard lib/**.js test/**.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -38,7 +40,8 @@
     "puppeteer": "1.15.0",
     "mathjax": "^2.7.6",
     "file-url": "3.0.0",
-    "yargs": "13.2.2"
+    "yargs": "13.2.2",
+    "snyk": "^1.230.5"
   },
   "devDependencies": {
     "@asciidoctor/core": "^2.0.0-rc.1",
@@ -50,5 +53,6 @@
   },
   "peerDependencies": {
     "@asciidoctor/core": "^2.0.0-rc.1"
-  }
+  },
+  "snyk": true
 }
