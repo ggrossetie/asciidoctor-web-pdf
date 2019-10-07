@@ -1,6 +1,7 @@
 # Asciidoctor.js PDF
 
 [![Build Status](https://travis-ci.org/Mogztter/asciidoctor-pdf.js.svg?branch=master)](https://travis-ci.org/Mogztter/asciidoctor-pdf.js)
+[![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
 
 Convert AsciiDoc document to PDF using Asciidoctor.js and Puppeteer (Headless Chrome)
 
