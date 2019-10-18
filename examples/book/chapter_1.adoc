@@ -135,7 +135,7 @@ finding it very nice, (it had, in fact, a sort of mixed flavour of cherry-tart,
 custard, pine-apple, roast turkey, toffee, and hot buttered toast,) she very
 soon finished it off.
 
-<img class='stars' src='assets/stars.png'></img>
+image::assets/stars.png[role=stars]
 
 ‘What a curious feeling!’ said Alice; ‘I must be shutting up like a telescope.’
 
