@@ -1,0 +1,396 @@
+@import 'https://fonts.googleapis.com/css?family=Source+Code+Pro|Open+Sans&display=swap';
+
+@page {
+  size: 1024px 768px;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  color: #797979;
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+p, blockquote, dt, td.content, span.alt {
+  font-size: 1.4rem;
+}
+
+html {
+  font-size: 16pt;
+}
+
+.slide {
+  position: relative;
+  width: 1024px;
+  height: 768px;
+
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+  padding: 2.5rem 3.75rem;
+
+  background: linear-gradient(to bottom, #fff 90%, #e6e6e6);
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+h1 {
+  font-size: 4.0625rem;
+  letter-spacing: -.1875rem;
+  line-height: 1.4;
+  color: #515151;
+}
+
+h1, h2 {
+  margin-top: 0;
+  font-family: "Open Sans", "DejaVu Sans", sans-serif;
+  font-weight: 600;
+  color: #515151;
+}
+
+.slide.title h2 {
+  color: #a9a9a9;
+  font-size: 2.125rem;
+  font-weight: normal;
+}
+
+h2 {
+  letter-spacing: -.125rem;
+  line-height: 1;
+}
+
+h3 {
+  font-size: 1.875rem;
+  font-weight: inherit;
+  letter-spacing: -.0625rem;
+  line-height: 2;
+  color: #797979;
+}
+
+:not(header) > h2, header {
+  margin-bottom: 2.5rem;
+}
+
+table {
+  font-size: 1.25rem;
+}
+
+ul {
+  margin: 0 0 1em 1.2em;
+  position: relative;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+ul li {
+  margin-bottom: .15em;
+}
+
+ul > li p {
+  margin-bottom: 0.1rem;
+}
+
+.ulist .ulist {
+  margin-bottom: 0.15rem;
+}
+
+ul li::before {
+  content: "\00b7";
+  margin-left: -1em;
+  position: absolute;
+  font-weight: 600;
+}
+
+ul ul {
+  margin: .1em 0 0 1em;
+}
+
+ul li ul li::before {
+  content: "\002d";
+}
+
+h1, h2, h3 {
+  margin: 0;
+}
+
+.slide.title > footer {
+  position: absolute;
+  bottom: 3rem;
+  font-size: 1.25rem;
+  margin-top: 2em;
+}
+
+.slide.title header {
+  position: absolute;
+  bottom: 11.25rem;
+  margin-bottom: 0;
+}
+
+.slide.title::before {
+  content: "";
+  background-image: url(../images/google-developers-icon.svg), linear-gradient(to left, #e6e6e6, #e6e6e6);
+  background-size: 3rem 3rem, 100% 100%;
+  background-position: right 1rem center, left top;
+  background-repeat: no-repeat;
+  padding-right: 1rem;
+  position: absolute;
+  top: 9rem;
+  left: 0;
+  width: 8rem;
+  height: 4rem;
+  border-radius: 0 0.7rem 0.7rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.no-title > h2 {
+  display: none;
+}
+
+.slide::after {
+  content: attr(data-slide-number) "/" attr(data-slide-count);
+  counter-increment: slide;
+  font-size: .75rem;
+  position: absolute;
+  bottom: 1.25rem;
+  right: 3.75rem;
+  line-height: 1.9;
+}
+
+.slide.title::after {
+  content: ''
+}
+
+.compact pre {
+  font-size: .9375rem;
+  line-height: 1.3333;
+  letter-spacing: 0
+}
+
+.compact .literalblock pre, .compact .literalblock pre[class], .compact .listingblock pre, .compact .listingblock pre[class] {
+  font-size: .6rem;
+}
+
+.audioblock, .imageblock, .literalblock, .listingblock, .stemblock, .videoblock {
+  margin-bottom: 1rem;
+}
+
+.compact pre > code[data-lang]::after {
+  font-size: .75rem;
+}
+
+.compact p:not(.tableblock), .compact ul {
+  font-size: 1.1rem;
+  line-height: 1.2;
+  letter-spacing: 0
+}
+
+.compact table td, .compact table th {
+  font-size: .875rem
+}
+
+code:not([data-lang]) {
+  font-size: .95em;
+  color: #000
+}
+
+pre, pre > code {
+  font-family: "Source Code Pro", monospace;
+  color: #000;
+  background-color: #e6e6e6;
+  margin: 0 0 1.25rem -3.75rem;
+  position: relative;
+}
+
+.literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] {
+  font-size: .8em;
+  padding: 0;
+}
+
+pre > code[data-lang] {
+  display: block;
+  background: inherit;
+  padding: .625rem 4.75rem .625rem 5.75rem;
+}
+
+pre > code[data-lang]::after {
+  content: attr(data-lang);
+  background-color: #a9a9a9;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.25rem;
+  color: #fff;
+  padding: .125rem 1.5625rem;
+  text-transform: uppercase
+}
+
+b.button {
+  display: inline-block;
+  color: #000;
+  background: linear-gradient(#f9f9f9 40%, #e3e3e3 70%);
+  font-weight: inherit;
+  border: 1px solid #a9a9a9;
+  border-radius: 3px;
+  white-space: nowrap;
+  text-shadow: 1px 1px #fff;
+  font-size: .5em;
+  vertical-align: middle;
+  padding: .3125rem .5rem .35rem;
+}
+
+b.button:before, b.button:after {
+  display: none;
+}
+
+.disabled b.button {
+  color: #a9a9a9;
+}
+
+.columns-2 {
+  display: flex;
+}
+
+.columns-2 > * {
+  flex: 0 0 50%;
+}
+
+.slide.image h2, p.credit.light, small.credit.light {
+  color: #fff;
+}
+
+p.credit, small.credit {
+  font-size: .875rem;
+  color: #a9a9a9;
+  position: absolute;
+  bottom: 4.375rem;
+  left: 3.75rem;
+  margin: 0;
+}
+
+.slide.inverse {
+  color: #e6e6e6;
+  background: #515151;
+}
+
+.quoteblock {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quoteblock blockquote:before {
+  content: open-quote;
+  position: absolute;
+  margin-left: -.5em;
+  color: inherit;
+}
+
+.quoteblock blockquote {
+  margin: 0;
+  font-size: 2.5rem;
+  line-height: 1.6;
+}
+
+.quoteblock blockquote, .quoteblock blockquote p {
+  color: inherit;
+}
+
+.quoteblock .attribution cite, .verseblock .attribution cite {
+  color: inherit;
+}
+
+.slide.closing {
+  background: #4387fd;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.closing h2 {
+  color: inherit;
+  margin-bottom: 3.3333rem;
+}
+
+.slide.segue h2 {
+  font-size: 3.75rem;
+  line-height: .75;
+}
+
+.slide.closing .contact td.hdlist1 {
+  width: 7.1875rem;
+}
+
+.slide.closing .contact td, ol, ul {
+  padding: 0;
+}
+
+.slide.closing .contact p, .slide.closing .contact td {
+  font-size: inherit;
+}
+
+.slide.closing .contact p, .slide.closing .contact td {
+  font-size: inherit;
+}
+
+.slide.closing table tr th, .slide.closing table tr td {
+  color: inherit;
+}
+
+.slide.segue::before, .slide.title::before {
+  content: "";
+  background-image: url(../images/google-developers-icon.svg), linear-gradient(to left, #e6e6e6, #e6e6e6);
+  background-size: 3rem 3rem, 100% 100%;
+  background-position: right 15px center, left top;
+  background-repeat: no-repeat;
+  padding-right: 1rem;
+  position: absolute;
+  top: 7.8125rem;
+  left: 0;
+  width: 8rem;
+  height: 4rem;
+  border-radius: 0 10px 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  transition: background-size 500ms ease-out 500ms;
+}
+
+.slide.badge-right::before {
+  top: 5.475rem;
+  right: 0;
+  left: initial;
+  border-radius: 10px 0 0 10px;
+  background-position: 15px center, right top;
+}
+
+.slide.badge-bottom::before {
+  top: initial;
+  bottom: 3.75rem;
+}
+
+figure.image {
+  max-width: 100%;
+}
+
+figure.image.crux {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+figure.image.crux {
+  align-items: center;
+}

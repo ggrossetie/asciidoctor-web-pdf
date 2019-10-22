@@ -1,4 +1,4 @@
-= Asciidoctor.js PDF Presentation
+= Asciidoctor PDF Presentation
 Tulse Luper <luper@example.org>
 :icons: font
 
@@ -42,9 +42,10 @@ class property(object):
 ----
 
 
-[.two-col]
 == Two Columns
-
+[.columns-2]
+--
+[.column]
 [source,python]
 ----
 class Point(NamedTuple):
@@ -52,9 +53,11 @@ class Point(NamedTuple):
     y: float
 ----
 
---
+[.column]
+====
 `NamedTuple` is cool:
 
   * `+__str__+`
   * `+__eq__+` & `+__hash__+`
+====
 --

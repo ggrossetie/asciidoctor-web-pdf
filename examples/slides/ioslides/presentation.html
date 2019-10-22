@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="/home/guillaume/workspace/opensource/asciidoctor/asciidoctor-pdf.js/examples/slides/asciidoctor.css" rel="stylesheet">
+<link rel="stylesheet" href="/home/guillaume/workspace/opensource/asciidoctor/asciidoctor-pdf.js/examples/slides/ioslides/styles/main.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<section class="title slide">
+  <header>
+    <h1>Asciidoctor PDF</h1>
+<h2>Beautiful documents using web technologies</h2>
+  </header>
+  <footer>
+    <p class="author">Author Name</p>
+  </footer>
+</section>
+<section class="slide " data-slide-number="1" data-slide-count="14" >
+  <h2>Slide with Bullets</h2>
+  <div class="ulist">
+<ul>
+<li>
+<p>Titles are formatted as Open Sans with bold applied</p>
+</li>
+<li>
+<p>The font size of titles is set at 45</p>
+</li>
+<li>
+<p>Title capitalization is title case</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Subtitle capitalization is title case</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Titles and subtitles should never have a period at the end</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="slide compact " data-slide-number="2" data-slide-count="14" >
+  <h2>Slide with Smaller Font</h2>
+  <div class="ulist">
+<ul>
+<li>
+<p>All <a href="http://google.com">links</a> open in new tabs.</p>
+</li>
+<li>
+<p>To change that behavior, add <code>target="_self"</code> to the link.</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="slide " data-slide-number="3" data-slide-count="14" >
+  <header>
+  <h2>Code Slide (with Subtitle Placeholder)</h2>
+  <h3> Subtitle Placeholder</h3>
+</header>
+  <div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-js" data-lang="js">// Say hello world until the user starts questioning
+// the meaningfulness of their existence.
+function helloWorld(world) {
+  for (var i = 42; --i &gt;= 0;) {
+    alert('Hello ' + String(world));
+  }
+}</code></pre>
+</div>
+</div>
+</section>
+<section class="slide compact " data-slide-number="4" data-slide-count="14" >
+  <h2>Code Slide (Smaller Font)</h2>
+  <div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-js" data-lang="js">// Say hello world until the user starts questioning
+// the meaningfulness of their existence.
+function helloWorld(world) {
+  for (var i = 42; --i &gt;= 0;) {
+    alert('Hello ' + String(world));
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-html" data-lang="html">&lt;style&gt;
+  p { color: pink }
+  b { color: blue }
+&lt;/style&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-html" data-lang="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;My Awesome Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;Hello world&lt;/p&gt;
+&lt;body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide " data-slide-number="5" data-slide-count="14" >
+  <h2>Slide with Image</h2>
+  <figure class="image reflect"><img src="images/piechart.png" height="419" width="654"/></figure>
+</section>
+<section class="slide " data-slide-number="6" data-slide-count="14" >
+  <h2>Slide with Image (Centered horz/vert)</h2>
+  <figure class="image crux"><img src="images/barchart.png" height="299" width="697"/></figure>
+</section>
+<section class="slide " data-slide-number="7" data-slide-count="14" >
+  <header>
+  <h2>Table Option A</h2>
+  <h3> Subtitle Placeholder</h3>
+</header>
+  <table class="tableblock frame-all grid-all fit-content spread">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">Column 1</th>
+<th class="tableblock halign-left valign-top">Column 2</th>
+<th class="tableblock halign-left valign-top">Column 3</th>
+<th class="tableblock halign-left valign-top">Column 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 1</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 2</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 3</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 4</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section class="slide compact " data-slide-number="8" data-slide-count="14" >
+  <header>
+  <h2>Table Option A (Smaller Text)</h2>
+  <h3> Subtitle Placeholder</h3>
+</header>
+  <table class="tableblock frame-all grid-all fit-content spread">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">Column 1</th>
+<th class="tableblock halign-left valign-top">Column 2</th>
+<th class="tableblock halign-left valign-top">Column 3</th>
+<th class="tableblock halign-left valign-top">Column 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 1</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 2</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 3</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 4</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Row 5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section class="slide " data-slide-number="9" data-slide-count="14" >
+  <header>
+  <h2>Table Option B</h2>
+  <h3> Subtitle Placeholder</h3>
+</header>
+  <table class="tableblock frame-all grid-all fit-content pivot spread">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Header 1</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Header 2</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Header 3</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Header 4</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Header 5</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">placeholder</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section class="slide " data-slide-number="10" data-slide-count="14" >
+  <h2>Slide Styles</h2>
+  <div class="columns-2 compact float-group"><div class="ulist left">
+<ul>
+<li>
+<p>class="red"</p>
+</li>
+<li>
+<p>class="red2"</p>
+</li>
+<li>
+<p>class="red3"</p>
+</li>
+<li>
+<p>class="blue"</p>
+</li>
+<li>
+<p>class="blue2"</p>
+</li>
+<li>
+<p>class="blue3"</p>
+</li>
+<li>
+<p>class="green"</p>
+</li>
+<li>
+<p>class="green2"</p>
+</li>
+</ul>
+</div>
+<div class="ulist left">
+<ul>
+<li>
+<p>class="green3"</p>
+</li>
+<li>
+<p>class="yellow"</p>
+</li>
+<li>
+<p>class="yellow2"</p>
+</li>
+<li>
+<p>class="yellow3"</p>
+</li>
+<li>
+<p>class="gray"</p>
+</li>
+<li>
+<p>class="gray2"</p>
+</li>
+<li>
+<p>class="gray3"</p>
+</li>
+<li>
+<p>class="gray4"</p>
+</li>
+</ul>
+</div></div>
+<div class="text-center">I am centered text with a <b class="button">Button</b> and <span class="disabled"><b class="button">Disabled</b></span> button.</div>
+</section>
+<section class="slide image " data-slide-number="11" data-slide-count="14" style="background-image: url(images/mountains.jpg); background-size: cover; background-repeat: no-repeat">
+  <h2>Full Image (with Optional Header)</h2>
+  
+<p class="credit light">unsplash.com/photos/PKVcQXEcfLU</p>
+</section>
+<section class="slide inverse segue badge-right badge-bottom no-title" data-slide-number="12" data-slide-count="14" >
+  <h2>!</h2>
+  <div class="quoteblock tada">
+<blockquote>
+This is an example of a quote.
+</blockquote>
+<div class="attribution">
+&#8212; Name<br>
+<cite>Company</cite>
+</div>
+</div>
+</section>
+<section class="slide closing segue badge-right " data-slide-number="13" data-slide-count="14" >
+  <h2>&lt;Thank You!&gt;</h2>
+  <p class="">Important contact information goes here.</p>
+<div class="hdlist contact">
+<table>
+<tr>
+<td class="hdlist1">
+g+
+</td>
+<td class="hdlist2">
+<p>plus.google.com/1234567890</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+twitter
+</td>
+<td class="hdlist2">
+<p>@yourhandle</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+www
+</td>
+<td class="hdlist2">
+<p>www.you.com</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+github
+</td>
+<td class="hdlist2">
+<p>github.com/you</p>
+</td>
+</tr>
+</table>
+</div>
+</section>
+<section class="slide inverse subject no-title" data-slide-number="14" data-slide-count="14" >
+  <h2>!</h2>
+  <figure class="image logo crux"><img src="images/google-developers-logo-inverse.svg" height="96" width="422"/></figure>
+</section>
+</body>
