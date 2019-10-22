@@ -11,6 +11,20 @@ html {
   text-align: justify;
 }
 
+/* fix callout text alignment */
+.conum[data-value]:after {
+  display: flex;
+  margin: auto;
+}
+
+pre .conum[data-value] {
+  display: inline-flex;
+}
+
+.colist > table tr > td:first-of-type {
+  padding: .5625em .625em;
+}
+
 p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-split-to],
 .sectionbody, [data-split-original] {
   text-align-last: left !important;
