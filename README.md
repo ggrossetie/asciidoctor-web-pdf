@@ -153,45 +153,50 @@ ${node.getContent()}
 ```
 
 In the above example, we are using [Template Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) but you can use your favorite template engine.
-You can also override other elements. Here's the complete list:
+You can also override other elements.
 
-* `document`
-* `embedded`
-* `outline`
-* `section`
-* `admonition`
-* `audio`
-* `colist`
-* `dlist`
-* `example`
-* `floating-title`
-* `image`
-* `listing`
-* `literal`
-* `stem`
-* `olist`
-* `open`
-* `page_break`
-* `paragraph`
-* `preamble`
-* `quote`
-* `thematic_break`
-* `sidebar`
-* `table`
-* `toc`
-* `ulist`
-* `verse`
-* `video`
-* `inline_anchor`
-* `inline_break`
-* `inline_button`
-* `inline_callout`
-* `inline_footnote`
-* `inline_image`
-* `inline_indexterm`
-* `inline_kbd`
-* `inline_menu`
-* `inline_quoted`
+<details>
+  <summary>Complete list of elements</summary>
+  <ul>
+    <li><code>document</code></li>
+    <li><code>embedded</code></li>
+    <li><code>outline</code></li>
+    <li><code>section</code></li>
+    <li><code>admonition</code></li>
+    <li><code>audio</code></li>
+    <li><code>colist</code></li>
+    <li><code>dlist</code></li>
+    <li><code>example</code></li>
+    <li><code>floating-title</code></li>
+    <li><code>image</code></li>
+    <li><code>listing</code></li>
+    <li><code>literal</code></li>
+    <li><code>stem</code></li>
+    <li><code>olist</code></li>
+    <li><code>open</code></li>
+    <li><code>page_break</code></li>
+    <li><code>paragraph</code></li>
+    <li><code>preamble</code></li>
+    <li><code>quote</code></li>
+    <li><code>thematic_break</code></li>
+    <li><code>sidebar</code></li>
+    <li><code>table</code></li>
+    <li><code>toc</code></li>
+    <li><code>ulist</code></li>
+    <li><code>verse</code></li>
+    <li><code>video</code></li>
+    <li><code>inline_anchor</code></li>
+    <li><code>inline_break</code></li>
+    <li><code>inline_button</code></li>
+    <li><code>inline_callout</code></li>
+    <li><code>inline_footnote</code></li>
+    <li><code>inline_image</code></li>
+    <li><code>inline_indexterm</code></li>
+    <li><code>inline_kbd</code></li>
+    <li><code>inline_menu</code></li>
+    <li><code>inline_quoted</code></li>
+</ul>
+</details>
 
 The function takes one parameter, called `node`.
 Depending on the context a `node` can be
@@ -203,13 +208,13 @@ If you want to learn more, please read the [Asciidoctor.js API documentation](ht
 
 To help you get started, we provides a few alternative layouts in the `examples` directory:
 
-| Layout                    | Template file                           |
-| ------------------------- |---------------------------------------- |
-| **Letter**                | `examples/letter/template.js`           |
-| **Book**                  | `examples/book/template.js`             |
-| **Slides**                | `examples/slides/template.js`           |
-| **Resume**                | `examples/resume/template.js`           |
-| **Cheat sheet (Snyk)**    | `examples/cheat-sheet/snyk/template.js` |
+| Layout                    | Template file                                                                     |
+| ------------------------- |---------------------------------------------------------------------------------- |
+| **Letter**                | [`examples/letter/template.js`](examples/letter/template.js)                      |
+| **Book**                  | [`examples/book/template.js`](examples/book/template.js)                          |
+| **Slides**                | [`examples/slides/template.js`](examples/slides/template.js)                      |
+| **Resume**                | [`examples/resume/template.js`](examples/resume/template.js)                      |
+| **Cheat sheet (Snyk)**    | [`examples/cheat-sheet/snyk/template.js`](examples/cheat-sheet/snyk/template.js)  |
 
 To enable a custom layout, use the `--template-require` command line option.
 For instance, if I want to use the cheat sheet layout on `examples/cheat-sheet/maven-security-cheat-sheet.adoc`:
