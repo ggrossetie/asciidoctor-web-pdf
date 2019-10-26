@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="/home/guillaume/workspace/opensource/asciidoctor/asciidoctor-pdf.js/examples/slides/asciidoctor.css" rel="stylesheet">
+<link rel="stylesheet" href="/home/guillaume/workspace/opensource/asciidoctor/asciidoctor-pdf.js/examples/slides/slides.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<section class="title slide">
+  <header>
+    <h1>Asciidoctor PDF Presentation</h1>
+  </header>
+  <footer>
+    <p class="author">Tulse Luper</p>
+  </footer>
+</section>
+<section class="slide " data-slide-number="1" data-slide-count="3" >
+  <h2>First Slide</h2>
+  <p class="">Hello</p>
+<div class="ulist">
+<ul>
+<li>
+<p>one</p>
+</li>
+<li>
+<p>two</p>
+</li>
+<li>
+<p>three</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+AsciiDoc is a powerful &amp; easy to use markup language
+</td>
+</tr>
+</table>
+</div>
+</section>
+<section class="slide no-title" data-slide-number="2" data-slide-count="3" >
+  <h2>!</h2>
+  <div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">class property(object):
+    def __init__(self, fget=None, fset=None, fdel=None):
+        self.fget = fget
+        self.fset = fset
+        self.fdel = fdel
+
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        if self.fget is None:
+            raise AttributeError("unreadable attribute")
+        return self.fget(obj)
+
+    def __set__(self, obj, value):
+        if self.fset is None:
+            raise AttributeError("can't set attribute")
+        self.fset(obj, value)
+
+    def __delete__(self, obj):
+        if self.fdel is None:
+            raise AttributeError("can't delete attribute")
+        self.fdel(obj)</code></pre>
+</div>
+</div>
+</section>
+<section class="slide " data-slide-number="3" data-slide-count="3" >
+  <h2>Two Columns</h2>
+  <div class="columns-2"><div class="listingblock column">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">class Point(NamedTuple):
+    x: float
+    y: float</code></pre>
+</div>
+</div>
+<div class="exampleblock column">
+<div class="content">
+<p class=""><code>NamedTuple</code> is cool:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>__str__</code></p>
+</li>
+<li>
+<p><code>__eq__</code> &amp; <code>__hash__</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div></div>
+</section>
+</body>
