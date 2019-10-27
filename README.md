@@ -55,7 +55,7 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/slides/ioslides/presentation.pdf">
         <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/slides/ioslides/presentation_screenshot.png" />
       </a>
-      Resume -
+      Slides -
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/slides/ioslides/"> Source </a> /
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/slides/ioslides/presentation.pdf"> PDF </a>
     </td>
