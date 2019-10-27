@@ -36,6 +36,7 @@
     "@fortawesome/free-brands-svg-icons": "5.11.2",
     "@fortawesome/free-regular-svg-icons": "5.11.2",
     "@fortawesome/free-solid-svg-icons": "5.11.2",
+    "@primer/octicons": "^9.1.1",
     "chokidar": "2.0.4",
     "fs-extra": "7.0.1",
     "pagedjs": "0.1.34",
