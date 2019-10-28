@@ -46,6 +46,8 @@ sqrt(4) = 2
 Water (stem:[H_2O]) is a critical component.
 --
 
+<<<
+
 == Icons
 
 :icons: font
@@ -71,6 +73,8 @@ icon:heart[role=is-primary] icon:heart[role=is-success] icon:heart[role=is-warni
 .Set
 icon:address-book[set=far] icon:address-book[] icon:chrome@fab[]
 
+<<<
+
 == Admonitions
 
 CAUTION: Don't stick forks in electric sockets.
@@ -83,6 +87,7 @@ IMPORTANT: A monster lives in the basement.
 
 NOTE: If you go into the basement, see if you can find Kenny's parka.
 
+<<<
 
 == Conclusion
 
