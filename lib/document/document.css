@@ -11,6 +11,42 @@ html {
   text-align: justify;
 }
 
+/* fix admonition icon size with Font Awesome 5*/
+.admonitionblock > table td.icon svg {
+  height: 2.5em;
+  width: 100%;
+  cursor: default;
+}
+.admonitionblock > table td.icon .fa-layers {
+  height: 100%;
+  width: 100%;
+}
+
+.admonitionblock > table td.icon svg.fa-hand-paper path,
+.admonitionblock > table td.icon svg.fa-lightbulb path {
+  fill: white;
+}
+
+.admonitionblock td.icon.icon-tip svg.fa-circle path {
+  fill: #338a37;
+}
+
+.admonitionblock td.icon.icon-caution svg.fa-circle path {
+  fill: #7c3479;
+}
+
+.admonitionblock td.icon.icon-note svg > path {
+  fill: #1565c0;
+}
+
+.admonitionblock td.icon.icon-warning svg > path {
+  fill: #b26610;
+}
+
+.admonitionblock td.icon.icon-important svg > path {
+  fill: #ab2424;
+}
+
 /* fix callout text alignment */
 .conum[data-value]:after {
   display: flex;
