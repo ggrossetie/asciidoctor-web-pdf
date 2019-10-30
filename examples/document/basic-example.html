@@ -1,7 +1,352 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
+<title>Document Title</title>
 <meta charset="UTF-8">
+<style>
+svg:not(:root).svg-inline--fa {
+  overflow: visible; }
+
+.svg-inline--fa {
+  display: inline-block;
+  font-size: inherit;
+  height: 1em;
+  overflow: visible;
+  vertical-align: -.125em; }
+  .svg-inline--fa.fa-lg {
+    vertical-align: -.225em; }
+  .svg-inline--fa.fa-w-1 {
+    width: 0.0625em; }
+  .svg-inline--fa.fa-w-2 {
+    width: 0.125em; }
+  .svg-inline--fa.fa-w-3 {
+    width: 0.1875em; }
+  .svg-inline--fa.fa-w-4 {
+    width: 0.25em; }
+  .svg-inline--fa.fa-w-5 {
+    width: 0.3125em; }
+  .svg-inline--fa.fa-w-6 {
+    width: 0.375em; }
+  .svg-inline--fa.fa-w-7 {
+    width: 0.4375em; }
+  .svg-inline--fa.fa-w-8 {
+    width: 0.5em; }
+  .svg-inline--fa.fa-w-9 {
+    width: 0.5625em; }
+  .svg-inline--fa.fa-w-10 {
+    width: 0.625em; }
+  .svg-inline--fa.fa-w-11 {
+    width: 0.6875em; }
+  .svg-inline--fa.fa-w-12 {
+    width: 0.75em; }
+  .svg-inline--fa.fa-w-13 {
+    width: 0.8125em; }
+  .svg-inline--fa.fa-w-14 {
+    width: 0.875em; }
+  .svg-inline--fa.fa-w-15 {
+    width: 0.9375em; }
+  .svg-inline--fa.fa-w-16 {
+    width: 1em; }
+  .svg-inline--fa.fa-w-17 {
+    width: 1.0625em; }
+  .svg-inline--fa.fa-w-18 {
+    width: 1.125em; }
+  .svg-inline--fa.fa-w-19 {
+    width: 1.1875em; }
+  .svg-inline--fa.fa-w-20 {
+    width: 1.25em; }
+  .svg-inline--fa.fa-pull-left {
+    margin-right: .3em;
+    width: auto; }
+  .svg-inline--fa.fa-pull-right {
+    margin-left: .3em;
+    width: auto; }
+  .svg-inline--fa.fa-border {
+    height: 1.5em; }
+  .svg-inline--fa.fa-li {
+    width: 2em; }
+  .svg-inline--fa.fa-fw {
+    width: 1.25em; }
+
+.fa-layers svg.svg-inline--fa {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0; }
+
+.fa-layers {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -.125em;
+  width: 1em; }
+  .fa-layers svg.svg-inline--fa {
+    -webkit-transform-origin: center center;
+            transform-origin: center center; }
+
+.fa-layers-text, .fa-layers-counter {
+  display: inline-block;
+  position: absolute;
+  text-align: center; }
+
+.fa-layers-text {
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-transform-origin: center center;
+          transform-origin: center center; }
+
+.fa-layers-counter {
+  background-color: #ff253a;
+  border-radius: 1em;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #fff;
+  height: 1.5em;
+  line-height: 1;
+  max-width: 5em;
+  min-width: 1.5em;
+  overflow: hidden;
+  padding: .25em;
+  right: 0;
+  text-overflow: ellipsis;
+  top: 0;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: top right;
+          transform-origin: top right; }
+
+.fa-layers-bottom-right {
+  bottom: 0;
+  right: 0;
+  top: auto;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: bottom right;
+          transform-origin: bottom right; }
+
+.fa-layers-bottom-left {
+  bottom: 0;
+  left: 0;
+  right: auto;
+  top: auto;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: bottom left;
+          transform-origin: bottom left; }
+
+.fa-layers-top-right {
+  right: 0;
+  top: 0;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: top right;
+          transform-origin: top right; }
+
+.fa-layers-top-left {
+  left: 0;
+  right: auto;
+  top: 0;
+  -webkit-transform: scale(0.25);
+          transform: scale(0.25);
+  -webkit-transform-origin: top left;
+          transform-origin: top left; }
+
+.fa-lg {
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -.0667em; }
+
+.fa-xs {
+  font-size: .75em; }
+
+.fa-sm {
+  font-size: .875em; }
+
+.fa-1x {
+  font-size: 1em; }
+
+.fa-2x {
+  font-size: 2em; }
+
+.fa-3x {
+  font-size: 3em; }
+
+.fa-4x {
+  font-size: 4em; }
+
+.fa-5x {
+  font-size: 5em; }
+
+.fa-6x {
+  font-size: 6em; }
+
+.fa-7x {
+  font-size: 7em; }
+
+.fa-8x {
+  font-size: 8em; }
+
+.fa-9x {
+  font-size: 9em; }
+
+.fa-10x {
+  font-size: 10em; }
+
+.fa-fw {
+  text-align: center;
+  width: 1.25em; }
+
+.fa-ul {
+  list-style-type: none;
+  margin-left: 2.5em;
+  padding-left: 0; }
+  .fa-ul > li {
+    position: relative; }
+
+.fa-li {
+  left: -2em;
+  position: absolute;
+  text-align: center;
+  width: 2em;
+  line-height: inherit; }
+
+.fa-border {
+  border: solid 0.08em #eee;
+  border-radius: .1em;
+  padding: .2em .25em .15em; }
+
+.fa-pull-left {
+  float: left; }
+
+.fa-pull-right {
+  float: right; }
+
+.fa.fa-pull-left,
+.fas.fa-pull-left,
+.far.fa-pull-left,
+.fal.fa-pull-left,
+.fab.fa-pull-left {
+  margin-right: .3em; }
+
+.fa.fa-pull-right,
+.fas.fa-pull-right,
+.far.fa-pull-right,
+.fal.fa-pull-right,
+.fab.fa-pull-right {
+  margin-left: .3em; }
+
+.fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+          animation: fa-spin 2s infinite linear; }
+
+.fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
+          animation: fa-spin 1s infinite steps(8); }
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+.fa-rotate-90 {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg); }
+
+.fa-rotate-180 {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg); }
+
+.fa-rotate-270 {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg); }
+
+.fa-flip-horizontal {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+  -webkit-transform: scale(-1, 1);
+          transform: scale(-1, 1); }
+
+.fa-flip-vertical {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  -webkit-transform: scale(1, -1);
+          transform: scale(1, -1); }
+
+.fa-flip-horizontal.fa-flip-vertical {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  -webkit-transform: scale(-1, -1);
+          transform: scale(-1, -1); }
+
+:root .fa-rotate-90,
+:root .fa-rotate-180,
+:root .fa-rotate-270,
+:root .fa-flip-horizontal,
+:root .fa-flip-vertical {
+  -webkit-filter: none;
+          filter: none; }
+
+.fa-stack {
+  display: inline-block;
+  height: 2em;
+  position: relative;
+  width: 2.5em; }
+
+.fa-stack-1x,
+.fa-stack-2x {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0; }
+
+.svg-inline--fa.fa-stack-1x {
+  height: 1em;
+  width: 1.25em; }
+
+.svg-inline--fa.fa-stack-2x {
+  height: 2em;
+  width: 2.5em; }
+
+.fa-inverse {
+  color: #fff; }
+
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px; }
+
+.sr-only-focusable:active, .sr-only-focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto; }
+
+</style>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove comment around @import statement below when using as a custom stylesheet */
@@ -1953,11 +2298,6 @@ html {
   width: 100%;
 }
 
-.admonitionblock > table td.icon svg.fa-hand-paper path,
-.admonitionblock > table td.icon svg.fa-lightbulb path {
-  fill: white;
-}
-
 .admonitionblock td.icon.icon-tip svg.fa-circle path {
   fill: #338a37;
 }
@@ -2130,348 +2470,6 @@ tr {
   break-after: always;
 }
 
-svg:not(:root).svg-inline--fa {
-  overflow: visible; }
-
-.svg-inline--fa {
-  display: inline-block;
-  font-size: inherit;
-  height: 1em;
-  overflow: visible;
-  vertical-align: -.125em; }
-  .svg-inline--fa.fa-lg {
-    vertical-align: -.225em; }
-  .svg-inline--fa.fa-w-1 {
-    width: 0.0625em; }
-  .svg-inline--fa.fa-w-2 {
-    width: 0.125em; }
-  .svg-inline--fa.fa-w-3 {
-    width: 0.1875em; }
-  .svg-inline--fa.fa-w-4 {
-    width: 0.25em; }
-  .svg-inline--fa.fa-w-5 {
-    width: 0.3125em; }
-  .svg-inline--fa.fa-w-6 {
-    width: 0.375em; }
-  .svg-inline--fa.fa-w-7 {
-    width: 0.4375em; }
-  .svg-inline--fa.fa-w-8 {
-    width: 0.5em; }
-  .svg-inline--fa.fa-w-9 {
-    width: 0.5625em; }
-  .svg-inline--fa.fa-w-10 {
-    width: 0.625em; }
-  .svg-inline--fa.fa-w-11 {
-    width: 0.6875em; }
-  .svg-inline--fa.fa-w-12 {
-    width: 0.75em; }
-  .svg-inline--fa.fa-w-13 {
-    width: 0.8125em; }
-  .svg-inline--fa.fa-w-14 {
-    width: 0.875em; }
-  .svg-inline--fa.fa-w-15 {
-    width: 0.9375em; }
-  .svg-inline--fa.fa-w-16 {
-    width: 1em; }
-  .svg-inline--fa.fa-w-17 {
-    width: 1.0625em; }
-  .svg-inline--fa.fa-w-18 {
-    width: 1.125em; }
-  .svg-inline--fa.fa-w-19 {
-    width: 1.1875em; }
-  .svg-inline--fa.fa-w-20 {
-    width: 1.25em; }
-  .svg-inline--fa.fa-pull-left {
-    margin-right: .3em;
-    width: auto; }
-  .svg-inline--fa.fa-pull-right {
-    margin-left: .3em;
-    width: auto; }
-  .svg-inline--fa.fa-border {
-    height: 1.5em; }
-  .svg-inline--fa.fa-li {
-    width: 2em; }
-  .svg-inline--fa.fa-fw {
-    width: 1.25em; }
-
-.fa-layers svg.svg-inline--fa {
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  position: absolute;
-  right: 0;
-  top: 0; }
-
-.fa-layers {
-  display: inline-block;
-  height: 1em;
-  position: relative;
-  text-align: center;
-  vertical-align: -.125em;
-  width: 1em; }
-  .fa-layers svg.svg-inline--fa {
-    -webkit-transform-origin: center center;
-            transform-origin: center center; }
-
-.fa-layers-text, .fa-layers-counter {
-  display: inline-block;
-  position: absolute;
-  text-align: center; }
-
-.fa-layers-text {
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  -webkit-transform-origin: center center;
-          transform-origin: center center; }
-
-.fa-layers-counter {
-  background-color: #ff253a;
-  border-radius: 1em;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  color: #fff;
-  height: 1.5em;
-  line-height: 1;
-  max-width: 5em;
-  min-width: 1.5em;
-  overflow: hidden;
-  padding: .25em;
-  right: 0;
-  text-overflow: ellipsis;
-  top: 0;
-  -webkit-transform: scale(0.25);
-          transform: scale(0.25);
-  -webkit-transform-origin: top right;
-          transform-origin: top right; }
-
-.fa-layers-bottom-right {
-  bottom: 0;
-  right: 0;
-  top: auto;
-  -webkit-transform: scale(0.25);
-          transform: scale(0.25);
-  -webkit-transform-origin: bottom right;
-          transform-origin: bottom right; }
-
-.fa-layers-bottom-left {
-  bottom: 0;
-  left: 0;
-  right: auto;
-  top: auto;
-  -webkit-transform: scale(0.25);
-          transform: scale(0.25);
-  -webkit-transform-origin: bottom left;
-          transform-origin: bottom left; }
-
-.fa-layers-top-right {
-  right: 0;
-  top: 0;
-  -webkit-transform: scale(0.25);
-          transform: scale(0.25);
-  -webkit-transform-origin: top right;
-          transform-origin: top right; }
-
-.fa-layers-top-left {
-  left: 0;
-  right: auto;
-  top: 0;
-  -webkit-transform: scale(0.25);
-          transform: scale(0.25);
-  -webkit-transform-origin: top left;
-          transform-origin: top left; }
-
-.fa-lg {
-  font-size: 1.33333em;
-  line-height: 0.75em;
-  vertical-align: -.0667em; }
-
-.fa-xs {
-  font-size: .75em; }
-
-.fa-sm {
-  font-size: .875em; }
-
-.fa-1x {
-  font-size: 1em; }
-
-.fa-2x {
-  font-size: 2em; }
-
-.fa-3x {
-  font-size: 3em; }
-
-.fa-4x {
-  font-size: 4em; }
-
-.fa-5x {
-  font-size: 5em; }
-
-.fa-6x {
-  font-size: 6em; }
-
-.fa-7x {
-  font-size: 7em; }
-
-.fa-8x {
-  font-size: 8em; }
-
-.fa-9x {
-  font-size: 9em; }
-
-.fa-10x {
-  font-size: 10em; }
-
-.fa-fw {
-  text-align: center;
-  width: 1.25em; }
-
-.fa-ul {
-  list-style-type: none;
-  margin-left: 2.5em;
-  padding-left: 0; }
-  .fa-ul > li {
-    position: relative; }
-
-.fa-li {
-  left: -2em;
-  position: absolute;
-  text-align: center;
-  width: 2em;
-  line-height: inherit; }
-
-.fa-border {
-  border: solid 0.08em #eee;
-  border-radius: .1em;
-  padding: .2em .25em .15em; }
-
-.fa-pull-left {
-  float: left; }
-
-.fa-pull-right {
-  float: right; }
-
-.fa.fa-pull-left,
-.fas.fa-pull-left,
-.far.fa-pull-left,
-.fal.fa-pull-left,
-.fab.fa-pull-left {
-  margin-right: .3em; }
-
-.fa.fa-pull-right,
-.fas.fa-pull-right,
-.far.fa-pull-right,
-.fal.fa-pull-right,
-.fab.fa-pull-right {
-  margin-left: .3em; }
-
-.fa-spin {
-  -webkit-animation: fa-spin 2s infinite linear;
-          animation: fa-spin 2s infinite linear; }
-
-.fa-pulse {
-  -webkit-animation: fa-spin 1s infinite steps(8);
-          animation: fa-spin 1s infinite steps(8); }
-
-@-webkit-keyframes fa-spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
-
-@keyframes fa-spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
-
-.fa-rotate-90 {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
-  -webkit-transform: rotate(90deg);
-          transform: rotate(90deg); }
-
-.fa-rotate-180 {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg); }
-
-.fa-rotate-270 {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
-  -webkit-transform: rotate(270deg);
-          transform: rotate(270deg); }
-
-.fa-flip-horizontal {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
-  -webkit-transform: scale(-1, 1);
-          transform: scale(-1, 1); }
-
-.fa-flip-vertical {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
-  -webkit-transform: scale(1, -1);
-          transform: scale(1, -1); }
-
-.fa-flip-horizontal.fa-flip-vertical {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
-  -webkit-transform: scale(-1, -1);
-          transform: scale(-1, -1); }
-
-:root .fa-rotate-90,
-:root .fa-rotate-180,
-:root .fa-rotate-270,
-:root .fa-flip-horizontal,
-:root .fa-flip-vertical {
-  -webkit-filter: none;
-          filter: none; }
-
-.fa-stack {
-  display: inline-block;
-  height: 2em;
-  position: relative;
-  width: 2.5em; }
-
-.fa-stack-1x,
-.fa-stack-2x {
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  position: absolute;
-  right: 0;
-  top: 0; }
-
-.svg-inline--fa.fa-stack-1x {
-  height: 1em;
-  width: 1.25em; }
-
-.svg-inline--fa.fa-stack-2x {
-  height: 2em;
-  width: 2.5em; }
-
-.fa-inverse {
-  color: #fff; }
-
-.sr-only {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px; }
-
-.sr-only-focusable:active, .sr-only-focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto; }
-
 @page :right {
   @bottom-right {
     content: counter(page);
@@ -2503,7 +2501,6 @@ svg:not(:root).svg-inline--fa {
 .pagedjs_page.pagedjs_first_page {
   counter-increment: page 1;
 }
-
 
 </style>
 <script type="text/x-mathjax-config">
@@ -30194,6 +30191,13 @@ Paged.registerHandlers(RepeatingTableHeaders);
 <div class="title-document">
   <h1>Document Title</h1>
 </div>
+<div style="display: none;"><ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_equations_and_formulas">Equations and Formulas</a></li>
+<li><a href="#_icons">Icons</a></li>
+<li><a href="#_admonitions">Admonitions</a></li>
+<li><a href="#_conclusion">Conclusion</a></li>
+</ul></div>
 <div id="content" class="content">
 <div id="preamble">
 <div class="sectionbody">
@@ -30268,7 +30272,7 @@ end</code></pre>
 <div class="sectionbody">
 <div class="paragraph">
 <div class="title">Size &amp; title</div>
-<p>Do you want to drink a small <svg aria-hidden="true" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-8FtfukuvgmDq" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-8FtfukuvgmDq">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
+<p>Do you want to drink a small <svg aria-hidden="true" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-Ltjx8wAChBqF" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-Ltjx8wAChBqF">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
 </div>
 <div class="paragraph">
 <div class="title">Fixed-width</div>
@@ -30301,7 +30305,7 @@ end</code></pre>
 <table>
 <tr>
 <td class="icon icon-caution">
-<span class="fa-layers"><svg aria-hidden="true" data-prefix="fas" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg aria-hidden="true" data-prefix="fas" data-icon="hand-paper" class="svg-inline--fa fa-hand-paper fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="transform-origin: 0.40625em 0.5em;"><g transform="translate(224 256)"><g transform="translate(-16, 0)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M408.781 128.007C386.356 127.578 368 146.36 368 168.79V256h-8V79.79c0-22.43-18.356-41.212-40.781-40.783C297.488 39.423 280 57.169 280 79v177h-8V40.79C272 18.36 253.644-.422 231.219.007 209.488.423 192 18.169 192 40v216h-8V80.79c0-22.43-18.356-41.212-40.781-40.783C121.488 40.423 104 58.169 104 80v235.992l-31.648-43.519c-12.993-17.866-38.009-21.817-55.877-8.823-17.865 12.994-21.815 38.01-8.822 55.877l125.601 172.705A48 48 0 0 0 172.073 512h197.59c22.274 0 41.622-15.324 46.724-37.006l26.508-112.66a192.011 192.011 0 0 0 5.104-43.975V168c.001-21.831-17.487-39.577-39.218-39.993z" transform="translate(-224 -256)"></path></g></g></svg></span>
+<span class="fa-layers"><svg aria-hidden="true" data-prefix="fas" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg aria-hidden="true" data-prefix="fas" data-icon="hand-paper" class="svg-inline--fa fa-hand-paper fa-w-14 fa-inverse" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="transform-origin: 0.40625em 0.5em;"><g transform="translate(224 256)"><g transform="translate(-16, 0)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M408.781 128.007C386.356 127.578 368 146.36 368 168.79V256h-8V79.79c0-22.43-18.356-41.212-40.781-40.783C297.488 39.423 280 57.169 280 79v177h-8V40.79C272 18.36 253.644-.422 231.219.007 209.488.423 192 18.169 192 40v216h-8V80.79c0-22.43-18.356-41.212-40.781-40.783C121.488 40.423 104 58.169 104 80v235.992l-31.648-43.519c-12.993-17.866-38.009-21.817-55.877-8.823-17.865 12.994-21.815 38.01-8.822 55.877l125.601 172.705A48 48 0 0 0 172.073 512h197.59c22.274 0 41.622-15.324 46.724-37.006l26.508-112.66a192.011 192.011 0 0 0 5.104-43.975V168c.001-21.831-17.487-39.577-39.218-39.993z" transform="translate(-224 -256)"></path></g></g></svg></span>
 </td>
 <td class="content">
 Don&#8217;t stick forks in electric sockets.
@@ -30313,7 +30317,7 @@ Don&#8217;t stick forks in electric sockets.
 <table>
 <tr>
 <td class="icon icon-tip">
-<span class="fa-layers"><svg aria-hidden="true" data-prefix="fas" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg aria-hidden="true" data-prefix="far" data-icon="lightbulb" class="svg-inline--fa fa-lightbulb fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" style="transform-origin: 0.34375em 0.5em;"><g transform="translate(176 256)"><g transform="translate(0, 0)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M176 80c-52.94 0-96 43.06-96 96 0 8.84 7.16 16 16 16s16-7.16 16-16c0-35.3 28.72-64 64-64 8.84 0 16-7.16 16-16s-7.16-16-16-16zM96.06 459.17c0 3.15.93 6.22 2.68 8.84l24.51 36.84c2.97 4.46 7.97 7.14 13.32 7.14h78.85c5.36 0 10.36-2.68 13.32-7.14l24.51-36.84c1.74-2.62 2.67-5.7 2.68-8.84l.05-43.18H96.02l.04 43.18zM176 0C73.72 0 0 82.97 0 176c0 44.37 16.45 84.85 43.56 115.78 16.64 18.99 42.74 58.8 52.42 92.16v.06h48v-.12c-.01-4.77-.72-9.51-2.15-14.07-5.59-17.81-22.82-64.77-62.17-109.67-20.54-23.43-31.52-53.15-31.61-84.14-.2-73.64 59.67-128 127.95-128 70.58 0 128 57.42 128 128 0 30.97-11.24 60.85-31.65 84.14-39.11 44.61-56.42 91.47-62.1 109.46a47.507 47.507 0 0 0-2.22 14.3v.1h48v-.05c9.68-33.37 35.78-73.18 52.42-92.16C335.55 260.85 352 220.37 352 176 352 78.8 273.2 0 176 0z" transform="translate(-176 -256)"></path></g></g></svg></span>
+<span class="fa-layers"><svg aria-hidden="true" data-prefix="fas" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg aria-hidden="true" data-prefix="far" data-icon="lightbulb" class="svg-inline--fa fa-lightbulb fa-w-11 fa-inverse" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" style="transform-origin: 0.34375em 0.5em;"><g transform="translate(176 256)"><g transform="translate(0, 0)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M176 80c-52.94 0-96 43.06-96 96 0 8.84 7.16 16 16 16s16-7.16 16-16c0-35.3 28.72-64 64-64 8.84 0 16-7.16 16-16s-7.16-16-16-16zM96.06 459.17c0 3.15.93 6.22 2.68 8.84l24.51 36.84c2.97 4.46 7.97 7.14 13.32 7.14h78.85c5.36 0 10.36-2.68 13.32-7.14l24.51-36.84c1.74-2.62 2.67-5.7 2.68-8.84l.05-43.18H96.02l.04 43.18zM176 0C73.72 0 0 82.97 0 176c0 44.37 16.45 84.85 43.56 115.78 16.64 18.99 42.74 58.8 52.42 92.16v.06h48v-.12c-.01-4.77-.72-9.51-2.15-14.07-5.59-17.81-22.82-64.77-62.17-109.67-20.54-23.43-31.52-53.15-31.61-84.14-.2-73.64 59.67-128 127.95-128 70.58 0 128 57.42 128 128 0 30.97-11.24 60.85-31.65 84.14-39.11 44.61-56.42 91.47-62.1 109.46a47.507 47.507 0 0 0-2.22 14.3v.1h48v-.05c9.68-33.37 35.78-73.18 52.42-92.16C335.55 260.85 352 220.37 352 176 352 78.8 273.2 0 176 0z" transform="translate(-176 -256)"></path></g></g></svg></span>
 </td>
 <td class="content">
 After someone sticks a fork in a socket, you&#8217;ll need to reset the circuit in the breaker box in the dark and scary basement.
