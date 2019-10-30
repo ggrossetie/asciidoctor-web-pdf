@@ -37,11 +37,12 @@
     "@fortawesome/free-regular-svg-icons": "5.11.2",
     "@fortawesome/free-solid-svg-icons": "5.11.2",
     "chokidar": "2.0.4",
-    "fs-extra": "7.0.1",
-    "pagedjs": "0.1.34",
-    "puppeteer": "2.0.0",
-    "mathjax": "^2.7.6",
     "file-url": "3.0.0",
+    "fs-extra": "7.0.1",
+    "mathjax": "^2.7.6",
+    "pagedjs": "0.1.34",
+    "pdf-lib": "^1.2.1",
+    "puppeteer": "2.0.0",
     "yargs": "13.2.2"
   },
   "devDependencies": {
