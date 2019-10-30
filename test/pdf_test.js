@@ -11,7 +11,10 @@ const converter = require('../lib/converter.js')
 const templates = require('../lib/document/templates.js')
 converter.registerTemplateConverter(asciidoctor, templates)
 
-describe('PDF converter', () => {
+describe('PDF converter', function () {
+  // launching an headless browser (especially on Travis) can take a few seconds
+  this.timeout(15000)
+
   const getOutlineRefs = (pdfDoc) => {
     const values = pdfDoc.context.lookup(pdfDoc.catalog.get(PDFName.of('Outlines'))).context.indirectObjects.values()
     const dicts = []
@@ -30,8 +33,7 @@ describe('PDF converter', () => {
     return PDFDocument.load(fs.readFileSync(outputFile))
   }
 
-  it('should generate a PDF outline even if the TOC is absent from the output', async function () {
-    this.timeout(10000)
+  it('should generate a PDF outline even if the TOC is absent from the output', async () => {
     const options = { attributes: { toc: 'macro' } }
     const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toc-absent.pdf`, options)
     const refs = getOutlineRefs(pdfDoc)
@@ -39,16 +41,14 @@ describe('PDF converter', () => {
     expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
   })
 
-  it('should generate a PDF outline even if the TOC is not enabled', async function () {
-    this.timeout(10000)
+  it('should generate a PDF outline even if the TOC is not enabled', async () => {
     const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toc-disabled.pdf`)
     const refs = getOutlineRefs(pdfDoc)
     expect(refs.length).to.equal(9)
     expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
   })
 
-  it('should honor toclevels 1 when generating a PDF outline', async function () {
-    this.timeout(10000)
+  it('should honor toclevels 1 when generating a PDF outline', async () => {
     const options = { attributes: { toclevels: 1 } }
     const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toclevels-1.pdf`, options)
     const refs = getOutlineRefs(pdfDoc)
@@ -56,8 +56,7 @@ describe('PDF converter', () => {
     expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
   })
 
-  it('should honor toclevels 3 when generating a PDF outline', async function () {
-    this.timeout(10000)
+  it('should honor toclevels 3 when generating a PDF outline', async () => {
     const options = { attributes: { toclevels: 3 } }
     const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toclevels-1.pdf`, options)
     const refs = getOutlineRefs(pdfDoc)
