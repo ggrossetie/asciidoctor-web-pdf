@@ -22,11 +22,6 @@ html {
   width: 100%;
 }
 
-.admonitionblock > table td.icon svg.fa-hand-paper path,
-.admonitionblock > table td.icon svg.fa-lightbulb path {
-  fill: white;
-}
-
 .admonitionblock td.icon.icon-tip svg.fa-circle path {
   fill: #338a37;
 }
