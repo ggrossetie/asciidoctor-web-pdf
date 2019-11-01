@@ -56,9 +56,17 @@ pre .conum[data-value] {
   padding: .5625em .625em;
 }
 
+/*
+Workaround to restore the "original" text alignment
+https://gitlab.pagedmedia.org/tools/pagedjs/issues/76
+*/
 p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-split-to],
 .sectionbody, [data-split-original] {
-  text-align-last: left !important;
+  text-align-last: start !important;
+}
+
+.stemblock {
+  text-align-last: initial;
 }
 
 h1 {

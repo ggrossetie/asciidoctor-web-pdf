@@ -61,13 +61,18 @@ Guillaume Grossetie
   })
 
   describe('Stem', () => {
+    const fileUrl = require('file-url')
+    const mathjaxFileUrl = fileUrl(require.resolve('mathjax/es5/tex-chtml-full.js'))
+
     it('should include MathML when stem is set', () => {
       const doc = asciidoctor.load(`= Title
 :stem:
 
 == Section`)
       const $ = cheerio.load(templates.document(doc))
-      expect($('script[type="text/x-mathjax-config"]').length).to.equal(1)
+      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(1)
+      // by default equation numbering is not enabled
+      expect($('script[data-type="mathjax-config"]').html()).to.have.string('tags: "none"')
     })
 
     it('should not include MathML when stem is not set', () => {
@@ -76,7 +81,7 @@ Guillaume Grossetie
 
 == Section`)
       const $ = cheerio.load(templates.document(doc))
-      expect($('script[type="text/x-mathjax-config"]').length).to.equal(0)
+      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(0)
     })
 
     it('should not include MathML when stem is not present', () => {
@@ -84,7 +89,41 @@ Guillaume Grossetie
 
 == Section`)
       const $ = cheerio.load(templates.document(doc))
-      expect($('script[type="text/x-mathjax-config"]').length).to.equal(0)
+      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(0)
+    })
+
+    it('should add equation numbers when eqnums equals AMS', () => {
+      const doc = asciidoctor.load(`= Title
+:stem:
+:eqnums: AMS
+
+== Section`)
+      const $ = cheerio.load(templates.document(doc))
+      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(1)
+      expect($('script[data-type="mathjax-config"]').html()).to.have.string('tags: "ams"')
+    })
+
+    it('should add equation numbers when eqnums is present', () => {
+      const doc = asciidoctor.load(`= Title
+:stem:
+:eqnums:
+
+== Section`)
+      const $ = cheerio.load(templates.document(doc))
+      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(1)
+      // If eqnums is empty, the value will be "ams"
+      expect($('script[data-type="mathjax-config"]').html()).to.have.string('tags: "ams"')
+    })
+
+    it('should add equation numbers when eqnums equals all', () => {
+      const doc = asciidoctor.load(`= Title
+:stem:
+:eqnums: all
+
+== Section`)
+      const $ = cheerio.load(templates.document(doc))
+      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(1)
+      expect($('script[data-type="mathjax-config"]').html()).to.have.string('tags: "all"')
     })
   })
 
