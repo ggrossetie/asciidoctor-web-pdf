@@ -12,8 +12,8 @@ const templates = require('../lib/document/templates.js')
 converter.registerTemplateConverter(asciidoctor, templates)
 
 describe('PDF converter', function () {
-  // launching an headless browser (especially on Travis) can take a few seconds
-  this.timeout(15000)
+  // launching an headless browser (especially on Travis) can take several tens of seconds
+  this.timeout(30000)
 
   const getOutlineRefs = (pdfDoc) => {
     const values = pdfDoc.context.lookup(pdfDoc.catalog.get(PDFName.of('Outlines'))).context.indirectObjects.values()
