@@ -67,10 +67,10 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 Asciidoctor PDF has support for LaTeX-style mathematical equations (via [MathJax](https://www.mathjax.org/)) and syntax highlighting (via [highlight.js](https://highlightjs.org/)).
 Many more features can be added by importing an existing JavaScript or CSS framework.
 
-## Install globally via npm
+## Install globally using npm
 
 You need [Node.js](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
-To install Asciidoctor PDF, open a terminal and type:
+To install Asciidoctor PDF package globally, open a terminal and type:
 
     $ npm i -g asciidoctor asciidoctor-pdf
 
@@ -90,38 +90,21 @@ Runtime Environment (node v10.15.1 on linux)
 CLI version 3.0.1
 ```
 
-## Install locally via npm or yarn (alternative install)
-
-Required: current version of yarn or npm installed
-
-Create a file `package.json` within your project with the following content:
-
-```javascript
-{
-  "name": "example",
-  "version": "1.0.0",
-  "dependencies": {
-    "asciidoctor": "^2.0.3",
-    "asciidoctor-pdf": "^1.0.0-alpha.3"
-  },
-  "scripts": {
-    "render-pdf": "asciidoctor-pdf <path to your adoc-file>"
-  }
-}
+**NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor PDF package:
+```
+$ yarn global add asciidoctor asciidoctor-pdf
 ```
 
-The commands
+## Install in a project directory (alternative install)
 
-```
-yarn install
-yarn render-pdf
-```
+You can opt to install Asciidoctor PDF in a project directory, such as the directory where your AsciiDoc files are stored.
+To install Asciidoctor PDF in a project directory, move into your project directory and type:
 
-will then install `asciidoctor` and `asciidoctor-pdf` as local module and render your AsciiDoc file as PDF to the same folder as your soruce file is located.
+    $ npm i asciidoctor asciidoctor-pdf
 
-To use npm instead of yarn, use `npm install` and `npm run render-pdf` instead.
+Dropping the `-g` flag installs the package under the `node_modules` folder in the current directory.
 
-Note: this is verified to work on Windows in WSL.
+Verify that the `asciidoctor-pdf` command is available by running `$(npm bin)/asciidoctor-pdf --version`.
 
 ## Getting started
 
