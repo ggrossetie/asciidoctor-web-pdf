@@ -94,7 +94,7 @@ CLI version 3.0.1
 
 required: current version of yarn installed (should also work with npm)
 
-create a file `package.json`within your project with the following content
+Create a file `package.json` within your project with the following content:
 
 ```javascript
 {
