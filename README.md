@@ -90,7 +90,7 @@ Runtime Environment (node v10.15.1 on linux)
 CLI version 3.0.1
 ```
 
-## Install locally via yarn (alternative install)
+## Install locally via npm or yarn (alternative install)
 
 required: current version of yarn installed (should also work with npm)
 
