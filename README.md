@@ -67,7 +67,7 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 Asciidoctor PDF has support for LaTeX-style mathematical equations (via [MathJax](https://www.mathjax.org/)) and syntax highlighting (via [highlight.js](https://highlightjs.org/)).
 Many more features can be added by importing an existing JavaScript or CSS framework.
 
-## Install
+## Install globally via npm
 
 You need [Node.js](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
 To install Asciidoctor PDF, open a terminal and type:
@@ -89,6 +89,39 @@ Asciidoctor PDF 1.0.0-alpha.3 using Asciidoctor.js 2.0.0 (Asciidoctor 2.0.6) [ht
 Runtime Environment (node v10.15.1 on linux)
 CLI version 3.0.1
 ```
+
+## Install locally via npm or yarn (alternative install)
+
+Required: current version of yarn or npm installed
+
+Create a file `package.json` within your project with the following content:
+
+```javascript
+{
+  "name": "example",
+  "version": "1.0.0",
+  "dependencies": {
+    "asciidoctor": "^2.0.3",
+    "asciidoctor-pdf": "^1.0.0-alpha.3"
+  },
+  "scripts": {
+    "render-pdf": "asciidoctor-pdf <path to your adoc-file>"
+  }
+}
+```
+
+The commands
+
+```
+yarn install
+yarn render-pdf
+```
+
+will then install `asciidoctor` and `asciidoctor-pdf` as local module and render your AsciiDoc file as PDF to the same folder as your soruce file is located.
+
+To use npm instead of yarn, use `npm install` and `npm run render-pdf` instead.
+
+Note: this is verified to work on Windows in WSL.
 
 ## Getting started
 
