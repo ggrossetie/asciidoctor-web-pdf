@@ -110,7 +110,7 @@ Create a file `package.json` within your project with the following content:
 }
 ```
 
-the commands
+The commands
 
 ```javascript
 yarn install
