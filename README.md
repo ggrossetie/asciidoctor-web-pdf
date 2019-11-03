@@ -92,7 +92,7 @@ CLI version 3.0.1
 
 ## Install locally via npm or yarn (alternative install)
 
-required: current version of yarn installed (should also work with npm)
+Required: current version of yarn or npm installed
 
 Create a file `package.json` within your project with the following content:
 
