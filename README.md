@@ -112,7 +112,7 @@ Create a file `package.json` within your project with the following content:
 
 The commands
 
-```javascript
+```
 yarn install
 yarn render-pdf
 ```
