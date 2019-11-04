@@ -120,23 +120,10 @@ $ asciidoctor-pdf document.adoc -a title-page
 
 **Additional styles**
 
-You can provide a custom stylesheet using the `stylesheet` attribute. 
+You can provide a custom stylesheet using the `stylesheet` attribute.
 You can also specify where the stylesheet is located with the `stylesdir` attribute.
 
     $ asciidoctor-pdf document.adoc -a stylesheet=custom.css
-
-**NOTE:** The default stylesheet will still be applied.
-While it's possible to override existing rules, the goal is to provide additional styles for custom roles, for instance:
-
-```adoc
-Please edit the [.path]_package.json_ file.
-```
-
-```css
-.path {
-  color: #fecbcb;
-}
-```
 
 ## Custom layout
 
@@ -235,7 +222,7 @@ It will produce a file named `examples/cheat-sheet/maven-security-cheat-sheet.pd
 Asciidoctor PDF is using an HTML 5 converter to convert an AsciiDoc document to an HTML 5 page.
 [Puppeteer](https://github.com/GoogleChrome/puppeteer) will then run an headless Chrome to generate a PDF from the HTML 5 page.
 
-To paginate content in the browser, we are using [Paged.js](https://www.pagedmedia.org/paged-js/), 
+To paginate content in the browser, we are using [Paged.js](https://www.pagedmedia.org/paged-js/),
 an open-source library, that acts as a _polyfill_ for [Paged Media](https://www.w3.org/TR/css-page-3/) and [Generated Content for Paged Media](https://www.w3.org/TR/css-gcpm-3/) W3C specifications.
 
 This project is heavily inspired by [ReLaXed](https://github.com/RelaxedJS/ReLaXed).
