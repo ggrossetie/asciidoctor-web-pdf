@@ -67,9 +67,42 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 Asciidoctor PDF has support for LaTeX-style mathematical equations (via [MathJax](https://www.mathjax.org/)) and syntax highlighting (via [highlight.js](https://highlightjs.org/)).
 Many more features can be added by importing an existing JavaScript or CSS framework.
 
-## Install globally using npm
+## Installation
 
-You need [Node.js](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
+### Requirements
+
+You need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
+The best way to install Node is to use _nvm_ (Node Version Manager).
+
+<details>
+<summary>How to set up nvm on my machine</summary>
+<br/>
+
+**Install nvm and Node on Linux or macOS**
+
+Follow these [installation instructions](https://github.com/nvm-sh/nvm#installation-and-update) to set up nvm on your machine. <br/>
+Once you've installed nvm, open a new terminal and install the latest Node LTS release.
+
+    $ nvm install --lts
+
+The above command will install the latest LTS release of Node and automatically set it as your default alias.
+
+**Install nvm and Node on Windows**
+
+Follow these [installation instructions](https://github.com/coreybutler/nvm-windows#installation--upgrades) to set up nvm on your machine. <br/>
+Once you've installed nvm, open an new, regular PowerShell terminal, and install Node using nvm.
+
+    $ nvm install 12.13.0
+
+The above command will install the latest LTS release of Node and automatically set it as your default alias.
+</details>
+<br/>
+
+We recommend using the latest long term support (LTS) release of Node.
+While you can use other versions of Node, Asciidoctor PDF is only tested against active LTS releases.
+
+### Install globally using npm
+
 To install Asciidoctor PDF package globally, open a terminal and type:
 
     $ npm i -g asciidoctor asciidoctor-pdf
@@ -95,7 +128,7 @@ CLI version 3.0.1
 $ yarn global add asciidoctor asciidoctor-pdf
 ```
 
-## Install in a project directory (alternative install)
+### Install in a project directory (alternative install)
 
 You can opt to install Asciidoctor PDF in a project directory, such as the directory where your AsciiDoc files are stored.
 To install Asciidoctor PDF in a project directory, move into your project directory and type:
@@ -136,7 +169,7 @@ $ asciidoctor-pdf document.adoc -a title-page
 
 **Additional styles**
 
-You can provide a custom stylesheet using the `stylesheet` attribute. 
+You can provide a custom stylesheet using the `stylesheet` attribute.
 You can also specify where the stylesheet is located with the `stylesdir` attribute.
 
     $ asciidoctor-pdf document.adoc -a stylesheet=custom.css
@@ -251,7 +284,7 @@ It will produce a file named `examples/cheat-sheet/maven-security-cheat-sheet.pd
 Asciidoctor PDF is using an HTML 5 converter to convert an AsciiDoc document to an HTML 5 page.
 [Puppeteer](https://github.com/GoogleChrome/puppeteer) will then run an headless Chrome to generate a PDF from the HTML 5 page.
 
-To paginate content in the browser, we are using [Paged.js](https://www.pagedmedia.org/paged-js/), 
+To paginate content in the browser, we are using [Paged.js](https://www.pagedmedia.org/paged-js/),
 an open-source library, that acts as a _polyfill_ for [Paged Media](https://www.w3.org/TR/css-page-3/) and [Generated Content for Paged Media](https://www.w3.org/TR/css-gcpm-3/) W3C specifications.
 
 This project is heavily inspired by [ReLaXed](https://github.com/RelaxedJS/ReLaXed).
