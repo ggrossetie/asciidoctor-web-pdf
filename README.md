@@ -96,7 +96,6 @@ Once you've installed nvm, open an new, regular PowerShell terminal, and install
 
 The above command will install the latest LTS release of Node and automatically set it as your default alias.
 </details>
-<br/>
 
 We recommend using the latest long term support (LTS) release of Node.
 While you can use other versions of Node, Asciidoctor PDF is only tested against active LTS releases.
