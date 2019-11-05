@@ -114,6 +114,8 @@ Verify that the `asciidoctor-pdf` command is available on your `PATH` by running
 
     $ asciidoctor-pdf --version
 
+**NOTE:** If you get an error about [Executions Policies](https://go.microsoft.com/fwlink/?LinkID=135170) when running this command on PowerShell, try to use the following command instead: `$ asciidoctor-pdf.cmd --version`.
+
 If installation was successful, the command should report the version of Asciidoctor PDF.
 
 ```console
