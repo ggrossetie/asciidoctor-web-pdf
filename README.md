@@ -93,8 +93,9 @@ Follow these [installation instructions](https://github.com/coreybutler/nvm-wind
 Once you've installed nvm, open an new, regular PowerShell terminal, and install Node using nvm.
 
     $ nvm install 12.13.0
+    $ nvm use 12.13.0
 
-The above command will install the latest LTS release of Node and automatically set it as your default alias.
+The above commands will install Node v12.13.0 and enable it.
 </details>
 
 We recommend using the latest long term support (LTS) release of Node.
