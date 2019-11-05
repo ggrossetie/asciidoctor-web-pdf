@@ -104,7 +104,7 @@ While you can use other versions of Node, Asciidoctor PDF is only tested against
 
 To install Asciidoctor PDF package globally, open a terminal and type:
 
-    $ npm i -g asciidoctor asciidoctor-pdf
+    $ npm i -g @asciidoctor/core asciidoctor-pdf
 
 **NOTE:** We recommend installing Asciidoctor PDF globally to make the `asciidoctor-pdf` command available on your `PATH`.
 However, you can also install Asciidoctor PDF in a project directory if you prefer.
@@ -132,7 +132,7 @@ $ yarn global add asciidoctor asciidoctor-pdf
 You can opt to install Asciidoctor PDF in a project directory, such as the directory where your AsciiDoc files are stored.
 To install Asciidoctor PDF in a project directory, move into your project directory and type:
 
-    $ npm i asciidoctor asciidoctor-pdf
+    $ npm i @asciidoctor/core asciidoctor-pdf
 
 Dropping the `-g` flag installs the package under the `node_modules` folder in the current directory.
 
