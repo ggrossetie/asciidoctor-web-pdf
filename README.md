@@ -67,12 +67,45 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 Asciidoctor PDF has support for LaTeX-style mathematical equations (via [MathJax](https://www.mathjax.org/)) and syntax highlighting (via [highlight.js](https://highlightjs.org/)).
 Many more features can be added by importing an existing JavaScript or CSS framework.
 
-## Install
+## Installation
 
-You need [Node.js](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
-To install Asciidoctor PDF, open a terminal and type:
+### Requirements
 
-    $ npm i -g asciidoctor asciidoctor-pdf
+You need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
+The best way to install Node is to use _nvm_ (Node Version Manager).
+
+<details>
+<summary>How to set up nvm on my machine</summary>
+<br/>
+
+**Install nvm and Node on Linux or macOS**
+
+Follow these [installation instructions](https://github.com/nvm-sh/nvm#installation-and-update) to set up nvm on your machine. <br/>
+Once you've installed nvm, open a new terminal and install the latest Node LTS release.
+
+    $ nvm install --lts
+
+The above command will install the latest LTS release of Node and automatically set it as your default alias.
+
+**Install nvm and Node on Windows**
+
+Follow these [installation instructions](https://github.com/coreybutler/nvm-windows#installation--upgrades) to set up nvm on your machine. <br/>
+Once you've installed nvm, open an new, regular PowerShell terminal, and install Node using nvm.
+
+    $ nvm install 12.13.0
+    $ nvm use 12.13.0
+
+The above commands will install Node v12.13.0 and enable it.
+</details>
+
+We recommend using the latest long term support (LTS) release of Node.
+While you can use other versions of Node, Asciidoctor PDF is only tested against active LTS releases.
+
+### Install globally using npm
+
+To install Asciidoctor PDF package globally, open a terminal and type:
+
+    $ npm i -g @asciidoctor/core asciidoctor-pdf
 
 **NOTE:** We recommend installing Asciidoctor PDF globally to make the `asciidoctor-pdf` command available on your `PATH`.
 However, you can also install Asciidoctor PDF in a project directory if you prefer.
@@ -80,6 +113,8 @@ However, you can also install Asciidoctor PDF in a project directory if you pref
 Verify that the `asciidoctor-pdf` command is available on your `PATH` by running:
 
     $ asciidoctor-pdf --version
+
+**NOTE:** If you get an error about [Executions Policies](https://go.microsoft.com/fwlink/?LinkID=135170) when running this command on PowerShell, try to use the following command instead: `$ asciidoctor-pdf.cmd --version`.
 
 If installation was successful, the command should report the version of Asciidoctor PDF.
 
@@ -89,6 +124,22 @@ Asciidoctor PDF 1.0.0-alpha.3 using Asciidoctor.js 2.0.0 (Asciidoctor 2.0.6) [ht
 Runtime Environment (node v10.15.1 on linux)
 CLI version 3.0.1
 ```
+
+**NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor PDF package:
+```
+$ yarn global add asciidoctor asciidoctor-pdf
+```
+
+### Install in a project directory (alternative install)
+
+You can opt to install Asciidoctor PDF in a project directory, such as the directory where your AsciiDoc files are stored.
+To install Asciidoctor PDF in a project directory, move into your project directory and type:
+
+    $ npm i @asciidoctor/core asciidoctor-pdf
+
+Dropping the `-g` flag installs the package under the `node_modules` folder in the current directory.
+
+Verify that the `asciidoctor-pdf` command is available by running `$(npm bin)/asciidoctor-pdf --version`.
 
 ## Getting started
 
