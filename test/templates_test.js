@@ -72,6 +72,14 @@ Guillaume Grossetie
     expect($(`head > link[href="${__dirname}/fixtures/custom.css"]`).length).to.equal(1)
   })
 
+  it('should load multiple stylesheets', () => {
+    const doc = asciidoctor.load('Hello world', { attributes: { stylesheet: `${__dirname}/fixtures/variable.css; ;${__dirname}/fixtures/theme.css;` } })
+    const $ = cheerio.load(doc.convert({ header_footer: true }))
+    expect($('head').html()).to.not.have.string('Asciidoctor default stylesheet')
+    expect($(`head > link[href="${__dirname}/fixtures/variable.css"]`).length).to.equal(1)
+    expect($(`head > link[href="${__dirname}/fixtures/theme.css"]`).length).to.equal(1)
+  })
+
   describe('Stem', () => {
     const fileUrl = require('file-url')
     const mathjaxFileUrl = fileUrl(require.resolve('mathjax/es5/tex-chtml-full.js'))
