@@ -1,4 +1,5 @@
 /* global it, describe */
+const ospath = require('path')
 const cheerio = require('cheerio')
 const chai = require('chai')
 const expect = chai.expect
@@ -78,6 +79,14 @@ Guillaume Grossetie
     expect($('head').html()).to.not.have.string('Asciidoctor default stylesheet')
     expect($(`head > link[href="${__dirname}/fixtures/variable.css"]`).length).to.equal(1)
     expect($(`head > link[href="${__dirname}/fixtures/theme.css"]`).length).to.equal(1)
+  })
+
+  it('should resolve the stylesheet when using a relative path', () => {
+    const doc = asciidoctor.load('[.greetings]#Hello world#', { attributes: { stylesheet: '@asciidoctor/core/dist/css/asciidoctor.css' } })
+    const $ = cheerio.load(doc.convert({ header_footer: true }))
+    expect($('head').html()).to.not.have.string('Asciidoctor default stylesheet')
+    const href = ospath.resolve(`${__dirname}/../node_modules/@asciidoctor/core/dist/css/asciidoctor.css`)
+    expect($(`head > link[href="${href}"]`).length).to.equal(1)
   })
 
   describe('Stem', () => {
