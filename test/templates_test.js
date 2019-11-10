@@ -192,4 +192,41 @@ icon:chrome@fab[]`)
       })
     })
   })
+
+  describe('Table Of Contents', () => {
+    it('should add a toc when toc is set', () => {
+      const doc = asciidoctor.load(`= Title
+:toc:
+
+== Section 1
+
+== Section 2
+
+== Section 3`, { safe: 'safe' })
+      const $ = cheerio.load(doc.convert())
+      expect($('#toc > ul.sectlevel1 > li')).to.have.length(3)
+    })
+
+    it('should not add a toc when there\'s no section', () => {
+      const doc = asciidoctor.load(`= Title
+:toc:
+
+Just a preamble.`, { safe: 'safe' })
+      const $ = cheerio.load(doc.convert())
+      expect($('#toc > ul.sectlevel1 > li')).to.have.length(0)
+    })
+
+    it('should not add a toc in the header when toc placement is macro', () => {
+      const doc = asciidoctor.load(`= Title
+:toc: macro
+
+== Section 1
+
+== Section 2
+
+== Section 3`, { safe: 'safe' })
+      const $ = cheerio.load(doc.convert())
+      expect($('#toc > ul.sectlevel1 > li')).to.have.length(0)
+    })
+  })
 })
