@@ -12,6 +12,34 @@ const templates = require('../lib/document/templates.js')
 converter.registerTemplateConverter(asciidoctor, templates)
 
 describe('Default converter', () => {
+  describe('Language', () => {
+    it('should have a default language', () => {
+      const doc = asciidoctor.load(`= Title
+
+== Section`)
+      const $ = cheerio.load(templates.document(doc))
+      expect($('html').attr('lang')).to.equal('en')
+    })
+
+    it('respect the document lang attribute', () => {
+      const doc = asciidoctor.load(`= Title
+:lang: de
+
+== Section`)
+      const $ = cheerio.load(templates.document(doc))
+      expect($('html').attr('lang')).to.equal('de')
+    })
+
+    it('respect the document nolang attribute', () => {
+      const doc = asciidoctor.load(`= Title
+:nolang:
+
+== Section`)
+      const $ = cheerio.load(templates.document(doc))
+      expect($('html').attr('lang')).to.be.undefined()
+    })
+  })
+
   describe('Page title', () => {
     it('should include a title page if title-page attribute is defined', () => {
       const doc = asciidoctor.load(`= Title
