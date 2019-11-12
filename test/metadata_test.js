@@ -101,4 +101,30 @@ content`)
 
     expectEqual(pdfWithMetadata, 'Subject', 'Cooking')
   })
+
+  it('should set Lang field with the default language (en)', async () => {
+    const pdfWithMetadata = await toPdfWithMetadata(`= Document Title
+
+content`)
+
+    expect(pdfWithMetadata.catalog.get(PDFName.of('Lang')).value).to.equal('en')
+  })
+
+  it('should set Lang field to value of lang attribute', async () => {
+    const pdfWithMetadata = await toPdfWithMetadata(`= Document Title
+:lang: de
+
+content`)
+
+    expect(pdfWithMetadata.catalog.get(PDFName.of('Lang')).value).to.equal('de')
+  })
+
+  it('should not set Lang field when nolang attribute is set', async () => {
+    const pdfWithMetadata = await toPdfWithMetadata(`= Document Title
+:nolang:
+
+content`)
+
+    expect(pdfWithMetadata.catalog.get(PDFName.of('Lang'))).to.be.undefined()
+  })
 })
