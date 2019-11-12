@@ -1923,3 +1923,7 @@ p {
 .print-only {
   display: none !important
 }
+
+.stretch {
+  width: 100%
+}

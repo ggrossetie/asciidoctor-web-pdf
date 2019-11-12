@@ -1931,6 +1931,10 @@ p {
   display: none !important
 }
 
+.stretch {
+  width: 100%
+}
+
 @import 'https://fonts.googleapis.com/css?family=Noto+Serif';
 @import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css';
 
@@ -1941,6 +1945,18 @@ p {
 
 html {
   font: 10.5pt/1.15 'Noto Serif', serif;
+}
+
+/*
+Justify the content of the following block elements unless it is specifically aligned using text-*
+Be most specific (that is on dd/li) as pagedjs will add a text-align-last to the whole element including
+nested elements once that breaks across two pages.
+ */
+.dlist:not(.text-left):not(.text-right):not(.text-center) dd p,
+.ulist:not(.text-left):not(.text-right):not(.text-center) li p,
+.olist:not(.text-left):not(.text-right):not(.text-center) li p,
+.paragraph:not(.text-left):not(.text-right):not(.text-center) p,
+.admonitionblock:not(.text-left):not(.text-right):not(.text-center) .content {
   text-align: justify;
 }
 
@@ -1987,19 +2003,6 @@ pre .conum[data-value] {
 
 .colist > table tr > td:first-of-type {
   padding: .5625em .625em;
-}
-
-/*
-Workaround to restore the "original" text alignment
-https://gitlab.pagedmedia.org/tools/pagedjs/issues/76
-*/
-p[data-split-to], li[data-split-to], figcaption[data-split-to], blockquote[data-split-to],
-.sectionbody, [data-split-original], .content[data-split-to] {
-  text-align-last: start !important;
-}
-
-.stemblock {
-  text-align-last: initial;
 }
 
 h1 {
@@ -30270,6 +30273,14 @@ img {
 
 }));
 
+window.AsciidoctorPDF = window.AsciidoctorPDF || {}
+window.AsciidoctorPDF.status = 'rendering'
+class PagedReadyHandler extends Paged.Handler {
+    afterRendered(pages) {
+        window.AsciidoctorPDF.status = 'ready'
+    }
+}
+Paged.registerHandlers(PagedReadyHandler);
 class RepeatingTableHeaders extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
