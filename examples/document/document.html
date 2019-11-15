@@ -1668,7 +1668,7 @@ sup.footnote a:active, sup.footnoteref a:active {
 }
 
 div.unbreakable {
-  page-break-inside: avoid
+  break-inside: avoid
 }
 
 .big {
@@ -2034,7 +2034,7 @@ h6 {
   flex-direction: column;
   justify-content: center;
   height: 100vh;
-  page-break-after: always;
+  break-after: page;
   align-items: flex-end;
 }
 
@@ -2113,15 +2113,15 @@ table.grid-all > tbody > tr:last-child > .tableblock, table.grid-all > thead:las
 }
 
 table {
-  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 tr {
-  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .listingblock {
-  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .title-document {
@@ -2135,7 +2135,7 @@ tr {
 }
 
 .page-break {
-  break-after: always;
+  break-after: page;
 }
 
 @page :right {

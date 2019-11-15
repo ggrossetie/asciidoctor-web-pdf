@@ -1661,7 +1661,7 @@ sup.footnote a:active, sup.footnoteref a:active {
 }
 
 div.unbreakable {
-  page-break-inside: avoid
+  break-inside: avoid
 }
 
 .big {
