@@ -67,6 +67,19 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 Asciidoctor PDF has support for LaTeX-style mathematical equations (via [MathJax](https://www.mathjax.org/)) and syntax highlighting (via [highlight.js](https://highlightjs.org/)).
 Many more features can be added by importing an existing JavaScript or CSS framework.
 
+## Highlights
+
+- Complex layouts with CSS and JavaScript
+- SVG icons with Font Awesome 5
+- PDF document outline (i.e., bookmarks)
+- Table Of Contents
+- Document metadata (title, authors, subject, keywords, etc)
+- Fully customizable template
+- Syntax highlighting with Highlight.js
+- Page numbering
+- Preview mode
+- STEM support with MathJax 3
+
 ## Installation
 
 ### Requirements
