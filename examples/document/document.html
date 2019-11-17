@@ -7,7 +7,7 @@
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove comment around @import statement below when using as a custom stylesheet */
-@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700&display=block";
 
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
   display: block
@@ -1935,8 +1935,8 @@ p {
   width: 100%
 }
 
-@import 'https://fonts.googleapis.com/css?family=Noto+Serif';
-@import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css';
+@import 'https://fonts.googleapis.com/css?family=Noto+Serif&display=block';
+@import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css?display=block';
 
 @page {
   margin: 0.15in 0.67in 0.5in 0.67in;
@@ -30276,11 +30276,37 @@ img {
 window.AsciidoctorPDF = window.AsciidoctorPDF || {}
 window.AsciidoctorPDF.status = 'rendering'
 class PagedReadyHandler extends Paged.Handler {
-    afterRendered(pages) {
-        window.AsciidoctorPDF.status = 'ready'
-    }
+  afterRendered(pages) {
+    window.AsciidoctorPDF.status = 'ready'
+  }
 }
 Paged.registerHandlers(PagedReadyHandler);
+
+window.PagedConfig = window.PagedConfig || {}
+
+window.PagedConfig.auto = false
+
+// same logic as pagedjs, but waiting for 'complete' instead of 'interactive'
+let ready = new Promise(function(resolve, reject){
+  if (document.readyState === "complete") {
+    resolve(document.readyState);
+    return;
+  }
+
+  document.onreadystatechange = function () {
+    if (document.readyState === "complete") {
+      resolve(document.readyState);
+    }
+  };
+});
+
+ready.then(async function () {
+  done = await PagedPolyfill.preview(window.PagedConfig.content, window.PagedConfig.stylesheets, window.PagedConfig.renderTo);
+  if (window.PagedConfig.after) {
+    await window.PagedConfig.after(done);
+  }
+});
+
 class RepeatingTableHeaders extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
@@ -30312,3 +30338,4 @@ Paged.registerHandlers(RepeatingTableHeaders);
 
 </script>
 </body>
+</html>
