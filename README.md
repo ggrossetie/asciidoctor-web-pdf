@@ -133,9 +133,9 @@ If installation was successful, the command should report the version of Asciido
 
 ```console
 $ asciidoctor-pdf --version
-Asciidoctor PDF 1.0.0-alpha.3 using Asciidoctor.js 2.0.0 (Asciidoctor 2.0.6) [https://asciidoctor.org]
+Asciidoctor PDF 1.0.0-alpha.4 using Asciidoctor.js 2.0.3 (Asciidoctor 2.0.9) [https://asciidoctor.org]
 Runtime Environment (node v10.15.1 on linux)
-CLI version 3.0.1
+CLI version 3.0.2
 ```
 
 **NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor PDF package:
