@@ -140,7 +140,7 @@ CLI version 3.0.1
 
 **NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor PDF package:
 ```
-$ yarn global add asciidoctor asciidoctor-pdf
+$ yarn global add @asciidoctor/core asciidoctor-pdf
 ```
 
 ### Install in a project directory (alternative install)
