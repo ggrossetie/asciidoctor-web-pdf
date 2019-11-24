@@ -18,7 +18,7 @@
 
 <<<
 
-== Section 2
+== Section 2: Black & White
 
 <<<
 
@@ -30,7 +30,7 @@
 
 <<<
 
-== Section 3
+== _Section 3_: "`Typographic quotes`"
 
 <<<
 
@@ -42,7 +42,7 @@
 
 <<<
 
-== Section 4
+== Section 4: Asterisk hex &#x2a; and decimal &#42;
 
 <<<
 

@@ -40,6 +40,7 @@
     "chokidar": "2.0.4",
     "file-url": "3.0.0",
     "fs-extra": "7.0.1",
+    "html-entities": "^1.2.1",
     "mathjax": "3.0.0",
     "pagedjs": "0.1.35",
     "pdf-lib": "^1.2.1",
