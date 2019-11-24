@@ -2643,7 +2643,7 @@ end</code></pre>
 <div class="sectionbody">
 <div class="paragraph">
 <div class="title">Size &amp; title</div>
-<p>Do you want to drink a small <svg aria-hidden="true" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-aBRGI6BVU2rr" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-aBRGI6BVU2rr">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
+<p>Do you want to drink a small <svg aria-hidden="true" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-SAd3DbIwfjuO" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-SAd3DbIwfjuO">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
 </div>
 <div class="paragraph">
 <div class="title">Fixed-width</div>
@@ -30622,68 +30622,69 @@ img {
 
 }));
 
+/* global Paged, PagedPolyfill */
 window.AsciidoctorPDF = window.AsciidoctorPDF || {}
 window.AsciidoctorPDF.status = 'rendering'
 class PagedReadyHandler extends Paged.Handler {
-  afterRendered(pages) {
+  afterRendered (pages) {
     window.AsciidoctorPDF.status = 'ready'
   }
 }
-Paged.registerHandlers(PagedReadyHandler);
+Paged.registerHandlers(PagedReadyHandler)
 
 window.PagedConfig = window.PagedConfig || {}
 
 window.PagedConfig.auto = false
 
 // same logic as pagedjs, but waiting for 'complete' instead of 'interactive'
-let ready = new Promise(function(resolve, reject){
-  if (document.readyState === "complete") {
-    resolve(document.readyState);
-    return;
+const ready = new Promise(function (resolve, reject) {
+  if (document.readyState === 'complete') {
+    resolve(document.readyState)
+    return
   }
 
   document.onreadystatechange = function () {
-    if (document.readyState === "complete") {
-      resolve(document.readyState);
+    if (document.readyState === 'complete') {
+      resolve(document.readyState)
     }
-  };
-});
+  }
+})
 
 ready.then(async function () {
-  done = await PagedPolyfill.preview(window.PagedConfig.content, window.PagedConfig.stylesheets, window.PagedConfig.renderTo);
+  const done = await PagedPolyfill.preview(window.PagedConfig.content, window.PagedConfig.stylesheets, window.PagedConfig.renderTo)
   if (window.PagedConfig.after) {
-    await window.PagedConfig.after(done);
+    await window.PagedConfig.after(done)
   }
-});
+})
 
+/* global Paged */
 class RepeatingTableHeaders extends Paged.Handler {
-  constructor(chunker, polisher, caller) {
-    super(chunker, polisher, caller);
+  constructor (chunker, polisher, caller) { // eslint-disable-line no-useless-constructor
+    super(chunker, polisher, caller)
   }
 
-  afterPageLayout(pageElement, page, breakToken, chunker) {
+  afterPageLayout (pageElement, page, breakToken, chunker) {
     // Find all split table elements
-    let tables = pageElement.querySelectorAll("table[data-split-from]");
+    const tables = pageElement.querySelectorAll('table[data-split-from]')
 
     tables.forEach((table) => {
       // Get the reference UUID of the node
-      let ref = table.dataset.ref;
+      const ref = table.dataset.ref
       // Find the node in the original source
-      let sourceTable = chunker.source.querySelector("[data-ref='" + ref + "']");
+      const sourceTable = chunker.source.querySelector("[data-ref='" + ref + "']")
       // Find if there is a header
-      let header = sourceTable.querySelector("thead");
+      const header = sourceTable.querySelector('thead')
       if (header) {
         // Clone the header element
-        let clonedHeader = header.cloneNode(true);
+        const clonedHeader = header.cloneNode(true)
         // Insert the header at the start of the split table
-        table.insertBefore(clonedHeader, table.firstChild);
+        table.insertBefore(clonedHeader, table.firstChild)
       }
-    });
-
+    })
   }
 }
 
-Paged.registerHandlers(RepeatingTableHeaders);
+Paged.registerHandlers(RepeatingTableHeaders)
 
 </script>
 </body>
