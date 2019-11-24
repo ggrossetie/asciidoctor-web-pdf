@@ -70,26 +70,32 @@ pre .conum[data-value] {
 
 h1 {
   font-size: 2.6em;
+  break-after: avoid;
 }
 
 h2 {
   font-size: 2em;
+  break-after: avoid;
 }
 
 h3, #toctitle, .sidebarblock > .content > .title {
   font-size: 1.4em;
+  break-after: avoid;
 }
 
 h4 {
   font-size: 1.3em;
+  break-after: avoid;
 }
 
 h5 {
   font-size: 1.2em;
+  break-after: avoid;
 }
 
 h6 {
   font-size: 1.1em;
+  break-after: avoid;
 }
 
 #cover {

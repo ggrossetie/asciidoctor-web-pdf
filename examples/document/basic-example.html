@@ -2350,26 +2350,32 @@ pre .conum[data-value] {
 
 h1 {
   font-size: 2.6em;
+  break-after: avoid;
 }
 
 h2 {
   font-size: 2em;
+  break-after: avoid;
 }
 
 h3, #toctitle, .sidebarblock > .content > .title {
   font-size: 1.4em;
+  break-after: avoid;
 }
 
 h4 {
   font-size: 1.3em;
+  break-after: avoid;
 }
 
 h5 {
   font-size: 1.2em;
+  break-after: avoid;
 }
 
 h6 {
   font-size: 1.1em;
+  break-after: avoid;
 }
 
 #cover {
@@ -2554,6 +2560,11 @@ tr {
 <li><a href="#_equations_and_formulas">Equations and Formulas</a></li>
 <li><a href="#_icons">Icons</a></li>
 <li><a href="#_admonitions">Admonitions</a></li>
+<li><a href="#_keep_together">Keep Together</a>
+<ul class="sectlevel2">
+<li><a href="#_heading_that_should_join_paragraph_on_next_page">Heading that should join paragraph on next page</a></li>
+</ul>
+</li>
 <li><a href="#_conclusion">Conclusion</a></li>
 </ul></div>
 <div id="toc" class="toc">
@@ -2563,6 +2574,11 @@ tr {
 <li><a href="#_equations_and_formulas">Equations and Formulas</a></li>
 <li><a href="#_icons">Icons</a></li>
 <li><a href="#_admonitions">Admonitions</a></li>
+<li><a href="#_keep_together">Keep Together</a>
+<ul class="sectlevel2">
+<li><a href="#_heading_that_should_join_paragraph_on_next_page">Heading that should join paragraph on next page</a></li>
+</ul>
+</li>
 <li><a href="#_conclusion">Conclusion</a></li>
 </ul>
 </div>
@@ -2643,7 +2659,7 @@ end</code></pre>
 <div class="sectionbody">
 <div class="paragraph">
 <div class="title">Size &amp; title</div>
-<p>Do you want to drink a small <svg aria-hidden="true" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-SAd3DbIwfjuO" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-SAd3DbIwfjuO">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
+<p>Do you want to drink a small <svg aria-hidden="true" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-DeteXLAiZ5i3" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-DeteXLAiZ5i3">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
 </div>
 <div class="paragraph">
 <div class="title">Fixed-width</div>
@@ -2934,6 +2950,99 @@ Stretch to the next page.
 Stretch to the next page.
 Stretch to the next page.</p>
 </div>
+<div class="page-break" style="break-after: page;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_keep_together">Keep Together</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="paragraph">
+<p>a</p>
+</div>
+<div class="sect2">
+<h3 id="_heading_that_should_join_paragraph_on_next_page">Heading that should join paragraph on next page</h3>
+<div class="paragraph">
+<p>b</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -3006,7 +3115,7 @@ Stretch to the next page.</p>
   window.PagedConfig.before = () => mathJaxReadyPromise
 })()
 </script>
-<script type="text/javascript" src="file:///home/guillaume/workspace/opensource/asciidoctor/asciidoctor-pdf.js/node_modules/mathjax/es5/tex-chtml-full.js"></script>
+<script type="text/javascript" src="file:///C:/workspace/asciidoc/asciidoctor-pdf.js/node_modules/mathjax/es5/tex-chtml-full.js"></script>
 <script>
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -30629,7 +30738,33 @@ class PagedReadyHandler extends Paged.Handler {
   afterRendered (pages) {
     window.AsciidoctorPDF.status = 'ready'
   }
+
+  // BEGIN: workaround to prevent duplicated content at end/beginning of page
+  // https://gitlab.pagedmedia.org/tools/pagedjs/issues/126
+  constructor (chunker, polisher, caller) {
+    super(chunker, polisher, caller)
+    this.carriageReturn = String.fromCharCode(10)
+  }
+
+  checkNode (node) {
+    if (!node) return
+    if (node.nodeType !== 3) return
+    if (node.textContent === this.carriageReturn) {
+      node.remove()
+    }
+  }
+
+  afterParsed (parsed) {
+    const template = document.querySelector('template').content
+    const breakAfterAvoidElements = template.querySelectorAll('[data-break-after="avoid"], [data-break-before="avoid"]')
+    for (const el of breakAfterAvoidElements) {
+      this.checkNode(el.previousSibling)
+      this.checkNode(el.nextSibling)
+    }
+  }
+  // END: workaround to prevent duplicated content at end/beginning of page
 }
+
 Paged.registerHandlers(PagedReadyHandler)
 
 window.PagedConfig = window.PagedConfig || {}

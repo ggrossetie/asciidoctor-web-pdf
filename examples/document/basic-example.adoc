@@ -275,6 +275,68 @@ Stretch to the next page.
 Stretch to the next page.
 Stretch to the next page.
 
+<<<
+
+== Keep Together
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+=== Heading that should join paragraph on next page
+
+b
+
 == Conclusion
 
 That's all, folks!
