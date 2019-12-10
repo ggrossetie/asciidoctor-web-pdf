@@ -2669,7 +2669,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
 	(global = global || self, global.PagedPolyfill = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
 	function createCommonjsModule(fn, module) {
 		return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -2689,6 +2689,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 
 	var isImplemented$1 = function () {
 		try {
+			Object.keys("primitive");
 			return true;
 		} catch (e) {
 	 return false;
@@ -2979,6 +2980,95 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	exports.methods = methods;
 	});
 	var eventEmitter_1 = eventEmitter.methods;
+
+	/**
+	 * Hooks allow for injecting functions that must all complete in order before finishing
+	 * They will execute in parallel but all must finish before continuing
+	 * Functions may return a promise if they are asycn.
+	 * From epubjs/src/utils/hooks
+	 * @param {any} context scope of this
+	 * @example this.content = new Hook(this);
+	 */
+	class Hook {
+		constructor(context){
+			this.context = context || this;
+			this.hooks = [];
+		}
+
+		/**
+		 * Adds a function to be run before a hook completes
+		 * @example this.content.register(function(){...});
+		 * @return {undefined} void
+		 */
+		register(){
+			for(var i = 0; i < arguments.length; ++i) {
+				if (typeof arguments[i]  === "function") {
+					this.hooks.push(arguments[i]);
+				} else {
+					// unpack array
+					for(var j = 0; j < arguments[i].length; ++j) {
+						this.hooks.push(arguments[i][j]);
+					}
+				}
+			}
+		}
+
+		/**
+		 * Triggers a hook to run all functions
+		 * @example this.content.trigger(args).then(function(){...});
+		 * @return {Promise} results
+		 */
+		trigger(){
+			var args = arguments;
+			var context = this.context;
+			var promises = [];
+
+			this.hooks.forEach(function(task) {
+				var executing = task.apply(context, args);
+
+				if(executing && typeof executing["then"] === "function") {
+					// Task is a function that returns a promise
+					promises.push(executing);
+				}
+				// Otherwise Task resolves immediately, add resolved promise with result
+				promises.push(new Promise((resolve, reject) => {
+					resolve(executing);
+				}));
+			});
+
+
+			return Promise.all(promises);
+		}
+
+	  /**
+	   * Triggers a hook to run all functions synchronously
+	   * @example this.content.trigger(args).then(function(){...});
+	   * @return {Array} results
+	   */
+	  triggerSync(){
+	    var args = arguments;
+	    var context = this.context;
+	    var results = [];
+
+	    this.hooks.forEach(function(task) {
+	      var executing = task.apply(context, args);
+
+	      results.push(executing);
+	    });
+
+
+	    return results;
+	  }
+
+		// Adds a function to be run before a hook completes
+		list(){
+			return this.hooks;
+		}
+
+		clear(){
+			return this.hooks = [];
+		}
+	}
 
 	function getBoundingClientRect(element) {
 		if (!element) {
@@ -3593,95 +3683,6 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 		return index;
 	}
 
-	/**
-	 * Hooks allow for injecting functions that must all complete in order before finishing
-	 * They will execute in parallel but all must finish before continuing
-	 * Functions may return a promise if they are asycn.
-	 * From epubjs/src/utils/hooks
-	 * @param {any} context scope of this
-	 * @example this.content = new Hook(this);
-	 */
-	class Hook {
-		constructor(context){
-			this.context = context || this;
-			this.hooks = [];
-		}
-
-		/**
-		 * Adds a function to be run before a hook completes
-		 * @example this.content.register(function(){...});
-		 * @return {undefined} void
-		 */
-		register(){
-			for(var i = 0; i < arguments.length; ++i) {
-				if (typeof arguments[i]  === "function") {
-					this.hooks.push(arguments[i]);
-				} else {
-					// unpack array
-					for(var j = 0; j < arguments[i].length; ++j) {
-						this.hooks.push(arguments[i][j]);
-					}
-				}
-			}
-		}
-
-		/**
-		 * Triggers a hook to run all functions
-		 * @example this.content.trigger(args).then(function(){...});
-		 * @return {Promise} results
-		 */
-		trigger(){
-			var args = arguments;
-			var context = this.context;
-			var promises = [];
-
-			this.hooks.forEach(function(task) {
-				var executing = task.apply(context, args);
-
-				if(executing && typeof executing["then"] === "function") {
-					// Task is a function that returns a promise
-					promises.push(executing);
-				}
-				// Otherwise Task resolves immediately, add resolved promise with result
-				promises.push(new Promise((resolve, reject) => {
-					resolve(executing);
-				}));
-			});
-
-
-			return Promise.all(promises);
-		}
-
-	  /**
-	   * Triggers a hook to run all functions synchronously
-	   * @example this.content.trigger(args).then(function(){...});
-	   * @return {Array} results
-	   */
-	  triggerSync(){
-	    var args = arguments;
-	    var context = this.context;
-	    var results = [];
-
-	    this.hooks.forEach(function(task) {
-	      var executing = task.apply(context, args);
-
-	      results.push(executing);
-	    });
-
-
-	    return results;
-	  }
-
-		// Adds a function to be run before a hook completes
-		list(){
-			return this.hooks;
-		}
-
-		clear(){
-			return this.hooks = [];
-		}
-	}
-
 	const MAX_CHARS_PER_BREAK = 1500;
 
 	/**
@@ -3690,7 +3691,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	 */
 	class Layout {
 
-		constructor(element, hooks, maxChars) {
+		constructor(element, hooks, options) {
 			this.element = element;
 
 			this.bounds = this.element.getBoundingClientRect();
@@ -3707,7 +3708,9 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 				this.hooks.onBreakToken = new Hook();
 			}
 
-			this.maxChars = maxChars || MAX_CHARS_PER_BREAK;
+			this.settings = options || {};
+
+			this.maxChars = this.settings.maxChars || MAX_CHARS_PER_BREAK;
 		}
 
 		async renderTo(wrapper, source, breakToken, bounds=this.bounds) {
@@ -3987,7 +3990,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 
 		findBreakToken(rendered, source, bounds=this.bounds, extract=true) {
 			let overflow = this.findOverflow(rendered, bounds);
-			let breakToken;
+			let breakToken, breakLetter;
 
 			let overflowHooks = this.hooks.onOverflow.triggerSync(overflow, rendered, bounds, this);
 			overflowHooks.forEach((newOverflow) => {
@@ -3998,6 +4001,11 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 
 			if (overflow) {
 				breakToken = this.createBreakToken(overflow, rendered, source);
+				if (breakToken["node"] && breakToken["offset"] && breakToken["node"].textContent) {
+					breakLetter = breakToken["node"].textContent.charAt(breakToken["offset"]);
+				} else {
+					breakLetter = undefined;
+				}
 
 				let breakHooks = this.hooks.onBreakToken.triggerSync(breakToken, overflow, rendered, this);
 				breakHooks.forEach((newToken) => {
@@ -4008,7 +4016,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 
 
 				if (breakToken && breakToken.node && extract) {
-					this.removeOverflow(overflow);
+					this.removeOverflow(overflow, breakLetter);
 				}
 
 			}
@@ -4223,24 +4231,27 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 			return offset;
 		}
 
-		removeOverflow(overflow) {
+		removeOverflow(overflow, breakLetter) {
 			let {startContainer} = overflow;
 			let extracted = overflow.extractContents();
 
-			this.hyphenateAtBreak(startContainer);
+			this.hyphenateAtBreak(startContainer, breakLetter);
 
 			return extracted;
 		}
 
-		hyphenateAtBreak(startContainer) {
+		hyphenateAtBreak(startContainer, breakLetter) {
 			if (isText(startContainer)) {
 				let startText = startContainer.textContent;
 				let prevLetter = startText[startText.length-1];
 
 				// Add a hyphen if previous character is a letter or soft hyphen
-				if (/^\w|\u00AD$/.test(prevLetter)) {
+				if (
+					  (breakLetter && /^\w|\u00AD$/.test(prevLetter) && /^\w|\u00AD$/.test(breakLetter)) ||
+					  (!breakLetter && /^\w|\u00AD$/.test(prevLetter))
+				) {
 					startContainer.parentNode.classList.add("pagedjs_hyphen");
-					startContainer.textContent += "\u2011";
+					startContainer.textContent += this.settings.hyphenGlyph || "\u2011";
 				}
 			}
 		}
@@ -4931,8 +4942,10 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	 * @class
 	 */
 	class Chunker {
-		constructor(content, renderTo) {
+		constructor(content, renderTo, options) {
 			// this.preview = preview;
+
+			this.settings = options || {};
 
 			this.hooks = {};
 			this.hooks.beforeParsed = new Hook(this);
@@ -5045,7 +5058,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 		// }
 
 		async render(parsed, startAt) {
-			let renderer = this.layout(parsed, startAt);
+			let renderer = this.layout(parsed, startAt, this.settings);
 
 			let done = false;
 			let result;
@@ -5151,7 +5164,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 		async *layout(content, startAt) {
 			let breakToken = startAt || false;
 
-			while (breakToken !== undefined && (true)) {
+			while (breakToken !== undefined && ( true)) {
 
 				if (breakToken && breakToken.node) {
 					await this.handleBreaks(breakToken.node);
@@ -5209,6 +5222,8 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 			} else {
 				this.pages = [];
 			}
+
+			this.total = this.pages.length;
 		}
 
 		addPage(blank) {
@@ -5323,7 +5338,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 
 		loadFonts() {
 			let fontPromises = [];
-			document.fonts.forEach((fontFace) => {
+			(document.fonts || []).forEach((fontFace) => {
 				if (fontFace.status !== "loaded") {
 					let fontLoaded = fontFace.load().then((r) => {
 						return fontFace.family;
@@ -8374,7 +8389,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	        throw new Error('Neither `enter` nor `leave` walker handler is set or both aren\'t a function');
 	    }
 
-	    walk(node, context);
+	    walk(node);
 	};
 
 	var astToTokens = {
@@ -21608,6 +21623,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	};
 
 	var properties$2 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
 		all: all,
 		animation: animation,
 		appearance: appearance,
@@ -21658,7 +21674,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 		widows: widows,
 		width: width,
 		zoom: zoom,
-		default: properties$1
+		'default': properties$1
 	});
 
 	var attachment = {
@@ -22354,6 +22370,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	};
 
 	var syntaxes$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
 		attachment: attachment,
 		box: box,
 		color: color$1,
@@ -22368,7 +22385,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 		size: size,
 		symbol: symbol,
 		target: target,
-		default: syntaxes
+		'default': syntaxes
 	});
 
 	var properties$3 = {
@@ -23177,9 +23194,10 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	};
 
 	var patch$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
 		properties: properties$3,
 		syntaxes: syntaxes$2,
-		default: patch
+		'default': patch
 	});
 
 	var mdnProperties = getCjsExportFromNamespace(properties$2);
@@ -24157,7 +24175,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	    parse: function() {
 	        var children = this.createList();
 
-	        scan:
+	        
 	        while (!this.scanner.eof) {
 	            switch (this.scanner.tokenType) {
 	                case WHITESPACE$4:
@@ -24314,7 +24332,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 
 	        this.scanner.eat(NUMBERSIGN$3);
 
-	        scan:
+	        
 	        switch (this.scanner.tokenType) {
 	            case NUMBER$4:
 	                consumeHexSequence(this.scanner, true);
@@ -25122,7 +25140,7 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	        var children = this.createList();
 	        var child;
 
-	        scan:
+	        
 	        while (!this.scanner.eof) {
 	            switch (this.scanner.tokenType) {
 	                case WHITESPACE$6:
@@ -26049,6 +26067,9 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 				this.hooks.onAtMedia = new Hook(this);
 				this.hooks.onRule = new Hook(this);
 				this.hooks.onDeclaration = new Hook(this);
+				this.hooks.onSelector = new Hook(this);
+				this.hooks.onPseudoSelector = new Hook(this);
+
 				this.hooks.onContent = new Hook(this);
 				this.hooks.onImport = new Hook(this);
 
@@ -26100,6 +26121,8 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 			return this.ast;
 		}
 
+
+
 		insertRule(rule) {
 			let inserted = this.ast.children.appendData(rule);
 			inserted.forEach((item) => {
@@ -26149,6 +26172,8 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 
 					this.hooks.onRule.trigger(ruleNode, ruleItem, rulelist);
 					this.declarations(ruleNode, ruleItem, rulelist);
+					this.onSelector(ruleNode, ruleItem, rulelist);
+
 				}
 			});
 		}
@@ -26174,13 +26199,40 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 			});
 		}
 
+		// add pseudo elements to parser
+		onSelector(ruleNode, ruleItem, rulelist) {
+			lib.walk(ruleNode, {
+				visit: "Selector",
+				enter: (selectNode, selectItem, selectList) => {
+					// console.log(selectNode);
+					this.hooks.onSelector.trigger(selectNode, selectItem, selectList, {ruleNode, ruleItem, rulelist});
+
+					if (selectNode.children.forEach(node => {if (node.type === "PseudoElementSelector") {
+						lib.walk(node, {
+							visit: "PseudoElementSelector",
+							enter: (pseudoNode, pItem, pList) => {
+								this.hooks.onPseudoSelector.trigger(pseudoNode, pItem, pList, {selectNode, selectItem, selectList}, {ruleNode, ruleItem, rulelist});
+							}
+						});
+					}}));
+					// else {
+					// 	console.log("dommage");
+					// }
+
+				}
+			});
+		}
+
 		replaceUrls(ast) {
 			lib.walk(ast, {
 				visit: "Url",
 				enter: (node, item, list) => {
-					let href = node.value.value.replace(/["']/g, "");
-					let url = new URL(href, this.url);
-					node.value.value = url.toString();
+					let content = node.value.value;
+					if ((node.value.type === "Raw" && content.startsWith("data:")) || (node.value.type === "String" && (content.startsWith("\"data:") || content.startsWith("'data:")))) ; else {
+						let href = content.replace(/["']/g, "");
+						let url = new URL(href, this.url);
+						node.value.value = url.toString();
+					}
 				}
 			});
 		}
@@ -26321,16 +26373,32 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 :root {
 	--pagedjs-width: 8.5in;
 	--pagedjs-height: 11in;
+	--pagedjs-width-right: 8.5in;
+	--pagedjs-height-right: 11in;
+	--pagedjs-width-left: 8.5in;
+	--pagedjs-height-left: 11in;
 	--pagedjs-pagebox-width: 8.5in;
 	--pagedjs-pagebox-height: 11in;
 	--pagedjs-margin-top: 1in;
 	--pagedjs-margin-right: 1in;
 	--pagedjs-margin-bottom: 1in;
 	--pagedjs-margin-left: 1in;
+	--pagedjs-padding-top: 0mm;
+	--pagedjs-padding-right: 0mm;
+	--pagedjs-padding-bottom: 0mm;
+	--pagedjs-padding-left: 0mm;
 	--pagedjs-bleed-top: 0mm;
 	--pagedjs-bleed-right: 0mm;
 	--pagedjs-bleed-bottom: 0mm;
 	--pagedjs-bleed-left: 0mm;
+	--pagedjs-bleed-right-top: 0mm;
+	--pagedjs-bleed-right-right: 0mm;
+	--pagedjs-bleed-right-bottom: 0mm;
+	--pagedjs-bleed-right-left: 0mm;
+	--pagedjs-bleed-left-top: 0mm;
+	--pagedjs-bleed-left-right: 0mm;
+	--pagedjs-bleed-left-bottom: 0mm;
+	--pagedjs-bleed-left-left: 0mm;
 	--pagedjs-crop-color: black;
 	--pagedjs-crop-offset: 2mm;
 	--pagedjs-crop-stroke: 1px;
@@ -26354,6 +26422,20 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	display: grid;
 	grid-template-columns: [bleed-left] var(--pagedjs-bleed-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-left) - var(--pagedjs-bleed-right)) [bleed-right] var(--pagedjs-bleed-right);
 	grid-template-rows: [bleed-top] var(--pagedjs-bleed-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-top) - var(--pagedjs-bleed-bottom)) [bleed-bottom] var(--pagedjs-bleed-bottom);
+}
+
+.pagedjs_right_page .pagedjs_sheet {
+	width: var(--pagedjs-width-right);
+	height: var(--pagedjs-height-right);
+	grid-template-columns: [bleed-left] var(--pagedjs-bleed-right-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-right-left) - var(--pagedjs-bleed-right-right)) [bleed-right] var(--pagedjs-bleed-right-right);
+	grid-template-rows: [bleed-top] var(--pagedjs-bleed-right-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-right-top) - var(--pagedjs-bleed-right-bottom)) [bleed-bottom] var(--pagedjs-bleed-right-bottom);
+}
+
+.pagedjs_left_page .pagedjs_sheet {
+	width: var(--pagedjs-width-left);
+	height: var(--pagedjs-height-left);
+	grid-template-columns: [bleed-left] var(--pagedjs-bleed-left-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-left-left) - var(--pagedjs-bleed-left-right)) [bleed-right] var(--pagedjs-bleed-left-right);
+	grid-template-rows: [bleed-top] var(--pagedjs-bleed-left-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-left-top) - var(--pagedjs-bleed-left-bottom)) [bleed-bottom] var(--pagedjs-bleed-left-bottom);
 }
 
 .pagedjs_bleed {
@@ -26400,10 +26482,30 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	border-right: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
 }
 
+.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
+.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
+	width: calc(var(--pagedjs-bleed-right-left) - var(--pagedjs-crop-stroke));
+}
+
+.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
+.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
+	width: calc(var(--pagedjs-bleed-left-left) - var(--pagedjs-crop-stroke));
+}
+
 .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
 .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
 	width: calc(var(--pagedjs-bleed-right) - var(--pagedjs-crop-stroke));
 	border-left: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
+}
+
+.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
+.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
+	width: calc(var(--pagedjs-bleed-right-right) - var(--pagedjs-crop-stroke));
+}
+
+.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
+.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
+	width: calc(var(--pagedjs-bleed-left-right) - var(--pagedjs-crop-stroke));
 }
 
 .pagedjs_bleed-top .pagedjs_marks-crop {
@@ -26411,9 +26513,25 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	height: calc(var(--pagedjs-bleed-top) - var(--pagedjs-crop-offset));
 }
 
+.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop {
+	height: calc(var(--pagedjs-bleed-right-top) - var(--pagedjs-crop-offset));
+}
+
+.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop {
+	height: calc(var(--pagedjs-bleed-left-top) - var(--pagedjs-crop-offset));
+}
+
 .pagedjs_bleed-bottom .pagedjs_marks-crop {
 	align-self: flex-end;
 	height: calc(var(--pagedjs-bleed-bottom) - var(--pagedjs-crop-offset));
+}
+
+.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop {
+	height: calc(var(--pagedjs-bleed-right-bottom) - var(--pagedjs-crop-offset));
+}
+
+.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop {
+	height: calc(var(--pagedjs-bleed-left-bottom) - var(--pagedjs-crop-offset));
 }
 
 .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
@@ -26422,10 +26540,30 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	border-bottom: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
 }
 
+.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
+.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
+	height: calc(var(--pagedjs-bleed-right-top) - var(--pagedjs-crop-stroke));
+}
+
+.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
+.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
+	height: calc(var(--pagedjs-bleed-left-top) - var(--pagedjs-crop-stroke));
+}
+
 .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
 .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
 	height: calc(var(--pagedjs-bleed-bottom) - var(--pagedjs-crop-stroke));
 	border-top: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
+}
+
+.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
+.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
+	height: calc(var(--pagedjs-bleed-right-bottom) - var(--pagedjs-crop-stroke));
+}
+
+.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
+.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
+	height: calc(var(--pagedjs-bleed-left-bottom) - var(--pagedjs-crop-stroke));
 }
 
 .pagedjs_bleed-left .pagedjs_marks-crop {
@@ -26433,9 +26571,25 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	align-self: flex-start;
 }
 
+.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop {
+	width: calc(var(--pagedjs-bleed-right-left) - var(--pagedjs-crop-offset));
+}
+
+.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop {
+	width: calc(var(--pagedjs-bleed-left-left) - var(--pagedjs-crop-offset));
+}
+
 .pagedjs_bleed-right .pagedjs_marks-crop {
 	width: calc(var(--pagedjs-bleed-right) - var(--pagedjs-crop-offset));
 	align-self: flex-end;
+}
+
+.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop {
+	width: calc(var(--pagedjs-bleed-right-right) - var(--pagedjs-crop-offset));
+}
+
+.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop {
+	width: calc(var(--pagedjs-bleed-left-right) - var(--pagedjs-crop-offset));
 }
 
 .pagedjs_marks-middle {
@@ -26575,6 +26729,8 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	grid-row: page;
 	width: 100%;
 	height: 100%;
+	padding: var(--pagedjs-padding-top) var(--pagedjs-padding-right) var(--pagedjs-padding-bottom) var(--pagedjs-padding-left) 
+
 }
 
 .pagedjs_pagebox > .pagedjs_area > .pagedjs_page_content {
@@ -26588,6 +26744,18 @@ However, since these features don&#8217;t appear in plain Markdown, they are not
 	counter-increment: page;
 	width: var(--pagedjs-width);
 	height: var(--pagedjs-height);
+}
+
+.pagedjs_page.pagedjs_right_page {
+	counter-increment: page;
+	width: var(--pagedjs-width-right);
+	height: var(--pagedjs-height-right);
+}
+
+.pagedjs_page.pagedjs_left_page {
+	counter-increment: page;
+	width: var(--pagedjs-width-left);
+	height: var(--pagedjs-height-left);
 }
 
 .pagedjs_pages {
@@ -26766,6 +26934,11 @@ img {
 	height: auto;
 }
 
+[data-align-last-split-element='justify'] {
+	text-align-last: justify;
+}
+
+
 @media print {
 	html {
 		width: 100%;
@@ -26782,7 +26955,7 @@ img {
 		max-height: 100%;
 	}
 	.pagedjs_pages {
-		width: var(--pagedjs-width);
+		width: auto;
 		display: block !important;
 		transform: none !important;
 		height: 100% !important;
@@ -26845,6 +27018,9 @@ img {
 			this.hooks.onRule = new Hook(this);
 			this.hooks.onDeclaration = new Hook(this);
 			this.hooks.onContent = new Hook(this);
+			this.hooks.onSelector = new Hook(this);
+			this.hooks.onPseudoSelector = new Hook(this);
+
 			this.hooks.onImport = new Hook(this);
 
 			this.hooks.beforeTreeParse = new Hook(this);
@@ -27163,6 +27339,12 @@ img {
 					left: {},
 					bottom: {}
 				},
+				padding : {
+					top: {},
+					right: {},
+					left: {},
+					bottom: {}
+				},
 				block: {},
 				marks: undefined
 			};
@@ -27271,6 +27453,9 @@ img {
 			if (declarations.margin) {
 				page.margin = declarations.margin;
 			}
+			if (declarations.padding) {
+				page.padding = declarations.padding;
+			}
 
 			if (declarations.marks) {
 				page.marks = declarations.marks;
@@ -27310,7 +27495,16 @@ img {
 				let orientation = this.pages["*"].orientation;
 				let bleed = this.pages["*"].bleed;
 				let marks = this.pages["*"].marks;
+				let bleedverso = undefined;
+				let bleedrecto = undefined;
 
+				if (":left" in this.pages) {
+		      bleedverso = this.pages[":left"].bleed;
+		    }
+
+		    if (":right" in this.pages) {
+		      bleedrecto = this.pages[":right"].bleed;
+		    }
 
 				if ((width && height) &&
 						(this.width !== width || this.height !== height)) {
@@ -27319,8 +27513,8 @@ img {
 					this.format = format;
 					this.orientation = orientation;
 
-					this.addRootVars(ast, width, height, orientation, bleed, marks);
-					this.addRootPage(ast, this.pages["*"].size, bleed);
+					this.addRootVars(ast, width, height, orientation, bleed, bleedrecto, bleedverso, marks);
+					this.addRootPage(ast, this.pages["*"].size, bleed, bleedrecto, bleedverso);
 
 					this.emit("size", { width, height, orientation, format, bleed });
 					this.emit("atpages", this.pages);
@@ -27408,7 +27602,7 @@ img {
 				visit: "Declaration",
 				enter: (declaration, dItem, dList) => {
 					let prop = lib.property(declaration.property).name;
-					let value = declaration.value;
+					// let value = declaration.value;
 
 					if (prop === "marks") {
 						parsed.marks = [];
@@ -27422,6 +27616,7 @@ img {
 					} else if (prop === "margin") {
 						parsed.margin = this.getMargins(declaration);
 						dList.remove(dItem);
+
 					} else if (prop.indexOf("margin-") === 0) {
 						let m = prop.substring("margin-".length);
 						if (!parsed.margin) {
@@ -27434,6 +27629,24 @@ img {
 						}
 						parsed.margin[m] = declaration.value.children.first();
 						dList.remove(dItem);
+
+					} else if (prop === "padding"){
+						parsed.padding = this.getPaddings(declaration.value);
+						dList.remove(dItem);
+
+					} else if (prop.indexOf("padding-") === 0) {
+						let p = prop.substring("padding-".length);
+						if (!parsed.padding) {
+							parsed.padding = {
+								top: {},
+								right: {},
+								left: {},
+								bottom: {}
+							};
+						}
+						parsed.padding[p] = declaration.value.children.first();
+						dList.remove(dItem);
+
 					} else if (prop === "size") {
 						parsed.size = this.getSize(declaration);
 						dList.remove(dItem);
@@ -27460,7 +27673,6 @@ img {
 											unit: "px"
 										});
 										break;
-									default:
 										// ignore
 								}
 
@@ -27571,6 +27783,46 @@ img {
 			return margin;
 		}
 
+		getPaddings(declaration) {
+			let paddings = [];
+			let padding = {
+				top: {},
+				right: {},
+				left: {},
+				bottom: {}
+			};
+
+			lib.walk(declaration, {
+				visit: "Dimension",
+				enter: (node, item, list) => {
+					paddings.push(node);
+				}
+			});
+			if (paddings.length === 1) {
+				for (let p in padding) {
+					padding[p] = paddings[0];
+				}
+			} else if (paddings.length === 2) {
+
+				padding.top = paddings[0];
+				padding.right = paddings[1];
+				padding.bottom = paddings[0];
+				padding.left = paddings[1];
+			} else if (paddings.length === 3) {
+
+				padding.top = paddings[0];
+				padding.right = paddings[1];
+				padding.bottom = paddings[2];
+				padding.left = paddings[1];
+			} else if (paddings.length === 4) {
+
+				padding.top = paddings[0];
+				padding.right = paddings[1];
+				padding.bottom = paddings[2];
+				padding.left = paddings[3];
+			}
+			return padding;
+		}
 		addPageClasses(pages, ast, sheet) {
 			// First add * page
 			if ("*" in pages && !pages["*"].added) {
@@ -27633,6 +27885,8 @@ img {
 
 			this.addMarginVars(page.margin, children, children.first());
 
+			this.addPaddingVars(page.padding, children, children.first());
+
 			if (page.width) {
 				this.addDimensions(page.width, page.height, page.orientation, children, children.first());
 			}
@@ -27660,6 +27914,26 @@ img {
 					});
 					list.append(mVar, item);
 				}
+			}
+		}
+
+		addPaddingVars(padding, list, item) {
+			// variables for padding
+			for (let p in padding) {
+				if (typeof padding[p].value !== "undefined") {
+					let value = padding[p].value + (padding[p].unit || "");
+					let pVar = list.createItem({
+						type: "Declaration",
+						property: "--pagedjs-padding-" + p,
+						value: {
+							type: "Raw",
+							value: value
+						}
+					});
+
+					list.append(pVar, item);
+				}
+
 			}
 		}
 
@@ -27849,7 +28123,7 @@ img {
 			}
 		}
 
-		addRootVars(ast, width, height, orientation, bleed, marks) {
+		addRootVars(ast, width, height, orientation, bleed, bleedrecto, bleedverso, marks) {
 			let rules = [];
 			let selectors = new lib.List();
 			selectors.insertData({
@@ -27859,23 +28133,79 @@ img {
 			});
 
 			let widthString, heightString;
+			let widthStringRight, heightStringRight;
+			let widthStringLeft, heightStringLeft;
 
 			if (!bleed) {
 				widthString = CSSValueToString(width);
 				heightString = CSSValueToString(height);
+				widthStringRight = CSSValueToString(width);
+				heightStringRight = CSSValueToString(height);
+				widthStringLeft = CSSValueToString(width);
+				heightStringLeft = CSSValueToString(height);
 			} else {
 				widthString = `calc( ${CSSValueToString(width)} + ${CSSValueToString(bleed.left)} + ${CSSValueToString(bleed.right)} )`;
 				heightString = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleed.top)} + ${CSSValueToString(bleed.bottom)} )`;
+
+				widthStringRight = `calc( ${CSSValueToString(width)} + ${CSSValueToString(bleed.left)} + ${CSSValueToString(bleed.right)} )`;
+				heightStringRight = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleed.top)} + ${CSSValueToString(bleed.bottom)} )`;
+
+				widthStringLeft = `calc( ${CSSValueToString(width)} + ${CSSValueToString(bleed.left)} + ${CSSValueToString(bleed.right)} )`;
+				heightStringLeft = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleed.top)} + ${CSSValueToString(bleed.bottom)} )`;
 
 				let bleedTop = this.createVariable("--pagedjs-bleed-top", CSSValueToString(bleed.top));
 				let bleedRight = this.createVariable("--pagedjs-bleed-right", CSSValueToString(bleed.right));
 				let bleedBottom = this.createVariable("--pagedjs-bleed-bottom", CSSValueToString(bleed.bottom));
 				let bleedLeft = this.createVariable("--pagedjs-bleed-left", CSSValueToString(bleed.left));
 
+				let bleedTopRecto = this.createVariable("--pagedjs-bleed-right-top", CSSValueToString(bleed.top));
+				let bleedRightRecto = this.createVariable("--pagedjs-bleed-right-right", CSSValueToString(bleed.right));
+				let bleedBottomRecto = this.createVariable("--pagedjs-bleed-right-bottom", CSSValueToString(bleed.bottom));
+				let bleedLeftRecto = this.createVariable("--pagedjs-bleed-right-left", CSSValueToString(bleed.left));
+
+				let bleedTopVerso = this.createVariable("--pagedjs-bleed-left-top", CSSValueToString(bleed.top));
+				let bleedRightVerso = this.createVariable("--pagedjs-bleed-left-right", CSSValueToString(bleed.right));
+				let bleedBottomVerso = this.createVariable("--pagedjs-bleed-left-bottom", CSSValueToString(bleed.bottom));
+				let bleedLeftVerso = this.createVariable("--pagedjs-bleed-left-left", CSSValueToString(bleed.left));
+
+				if (bleedrecto) {
+					bleedTopRecto = this.createVariable("--pagedjs-bleed-right-top", CSSValueToString(bleedrecto.top));
+					bleedRightRecto = this.createVariable("--pagedjs-bleed-right-right", CSSValueToString(bleedrecto.right));
+					bleedBottomRecto = this.createVariable("--pagedjs-bleed-right-bottom", CSSValueToString(bleedrecto.bottom));
+					bleedLeftRecto = this.createVariable("--pagedjs-bleed-right-left", CSSValueToString(bleedrecto.left));
+
+					widthStringRight = `calc( ${CSSValueToString(width)} + ${CSSValueToString(bleedrecto.left)} + ${CSSValueToString(bleedrecto.right)} )`;
+				  heightStringRight = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleedrecto.top)} + ${CSSValueToString(bleedrecto.bottom)} )`;
+				}
+				if (bleedverso) {
+					bleedTopVerso = this.createVariable("--pagedjs-bleed-left-top", CSSValueToString(bleedverso.top));
+					bleedRightVerso = this.createVariable("--pagedjs-bleed-left-right", CSSValueToString(bleedverso.right));
+					bleedBottomVerso = this.createVariable("--pagedjs-bleed-left-bottom", CSSValueToString(bleedverso.bottom));
+					bleedLeftVerso = this.createVariable("--pagedjs-bleed-left-left", CSSValueToString(bleedverso.left));
+
+					widthStringLeft = `calc( ${CSSValueToString(width)} + ${CSSValueToString(bleedverso.left)} + ${CSSValueToString(bleedverso.right)} )`;
+				  heightStringLeft = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleedverso.top)} + ${CSSValueToString(bleedverso.bottom)} )`;
+				}
+
 				let pageWidthVar = this.createVariable("--pagedjs-width", CSSValueToString(width));
 				let pageHeightVar = this.createVariable("--pagedjs-height", CSSValueToString(height));
 
-				rules.push(bleedTop, bleedRight, bleedBottom, bleedLeft, pageWidthVar, pageHeightVar);
+				rules.push(
+					bleedTop, 
+					bleedRight, 
+					bleedBottom, 
+					bleedLeft, 
+					bleedTopRecto, 
+					bleedRightRecto,
+					bleedBottomRecto,
+					bleedLeftRecto,
+					bleedTopVerso,
+					bleedRightVerso,
+					bleedBottomVerso,
+					bleedLeftVerso,
+					pageWidthVar, 
+					pageHeightVar
+				);
 			}
 
 			if (marks) {
@@ -27893,13 +28223,21 @@ img {
 				if (orientation !== "portrait") {
 					// reverse for orientation
 					[widthString, heightString] = [heightString, widthString];
+					[widthStringRight, heightStringRight] = [heightStringRight, widthStringRight];
+					[widthStringLeft, heightStringLeft] = [heightStringLeft, widthStringLeft];
 				}
 			}
 
 			let wVar = this.createVariable("--pagedjs-width", widthString);
 			let hVar = this.createVariable("--pagedjs-height", heightString);
 
-			rules.push(wVar, hVar);
+			let wVarR = this.createVariable("--pagedjs-width-right", widthStringRight);
+			let hVarR = this.createVariable("--pagedjs-height-right", heightStringRight);
+
+			let wVarL = this.createVariable("--pagedjs-width-left", widthStringLeft);
+			let hVarL = this.createVariable("--pagedjs-height-left", heightStringLeft);
+
+			rules.push(wVar, hVar, wVarR, hVarR, wVarL, hVarL);
 
 			let rule = this.createRule(selectors, rules);
 
@@ -27913,10 +28251,14 @@ img {
 			padding: 0;
 		}
 		*/
-		addRootPage(ast, size, bleed) {
+		addRootPage(ast, size, bleed, bleedrecto, bleedverso) {
 			let { width, height, orientation, format } = size;
 			let children = new lib.List();
+			let childrenLeft = new lib.List();
+			let childrenRight = new lib.List();
 			let dimensions = new lib.List();
+			let dimensionsLeft = new lib.List();
+			let dimensionsRight = new lib.List();
 
 			if (bleed) {
 				let widthCalculations = new lib.List();
@@ -28111,6 +28453,19 @@ img {
 				}
 			});
 
+			children.appendData({
+				type: "Declaration",
+				property: "padding",
+				loc: null,
+				value: {
+					type: "Value",
+					children: [{
+						type: "Dimension",
+						unit: "px",
+						value: 0
+					}]
+				}
+			});
 
 			let rule = ast.children.createItem({
 				type: "Atrule",
@@ -28124,6 +28479,294 @@ img {
 			});
 
 			ast.children.append(rule);
+
+			if (bleedverso) {
+				let widthCalculationsLeft = new lib.List();
+				let heightCalculationsLeft = new lib.List();
+
+				// width
+				widthCalculationsLeft.appendData({
+					type: "Dimension",
+					unit: width.unit,
+					value: width.value
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "Dimension",
+					unit: bleedverso.left.unit,
+					value: bleedverso.left.value
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsLeft.appendData({
+					type: "Dimension",
+					unit: bleedverso.right.unit,
+					value: bleedverso.right.value
+				});
+
+				// height
+				heightCalculationsLeft.appendData({
+					type: "Dimension",
+					unit: height.unit,
+					value: height.value
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "Dimension",
+					unit: bleedverso.top.unit,
+					value: bleedverso.top.value
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsLeft.appendData({
+					type: "Dimension",
+					unit: bleedverso.bottom.unit,
+					value: bleedverso.bottom.value
+				});
+
+				dimensionsLeft.appendData({
+					type: "Function",
+					name: "calc",
+					children: widthCalculationsLeft
+				});
+
+				dimensionsLeft.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				dimensionsLeft.appendData({
+					type: "Function",
+					name: "calc",
+					children: heightCalculationsLeft
+				});
+
+				childrenLeft.appendData({
+					type: "Declaration",
+					property: "size",
+					loc: null,
+					value: {
+						type: "Value",
+						children: dimensionsLeft
+					}
+				});
+
+				let ruleLeft = ast.children.createItem({
+					type: "Atrule",
+					prelude: null,
+					name: "page :left",
+					block: {
+						type: "Block",
+						loc: null,
+						children: childrenLeft
+					}
+				});
+
+				ast.children.append(ruleLeft);
+
+			}
+
+			if (bleedrecto) {
+				let widthCalculationsRight = new lib.List();
+				let heightCalculationsRight = new lib.List();
+
+				// width
+				widthCalculationsRight.appendData({
+					type: "Dimension",
+					unit: width.unit,
+					value: width.value
+				});
+
+				widthCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsRight.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				widthCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsRight.appendData({
+					type: "Dimension",
+					unit: bleedrecto.left.unit,
+					value: bleedrecto.left.value
+				});
+
+				widthCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsRight.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				widthCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				widthCalculationsRight.appendData({
+					type: "Dimension",
+					unit: bleedrecto.right.unit,
+					value: bleedrecto.right.value
+				});
+
+				// height
+				heightCalculationsRight.appendData({
+					type: "Dimension",
+					unit: height.unit,
+					value: height.value
+				});
+
+				heightCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsRight.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				heightCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsRight.appendData({
+					type: "Dimension",
+					unit: bleedrecto.top.unit,
+					value: bleedrecto.top.value
+				});
+
+				heightCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsRight.appendData({
+					type: "Operator",
+					value: "+"
+				});
+
+				heightCalculationsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				heightCalculationsRight.appendData({
+					type: "Dimension",
+					unit: bleedrecto.bottom.unit,
+					value: bleedrecto.bottom.value
+				});
+
+				dimensionsRight.appendData({
+					type: "Function",
+					name: "calc",
+					children: widthCalculationsRight
+				});
+
+				dimensionsRight.appendData({
+					type: "WhiteSpace",
+					value: " "
+				});
+
+				dimensionsRight.appendData({
+					type: "Function",
+					name: "calc",
+					children: heightCalculationsRight
+				});
+
+				childrenRight.appendData({
+					type: "Declaration",
+					property: "size",
+					loc: null,
+					value: {
+						type: "Value",
+						children: dimensionsRight
+					}
+				});
+
+				let ruleRight = ast.children.createItem({
+					type: "Atrule",
+					prelude: null,
+					name: "page :right",
+					block: {
+						type: "Block",
+						loc: null,
+						children: childrenRight
+					}
+				});
+
+				ast.children.append(ruleRight);
+
+			}
 		}
 
 		getNth(nth) {
@@ -28750,7 +29393,7 @@ img {
 					for (let prop of breaks[b]) {
 
 						if (prop.property === "break-after") {
-							let nodeAfter = elementAfter(elements[i], parsed);
+							let nodeAfter = elementAfter(elements[i]);
 
 							elements[i].setAttribute("data-break-after", prop.value);
 
@@ -28760,7 +29403,7 @@ img {
 						} else if (prop.property === "page") {
 							elements[i].setAttribute("data-page", prop.value);
 
-							let nodeAfter = elementAfter(elements[i], parsed);
+							let nodeAfter = elementAfter(elements[i]);
 
 							if (nodeAfter) {
 								nodeAfter.setAttribute("data-after-page", prop.value);
@@ -28879,9 +29522,10 @@ img {
 
 			prevPage = pages.children[index - 1];
 
+			let from; // Capture the last from element
 			splits.forEach((split) => {
 				let ref = split.dataset.ref;
-				let from = prevPage.querySelector("[data-ref='"+ ref +"']:not([data-split-to])");
+				from = prevPage.querySelector("[data-ref='"+ ref +"']:not([data-split-to])");
 
 				if (from) {
 					from.dataset.splitTo = ref;
@@ -28889,18 +29533,24 @@ img {
 					if (!from.dataset.splitFrom) {
 						from.dataset.splitOriginal = true;
 					}
-
-					this.handleAlignment(from);
 				}
 			});
+
+			// Fix alignment on the deepest split element
+			if (from) {
+				this.handleAlignment(from);
+			}
 		}
 
 		handleAlignment(node) {
 			let styles = window.getComputedStyle(node);
 			let align = styles["text-align"];
 			let alignLast = styles["text-align-last"];
+			node.dataset.lastSplitElement = "true";
 			if (align === "justify" && alignLast === "auto") {
-				node.style["text-align-last"] = "justify";
+				node.dataset.alignLastSplitElement = "justify";
+			} else {
+				node.dataset.alignLastSplitElement = alignLast;
 			}
 		}
 
@@ -28936,6 +29586,7 @@ img {
 
 		afterParsed(parsed) {
 			this.processCounters(parsed, this.counters);
+			this.scopeCounters(this.counters);
 		}
 
 		addCounter(name) {
@@ -29007,6 +29658,19 @@ img {
 			}
 		}
 
+		scopeCounters(counters) {
+			let countersArray = [];
+			for (let c in counters) {
+				countersArray.push(`${counters[c].name} 0`);
+			}
+			// Add to pages to allow cross page scope
+			this.insertRule(`.pagedjs_pages { counter-reset: ${countersArray.join(" ")}}`);
+		}
+
+		insertRule(rule) {
+			this.styleSheet.insertRule(rule, this.styleSheet.cssRules.length);
+		}
+
 		processCounterIncrements(parsed, counter) {
 			let increment;
 			for (let inc in counter.increments) {
@@ -29016,6 +29680,7 @@ img {
 				// Add counter data
 				for (var i = 0; i < incrementElements.length; i++) {
 					incrementElements[i].setAttribute("data-counter-"+ counter.name +"-increment", increment.number);
+					incrementElements[i].setAttribute("data-counter-increment", counter.name);
 				}
 			}
 		}
@@ -29029,6 +29694,7 @@ img {
 				// Add counter data
 				for (var i = 0; i < resetElements.length; i++) {
 					resetElements[i].setAttribute("data-counter-"+ counter.name +"-reset", reset.number);
+					resetElements[i].setAttribute("data-counter-reset", counter.name);
 				}
 			}
 		}
@@ -29040,28 +29706,64 @@ img {
 			let count = 0;
 			let element;
 			let increment, reset;
+			let resetValue, incrementValue, resetDelta;
+			let incrementArray;
 
 			for (var i = 0; i < elements.length; i++) {
 				element = elements[i];
+				resetDelta = 0;
+				incrementArray = [];
 
 				if (element.hasAttribute("data-counter-"+ counterName +"-reset")) {
 					reset = element.getAttribute("data-counter-"+ counterName +"-reset");
-					count = parseInt(reset);
+					resetValue = parseInt(reset);
+
+					// Use negative increment value inplace of reset
+					resetDelta = resetValue - count;
+					incrementArray.push(`${counterName} ${resetDelta}`);
+
+					count = resetValue;
 				}
 
 				if (element.hasAttribute("data-counter-"+ counterName +"-increment")) {
 
 					increment = element.getAttribute("data-counter-"+ counterName +"-increment");
+					incrementValue = parseInt(increment);
 
-					this.styleSheet.insertRule(`[data-ref="${element.dataset.ref}"] { counter-reset: ${counterName} ${count} }`, this.styleSheet.cssRules.length);
-					this.styleSheet.insertRule(`[data-ref="${element.dataset.ref}"] { counter-increment: ${counterName} ${increment}}`, this.styleSheet.cssRules.length);
-
-					count += parseInt(increment);
+					count += incrementValue;
 
 					element.setAttribute("data-counter-"+counterName+"-value", count);
+
+					incrementArray.push(`${counterName} ${incrementValue}`);
+				}
+
+				if (incrementArray.length > 0) {
+					this.incrementCounterForElement(element, incrementArray);
 				}
 
 			}
+		}
+
+		incrementCounterForElement(element, incrementArray) {
+			if (!element || !incrementArray || incrementArray.length === 0) return;
+
+			let ref = element.dataset.ref;
+			let prevIncrements = Array.from(this.styleSheet.cssRules).filter((rule) => {
+				return rule.selectorText === `[data-ref="${element.dataset.ref}"]:not([data-split-from])`
+							 && rule.style[0] === "counter-increment";
+			});
+
+			let increments = [];
+			for (let styleRule of prevIncrements) {
+				let values = styleRule.style.counterIncrement.split(" ");
+				for (var i = 0; i < values.length; i+=2) {
+					increments.push(values[i] + " " + values[i+1]);
+				}
+			}
+
+			Array.prototype.push.apply(increments, incrementArray);
+
+			this.insertRule(`[data-ref="${ref}"]:not([data-split-from]) { counter-increment: ${increments.join(" ")} }`);
 		}
 
 		afterPageLayout(pageElement, page) {
@@ -29173,7 +29875,7 @@ img {
 									func: func,
 									args: args,
 									value: value,
-									style: style,
+									style: style ,
 									selector: s,
 									fullSelector: selector
 								};
@@ -29528,17 +30230,22 @@ img {
 		}
 	}
 
+	// import { nodeAfter } from "../../utils/dom";
+
 	class TargetText extends Handler {
 		constructor(chunker, polisher, caller) {
 			super(chunker, polisher, caller);
 
 			this.styleSheet = polisher.styleSheet;
 			this.textTargets = {};
+			this.beforeContent = "";
+			this.afterContent = "";
+			this.selector = {};
 		}
 
 		onContent(funcNode, fItem, fList, declaration, rule) {
 			if (funcNode.name === "target-text") {
-				let selector = lib.generate(rule.ruleNode.prelude);
+				this.selector = lib.generate(rule.ruleNode.prelude);
 				let first = funcNode.children.first();
 				let last = funcNode.children.last();
 				let func = first.name;
@@ -29547,7 +30254,7 @@ img {
 
 				let args = [];
 
-				first.children.forEach((child) => {
+				first.children.forEach(child => {
 					if (child.type === "Identifier") {
 						args.push(child.name);
 					}
@@ -29560,14 +30267,14 @@ img {
 
 				let variable = "--pagedjs-" + UUID();
 
-				selector.split(",").forEach((s) => {
+				this.selector.split(",").forEach(s => {
 					this.textTargets[s] = {
 						func: func,
 						args: args,
 						value: value,
 						style: style || "content",
 						selector: s,
-						fullSelector: selector,
+						fullSelector: this.selector,
 						variable: variable
 					};
 				});
@@ -29583,42 +30290,79 @@ img {
 			}
 		}
 
+		//   parse this on the ONCONTENT : get all before and after and replace the value with a variable
+		onPseudoSelector(pseudoNode, pItem, pList, selector, rule) {
+			// console.log(pseudoNode);
+			// console.log(rule);
+
+			rule.ruleNode.block.children.forEach(properties => {
+				if (pseudoNode.name === "before" && properties.property === "content") {
+					// let beforeVariable = "--pagedjs-" + UUID();
+
+					let contenu = properties.value.children;
+					contenu.forEach(prop => {
+						if (prop.type === "String") {
+							this.beforeContent = prop.value;
+						}
+					});
+				} else if (pseudoNode.name === "after" && properties.property === "content") {
+					properties.value.children.forEach(prop => {
+						if (prop.type === "String") {
+							this.afterContent = prop.value;
+						}
+					});
+				}
+			});
+		}
+
 		afterParsed(fragment) {
-			Object.keys(this.textTargets).forEach((name) => {
+			Object.keys(this.textTargets).forEach(name => {
 				let target = this.textTargets[name];
 				let split = target.selector.split("::");
 				let query = split[0];
 				let queried = fragment.querySelectorAll(query);
+				let textContent;
 				queried.forEach((selected, index) => {
 					let val = attr(selected, target.args);
 					let element = fragment.querySelector(querySelectorEscape(val));
 					if (element) {
-						if (target.style === "content") {
-							let selector = UUID();
-							selected.setAttribute("data-target-text", selector);
+						// content & first-letter & before & after refactorized
+						if (target.style) {
+							this.selector = UUID();
+							selected.setAttribute("data-target-text", this.selector);
 
 							let psuedo = "";
 							if (split.length > 1) {
 								psuedo += "::" + split[1];
 							}
-
-							let textContent = element.textContent.trim().replace(/["']/g, (match) => {
-								return "\\" + match;
-							}).replace(/[\n]/g, (match) => {
-								return "\\00000A";
-							});
-
-							// this.styleSheet.insertRule(`[data-target-text="${selector}"]${psuedo} { content: "${element.textContent}" }`, this.styleSheet.cssRules.length);
-							this.styleSheet.insertRule(`[data-target-text="${selector}"]${psuedo} { ${target.variable}: "${textContent}" }`, this.styleSheet.cssRules.length);
-
+							
+							if (target.style === "before" || target.style === "after") {
+								const pseudoType = `${target.style}Content`;
+								textContent = cleanPseudoContent(this[pseudoType]);
+							} else {
+								textContent = cleanPseudoContent(element.textContent, " ");
+							}
+							textContent = target.style === "first-letter" ? textContent.charAt(0) : textContent;
+							this.styleSheet.insertRule(`[data-target-text="${this.selector}"]${psuedo} { ${target.variable}: "${textContent}" }`);
+						} else {
+							console.warn("missed target", val);
 						}
-					} else {
-						console.warn("missed target", val);
 					}
 				});
-
 			});
 		}
+	}
+
+	function cleanPseudoContent(el, trim = "\"' ") {
+		return el
+			.replace(new RegExp(`^[${trim}]+`), "")
+			.replace(new RegExp(`[${trim}]+$`), "")
+			.replace(/["']/g, match => {
+				return "\\" + match;
+			})
+			.replace(/[\n]/g, match => {
+				return "\\00000A";
+			});
 	}
 
 	var generatedContentHandlers = [
@@ -29639,8 +30383,10 @@ img {
 	var validTypes = { object: true, symbol: true };
 
 	var isImplemented$4 = function () {
+		var symbol;
 		if (typeof Symbol !== 'function') return false;
-		try { } catch (e) { return false; }
+		symbol = Symbol('test symbol');
+		try { String(symbol); } catch (e) { return false; }
 
 		// Return 'true' also for polyfills
 		if (!validTypes[typeof Symbol.iterator]) return false;
@@ -30080,17 +30826,21 @@ img {
 	}
 
 	class Previewer {
-		constructor() {
+		constructor(options) {
 			// this.preview = this.getParams("preview") !== "false";
+
+			this.settings = options || {};
 
 			// Process styles
 			this.polisher = new Polisher(false);
 
 			// Chunk contents
-			this.chunker = new Chunker();
+			this.chunker = new Chunker(undefined, undefined, this.settings);
 
 			// Hooks
 			this.hooks = {};
+			this.hooks.beforePreview = new Hook(this);
+			this.hooks.afterPreview = new Hook(this);
 
 			// default size
 			this.size = {
@@ -30190,6 +30940,8 @@ img {
 
 		async preview(content, stylesheets, renderTo) {
 
+			await this.hooks.beforePreview.trigger(content, renderTo);
+
 			if (!content) {
 				content = this.wrapContent();
 			}
@@ -30216,6 +30968,8 @@ img {
 
 			this.emit("rendered", flow);
 
+			await this.hooks.afterPreview.trigger(flow.pages);
+
 			return flow;
 		}
 	}
@@ -30225,6 +30979,7 @@ img {
 
 
 	var Paged = /*#__PURE__*/Object.freeze({
+		__proto__: null,
 		Chunker: Chunker,
 		Polisher: Polisher,
 		Previewer: Previewer,
@@ -30254,10 +31009,11 @@ img {
 		after: undefined,
 		content: undefined,
 		stylesheets: undefined,
-		renderTo: undefined
+		renderTo: undefined,
+		settings: undefined
 	};
 
-	let previewer = new Previewer();
+	let previewer = new Previewer(config.settings);
 
 	ready.then(async function () {
 		let done;
@@ -30277,7 +31033,7 @@ img {
 
 	return previewer;
 
-}));
+})));
 
 /* global Paged, PagedPolyfill */
 window.AsciidoctorPDF = window.AsciidoctorPDF || {}
