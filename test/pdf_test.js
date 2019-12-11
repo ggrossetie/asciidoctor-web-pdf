@@ -1,20 +1,38 @@
-/* global it, describe */
+/* global it, describe, before, after */
 const fs = require('fs')
 const { PDFDocument, PDFName, PDFDict } = require('pdf-lib')
 const chai = require('chai')
+const rimraf = require('rimraf')
+const ospath = require('path')
 const expect = chai.expect
 const dirtyChai = require('dirty-chai')
 chai.use(dirtyChai)
+require('./helper.js')(chai)
 
 const asciidoctor = require('@asciidoctor/core')()
 const converter = require('../lib/converter.js')
 const templates = require('../lib/document/templates.js')
-const helper = require('./helper.js')
 converter.registerTemplateConverter(asciidoctor, templates)
 
 describe('PDF converter', function () {
   // launching an headless browser (especially on Travis) can take several tens of seconds
   this.timeout(30000)
+
+  before(() => {
+    const outputDir = ospath.join(__dirname, 'output')
+    rimraf.sync(outputDir)
+    fs.mkdirSync(outputDir)
+  })
+
+  after(function () {
+    // clean the output directory if there's no failed tests (and if the DEBUG environment variable is absent).
+    const failedTests = this.test.parent.tests.filter(t => t.state === 'failed')
+    if (failedTests.length === 0 && typeof process.env.DEBUG === 'undefined') {
+      const outputDir = ospath.join(__dirname, 'output')
+      rimraf.sync(outputDir)
+      fs.mkdirSync(outputDir)
+    }
+  })
 
   const getOutlineRefs = (pdfDoc) => {
     const values = pdfDoc.context.lookup(pdfDoc.catalog.get(PDFName.of('Outlines'))).context.indirectObjects.values()
@@ -71,6 +89,6 @@ describe('PDF converter', function () {
     opts.to_file = outputFile
     opts.attributes = { stylesheet: `${__dirname}/../css/asciidoctor.css;${__dirname}/../css/document.css;${__dirname}/../css/features/book.css;${__dirname}/fixtures/black-title-page.css` }
     await converter.convert(asciidoctor, `${__dirname}/fixtures/title-page.adoc`, opts, false)
-    expect(helper.toVisuallyMatch('title-page-background-color.pdf', outputFile)).to.equal(true)
+    expect(outputFile).to.be.visuallyIdentical('title-page-background-color.pdf')
   })
 })

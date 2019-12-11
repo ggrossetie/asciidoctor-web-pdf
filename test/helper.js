@@ -79,6 +79,17 @@ function toVisuallyMatch (referenceFilename, actualPath) {
   }
 }
 
-module.exports = {
-  toVisuallyMatch: toVisuallyMatch
+module.exports = (chai) => {
+  chai.use(function (_chai, _) {
+    _chai.Assertion.addMethod('visuallyIdentical', function (reference) {
+      const obj = this._obj
+      this.assert(
+        toVisuallyMatch(reference, obj) === true
+        , 'expected #{obj} to be visually identical to #{reference}'
+        , 'expected #{obj} to not be visually identical to #{reference}'
+        , reference
+        , obj
+      )
+    })
+  })
 }

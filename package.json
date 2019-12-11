@@ -53,6 +53,7 @@
     "dirty-chai": "2.0.1",
     "mocha": "6.2.0",
     "pixelmatch": "^5.1.0",
+    "rimraf": "^3.0.0",
     "standard": "14.1.0"
   },
   "peerDependencies": {
