@@ -285,6 +285,7 @@ describe('PDF converter', function () {
       it(`should break pages accordingly when the document${featuresDescription}`, async () => {
         const options = {}
         options.attributes = {}
+        options.attributes.reproducible = ''
         if (scenario['title-page-attribute']) {
           options.attributes['title-page'] = ''
         }
@@ -313,6 +314,8 @@ describe('PDF converter', function () {
   it('should be able to set background color of title page', async () => {
     const opts = {}
     const outputFile = `${__dirname}/output/title-page-background-color.pdf`
+    opts.attributes = {}
+    opts.attributes.reproducible = ''
     opts.to_file = outputFile
     opts.attributes = { stylesheet: `${__dirname}/../css/asciidoctor.css;${__dirname}/../css/document.css;${__dirname}/../css/features/book.css;${__dirname}/fixtures/black-title-page.css` }
     await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/title-page.adoc` }, opts, false)
