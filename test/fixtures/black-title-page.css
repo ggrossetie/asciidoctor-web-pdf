@@ -1,0 +1,11 @@
+@page :first {
+  background-color: black;
+}
+
+#cover > h1 {
+  color: white;
+}
+
+#cover > h2 {
+  color: white;
+}
