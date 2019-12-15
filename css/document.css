@@ -102,13 +102,18 @@ h6 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: 100%;
   break-after: page;
   align-items: flex-end;
 }
 
 .pagedjs_page.pagedjs_first_page {
   counter-increment: page 1;
+}
+
+/* Workaround: https://gitlab.pagedmedia.org/tools/pagedjs/issues/162 */
+.pagedjs_page_content > div {
+  height: 100%;
 }
 
 #cover h1 {
