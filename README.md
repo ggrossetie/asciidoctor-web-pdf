@@ -189,6 +189,10 @@ You can also specify where the stylesheet is located with the `stylesdir` attrib
 
     $ asciidoctor-pdf document.adoc -a stylesheet=custom.css
 
+The `stylesheet` attribute can accept multiple semi-colon delimited values (without spaces).
+For example `-a stylesheet=asciidoctor.css;override.css`.
+This could be used to begin with a base stylesheet and then apply supplementary content.
+
 ## Custom layout
 
 It's also possible to create your own layout by extending the default HTML 5 converter.
