@@ -48,7 +48,7 @@
     "yargs": "13.2.2"
   },
   "devDependencies": {
-    "@asciidoctor/core": "^2.0.0-rc.1",
+    "@asciidoctor/core": "^2.1.0",
     "chai": "4.2.0",
     "cheerio": "^1.0.0-rc.3",
     "dirty-chai": "2.0.1",
@@ -58,6 +58,6 @@
     "standard": "14.1.0"
   },
   "peerDependencies": {
-    "@asciidoctor/core": "^2.0.0-rc.1"
+    "@asciidoctor/core": "^2.1.0"
   }
 }
