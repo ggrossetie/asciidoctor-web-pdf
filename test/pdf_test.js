@@ -61,7 +61,7 @@ describe('PDF converter', function () {
   const convert = async (inputFile, outputFile, options) => {
     const opts = options || {}
     opts.to_file = outputFile
-    await converter.convert(asciidoctor, inputFile, opts, false)
+    await converter.convert(asciidoctor, { path: inputFile }, opts, false)
     return PDFDocument.load(fs.readFileSync(outputFile))
   }
 
@@ -113,7 +113,7 @@ describe('PDF converter', function () {
     const outputFile = `${__dirname}/output/title-page-background-color.pdf`
     opts.to_file = outputFile
     opts.attributes = { stylesheet: `${__dirname}/../css/asciidoctor.css;${__dirname}/../css/document.css;${__dirname}/../css/features/book.css;${__dirname}/fixtures/black-title-page.css` }
-    await converter.convert(asciidoctor, `${__dirname}/fixtures/title-page.adoc`, opts, false)
+    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/title-page.adoc` }, opts, false)
     expect(outputFile).to.be.visuallyIdentical('title-page-background-color.pdf')
   })
 })
