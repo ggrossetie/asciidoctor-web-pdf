@@ -18,7 +18,7 @@
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
-    "lint": "standard lib/**/**.js test/**/**.js"
+    "lint": "standard lib/**.js test/**.js"
   },
   "repository": {
     "type": "git",
