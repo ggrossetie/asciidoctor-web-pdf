@@ -72,10 +72,9 @@ function toVisuallyMatch (referenceFilename, actualPath) {
     if (typeof process.env.DEBUG === 'undefined') {
       tmpFiles.forEach((file) => fs.unlinkSync(file))
     }
-    console.error(`expected ${actualPath} to be visually identical to ${referencePath}`)
-    return false
+    return pixels
   } else {
-    return true
+    return pixels
   }
 }
 
@@ -83,12 +82,14 @@ module.exports = (chai) => {
   chai.use(function (_chai, _) {
     _chai.Assertion.addMethod('visuallyIdentical', function (reference) {
       const obj = this._obj
+      const result = toVisuallyMatch(reference, obj)
+      const objRelativePath = ospath.relative(__dirname, obj)
       this.assert(
-        toVisuallyMatch(reference, obj) === true
-        , 'expected #{obj} to be visually identical to #{reference}'
-        , 'expected #{obj} to not be visually identical to #{reference}'
-        , reference
-        , obj
+        result === 0
+        , `expected ${objRelativePath} to be visually identical to reference/${reference} but has ${result} pixels difference`
+        , `expected ${objRelativePath} to not be visually identical to reference/${reference} but has 0 pixel difference`
+        , 0
+        , result
       )
     })
   })

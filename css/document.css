@@ -1,6 +1,3 @@
-@import 'https://fonts.googleapis.com/css?family=Noto+Serif&display=block';
-@import 'https://fonts.googleapis.com/earlyaccess/mplus1p.css?display=block';
-
 @page {
   margin: 0.15in 0.67in 0.5in 0.67in;
   size: A4;
@@ -102,13 +99,18 @@ h6 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: 100%;
   break-after: page;
   align-items: flex-end;
 }
 
 .pagedjs_page.pagedjs_first_page {
   counter-increment: page 1;
+}
+
+/* Workaround: https://gitlab.pagedmedia.org/tools/pagedjs/issues/162 */
+.pagedjs_page_content > div {
+  height: 100%;
 }
 
 #cover h1 {

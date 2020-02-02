@@ -1,0 +1,7 @@
+= Title
+
+This is a preamble.
+
+== Section
+
+This is a paragraph.

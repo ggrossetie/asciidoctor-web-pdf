@@ -1,11 +1,15 @@
 #toc {
-  break-after: always;
+  break-before: page;
 }
 
 #preamble {
-  break-after: always;
+  break-before: page;
 }
 
 .sect1 {
-  break-after: always;
+  break-before: page;
+}
+
+#cover {
+  break-after: unset;
 }
