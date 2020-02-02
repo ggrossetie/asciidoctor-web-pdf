@@ -12,30 +12,41 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/document/document.pdf">
         <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/document/document_screenshot.png" />
       </a>
-      Document -
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/document/"> source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/document/document.pdf"> PDF </a>
     </td>
     <td width="25%">
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/letter/letter.pdf">
         <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/letter/letter_screenshot.png" />
       </a>
-      Letter -
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/letter/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/letter/letter.pdf"> PDF </a>
     </td>
     <td width="25%">
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/book/book.pdf">
         <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/book/book_screenshot.png" />
       </a>
-      Book -
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/book/"> source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/book/book.pdf"> PDF </a>
     </td>
     <td width="25%">
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf">
-      <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png" /></a>
-      Cheat sheet -
+      <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png" />
+      </a>
+    </td>
+  </tr>
+  <tr align="center">
+    <td with="25%">
+      Document<br/>
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/document/"> source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/document/document.pdf"> PDF </a>
+    </td>
+    <td with="25%">
+      Letter<br/>
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/letter/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/letter/letter.pdf"> PDF </a>
+    </td>
+    <td with="25%">
+      Book<br/>
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/book/"> source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/book/book.pdf"> PDF </a>
+    </td>
+    <td with="25%">
+      Cheat sheet<br/>
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/cheat-sheet/"> Source </a> /
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf"> PDF </a>
     </td>
@@ -47,15 +58,23 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/resume/resume.pdf">
         <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/resume/resume_screenshot.png" />
       </a>
-      Resume -
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/resume/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/resume/resume.pdf"> PDF </a>
     </td>
     <td width="25%">
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/slides/ioslides/presentation.pdf">
         <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/slides/ioslides/presentation_screenshot.png" />
       </a>
-      Slides -
+    </td>
+    <td width="25%"></td>
+    <td width="25%"></td>
+  </tr>
+  <tr align="center">
+    <td width="25%">
+      Resume<br/>
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/resume/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/resume/resume.pdf"> PDF </a>
+    </td>
+    <td width="25%">
+      Slides<br/>
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/slides/ioslides/"> Source </a> /
       <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/slides/ioslides/presentation.pdf"> PDF </a>
     </td>
