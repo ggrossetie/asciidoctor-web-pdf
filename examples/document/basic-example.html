@@ -3109,7 +3109,7 @@ Stretch to the next page.</p>
   })
 
   // defer relayouting by 'Paged' until 'MathJax' rendering is complete
-  // otherwise formulas wouldn't be replaced and content height can't be calculated by 'Paged' 
+  // otherwise formulas wouldn't be replaced and content height can't be calculated by 'Paged'
   // 'MathJax' needs to be loaded before 'Paged' to make this work
   window.PagedConfig = window.PagedConfig || {}
   window.PagedConfig.before = () => mathJaxReadyPromise
@@ -24627,7 +24627,7 @@ Stretch to the next page.</p>
 	    parse: function() {
 	        var children = this.createList();
 
-	        
+
 	        while (!this.scanner.eof) {
 	            switch (this.scanner.tokenType) {
 	                case WHITESPACE$4:
@@ -24784,7 +24784,7 @@ Stretch to the next page.</p>
 
 	        this.scanner.eat(NUMBERSIGN$3);
 
-	        
+
 	        switch (this.scanner.tokenType) {
 	            case NUMBER$4:
 	                consumeHexSequence(this.scanner, true);
@@ -25592,7 +25592,7 @@ Stretch to the next page.</p>
 	        var children = this.createList();
 	        var child;
 
-	        
+
 	        while (!this.scanner.eof) {
 	            switch (this.scanner.tokenType) {
 	                case WHITESPACE$6:
@@ -27181,7 +27181,7 @@ Stretch to the next page.</p>
 	grid-row: page;
 	width: 100%;
 	height: 100%;
-	padding: var(--pagedjs-padding-top) var(--pagedjs-padding-right) var(--pagedjs-padding-bottom) var(--pagedjs-padding-left) 
+	padding: var(--pagedjs-padding-top) var(--pagedjs-padding-right) var(--pagedjs-padding-bottom) var(--pagedjs-padding-left)
 
 }
 
@@ -28643,11 +28643,11 @@ img {
 				let pageHeightVar = this.createVariable("--pagedjs-height", CSSValueToString(height));
 
 				rules.push(
-					bleedTop, 
-					bleedRight, 
-					bleedBottom, 
-					bleedLeft, 
-					bleedTopRecto, 
+					bleedTop,
+					bleedRight,
+					bleedBottom,
+					bleedLeft,
+					bleedTopRecto,
 					bleedRightRecto,
 					bleedBottomRecto,
 					bleedLeftRecto,
@@ -28655,7 +28655,7 @@ img {
 					bleedRightVerso,
 					bleedBottomVerso,
 					bleedLeftVerso,
-					pageWidthVar, 
+					pageWidthVar,
 					pageHeightVar
 				);
 			}
@@ -30787,7 +30787,7 @@ img {
 							if (split.length > 1) {
 								psuedo += "::" + split[1];
 							}
-							
+
 							if (target.style === "before" || target.style === "after") {
 								const pseudoType = `${target.style}Content`;
 								textContent = cleanPseudoContent(this[pseudoType]);

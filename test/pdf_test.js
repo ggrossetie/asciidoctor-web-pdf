@@ -11,7 +11,7 @@ require('./helper.js')(chai)
 
 const asciidoctor = require('@asciidoctor/core')()
 const converter = require('../lib/converter.js')
-const templates = require('../lib/document/templates.js')
+const { templates } = require('../lib/document/document-converter')
 converter.registerTemplateConverter(asciidoctor, templates)
 
 describe('PDF converter', function () {
