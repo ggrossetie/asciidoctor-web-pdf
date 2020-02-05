@@ -106,6 +106,12 @@ Many more features can be added by importing an existing JavaScript or CSS frame
 You need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
 The best way to install Node is to use _nvm_ (Node Version Manager).
 
+**Install development dependencies on Linux**
+
+This projects uses Ghostscript. To install this dependency on Ubuntu flavoured distributions:
+
+    $ sudo apt install libgs-dev
+
 <details>
 <summary>How to set up nvm on my machine</summary>
 <br/>
