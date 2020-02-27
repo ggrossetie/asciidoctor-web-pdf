@@ -42,7 +42,7 @@
     "fs-extra": "7.0.1",
     "html-entities": "^1.2.1",
     "mathjax": "3.0.1",
-    "pagedjs": "0.1.35",
+    "pagedjs": "0.1.38",
     "pdf-lib": "^1.2.1",
     "puppeteer": "2.0.0",
     "yargs": "13.2.2"
