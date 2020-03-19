@@ -52,7 +52,7 @@
     "chai": "4.2.0",
     "cheerio": "^1.0.0-rc.3",
     "dirty-chai": "2.0.1",
-    "mocha": "7.1.0",
+    "mocha": "7.1.1",
     "pixelmatch": "^5.1.0",
     "rimraf": "^3.0.0",
     "standard": "14.3.3"
