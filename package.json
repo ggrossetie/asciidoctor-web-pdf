@@ -18,7 +18,8 @@
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
-    "lint": "standard lib/**.js test/**.js tasks/**js"
+    "lint": "standard lib/**.js test/**.js tasks/**js",
+    "dist:browser": "mkdir -p dist/browser && browserify lib/document/document-converter.js -t brfs --standalone AsciidoctorPdfDocumentConverter -o dist/browser/asciidoctor-pdf-document-converter.js"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,8 @@
   },
   "devDependencies": {
     "@asciidoctor/core": "^2.1.0",
+    "brfs": "2.0.2",
+    "browserify": "^16.3.0",
     "chai": "4.2.0",
     "cheerio": "^1.0.0-rc.3",
     "dirty-chai": "2.0.1",
