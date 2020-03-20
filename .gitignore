@@ -3,3 +3,4 @@ node_modules/
 /test/output/*.pdf
 /test/fixtures/*.html
 /test/output/visual-comparison-workdir/
+/dist/
