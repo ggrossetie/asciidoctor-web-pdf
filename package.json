@@ -3,8 +3,8 @@
   "version": "1.0.0-alpha.7",
   "description": "A PDF converter for AsciiDoc based on Asciidoctor.js",
   "engines": {
-    "node": ">=8.11",
-    "npm": ">=5.0.0"
+    "node": ">=10",
+    "npm": ">=6.0.0"
   },
   "bin": {
     "asciidoctor-pdf": "bin/asciidoctor-pdf"
