@@ -201,16 +201,25 @@ The title page is enabled if either of these conditions are met:
 $ asciidoctor-pdf document.adoc -a title-page
 ```
 
-**Additional styles**
+**Custom styles**
 
-You can provide a custom stylesheet using the `stylesheet` attribute.
-You can also specify where the stylesheet is located with the `stylesdir` attribute.
+You can provide a custom stylesheet using the `stylesheet` attribute. A custom stylesheet does completely replace the default stylesheet.
 
-    $ asciidoctor-pdf document.adoc -a stylesheet=custom.css
+    $ asciidoctor-pdf document.adoc -a stylesheet="custom.css"
 
-The `stylesheet` attribute can accept multiple semi-colon delimited values (without spaces).
-For example `-a stylesheet=asciidoctor.css;override.css`.
-This could be used to begin with a base stylesheet and then apply supplementary content.
+The `stylesheet` attribute can accept multiple comma delimited values (without spaces).
+This can be used to begin with a base stylesheet and then apply supplementary content.
+
+    $ asciidoctor-pdf document.adoc -a stylesheet="custom.css,override.css"
+
+It's also possible to use the default stylesheet and add custom styles with a custom stylesheet. All default stylesheets are available under the prefix `asciidoctor-pdf/css/`:
+
+    $ asciidoctor-pdf document.adoc -a stylesheet="asciidoctor-pdf/css/asciidoctor.css,asciidoctor-pdf/css/document.css,custom.css"
+
+You can also specify where the stylesheets are located with the `stylesdir` attribute.
+
+    $ asciidoctor-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
+
 
 ## Custom layout
 

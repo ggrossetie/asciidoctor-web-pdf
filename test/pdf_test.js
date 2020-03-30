@@ -317,7 +317,7 @@ describe('PDF converter', function () {
     opts.attributes = {}
     opts.attributes.reproducible = ''
     opts.to_file = outputFile
-    opts.attributes = { stylesheet: `${__dirname}/../css/asciidoctor.css;${__dirname}/../css/document.css;${__dirname}/../css/features/book.css;${__dirname}/fixtures/black-title-page.css` }
+    opts.attributes = { stylesheet: `${__dirname}/../css/asciidoctor.css,${__dirname}/../css/document.css,${__dirname}/../css/features/book.css,${__dirname}/fixtures/black-title-page.css` }
     await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/title-page.adoc` }, opts, false)
     expect(outputFile).to.be.visuallyIdentical('title-page-background-color.pdf')
   })
