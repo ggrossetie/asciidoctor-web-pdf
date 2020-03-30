@@ -203,22 +203,22 @@ $ asciidoctor-pdf document.adoc -a title-page
 
 **Custom styles**
 
-You can provide a custom stylesheet using the `stylesheet` attribute. A custom stylesheet does completely replace the default stylesheets.
+You can provide a custom stylesheet using the `stylesheet` attribute. A custom stylesheet does completely replace the default stylesheet.
 
-    $ asciidoctor-pdf document.adoc -a stylesheet=custom.css
+    $ asciidoctor-pdf document.adoc -a stylesheet="custom.css"
 
 The `stylesheet` attribute can accept multiple comma delimited values (without spaces).
 This can be used to begin with a base stylesheet and then apply supplementary content.
 
-    $ asciidoctor-pdf document.adoc -a stylesheet=custom.css,override.css
+    $ asciidoctor-pdf document.adoc -a stylesheet="custom.css,override.css"
 
-It's also possible to use the default stylesheets and add custom styles with a custom stylesheet. All default stylesheets are available under the prefix `asciidoctor-pdf/css/`:
+It's also possible to use the default stylesheet and add custom styles with a custom stylesheet. All default stylesheets are available under the prefix `asciidoctor-pdf/css/`:
 
-    $ asciidoctor-pdf document.adoc -a stylesheet=asciidoctor-pdf/css/asciidoctor.css,asciidoctor-pdf/css/document.css,custom.css
+    $ asciidoctor-pdf document.adoc -a stylesheet="asciidoctor-pdf/css/asciidoctor.css,asciidoctor-pdf/css/document.css,custom.css"
 
 You can also specify where the stylesheets are located with the `stylesdir` attribute.
 
-    $ asciidoctor-pdf document.adoc -a stylesdir=css -a stylesheet=custom.css,override.css
+    $ asciidoctor-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
 
 
 ## Custom layout
