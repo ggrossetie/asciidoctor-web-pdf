@@ -220,6 +220,83 @@ You can also specify where the stylesheets are located with the `stylesdir` attr
 
     $ asciidoctor-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
 
+**Asciidoctor extensions**
+
+Asciidoctor PDF can require Asciidoctor extensions written in JavaScript from the CLI.
+For instance, if we want to use the [Asciidoctor Kroki](https://github.com/mogztter/asciidoctor-kroki) extension, we first need to install it:
+
+    $ npm i asciidoctor-kroki
+
+Then, we can use the following command to require this extension:
+
+    $ asciidoctor-pdf --require asciidoctor-kroki document.adoc
+
+It's also possible to require an extension from a JavaScript file.
+For instance, if you want to require a local JavaScript file named `my-asciidoctor-extension.js`, then you can require it using:
+
+    $ asciidoctor-pdf --require ./my-asciidoctor-extension.js document.adoc
+
+**NOTE:** Please note that the extension should export a function named `register`, otherwise the extension won't be registered:
+
+```js
+module.exports.register = function (registry) {
+  if (typeof registry.register === 'function') {
+    registry.register(function () {
+      this.block(function () {
+        // ...
+      })
+    })
+  } else if (typeof registry.block === 'function') {
+    registry.block(function () {
+      // ...
+    })
+  }
+  return registry
+}
+```
+
+**Diagrams**
+
+You can use the [Asciidoctor Kroki extension](https://github.com/Mogztter/asciidoctor-kroki) to render diagrams in your PDF.
+In this example, we create a file named `piracy.adoc` with the following content:
+
+**piracy.adoc**
+```
+= Piracy
+
+Piracy is an act of robbery or criminal violence by ship upon another ship,
+typically with the goal of stealing rum and other valuable items or properties.
+
+Here's what a pirate looks like!
+
+[nomnoml]
+....
+[Pirate|eyeCount: Int|raid();pillage()|
+  [beard]--[parrot]
+  [beard]-:>[foul mouth]
+]
+
+[<abstract>Marauder]<:--[Pirate]
+[Pirate]- 0..7[mischief]
+[jollyness]->[Pirate]
+[jollyness]->[rum]
+[jollyness]->[singing]
+[Pirate]-> *[rum|tastiness: Int|swig()]
+[Pirate]->[singing]
+[singing]<->[rum]
+....
+```
+
+[Kroki](https://kroki.io/) supports more than a dozen diagram libraries.
+In the above example, we are using the [nomnoml](https://github.com/skanaar/nomnoml) UML diagram library.
+
+**NOTE:** Please note, that you will need to install `asciidoctor-kroki`, using `npm i asciidoctor-kroki`.
+
+You can use the following command to generate a PDF:
+
+    $ asciidoctor-pdf --require asciidoctor-kroki piracy.adoc
+
+And here's the result: [piracy.pdf](https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/document/piracy.pdf)
 
 ## Custom layout
 
