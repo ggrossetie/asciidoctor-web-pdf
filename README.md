@@ -222,17 +222,17 @@ You can also specify where the stylesheets are located with the `stylesdir` attr
 
 **Asciidoctor extensions**
 
-Asciidoctor PDF can require Asciidoctor extensions written in JavaScript from the CLI.
-For instance, if we want to use the [Asciidoctor Kroki](https://github.com/mogztter/asciidoctor-kroki) extension, we first need to install it:
+Asciidoctor PDF can use Asciidoctor extensions written in JavaScript from the CLI.
+For instance, if you want to use the [Asciidoctor Kroki](https://github.com/mogztter/asciidoctor-kroki) extension, you first need to install it:
 
     $ npm i asciidoctor-kroki
 
-Then, we can use the following command to require this extension:
+Then, you can use the following command to load this extension:
 
     $ asciidoctor-pdf --require asciidoctor-kroki document.adoc
 
-It's also possible to require an extension from a JavaScript file.
-For instance, if you want to require a local JavaScript file named `my-asciidoctor-extension.js`, then you can require it using:
+It's also possible to use an extension from a JavaScript file.
+For instance, if you want to load a local extension declared in a JavaScript file named `my-asciidoctor-extension.js`, then you can use the following command:
 
     $ asciidoctor-pdf --require ./my-asciidoctor-extension.js document.adoc
 
