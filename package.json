@@ -41,7 +41,7 @@
     "file-url": "3.0.0",
     "fs-extra": "9.0.0",
     "html-entities": "^1.2.1",
-    "mathjax": "3.0.1",
+    "mathjax": "3.0.5",
     "pagedjs": "0.1.40",
     "pdf-lib": "^1.2.1",
     "puppeteer": "3.0.0",
