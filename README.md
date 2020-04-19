@@ -1,6 +1,6 @@
 # Asciidoctor PDF
 
-[![Build Status](https://travis-ci.org/Mogztter/asciidoctor-pdf.js.svg?branch=master)](https://travis-ci.org/Mogztter/asciidoctor-pdf.js)
+[![Build](https://github.com/Mogztter/asciidoctor-pdf.js/workflows/Build/badge.svg)](https://github.com/Mogztter/asciidoctor-pdf.js/actions?query=workflow%3ABuild)
 [![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
 
 A PDF converter for AsciiDoc based on web technologies.
