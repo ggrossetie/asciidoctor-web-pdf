@@ -44,7 +44,7 @@
     "mathjax": "3.0.5",
     "pagedjs": "0.1.40",
     "pdf-lib": "^1.2.1",
-    "puppeteer": "3.0.2",
+    "puppeteer": "3.0.4",
     "yargs": "15.3.1"
   },
   "devDependencies": {
