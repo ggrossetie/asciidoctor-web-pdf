@@ -265,5 +265,10 @@ Just a preamble.`, { safe: 'safe' })
       const $ = cheerio.load(doc.convert())
       expect($('#toc > ul.sectlevel1 > li')).to.have.length(0)
     })
+
+    it('should use a template directory (Nunjucks)', () => {
+      const html = asciidoctor.convert('Hello *world*', { template_dirs: [`${__dirname}/fixtures/templates/nunjucks`] })
+      expect(html).to.equal('<p class="nunjucks">Hello <strong>world</strong></p>')
+    })
   })
 })
