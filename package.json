@@ -56,7 +56,7 @@
     "nunjucks": "^3.2.1",
     "pixelmatch": "^5.1.0",
     "rimraf": "^3.0.0",
-    "standard": "14.3.3"
+    "standard": "14.3.4"
   },
   "peerDependencies": {
     "@asciidoctor/core": "^2.2.0"
