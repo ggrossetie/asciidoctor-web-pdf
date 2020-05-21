@@ -1,0 +1,19 @@
+= Equations and Formulas
+
+If you need to get technical in your writing, https://asciidoctor.org/docs/user-manual/#stem[Asciidoctor integrates with MathJax].
+
+Here some examples:
+
+:stem:
+
+[example]
+--
+[stem]
+++++
+sqrt(4) = 2
+++++
+
+Water (stem:[H_2O]) is a critical component.
+
+latexmath:[C = \alpha + \beta Y^{\gamma} + \epsilon]
+--

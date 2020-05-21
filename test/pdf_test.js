@@ -323,6 +323,16 @@ describe('PDF converter', function () {
     expect(outputFile).to.be.visuallyIdentical('title-page-background-color.pdf')
   })
 
+  it('should render mathematical expressions using MathJax.js', async () => {
+    const opts = {}
+    const outputFile = `${__dirname}/output/document-with-stem.pdf`
+    opts.attributes = {}
+    opts.attributes.reproducible = ''
+    opts.to_file = outputFile
+    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/document-with-stem.adoc` }, opts, false)
+    expect(outputFile).to.be.visuallyIdentical('document-with-stem.pdf')
+  })
+
   describe('Timeout', () => {
     beforeEach(function () {
       sinon.spy(console, 'error')
