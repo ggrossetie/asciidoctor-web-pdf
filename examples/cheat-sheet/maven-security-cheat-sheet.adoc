@@ -1,5 +1,6 @@
 = Cheat Sheet: 10 Maven Security Best Practices
 Simon Maple <https://twitter.com/sjmaple>; Robert Scholte <https://twitter.com/rfscholte>
+:imagesdir: snyk/assets
 :authorbio_1: Java Champion and Developer Advocate at Snyk
 :authorbio_2: CEO of Sourcegrounds, Chairman of the Apache Maven project
 :pdf-width: 508mm
