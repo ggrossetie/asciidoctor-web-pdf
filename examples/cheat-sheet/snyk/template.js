@@ -25,10 +25,12 @@ const getAuthors = function (node) {
   return result;
 }
 
-const renderAuthors = function (authors) {
+const renderAuthors = function (node) {
+  const authors = getAuthors(node)
   return authors.map(author => {
+    const authorImageUri = node.getMediaUri(`${author.twitter}.jpg`)
     return `<div class="author">
-<div class="author-avatar"><img src="http://avatars.io/twitter/${author.twitter}"/></div>
+<div class="author-avatar"><img src="${authorImageUri}"/></div>
 <div class="author-name"><a href="${author.email}">@${author.twitter}</a></div>
 <div class="author-bio">${author.bio}</div>
 </div>
@@ -56,7 +58,7 @@ module.exports = {
 ${node.getContent()}
 <div class="sect1 authors">
 <h3>Authors :</h3>
-${renderAuthors(getAuthors(node))}
+${renderAuthors(node)}
 </div>
 </section>
 </body>`
