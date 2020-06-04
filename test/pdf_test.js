@@ -1,7 +1,8 @@
-/* global it, describe, before, after */
+/* global it, describe, before, after, beforeEach, afterEach */
 const fs = require('fs')
 const { PDFDocument, PDFName, PDFDict } = require('pdf-lib')
 const chai = require('chai')
+const sinon = require('sinon')
 const rimraf = require('rimraf')
 const ospath = require('path')
 const expect = chai.expect
@@ -320,5 +321,29 @@ describe('PDF converter', function () {
     opts.attributes = { stylesheet: `${__dirname}/../css/asciidoctor.css,${__dirname}/../css/document.css,${__dirname}/../css/features/book.css,${__dirname}/fixtures/black-title-page.css` }
     await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/title-page.adoc` }, opts, false)
     expect(outputFile).to.be.visuallyIdentical('title-page-background-color.pdf')
+  })
+
+  describe('Timeout', () => {
+    beforeEach(function () {
+      sinon.spy(console, 'error')
+    })
+
+    afterEach(function () {
+      console.error.restore()
+    })
+
+    it('should timeout while navigating', async () => {
+      try {
+        process.env.PUPPETEER_NAVIGATION_TIMEOUT = 1
+        delete require.cache[require.resolve('../lib/converter.js')]
+        const converter = require('../lib/converter.js')
+        await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/title-page.adoc` }, {}, false)
+        const call = console.error.getCall(0)
+        expect(call).to.have.property('firstArg')
+        expect(call.firstArg).to.equal('Unable to generate the PDF - Error: TimeoutError: Navigation timeout of 1 ms exceeded')
+      } finally {
+        delete process.env.PUPPETEER_NAVIGATION_TIMEOUT
+      }
+    })
   })
 })
