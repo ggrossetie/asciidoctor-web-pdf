@@ -215,7 +215,7 @@ describe('PDF converter', function () {
         section: true,
         toc: 'preamble',
         'title-page-attribute': true,
-        'expected-page-number': 2
+        'expected-page-number': 3
       },
       {
         doctype: 'article',
@@ -223,7 +223,7 @@ describe('PDF converter', function () {
         section: true,
         toc: 'auto',
         'title-page-attribute': true,
-        'expected-page-number': 2
+        'expected-page-number': 3
       },
       // disabled from now until https://gitlab.pagedmedia.org/tools/pagedjs/issues/164 is fixed.
       // currently, paged.js will produce an empty page.
@@ -243,7 +243,7 @@ describe('PDF converter', function () {
         section: true,
         toc: 'auto',
         'title-page-attribute': true,
-        'expected-page-number': 2
+        'expected-page-number': 3
       },
       {
         doctype: 'article',
@@ -305,6 +305,7 @@ describe('PDF converter', function () {
           inputFileName = 'document-with-only-title.adoc'
         }
         const inputFile = `${__dirname}/fixtures/${inputFileName}`
+
         const pdfDoc = await convert(inputFile, outputFile, options)
         expect(pdfDoc.getPages().length).to.equal(scenario['expected-page-number'])
         expect(outputFile).to.be.visuallyIdentical(outputFileName)

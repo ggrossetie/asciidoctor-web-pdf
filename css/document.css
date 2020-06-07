@@ -104,10 +104,6 @@ h6 {
   align-items: flex-end;
 }
 
-.pagedjs_page.pagedjs_first_page {
-  counter-increment: page 1;
-}
-
 /* Workaround: https://gitlab.pagedmedia.org/tools/pagedjs/issues/162 */
 .pagedjs_page_content > div {
   height: 100%;
@@ -209,16 +205,23 @@ tr {
   break-after: page;
 }
 
-/* TOC page numbering and leaders, adapted from https://www.pagedjs.org/posts/2020-02-19-toc/ */
-/* The page numbering is straightforward and generally works. */
-/* The leader works by filling the li with dots, and arranging for the <a> and a::after to cover them, */
-/* using the same background color as the TOC div. */
-/* The leader requires changes in TOC (outline) generation in ruby Asciidoctor */
-/* See https://github.com/asciidoctor/asciidoctor/issues/3670 */
+/*
+TOC page numbering and leaders, adapted from https://www.pagedjs.org/posts/2020-02-19-toc/
+The page numbering is straightforward and generally works.
+The leader works by filling the li with dots, and arranging for the <a> and a::after to cover them, using the same background color as the TOC div.
+*/
+.toc {
+  background-color: white;
+}
+
+.toc ul > li:first-child,
+.toc2 ul > li:first-child {
+  margin-top: 0;
+}
 
 .toc a::after,
 .toc2 a::after {
-  content: "p. " target-counter(attr(href), page);
+  content: target-counter(attr(href url), page);
   float: right;
   /* for leader: */
   position: relative;
@@ -237,8 +240,8 @@ tr {
     "........";
   float: left;
   width: 0;
-  padding-left: 5px;
   letter-spacing: 2px;
+  color: #999;
 }
 
 .toc ul,
@@ -256,4 +259,13 @@ tr {
 .toc2 a {
   background-color: inherit;
   right: 0;
+  padding-right: 0.25rem;
+}
+
+.front-matter {
+  page: front;
+}
+
+#content {
+  counter-reset: page 1;
 }

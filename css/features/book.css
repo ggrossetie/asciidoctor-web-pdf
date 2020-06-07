@@ -1,9 +1,9 @@
 #toc {
-  break-before: page;
+  page: tableofcontents;
 }
 
 #preamble {
-  break-before: page;
+  page: preamble;
 }
 
 .sect1 {
@@ -12,4 +12,34 @@
 
 #cover {
   break-after: unset;
+}
+
+@page tableofcontents {
+  @bottom-right {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+  @bottom-left {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+}
+
+@page preamble {
+  @bottom-right {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+  @bottom-left {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
 }

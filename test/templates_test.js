@@ -75,18 +75,6 @@ Guillaume Grossetie
       expect($('.title-page > h1').length).to.equal(0)
     })
 
-    it('should use a special page numbering when title page is set', () => {
-      const doc = asciidoctor.load(`= Title
-Guillaume Grossetie
-:title-page:
-
-== Section`)
-      const $ = cheerio.load(doc.convert({ header_footer: true }))
-      expect($('head').html()).to.have.string(`.pagedjs_page.pagedjs_first_page {
-  counter-increment: page 0;
-}`)
-    })
-
     it('should not include a document title if the document title is empty', () => {
       const doc = asciidoctor.load('Hello world!')
       const $ = cheerio.load(doc.convert({ header_footer: true }))
