@@ -1,0 +1,98 @@
+@page {
+  size: A4;
+  orphans: 4;
+  widows: 2;
+  margin-inside: 0.5cm;
+  margin-outside: 2.5cm;
+  marks: crop cross;
+}
+
+@page tocpage:left {
+  @top-left {
+    content: "Table of Contents";
+  }
+  @bottom-left {
+    content: counter(page, lower-alpha);
+  }
+}
+
+@page tocpage:right {
+  @top-right {
+    content: "Table of Contents";
+  }
+  @bottom-right {
+    content: counter(page, lower-alpha);
+  }
+}
+
+@page tocpage:blank {
+  @top-right {
+    content: none;
+  }
+  @bottom-right {
+    content: none;
+  }
+  @top-left {
+    content: none;
+  }
+  @bottom-left {
+    content: none;
+  }
+  @bottom-center {
+    content: "This page is intentionally left blank";
+  }
+}
+
+@page headerpage {
+}
+
+@page contentpage:left {
+  @top-left {
+    content: string(Section);
+  }
+  @bottom-left {
+    content: "Page " counter(page);
+  }
+}
+
+@page contentpage:right {
+  @top-right {
+    content: string(Section);
+  }
+  @bottom-right {
+    content: "Page " counter(page);
+  }
+}
+
+@page contentpage:first {
+  @top-right {
+    content: none;
+  }
+}
+
+#header {
+  page: headerpage;
+}
+
+#content {
+  page: contentpage;
+  counter-reset: page 1;
+  hyphens: auto;
+}
+
+#toc {
+  page: tocpage;
+  break-before: right; /* Always start on right page */
+  counter-reset: page 1;
+}
+
+.sect1 {
+  break-before: right; /* Always start on right page */
+  prince-page-group: start; /* This is only used by the Prince Formatter */
+}
+
+.sect1 > h2 {
+  color: blue;
+  /** This will break asciidoctor-web-pdf */
+  string-set: Section content();
+}
