@@ -180,6 +180,13 @@ To convert an AsciiDoc document using this layout, open a terminal and type:
 
     $ asciidoctor-pdf document.adoc
 
+**IMPORTANT:** Asciidoctor Web PDF relies on Puppeteer to generate a PDF from a Web page.
+If you get the following error, make sure that [all the necessary dependencies are installed](https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md).
+
+```
+> Unable to generate the PDF - Error: TimeoutError: Timed out after 30000 ms while trying to connect to Chrome!
+```
+
 ## Configuration
 
 The standard document layout can be configured depending on your needs.
