@@ -1,6 +1,6 @@
-# Asciidoctor PDF
+# Asciidoctor Web PDF
 
-[![Build](https://github.com/Mogztter/asciidoctor-pdf.js/workflows/Build/badge.svg)](https://github.com/Mogztter/asciidoctor-pdf.js/actions?query=workflow%3ABuild)
+[![Build](https://github.com/Mogztter/asciidoctor-pdf.js/workflows/Build/badge.svg)](https://github.com/Mogztter/asciidoctor-web-pdf/actions?query=workflow%3ABuild)
 [![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
 
 A PDF converter for AsciiDoc based on web technologies.
@@ -83,7 +83,7 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
   </tr>
 </table>
 
-Asciidoctor PDF has support for LaTeX-style mathematical equations (via [MathJax](https://www.mathjax.org/)) and syntax highlighting (via [highlight.js](https://highlightjs.org/)).
+Asciidoctor Web PDF has support for LaTeX-style mathematical equations (via [MathJax](https://www.mathjax.org/)) and syntax highlighting (via [highlight.js](https://highlightjs.org/)).
 Many more features can be added by importing an existing JavaScript or CSS framework.
 
 ## Highlights
@@ -103,7 +103,7 @@ Many more features can be added by importing an existing JavaScript or CSS frame
 
 ### Requirements
 
-You need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor PDF.
+You need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor Web PDF.
 The best way to install Node is to use _nvm_ (Node Version Manager).
 
 <details>
@@ -131,16 +131,16 @@ The above commands will install Node v12.13.0 and enable it.
 </details>
 
 We recommend using the latest long term support (LTS) release of Node.
-While you can use other versions of Node, Asciidoctor PDF is only tested against active LTS releases.
+While you can use other versions of Node, Asciidoctor Web PDF is only tested against active LTS releases.
 
 ### Install globally using npm
 
-To install Asciidoctor PDF package globally, open a terminal and type:
+To install Asciidoctor Web PDF package globally, open a terminal and type:
 
     $ npm i -g @asciidoctor/core asciidoctor-pdf
 
-**NOTE:** We recommend installing Asciidoctor PDF globally to make the `asciidoctor-pdf` command available on your `PATH`.
-However, you can also install Asciidoctor PDF in a project directory if you prefer.
+**NOTE:** We recommend installing Asciidoctor Web PDF globally to make the `asciidoctor-pdf` command available on your `PATH`.
+However, you can also install Asciidoctor Web PDF in a project directory if you prefer.
 
 Verify that the `asciidoctor-pdf` command is available on your `PATH` by running:
 
@@ -148,24 +148,24 @@ Verify that the `asciidoctor-pdf` command is available on your `PATH` by running
 
 **NOTE:** If you get an error about [Executions Policies](https://go.microsoft.com/fwlink/?LinkID=135170) when running this command on PowerShell, try to use the following command instead: `$ asciidoctor-pdf.cmd --version`.
 
-If installation was successful, the command should report the version of Asciidoctor PDF.
+If installation was successful, the command should report the version of Asciidoctor Web PDF.
 
 ```console
 $ asciidoctor-pdf --version
-Asciidoctor PDF 1.0.0-alpha.4 using Asciidoctor.js 2.0.3 (Asciidoctor 2.0.9) [https://asciidoctor.org]
+Asciidoctor Web PDF 1.0.0-alpha.4 using Asciidoctor.js 2.0.3 (Asciidoctor 2.0.9) [https://asciidoctor.org]
 Runtime Environment (node v10.15.1 on linux)
 CLI version 3.0.2
 ```
 
-**NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor PDF package:
+**NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor Web PDF package:
 ```
 $ yarn global add @asciidoctor/core asciidoctor-pdf
 ```
 
 ### Install in a project directory (alternative install)
 
-You can opt to install Asciidoctor PDF in a project directory, such as the directory where your AsciiDoc files are stored.
-To install Asciidoctor PDF in a project directory, move into your project directory and type:
+You can opt to install Asciidoctor Web PDF in a project directory, such as the directory where your AsciiDoc files are stored.
+To install Asciidoctor Web PDF in a project directory, move into your project directory and type:
 
     $ npm i @asciidoctor/core asciidoctor-pdf
 
@@ -175,7 +175,7 @@ Verify that the `asciidoctor-pdf` command is available by running `$(npm bin)/as
 
 ## Getting started
 
-Asciidoctor PDF provides a standard document layout.
+Asciidoctor Web PDF provides a standard document layout.
 To convert an AsciiDoc document using this layout, open a terminal and type:  
 
     $ asciidoctor-pdf document.adoc
@@ -222,7 +222,7 @@ You can also specify where the stylesheets are located with the `stylesdir` attr
 
 **Asciidoctor extensions**
 
-Asciidoctor PDF can use Asciidoctor extensions written in JavaScript from the CLI.
+Asciidoctor Web PDF can use Asciidoctor extensions written in JavaScript from the CLI.
 For instance, if you want to use the [Asciidoctor Kroki](https://github.com/mogztter/asciidoctor-kroki) extension, you first need to install it:
 
     $ npm i asciidoctor-kroki
@@ -392,7 +392,7 @@ It will produce a file named `examples/cheat-sheet/maven-security-cheat-sheet.pd
 
 ## How does it work?
 
-Asciidoctor PDF is using an HTML 5 converter to convert an AsciiDoc document to an HTML 5 page.
+Asciidoctor Web PDF is using an HTML 5 converter to convert an AsciiDoc document to an HTML 5 page.
 [Puppeteer](https://github.com/GoogleChrome/puppeteer) will then run an headless Chrome to generate a PDF from the HTML 5 page.
 
 To paginate content in the browser, we are using [Paged.js](https://www.pagedmedia.org/paged-js/),
