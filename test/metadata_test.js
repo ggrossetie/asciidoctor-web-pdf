@@ -54,7 +54,7 @@ content`)
     expectEqual(pdfWithMetadata, 'Subject', '')
     expectEqual(pdfWithMetadata, 'Keywords', 'pdf asciidoctor doc')
     expectEqual(pdfWithMetadata, 'Producer', 'Guillaume Grossetie')
-    expectEqual(pdfWithMetadata, 'Creator', `Asciidoctor PDF ${pkgVersion}`)
+    expectEqual(pdfWithMetadata, 'Creator', `Asciidoctor Web PDF ${pkgVersion}`)
   })
 
   it('should add epoch unix at start date if reproducible attribute is set', async () => {
@@ -88,7 +88,7 @@ content`)
   it('should set Producer field to value of Creator field by default', async () => {
     const pdfWithMetadata = await toPdfWithMetadata('hello')
 
-    const creator = `Asciidoctor PDF ${pkgVersion}`
+    const creator = `Asciidoctor Web PDF ${pkgVersion}`
     expectEqual(pdfWithMetadata, 'Creator', creator)
     expectEqual(pdfWithMetadata, 'Producer', creator)
   })
