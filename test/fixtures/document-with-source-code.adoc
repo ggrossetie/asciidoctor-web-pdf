@@ -1,0 +1,14 @@
+= Syntax Highlighting
+
+Here's how you say "`Hello, World!`" in Prawn:
+
+.Create a basic PDF document using Prawn
+[source,ruby]
+----
+require 'prawn'
+
+Prawn::Document.generate 'example.pdf' do
+  text 'Hello, World!' // <1>
+end
+----
+<1> Add `Hello, World!` as text

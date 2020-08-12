@@ -333,6 +333,17 @@ describe('PDF converter', function () {
     expect(outputFile).to.be.visuallyIdentical('document-with-stem.pdf')
   })
 
+  it('should enable syntax highlighting if source highlighter is set', async () => {
+    const opts = {}
+    const outputFile = `${__dirname}/output/document-with-source-code.pdf`
+    opts.attributes = {}
+    opts.attributes.reproducible = ''
+    opts.attributes['source-highlighter'] = 'highlight.js'
+    opts.to_file = outputFile
+    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/document-with-source-code.adoc` }, opts, false)
+    expect(outputFile).to.be.visuallyIdentical('document-with-source-code.pdf')
+  })
+
   describe('Timeout', () => {
     beforeEach(function () {
       sinon.spy(console, 'error')
