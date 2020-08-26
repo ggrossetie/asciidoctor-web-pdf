@@ -25,7 +25,3 @@
     border-top: .1pt solid #d2d2d2;
   }
 }
-
-.pagedjs_page.pagedjs_first_page {
-  counter-increment: page 1;
-}
