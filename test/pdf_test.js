@@ -324,6 +324,16 @@ describe('PDF converter', function () {
     expect(outputFile).to.be.visuallyIdentical('title-page-background-color.pdf')
   })
 
+  it('should repeat column group, caption and table header', async () => {
+    const opts = {}
+    const outputFile = `${__dirname}/output/repeat-table-elements.pdf`
+    opts.attributes = {}
+    opts.attributes.reproducible = ''
+    opts.to_file = outputFile
+    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/repeat-table-elements.adoc` }, opts, false)
+    expect(outputFile).to.be.visuallyIdentical('repeat-table-elements.pdf')
+  })
+
   it('should render mathematical expressions using MathJax.js', async () => {
     const opts = {}
     const outputFile = `${__dirname}/output/document-with-stem.pdf`
