@@ -25,4 +25,30 @@ Guillaume Grossetie
     const $ = cheerio.load(doc.convert({ header_footer: true }))
     expect($('h1').text()).to.equal('Static title')
   })
+
+  describe('Docinfo', () => {
+    it('should include shared (head) docinfo', () => {
+      asciidoctor.ConverterFactory.register(new DocumentConverter(), ['web-pdf'])
+      const $ = cheerio.load(asciidoctor.convertFile(`${__dirname}/fixtures/simple.adoc`, {
+        safe: 'safe',
+        backend: 'web-pdf',
+        header_footer: true,
+        to_file: false,
+        attributes: { docinfo: 'shared' }
+      }))
+      expect($('head > meta[name="keywords"]').attr('content')).to.equal('journalism, press')
+      expect($('head > script[src="debug.js"]').length).to.equal(1)
+    })
+    it('should include private (footer) docinfo', () => {
+      asciidoctor.ConverterFactory.register(new DocumentConverter(), ['web-pdf'])
+      const $ = cheerio.load(asciidoctor.convertFile(`${__dirname}/fixtures/simple.adoc`, {
+        safe: 'safe',
+        backend: 'web-pdf',
+        header_footer: true,
+        to_file: false,
+        attributes: { docinfo: 'private-footer' }
+      }))
+      expect($('footer').text()).to.equal('This is the end.')
+    })
+  })
 })
