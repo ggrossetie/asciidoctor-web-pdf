@@ -334,7 +334,7 @@ describe('PDF converter', function () {
     expect(outputFile).to.be.visuallyIdentical('repeat-table-elements.pdf')
   })
 
-  it('should render mathematical expressions using MathJax.js', async () => {
+  it('should render mathematical expressions using KaTeX', async () => {
     const opts = {}
     const outputFile = `${__dirname}/output/document-with-stem.pdf`
     opts.attributes = {}

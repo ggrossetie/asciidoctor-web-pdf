@@ -106,37 +106,34 @@ Guillaume Grossetie
   })
 
   describe('Stem', () => {
-    const fileUrl = require('file-url')
-    const mathjaxFileUrl = fileUrl(require.resolve('mathjax/es5/tex-chtml-full.js'))
-
-    it('should include MathML when stem is set', () => {
+    it('should include KaTeX when stem is set', () => {
       const doc = asciidoctor.load(`= Title
 :stem:
 
 == Section`)
       const $ = cheerio.load(templates.document(doc))
-      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(1)
-      // by default equation numbering is not enabled
-      expect($('script[data-type="mathjax-config"]').html()).to.have.string('tags: "none"')
+      expect($('script[data-id="katex"]').length).to.equal(1)
     })
 
-    it('should not include MathML when stem is not set', () => {
+    it('should not include KaTeX when stem is not set', () => {
       const doc = asciidoctor.load(`= Title
 :stem!:
 
 == Section`)
       const $ = cheerio.load(templates.document(doc))
-      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(0)
+      expect($('script[data-id="katex"]').length).to.equal(0)
     })
 
-    it('should not include MathML when stem is not present', () => {
+    it('should not include KaTeX when stem is not present', () => {
       const doc = asciidoctor.load(`= Title
 
 == Section`)
       const $ = cheerio.load(templates.document(doc))
-      expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(0)
+      expect($('script[data-id="katex"]').length).to.equal(0)
     })
 
+    // FIXME: add support for equation numbering
+    /*
     it('should add equation numbers when eqnums equals AMS', () => {
       const doc = asciidoctor.load(`= Title
 :stem:
@@ -170,6 +167,7 @@ Guillaume Grossetie
       expect($(`script[src="${mathjaxFileUrl}"]`).length).to.equal(1)
       expect($('script[data-type="mathjax-config"]').html()).to.have.string('tags: "all"')
     })
+    */
   })
 
   describe('Admonition', () => {
