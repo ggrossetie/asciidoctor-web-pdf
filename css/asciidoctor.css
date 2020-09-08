@@ -551,28 +551,6 @@ blockquote, blockquote p {
   color: rgba(0, 0, 0, .85)
 }
 
-@media only screen and (min-width: 768px) {
-  h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
-    line-height: 1.2
-  }
-
-  h1 {
-    font-size: 2.75em
-  }
-
-  h2 {
-    font-size: 2.3125em
-  }
-
-  h3, #toctitle, .sidebarblock > .content > .title {
-    font-size: 1.6875em
-  }
-
-  h4 {
-    font-size: 1.4375em
-  }
-}
-
 table {
   background: #fff;
   margin-bottom: 1.25em;
@@ -875,95 +853,6 @@ p a > code:hover {
   font-size: 1.2em
 }
 
-@media only screen and (min-width: 768px) {
-  #toctitle {
-    font-size: 1.375em
-  }
-
-  body.toc2 {
-    padding-left: 15em;
-    padding-right: 0
-  }
-
-  #toc.toc2 {
-    margin-top: 0 !important;
-    background-color: #f8f8f7;
-    position: fixed;
-    width: 15em;
-    left: 0;
-    top: 0;
-    border-right: 1px solid #efefed;
-    border-top-width: 0 !important;
-    border-bottom-width: 0 !important;
-    z-index: 1000;
-    padding: 1.25em 1em;
-    height: 100%;
-    overflow: auto
-  }
-
-  #toc.toc2 #toctitle {
-    margin-top: 0;
-    margin-bottom: .8rem;
-    font-size: 1.2em
-  }
-
-  #toc.toc2 > ul {
-    font-size: .9em;
-    margin-bottom: 0
-  }
-
-  #toc.toc2 ul ul {
-    margin-left: 0;
-    padding-left: 1em
-  }
-
-  #toc.toc2 ul.sectlevel0 ul.sectlevel1 {
-    padding-left: 0;
-    margin-top: .5em;
-    margin-bottom: .5em
-  }
-
-  body.toc2.toc-right {
-    padding-left: 0;
-    padding-right: 15em
-  }
-
-  body.toc2.toc-right #toc.toc2 {
-    border-right-width: 0;
-    border-left: 1px solid #efefed;
-    left: auto;
-    right: 0
-  }
-}
-
-@media only screen and (min-width: 1280px) {
-  body.toc2 {
-    padding-left: 20em;
-    padding-right: 0
-  }
-
-  #toc.toc2 {
-    width: 20em
-  }
-
-  #toc.toc2 #toctitle {
-    font-size: 1.375em
-  }
-
-  #toc.toc2 > ul {
-    font-size: .95em
-  }
-
-  #toc.toc2 ul ul {
-    padding-left: 1.25em
-  }
-
-  body.toc2.toc-right {
-    padding-left: 0;
-    padding-right: 20em
-  }
-}
-
 #content #toc {
   border-style: solid;
   border-width: 1px;
@@ -997,13 +886,6 @@ p a > code:hover {
 .sect1 {
   padding-bottom: .625em
 }
-
-@media only screen and (min-width: 768px) {
-  .sect1 {
-    padding-bottom: 1.25em
-  }
-}
-
 
 #content h1 > a.anchor, h2 > a.anchor, h3 > a.anchor, #toctitle > a.anchor, .sidebarblock > .content > .title > a.anchor, h4 > a.anchor, h5 > a.anchor, h6 > a.anchor {
   position: absolute;
