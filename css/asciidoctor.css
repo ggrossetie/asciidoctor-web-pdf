@@ -406,7 +406,7 @@ h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
   font-style: normal;
   color: #ba3925;
   text-rendering: optimizeLegibility;
-  margin-top: 1em;
+  margin-top: .75em;
   margin-bottom: .5em;
   line-height: 1.0125em
 }
