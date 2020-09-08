@@ -355,6 +355,16 @@ describe('PDF converter', function () {
     expect(outputFile).to.be.visuallyIdentical('document-with-source-code.pdf')
   })
 
+  it('should be put the Table Of Contents on the page even when :toc: left', async () => {
+    const opts = {}
+    const outputFile = `${__dirname}/output/document-with-left-toc.pdf`
+    opts.attributes = {}
+    opts.attributes.reproducible = ''
+    opts.to_file = outputFile
+    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/document-with-left-toc.adoc` }, opts, false)
+    expect(outputFile).to.be.visuallyIdentical('document-with-left-toc.pdf')
+  })
+
   describe('Timeout', () => {
     beforeEach(function () {
       sinon.spy(console, 'error')
