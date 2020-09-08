@@ -775,16 +775,13 @@ p a > code:hover {
 
 #header > h1:first-child + #toc {
   margin-top: 8px;
-  border-top: 1px solid #ddddd8
 }
 
-#header > h1:only-child, body.toc2 #header > h1:nth-last-child(2) {
-  border-bottom: 1px solid #ddddd8;
+#header > h1:only-child {
   padding-bottom: 8px
 }
 
 #header .details {
-  border-bottom: 1px solid #ddddd8;
   line-height: 1.45;
   padding-top: .25em;
   padding-bottom: .25em;
@@ -833,7 +830,6 @@ p a > code:hover {
 
 #content > h1:first-child:not([class]) {
   color: rgba(0, 0, 0, .85);
-  border-bottom: 1px solid #ddddd8;
   padding-bottom: 8px;
   margin-top: 0;
   padding-top: 1rem;
@@ -841,7 +837,6 @@ p a > code:hover {
 }
 
 #toc {
-  border-bottom: 1px solid #efefed;
   padding-bottom: .5em
 }
 
@@ -1009,9 +1004,6 @@ p a > code:hover {
   }
 }
 
-.sect1 + .sect1 {
-  border-top: 1px solid #efefed
-}
 
 #content h1 > a.anchor, h2 > a.anchor, h3 > a.anchor, #toctitle > a.anchor, .sidebarblock > .content > .title > a.anchor, h4 > a.anchor, h5 > a.anchor, h6 > a.anchor {
   position: absolute;
