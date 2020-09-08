@@ -210,7 +210,7 @@ TOC page numbering and leaders, adapted from https://www.pagedjs.org/posts/2020-
 The page numbering is straightforward and generally works.
 The leader works by filling the li with dots, and arranging for the <a> and a::after to cover them, using the same background color as the TOC div.
 */
-.toc {
+.toc, .toc2 {
   background-color: white;
 }
 
