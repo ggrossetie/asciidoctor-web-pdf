@@ -46,7 +46,7 @@
     "mathjax": "3.1.0",
     "pdf-lib": "^1.2.1",
     "puppeteer": "5.2.1",
-    "yargs": "15.4.1"
+    "yargs": "16.0.2"
   },
   "devDependencies": {
     "@asciidoctor/core": "^2.2.0",
