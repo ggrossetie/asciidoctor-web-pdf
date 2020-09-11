@@ -1,0 +1,8 @@
+= Title
+:toc: left
+
+// no preamble
+
+== Section
+
+This is a paragraph.
