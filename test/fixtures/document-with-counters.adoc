@@ -1,0 +1,16 @@
+= Counters
+
+[cols="1s,5"]
+|====
+| Step{nbsp}{counter:item}
+| Place 1/2 the pumpkin in a single layer onto a microwave safe plate. Cover and microwave on High for 4 minutes. Repeat with remaining pumpkin. Set aside for 5 minutes.
+
+| Step{nbsp}{counter:item}
+| Place mushrooms in a shallow dish. Combine 1/4 cup (60ml) olive oil, brown sugar, cumin and salt and pepper in a screw-top jar and shake well to combine. Pour the dressing over the mushrooms, toss well. Cover and set aside 5 minutes.
+
+| Step{nbsp}{counter:item}
+| Combine the remaining olive oil, lemon juice, salt and pepper in a screw-top jar, shake well to combine.
+
+| Step{nbsp}{counter:item}
+| Preheat a barbeque plate on a medium-high heat. Add the mushrooms and cook, tossing frequently, for 2-3 minutes. Transfer to a plate. Add the pumpkin and cook 2-3 minutes each side. Arrange the spinach, mushrooms and pumpkin onto serving plate. Drizzle dressing. Serve with bread.
+|====

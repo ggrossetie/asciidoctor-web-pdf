@@ -66,6 +66,19 @@ describe('PDF converter', function () {
     return PDFDocument.load(fs.readFileSync(outputFile))
   }
 
+  const shouldBeVisuallyIdentical = async (inputBaseFileName, attributes, outputBaseFileName) => {
+    if (typeof outputBaseFileName === 'undefined') {
+      outputBaseFileName = inputBaseFileName
+    }
+    const opts = {}
+    const outputFile = `${__dirname}/output/${outputBaseFileName}.pdf`
+    opts.attributes = attributes || {}
+    opts.attributes.reproducible = ''
+    opts.to_file = outputFile
+    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/${inputBaseFileName}.adoc` }, opts, false)
+    expect(outputFile).to.be.visuallyIdentical(`${outputBaseFileName}.pdf`)
+  }
+
   it('should not encode HTML entity in the PDF outline', async () => {
     const options = { attributes: { toc: 'macro' } }
     const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toc-absent.pdf`, options)
@@ -314,55 +327,31 @@ describe('PDF converter', function () {
   })
 
   it('should be able to set background color of title page', async () => {
-    const opts = {}
-    const outputFile = `${__dirname}/output/title-page-background-color.pdf`
-    opts.attributes = {}
-    opts.attributes.reproducible = ''
-    opts.to_file = outputFile
-    opts.attributes = { stylesheet: `${__dirname}/../css/asciidoctor.css,${__dirname}/../css/document.css,${__dirname}/../css/features/book.css,${__dirname}/fixtures/black-title-page.css` }
-    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/title-page.adoc` }, opts, false)
-    expect(outputFile).to.be.visuallyIdentical('title-page-background-color.pdf')
+    const attributes = {}
+    attributes.stylesheet = `${__dirname}/../css/asciidoctor.css,${__dirname}/../css/document.css,${__dirname}/../css/features/book.css,${__dirname}/fixtures/black-title-page.css`
+    await shouldBeVisuallyIdentical('title-page', attributes, 'title-page-background-color')
   })
 
   it('should repeat column group, caption and table header', async () => {
-    const opts = {}
-    const outputFile = `${__dirname}/output/repeat-table-elements.pdf`
-    opts.attributes = {}
-    opts.attributes.reproducible = ''
-    opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/repeat-table-elements.adoc` }, opts, false)
-    expect(outputFile).to.be.visuallyIdentical('repeat-table-elements.pdf')
+    await shouldBeVisuallyIdentical('repeat-table-elements')
   })
 
   it('should render mathematical expressions using MathJax.js', async () => {
-    const opts = {}
-    const outputFile = `${__dirname}/output/document-with-stem.pdf`
-    opts.attributes = {}
-    opts.attributes.reproducible = ''
-    opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/document-with-stem.adoc` }, opts, false)
-    expect(outputFile).to.be.visuallyIdentical('document-with-stem.pdf')
+    await shouldBeVisuallyIdentical('document-with-stem')
   })
 
   it('should enable syntax highlighting if source highlighter is set', async () => {
-    const opts = {}
-    const outputFile = `${__dirname}/output/document-with-source-code.pdf`
-    opts.attributes = {}
-    opts.attributes.reproducible = ''
-    opts.attributes['source-highlighter'] = 'highlight.js'
-    opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/document-with-source-code.adoc` }, opts, false)
-    expect(outputFile).to.be.visuallyIdentical('document-with-source-code.pdf')
+    const attributes = {}
+    attributes['source-highlighter'] = 'highlight.js'
+    await shouldBeVisuallyIdentical('document-with-left-toc', attributes)
   })
 
   it('should be put the Table Of Contents on the page even when :toc: left', async () => {
-    const opts = {}
-    const outputFile = `${__dirname}/output/document-with-left-toc.pdf`
-    opts.attributes = {}
-    opts.attributes.reproducible = ''
-    opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/document-with-left-toc.adoc` }, opts, false)
-    expect(outputFile).to.be.visuallyIdentical('document-with-left-toc.pdf')
+    await shouldBeVisuallyIdentical('document-with-left-toc')
+  })
+
+  it('should create a counter and increment it accordingly', async () => {
+    await shouldBeVisuallyIdentical('document-with-counters')
   })
 
   describe('Timeout', () => {
