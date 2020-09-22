@@ -45,7 +45,7 @@
     "html-entities": "^1.2.1",
     "mathjax": "3.1.0",
     "pdf-lib": "^1.2.1",
-    "puppeteer": "5.3.0",
+    "puppeteer": "5.3.1",
     "yargs": "15.4.1"
   },
   "devDependencies": {
