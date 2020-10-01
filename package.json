@@ -37,7 +37,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.31",
     "@fortawesome/free-brands-svg-icons": "5.14.0",
     "@fortawesome/free-regular-svg-icons": "5.14.0",
-    "@fortawesome/free-solid-svg-icons": "5.14.0",
+    "@fortawesome/free-solid-svg-icons": "5.15.0",
     "@ggrossetie/pagedjs": "0.1.42-next",
     "chokidar": "3.4.2",
     "file-url": "3.0.0",
