@@ -34,7 +34,7 @@
   "homepage": "https://github.com/Mogztter/asciidoctor-pdf.js#readme",
   "dependencies": {
     "@asciidoctor/cli": "3.4.0",
-    "@fortawesome/fontawesome-svg-core": "1.2.31",
+    "@fortawesome/fontawesome-svg-core": "1.2.32",
     "@fortawesome/free-brands-svg-icons": "5.15.1",
     "@fortawesome/free-regular-svg-icons": "5.15.1",
     "@fortawesome/free-solid-svg-icons": "5.15.1",
