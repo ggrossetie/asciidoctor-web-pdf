@@ -43,7 +43,7 @@
     "file-url": "3.0.0",
     "fs-extra": "9.0.1",
     "html-entities": "^1.2.1",
-    "mathjax": "3.1.0",
+    "mathjax": "3.1.2",
     "pdf-lib": "^1.2.1",
     "puppeteer": "5.3.1",
     "yargs": "16.1.0"
