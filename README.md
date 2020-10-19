@@ -1,6 +1,6 @@
 # Asciidoctor Web PDF
 
-[![Build](https://github.com/Mogztter/asciidoctor-pdf.js/workflows/Build/badge.svg)](https://github.com/Mogztter/asciidoctor-web-pdf/actions?query=workflow%3ABuild)
+[![Build](https://github.com/Mogztter/asciidoctor-web-pdf/workflows/Build/badge.svg)](https://github.com/Mogztter/asciidoctor-web-pdf/actions?query=workflow%3ABuild)
 [![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
 
 A PDF converter for AsciiDoc based on web technologies.
@@ -9,59 +9,59 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 <table>
   <tr align="center">
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/document/document.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/document/document_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/document/document.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/document/document_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/letter/letter.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/letter/letter_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/letter/letter.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/letter/letter_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/book/book.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/book/book_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/book/book.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/book/book_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf">
-      <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf">
+      <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png" />
       </a>
     </td>
   </tr>
   <tr align="center">
     <td with="25%">
       Document<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/document/"> source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/document/document.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/document/"> source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/document/document.pdf"> PDF </a>
     </td>
     <td with="25%">
       Letter<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/letter/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/letter/letter.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/letter/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/letter/letter.pdf"> PDF </a>
     </td>
     <td with="25%">
       Book<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/book/"> source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/book/book.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/book/"> source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/book/book.pdf"> PDF </a>
     </td>
     <td with="25%">
       Cheat sheet<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/cheat-sheet/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/cheat-sheet/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf"> PDF </a>
     </td>
   </tr>
 </table>
 <table>
   <tr align="center">
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/resume/resume.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/resume/resume_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/resume/resume.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/resume/resume_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/slides/ioslides/presentation.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-pdf.js/raw/master/examples/slides/ioslides/presentation_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/slides/ioslides/presentation.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/slides/ioslides/presentation_screenshot.png" />
       </a>
     </td>
     <td width="25%"></td>
@@ -70,13 +70,13 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
   <tr align="center">
     <td width="25%">
       Resume<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/resume/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/resume/resume.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/resume/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/resume/resume.pdf"> PDF </a>
     </td>
     <td width="25%">
       Slides<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/tree/master/examples/slides/ioslides/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/slides/ioslides/presentation.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/slides/ioslides/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/slides/ioslides/presentation.pdf"> PDF </a>
     </td>
     <td width="25%"></td>
     <td width="25%"></td>
@@ -139,22 +139,22 @@ To install Asciidoctor Web PDF package globally, open a terminal and type:
 
     $ npm i -g @asciidoctor/core asciidoctor-pdf
 
-**NOTE:** We recommend installing Asciidoctor Web PDF globally to make the `asciidoctor-pdf` command available on your `PATH`.
+**NOTE:** We recommend installing Asciidoctor Web PDF globally to make the `asciidoctor-web-pdf` command available on your `PATH`.
 However, you can also install Asciidoctor Web PDF in a project directory if you prefer.
 
-Verify that the `asciidoctor-pdf` command is available on your `PATH` by running:
+Verify that the `asciidoctor-web-pdf` command is available on your `PATH` by running:
 
-    $ asciidoctor-pdf --version
+    $ asciidoctor-web-pdf --version
 
-**NOTE:** If you get an error about [Executions Policies](https://go.microsoft.com/fwlink/?LinkID=135170) when running this command on PowerShell, try to use the following command instead: `$ asciidoctor-pdf.cmd --version`.
+**NOTE:** If you get an error about [Executions Policies](https://go.microsoft.com/fwlink/?LinkID=135170) when running this command on PowerShell, try to use the following command instead: `$ asciidoctor-web-pdf.cmd --version`.
 
 If installation was successful, the command should report the version of Asciidoctor Web PDF.
 
 ```console
-$ asciidoctor-pdf --version
-Asciidoctor Web PDF 1.0.0-alpha.4 using Asciidoctor.js 2.0.3 (Asciidoctor 2.0.9) [https://asciidoctor.org]
-Runtime Environment (node v10.15.1 on linux)
-CLI version 3.0.2
+$ asciidoctor-web-pdf --version
+Asciidoctor Web PDF 1.0.0-alpha.10 using Asciidoctor.js 2.2.0 (Asciidoctor 2.0.10) [https://asciidoctor.org]
+Runtime Environment (node v12.18.4 on linux)
+CLI version 3.4.0
 ```
 
 **NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor Web PDF package:
@@ -171,14 +171,14 @@ To install Asciidoctor Web PDF in a project directory, move into your project di
 
 Dropping the `-g` flag installs the package under the `node_modules` folder in the current directory.
 
-Verify that the `asciidoctor-pdf` command is available by running `$(npm bin)/asciidoctor-pdf --version`.
+Verify that the `asciidoctor-web-pdf` command is available by running `$(npm bin)/asciidoctor-web-pdf --version`.
 
 ## Getting started
 
 Asciidoctor Web PDF provides a standard document layout.
 To convert an AsciiDoc document using this layout, open a terminal and type:  
 
-    $ asciidoctor-pdf document.adoc
+    $ asciidoctor-web-pdf document.adoc
 
 **IMPORTANT:** Asciidoctor Web PDF relies on Puppeteer to generate a PDF from a Web page.
 If you get the following error, make sure that [all the necessary dependencies are installed](https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md).
@@ -195,7 +195,7 @@ The standard document layout can be configured depending on your needs.
 
 To activate equation and formula support, set the `stem` attribute in the document's header (or by passing the attribute to the command line):
 
-    $ asciidoctor-pdf document.adoc -a stem
+    $ asciidoctor-web-pdf document.adoc -a stem
 
 **Title page**
 
@@ -205,27 +205,27 @@ The title page is enabled if either of these conditions are met:
 - The `title-page` attribute is set (with an empty value) in the document header.
 
 ```
-$ asciidoctor-pdf document.adoc -a title-page
+$ asciidoctor-web-pdf document.adoc -a title-page
 ```
 
 **Custom styles**
 
 You can provide a custom stylesheet using the `stylesheet` attribute. A custom stylesheet does completely replace the default stylesheet.
 
-    $ asciidoctor-pdf document.adoc -a stylesheet="custom.css"
+    $ asciidoctor-web-pdf document.adoc -a stylesheet="custom.css"
 
 The `stylesheet` attribute can accept multiple comma delimited values (without spaces).
 This can be used to begin with a base stylesheet and then apply supplementary content.
 
-    $ asciidoctor-pdf document.adoc -a stylesheet="custom.css,override.css"
+    $ asciidoctor-web-pdf document.adoc -a stylesheet="custom.css,override.css"
 
 It's also possible to use the default stylesheet and add custom styles with a custom stylesheet. All default stylesheets are available under the prefix `asciidoctor-pdf/css/`:
 
-    $ asciidoctor-pdf document.adoc -a stylesheet="asciidoctor-pdf/css/asciidoctor.css,asciidoctor-pdf/css/document.css,custom.css"
+    $ asciidoctor-web-pdf document.adoc -a stylesheet="asciidoctor-pdf/css/asciidoctor.css,asciidoctor-pdf/css/document.css,custom.css"
 
 You can also specify where the stylesheets are located with the `stylesdir` attribute.
 
-    $ asciidoctor-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
+    $ asciidoctor-web-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
 
 **Asciidoctor extensions**
 
@@ -236,12 +236,12 @@ For instance, if you want to use the [Asciidoctor Kroki](https://github.com/mogz
 
 Then, you can use the following command to load this extension:
 
-    $ asciidoctor-pdf --require asciidoctor-kroki document.adoc
+    $ asciidoctor-web-pdf --require asciidoctor-kroki document.adoc
 
 It's also possible to use an extension from a JavaScript file.
 For instance, if you want to load a local extension declared in a JavaScript file named `my-asciidoctor-extension.js`, then you can use the following command:
 
-    $ asciidoctor-pdf --require ./my-asciidoctor-extension.js document.adoc
+    $ asciidoctor-web-pdf --require ./my-asciidoctor-extension.js document.adoc
 
 **NOTE:** Please note that the extension should export a function named `register`, otherwise the extension won't be registered:
 
@@ -301,9 +301,9 @@ In the above example, we are using the [nomnoml](https://github.com/skanaar/nomn
 
 You can use the following command to generate a PDF:
 
-    $ asciidoctor-pdf --require asciidoctor-kroki piracy.adoc
+    $ asciidoctor-web-pdf --require asciidoctor-kroki piracy.adoc
 
-And here's the result: [piracy.pdf](https://github.com/Mogztter/asciidoctor-pdf.js/blob/master/examples/document/piracy.pdf)
+Here's the result: [piracy.pdf](https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/document/piracy.pdf)
 
 ## Custom layout
 
@@ -393,7 +393,7 @@ To help you get started, we provides a few alternative layouts in the `examples`
 To enable a custom layout, use the `--template-require` command line option.
 For instance, if I want to use the cheat sheet layout on `examples/cheat-sheet/maven-security-cheat-sheet.adoc`:
 
-    $ asciidoctor-pdf ./examples/cheat-sheet/maven-security-cheat-sheet.adoc --template-require ./examples/cheat-sheet/snyk/template.js
+    $ asciidoctor-web-pdf ./examples/cheat-sheet/maven-security-cheat-sheet.adoc --template-require ./examples/cheat-sheet/snyk/template.js
 
 It will produce a file named `examples/cheat-sheet/maven-security-cheat-sheet.pdf`.
 
