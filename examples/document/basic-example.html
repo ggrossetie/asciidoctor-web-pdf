@@ -866,7 +866,7 @@ h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
   font-style: normal;
   color: #ba3925;
   text-rendering: optimizeLegibility;
-  margin-top: 1em;
+  margin-top: .75em;
   margin-bottom: .5em;
   line-height: 1.0125em
 }
@@ -1009,28 +1009,6 @@ blockquote cite a, blockquote cite a:visited {
 blockquote, blockquote p {
   line-height: 1.6;
   color: rgba(0, 0, 0, .85)
-}
-
-@media only screen and (min-width: 768px) {
-  h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
-    line-height: 1.2
-  }
-
-  h1 {
-    font-size: 2.75em
-  }
-
-  h2 {
-    font-size: 2.3125em
-  }
-
-  h3, #toctitle, .sidebarblock > .content > .title {
-    font-size: 1.6875em
-  }
-
-  h4 {
-    font-size: 1.4375em
-  }
 }
 
 table {
@@ -1199,15 +1177,9 @@ p a > code:hover {
 
 #header, #content, #footnotes, #footer {
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 0;
-  margin-bottom: 0;
-  max-width: 62.5em;
-  *zoom: 1;
+  margin: 0 auto;
+  zoom: 1;
   position: relative;
-  padding-left: .9375em;
-  padding-right: .9375em
 }
 
 #header:before, #header:after, #content:before, #content:after, #footnotes:before, #footnotes:after, #footer:before, #footer:after {
@@ -1235,16 +1207,13 @@ p a > code:hover {
 
 #header > h1:first-child + #toc {
   margin-top: 8px;
-  border-top: 1px solid #ddddd8
 }
 
-#header > h1:only-child, body.toc2 #header > h1:nth-last-child(2) {
-  border-bottom: 1px solid #ddddd8;
+#header > h1:only-child {
   padding-bottom: 8px
 }
 
 #header .details {
-  border-bottom: 1px solid #ddddd8;
   line-height: 1.45;
   padding-top: .25em;
   padding-bottom: .25em;
@@ -1293,7 +1262,6 @@ p a > code:hover {
 
 #content > h1:first-child:not([class]) {
   color: rgba(0, 0, 0, .85);
-  border-bottom: 1px solid #ddddd8;
   padding-bottom: 8px;
   margin-top: 0;
   padding-top: 1rem;
@@ -1301,7 +1269,6 @@ p a > code:hover {
 }
 
 #toc {
-  border-bottom: 1px solid #efefed;
   padding-bottom: .5em
 }
 
@@ -1340,95 +1307,6 @@ p a > code:hover {
   font-size: 1.2em
 }
 
-@media only screen and (min-width: 768px) {
-  #toctitle {
-    font-size: 1.375em
-  }
-
-  body.toc2 {
-    padding-left: 15em;
-    padding-right: 0
-  }
-
-  #toc.toc2 {
-    margin-top: 0 !important;
-    background-color: #f8f8f7;
-    position: fixed;
-    width: 15em;
-    left: 0;
-    top: 0;
-    border-right: 1px solid #efefed;
-    border-top-width: 0 !important;
-    border-bottom-width: 0 !important;
-    z-index: 1000;
-    padding: 1.25em 1em;
-    height: 100%;
-    overflow: auto
-  }
-
-  #toc.toc2 #toctitle {
-    margin-top: 0;
-    margin-bottom: .8rem;
-    font-size: 1.2em
-  }
-
-  #toc.toc2 > ul {
-    font-size: .9em;
-    margin-bottom: 0
-  }
-
-  #toc.toc2 ul ul {
-    margin-left: 0;
-    padding-left: 1em
-  }
-
-  #toc.toc2 ul.sectlevel0 ul.sectlevel1 {
-    padding-left: 0;
-    margin-top: .5em;
-    margin-bottom: .5em
-  }
-
-  body.toc2.toc-right {
-    padding-left: 0;
-    padding-right: 15em
-  }
-
-  body.toc2.toc-right #toc.toc2 {
-    border-right-width: 0;
-    border-left: 1px solid #efefed;
-    left: auto;
-    right: 0
-  }
-}
-
-@media only screen and (min-width: 1280px) {
-  body.toc2 {
-    padding-left: 20em;
-    padding-right: 0
-  }
-
-  #toc.toc2 {
-    width: 20em
-  }
-
-  #toc.toc2 #toctitle {
-    font-size: 1.375em
-  }
-
-  #toc.toc2 > ul {
-    font-size: .95em
-  }
-
-  #toc.toc2 ul ul {
-    padding-left: 1.25em
-  }
-
-  body.toc2.toc-right {
-    padding-left: 0;
-    padding-right: 20em
-  }
-}
-
 #content #toc {
   border-style: solid;
   border-width: 1px;
@@ -1461,16 +1339,6 @@ p a > code:hover {
 
 .sect1 {
   padding-bottom: .625em
-}
-
-@media only screen and (min-width: 768px) {
-  .sect1 {
-    padding-bottom: 1.25em
-  }
-}
-
-.sect1 + .sect1 {
-  border-top: 1px solid #efefed
 }
 
 #content h1 > a.anchor, h2 > a.anchor, h3 > a.anchor, #toctitle > a.anchor, .sidebarblock > .content > .title > a.anchor, h4 > a.anchor, h5 > a.anchor, h6 > a.anchor {
@@ -2574,10 +2442,6 @@ h6 {
   align-items: flex-end;
 }
 
-.pagedjs_page.pagedjs_first_page {
-  counter-increment: page 1;
-}
-
 /* Workaround: https://gitlab.pagedmedia.org/tools/pagedjs/issues/162 */
 .pagedjs_page_content > div {
   height: 100%;
@@ -2684,7 +2548,7 @@ TOC page numbering and leaders, adapted from https://www.pagedjs.org/posts/2020-
 The page numbering is straightforward and generally works.
 The leader works by filling the li with dots, and arranging for the <a> and a::after to cover them, using the same background color as the TOC div.
 */
-.toc {
+.toc, .toc2 {
   background-color: white;
 }
 
@@ -2736,6 +2600,18 @@ The leader works by filling the li with dots, and arranging for the <a> and a::a
   padding-right: 0.25rem;
 }
 
+.front-matter {
+  page: front;
+}
+
+#content {
+  counter-reset: page 1;
+}
+
+#toc {
+  page: tableofcontents;
+}
+
 @page :left {
   @bottom-right {
     content: counter(page);
@@ -2779,27 +2655,7 @@ The leader works by filling the li with dots, and arranging for the <a> and a::a
   }
 }
 
-#toc {
-  break-before: page;
-  counter-reset: page;
-}
-
-#preamble {
-  break-before: page;
-  counter-reset: page;
-}
-
-.sect1 {
-  break-before: page;
-}
-
-#cover {
-  break-after: unset;
-  counter-reset: page;
-}
-
-/* Table Of Contents page */
-@page :nth(2) {
+@page tableofcontents {
   @bottom-right {
     margin: 0;
     padding: 0;
@@ -2814,13 +2670,58 @@ The leader works by filling the li with dots, and arranging for the <a> and a::a
   }
 }
 
+#toc {
+  page: tableofcontents;
+}
+
+#preamble {
+  page: preamble;
+}
+
+.sect1 {
+  break-before: page;
+}
+
+#cover {
+  break-after: unset;
+}
+
+@page tableofcontents {
+  @bottom-right {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+  @bottom-left {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+}
+
+@page preamble {
+  @bottom-right {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+  @bottom-left {
+    margin: 0;
+    padding: 0;
+    border: none;
+    content: normal;
+  }
+}
 
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css"/>
 </head>
 <body class="book">
-<div id="cover" class="title-page">
+<div id="cover" class="title-page front-matter">
   <h1>Document Title</h1>
   <h2>Doc Writer</h2>
 </div>
@@ -2881,7 +2782,7 @@ The leader works by filling the li with dots, and arranging for the <a> and a::a
 <div class="listingblock">
 <div class="title">Listing 1. Create a basic PDF document using Prawn</div>
 <div class="content">
-<pre class="highlight"><code class="language-ruby" data-lang="ruby">require 'prawn'
+<pre class="highlightjs highlight"><code data-lang="ruby" class="language-ruby hljs">require 'prawn'
 
 Prawn::Document.generate 'example.pdf' do
   text 'Hello, World!' <i class="conum" data-value="1"></i>
@@ -2928,7 +2829,7 @@ end</code></pre>
 <div class="sectionbody">
 <div class="paragraph">
 <div class="title">Size &amp; title</div>
-<p>Do you want to drink a small <svg aria-hidden="true" focusable="false" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-2RoXlbHk5AfL" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-2RoXlbHk5AfL">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
+<p>Do you want to drink a small <svg aria-hidden="true" focusable="false" data-prefix="fa" data-icon="cocktail" class="svg-inline--fa fa-cocktail fa-w-18 fa-sm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M296 464h-56V338.78l168.74-168.73c15.52-15.52 4.53-42.05-17.42-42.05H24.68c-21.95 0-32.94 26.53-17.42 42.05L176 338.78V464h-56c-22.09 0-40 17.91-40 40 0 4.42 3.58 8 8 8h240c4.42 0 8-3.58 8-8 0-22.09-17.91-40-40-40zM432 0c-62.61 0-115.35 40.2-135.18 96h52.54c16.65-28.55 47.27-48 82.64-48 52.93 0 96 43.06 96 96s-43.07 96-96 96c-14.04 0-27.29-3.2-39.32-8.64l-35.26 35.26C379.23 279.92 404.59 288 432 288c79.53 0 144-64.47 144-144S511.53 0 432 0z"></path></svg> or a tall <svg aria-labelledby="svg-inline--fa-title-nGdcPkucomc1" data-prefix="fa" data-icon="beer" class="svg-inline--fa fa-beer fa-w-14 fa-2x" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><title id="svg-inline--fa-title-nGdcPkucomc1">pint</title><path fill="currentColor" d="M368 96h-48V56c0-13.255-10.745-24-24-24H24C10.745 32 0 42.745 0 56v400c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24v-42.11l80.606-35.977C429.396 365.063 448 336.388 448 304.86V176c0-44.112-35.888-80-80-80zm16 208.86a16.018 16.018 0 0 1-9.479 14.611L320 343.805V160h48c8.822 0 16 7.178 16 16v128.86zM208 384c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16zm-96 0c-8.836 0-16-7.164-16-16V144c0-8.836 7.164-16 16-16s16 7.164 16 16v224c0 8.836-7.164 16-16 16z"></path></svg> ?</p>
 </div>
 <div class="paragraph">
 <div class="title">Fixed-width</div>
@@ -3332,6 +3233,8 @@ Stretch to the next page.</p>
         </div>
       </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 <script data-type="mathjax-config">
 (() => {
   function adjustDisplay(math, _) {
@@ -3384,6 +3287,10 @@ Stretch to the next page.</p>
 </script>
 <script type="text/javascript" src="file:///home/guillaume/workspace/opensource/asciidoctor/asciidoctor-web-pdf/node_modules/mathjax/es5/tex-chtml-full.js"></script>
 <script>
+/**
+ * @license Paged.js v0.1.42-next | MIT | https://gitlab.pagedmedia.org/tools/pagedjs
+ */
+
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
@@ -4219,15 +4126,16 @@ Stretch to the next page.</p>
 		return false;
 	}
 
-	function needsPageBreak(node) {
-		if( typeof node !== "undefined" &&
-				typeof node.dataset !== "undefined" &&
-				(node.dataset.page || node.dataset.afterPage)
-			 ) {
-			return true;
+	function needsPageBreak(node, previousSignificantNode) {
+		if (typeof node === "undefined" || !previousSignificantNode || isIgnorable(node)) {
+			return false;
 		}
-
-		return false;
+		if (node.dataset && node.dataset.undisplayed) {
+			return false;
+		}
+		const previousSignificantNodePage = previousSignificantNode.dataset ? previousSignificantNode.dataset.page : undefined;
+		const currentNodePage = node.dataset ? node.dataset.page : undefined;
+		return currentNodePage !== previousSignificantNodePage;
 	}
 
 	function *words(node) {
@@ -4584,6 +4492,7 @@ Stretch to the next page.</p>
 			this.settings = options || {};
 
 			this.maxChars = this.settings.maxChars || MAX_CHARS_PER_BREAK;
+			this.forceRenderBreak = false;
 		}
 
 		async renderTo(wrapper, source, breakToken, bounds = this.bounds) {
@@ -4607,7 +4516,7 @@ Stretch to the next page.</p>
 				prevNode = node;
 				node = next.value;
 				done = next.done;
-				
+
 				if (!node) {
 					this.hooks && this.hooks.layout.trigger(wrapper, this);
 
@@ -4615,7 +4524,7 @@ Stretch to the next page.</p>
 					if (imgs.length) {
 						await this.waitForImages(imgs);
 					}
-					
+
 					newBreakToken = this.findBreakToken(wrapper, source, bounds, prevBreakToken);
 
 					if (newBreakToken && newBreakToken.equals(prevBreakToken)) {
@@ -4642,7 +4551,7 @@ Stretch to the next page.</p>
 						newBreakToken = this.breakAt(node);
 					}
 
-					if (newBreakToken.equals(prevBreakToken)) {
+					if (newBreakToken && newBreakToken.equals(prevBreakToken)) {
 						console.warn("Unable to layout item: ", node);
 						return undefined;
 					}
@@ -4667,6 +4576,21 @@ Stretch to the next page.</p>
 				// Skip to the next node if a deep clone was rendered
 				if (!shallow) {
 					walker = walk(nodeAfter(node, source), source);
+				}
+
+				if (this.forceRenderBreak) {
+					this.hooks && this.hooks.layout.trigger(wrapper, this);
+
+					newBreakToken = this.findBreakToken(wrapper, source, bounds, prevBreakToken);
+
+					if (!newBreakToken) {
+						newBreakToken = this.breakAt(node);
+					}
+
+					length = 0;
+					this.forceRenderBreak = false;
+
+					break;
 				}
 
 				// Only check x characters
@@ -4697,10 +4621,18 @@ Stretch to the next page.</p>
 		}
 
 		breakAt(node, offset = 0) {
-			return new BreakToken(
+			let newBreakToken = new BreakToken(
 				node,
 				offset
 			);
+			let breakHooks = this.hooks.onBreakToken.triggerSync(newBreakToken, undefined, node, this);
+			breakHooks.forEach((newToken) => {
+				if (typeof newToken != "undefined") {
+					newBreakToken = newToken;
+				}
+			});
+
+			return newBreakToken;
 		}
 
 		shouldBreak(node) {
@@ -4713,7 +4645,11 @@ Stretch to the next page.</p>
 				doubleBreakBefore = node.dataset.breakBefore === parentNode.dataset.breakBefore;
 			}
 
-			return !doubleBreakBefore && needsBreakBefore(node) || needsPreviousBreakAfter(node) || needsPageBreak(node);
+			return !doubleBreakBefore && needsBreakBefore(node) || needsPreviousBreakAfter(node) || needsPageBreak(node, previousSibling);
+		}
+
+		forceBreak() {
+			this.forceRenderBreak = true;
 		}
 
 		getStart(source, breakToken) {
@@ -4760,7 +4696,7 @@ Stretch to the next page.</p>
 				dest.appendChild(clone);
 			}
 
-			let nodeHooks = this.hooks.renderNode.triggerSync(clone, node);
+			let nodeHooks = this.hooks.renderNode.triggerSync(clone, node, this);
 			nodeHooks.forEach((newNode) => {
 				if (typeof newNode != "undefined") {
 					clone = newNode;
@@ -4831,7 +4767,11 @@ Stretch to the next page.</p>
 
 					if (!renderedNode) {
 						// Find closest element with data-ref
-						renderedNode = findElement(prevValidNode(temp), rendered);
+						let prevNode = prevValidNode(temp);
+						if (!isElement(prevNode)) {
+							prevNode = prevNode.parentElement;
+						}
+						renderedNode = findElement(prevNode, rendered);
 						// Check if temp is the last rendered node at its level.
 						if (!temp.nextSibling) {
 							// We need to ensure that the previous sibling of temp is fully rendered.
@@ -4924,7 +4864,7 @@ Stretch to the next page.</p>
 				});
 
 				// Stop removal if we are in a loop
-				if (breakToken.equals(prevBreakToken)) {
+				if (breakToken && breakToken.equals(prevBreakToken)) {
 					return breakToken;
 				}
 
@@ -29009,6 +28949,10 @@ Stretch to the next page.</p>
 	--pagedjs-padding-right: 0mm;
 	--pagedjs-padding-bottom: 0mm;
 	--pagedjs-padding-left: 0mm;
+	--pagedjs-border-top: 0mm;
+	--pagedjs-border-right: 0mm;
+	--pagedjs-border-bottom: 0mm;
+	--pagedjs-border-left: 0mm;
 	--pagedjs-bleed-top: 0mm;
 	--pagedjs-bleed-right: 0mm;
 	--pagedjs-bleed-bottom: 0mm;
@@ -29028,6 +28972,7 @@ Stretch to the next page.</p>
 	--pagedjs-mark-cross-display: none;
 	--pagedjs-mark-crop-display: none;
 	--pagedjs-page-count: 0;
+	--pagedjs-page-counter-increment: 1;
 }
 
 @page {
@@ -29351,8 +29296,11 @@ Stretch to the next page.</p>
 	grid-row: page;
 	width: 100%;
 	height: 100%;
-	padding: var(--pagedjs-padding-top) var(--pagedjs-padding-right) var(--pagedjs-padding-bottom) var(--pagedjs-padding-left) 
-
+	padding: var(--pagedjs-padding-top) var(--pagedjs-padding-right) var(--pagedjs-padding-bottom) var(--pagedjs-padding-left);
+	border-top: var(--pagedjs-border-top);
+	border-right: var(--pagedjs-border-right);
+	border-bottom: var(--pagedjs-border-bottom);
+	border-left: var(--pagedjs-border-left);
 }
 
 .pagedjs_pagebox > .pagedjs_area > .pagedjs_page_content {
@@ -29363,19 +29311,17 @@ Stretch to the next page.</p>
 }
 
 .pagedjs_page {
-	counter-increment: page;
+	counter-increment: page var(--pagedjs-page-counter-increment);
 	width: var(--pagedjs-width);
 	height: var(--pagedjs-height);
 }
 
 .pagedjs_page.pagedjs_right_page {
-	counter-increment: page;
 	width: var(--pagedjs-width-right);
 	height: var(--pagedjs-height-right);
 }
 
 .pagedjs_page.pagedjs_left_page {
-	counter-increment: page;
 	width: var(--pagedjs-width-left);
 	height: var(--pagedjs-height-left);
 }
@@ -29383,7 +29329,6 @@ Stretch to the next page.</p>
 .pagedjs_pages {
 	counter-reset: pages var(--pagedjs-page-count);
 }
-
 
 .pagedjs_pagebox .pagedjs_margin-top-left-corner,
 .pagedjs_pagebox .pagedjs_margin-top-right-corner,
@@ -29941,7 +29886,6 @@ img {
 			this.width = undefined;
 			this.height = undefined;
 			this.orientation = undefined;
-
 			this.marginalia = {};
 		}
 
@@ -29955,18 +29899,25 @@ img {
 				width: undefined,
 				height: undefined,
 				orientation: undefined,
-				margin : {
+				margin: {
 					top: {},
 					right: {},
 					left: {},
 					bottom: {}
 				},
-				padding : {
+				padding: {
 					top: {},
 					right: {},
 					left: {},
 					bottom: {}
 				},
+				border: {
+					top: {},
+					right: {},
+					left: {},
+					bottom: {}
+				},
+				backgroundOrigin: undefined,
 				block: {},
 				marks: undefined
 			};
@@ -30079,6 +30030,10 @@ img {
 				page.padding = declarations.padding;
 			}
 
+			if (declarations.border) {
+				page.border = declarations.border;
+			}
+
 			if (declarations.marks) {
 				page.marks = declarations.marks;
 			}
@@ -30121,15 +30076,15 @@ img {
 				let bleedrecto = undefined;
 
 				if (":left" in this.pages) {
-		      bleedverso = this.pages[":left"].bleed;
-		    }
+					bleedverso = this.pages[":left"].bleed;
+				}
 
-		    if (":right" in this.pages) {
-		      bleedrecto = this.pages[":right"].bleed;
-		    }
+				if (":right" in this.pages) {
+					bleedrecto = this.pages[":right"].bleed;
+				}
 
 				if ((width && height) &&
-						(this.width !== width || this.height !== height)) {
+					(this.width !== width || this.height !== height)) {
 					this.width = width;
 					this.height = height;
 					this.format = format;
@@ -30252,7 +30207,7 @@ img {
 						parsed.margin[m] = declaration.value.children.first();
 						dList.remove(dItem);
 
-					} else if (prop === "padding"){
+					} else if (prop === "padding") {
 						parsed.padding = this.getPaddings(declaration.value);
 						dList.remove(dItem);
 
@@ -30268,8 +30223,43 @@ img {
 						}
 						parsed.padding[p] = declaration.value.children.first();
 						dList.remove(dItem);
+					}
 
-					} else if (prop === "size") {
+					else if (prop === "border") {
+						if (!parsed.border) {
+							parsed.border = {
+								top: {},
+								right: {},
+								left: {},
+								bottom: {}
+							};
+						}
+						parsed.border.top = lib.generate(declaration.value);
+						parsed.border.right = lib.generate(declaration.value);
+						parsed.border.left = lib.generate(declaration.value);
+						parsed.border.bottom = lib.generate(declaration.value);
+
+						dList.remove(dItem);
+
+					}
+
+					else if (prop.indexOf("border-") === 0) {
+						if (!parsed.border) {
+							parsed.border = {
+								top: {},
+								right: {},
+								left: {},
+								bottom: {}
+							};
+						}
+						let p = prop.substring("border-".length);
+
+						parsed.border[p] = lib.generate(declaration.value);
+						dList.remove(dItem);
+
+					}
+
+					else if (prop === "size") {
 						parsed.size = this.getSize(declaration);
 						dList.remove(dItem);
 					} else if (prop === "bleed") {
@@ -30295,7 +30285,7 @@ img {
 											unit: "px"
 										});
 										break;
-										// ignore
+									// ignore
 								}
 
 							}
@@ -30308,8 +30298,8 @@ img {
 			});
 
 			return parsed;
-		}
 
+		}
 		getSize(declaration) {
 			let width, height, orientation, format;
 
@@ -30317,7 +30307,7 @@ img {
 			lib.walk(declaration, {
 				visit: "Dimension",
 				enter: (node, item, list) => {
-					let {value, unit} = node;
+					let { value, unit } = node;
 					if (typeof width === "undefined") {
 						width = { value, unit };
 					} else if (typeof height === "undefined") {
@@ -30459,6 +30449,42 @@ img {
 			}
 			return padding;
 		}
+
+		// get values for the border on the @page to pass them to the element with the .pagedjs_area class
+		getBorders(declaration) {
+			let border = {
+				top: {},
+				right: {},
+				left: {},
+				bottom: {}
+			};
+
+			if (declaration.prop == "border") {
+				border.top = lib.generate(declaration.value);
+				border.right = lib.generate(declaration.value);
+				border.bottom = lib.generate(declaration.value);
+				border.left = lib.generate(declaration.value);
+
+			}
+			else if (declaration.prop == "border-top") {
+				border.top = lib.generate(declaration.value);
+			}
+			else if (declaration.prop == "border-right") {
+				border.right = lib.generate(declaration.value);
+
+			}
+			else if (declaration.prop == "border-bottom") {
+				border.bottom = lib.generate(declaration.value);
+
+			}
+			else if (declaration.prop == "border-left") {
+				border.left = lib.generate(declaration.value);
+			}
+
+			return border;
+		}
+
+
 		addPageClasses(pages, ast, sheet) {
 			// First add * page
 			if ("*" in pages && !pages["*"].added) {
@@ -30517,11 +30543,14 @@ img {
 				loc: 0,
 				children: children
 			};
+
+
 			let rule = this.createRule(selectors, block);
 
 			this.addMarginVars(page.margin, children, children.first());
-
 			this.addPaddingVars(page.padding, children, children.first());
+			this.addBorderVars(page.border, children, children.first());
+
 
 			if (page.width) {
 				this.addDimensions(page.width, page.height, page.orientation, children, children.first());
@@ -30531,7 +30560,6 @@ img {
 				this.addMarginaliaStyles(page, ruleList, rule, sheet);
 				this.addMarginaliaContent(page, ruleList, rule, sheet);
 			}
-
 			return rule;
 		}
 
@@ -30549,6 +30577,7 @@ img {
 						}
 					});
 					list.append(mVar, item);
+
 				}
 			}
 		}
@@ -30556,6 +30585,7 @@ img {
 		addPaddingVars(padding, list, item) {
 			// variables for padding
 			for (let p in padding) {
+
 				if (typeof padding[p].value !== "undefined") {
 					let value = padding[p].value + (padding[p].unit || "");
 					let pVar = list.createItem({
@@ -30569,6 +30599,25 @@ img {
 
 					list.append(pVar, item);
 				}
+
+			}
+		}
+
+		addBorderVars(border, list, item) {
+			// variables for borders
+			for (let b in border) {
+				if (typeof border[b] !== "undefined") {
+					let value = border[b];
+					let bVar = list.createItem({
+						type: "Declaration",
+						property: "--pagedjs-border-" + b,
+						value: {
+							type: "Raw",
+							value: value
+						}
+					});
+					list.append(bVar, item);
+				}	
 
 			}
 		}
@@ -30603,7 +30652,7 @@ img {
 				let block = lib.clone(page.marginalia[loc]);
 				let hasContent = false;
 
-				if(block.children.isEmpty()) {
+				if (block.children.isEmpty()) {
 					continue;
 				}
 
@@ -30637,11 +30686,11 @@ img {
 
 						if (node.property === "width" &&
 							(loc === "top-left" ||
-							 loc === "top-center" ||
-							 loc === "top-right" ||
-							 loc === "bottom-left" ||
-							 loc === "bottom-center" ||
-							 loc === "bottom-right")) {
+								loc === "top-center" ||
+								loc === "top-right" ||
+								loc === "bottom-left" ||
+								loc === "bottom-center" ||
+								loc === "bottom-right")) {
 							let c = lib.clone(node);
 							c.property = "max-width";
 							list.appendData(c);
@@ -30649,11 +30698,11 @@ img {
 
 						if (node.property === "height" &&
 							(loc === "left-top" ||
-							 loc === "left-middle" ||
-							 loc === "left-bottom" ||
-							 loc === "right-top" ||
-							 loc === "right-middle" ||
-							 loc === "right-bottom")) {
+								loc === "left-middle" ||
+								loc === "left-bottom" ||
+								loc === "right-top" ||
+								loc === "right-middle" ||
+								loc === "right-bottom")) {
 							let c = lib.clone(node);
 							c.property = "max-height";
 							list.appendData(c);
@@ -30699,7 +30748,7 @@ img {
 					}
 				});
 
-				if(content.children.isEmpty()) {
+				if (content.children.isEmpty()) {
 					continue;
 				}
 
@@ -30811,7 +30860,7 @@ img {
 					bleedLeftRecto = this.createVariable("--pagedjs-bleed-right-left", CSSValueToString(bleedrecto.left));
 
 					widthStringRight = `calc( ${CSSValueToString(width)} + ${CSSValueToString(bleedrecto.left)} + ${CSSValueToString(bleedrecto.right)} )`;
-				  heightStringRight = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleedrecto.top)} + ${CSSValueToString(bleedrecto.bottom)} )`;
+					heightStringRight = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleedrecto.top)} + ${CSSValueToString(bleedrecto.bottom)} )`;
 				}
 				if (bleedverso) {
 					bleedTopVerso = this.createVariable("--pagedjs-bleed-left-top", CSSValueToString(bleedverso.top));
@@ -30820,7 +30869,7 @@ img {
 					bleedLeftVerso = this.createVariable("--pagedjs-bleed-left-left", CSSValueToString(bleedverso.left));
 
 					widthStringLeft = `calc( ${CSSValueToString(width)} + ${CSSValueToString(bleedverso.left)} + ${CSSValueToString(bleedverso.right)} )`;
-				  heightStringLeft = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleedverso.top)} + ${CSSValueToString(bleedverso.bottom)} )`;
+					heightStringLeft = `calc( ${CSSValueToString(height)} + ${CSSValueToString(bleedverso.top)} + ${CSSValueToString(bleedverso.bottom)} )`;
 				}
 
 				let pageWidthVar = this.createVariable("--pagedjs-width", CSSValueToString(width));
@@ -31486,6 +31535,7 @@ img {
 			if (start) {
 				this.addPageAttributes(page, start, chunker.pages);
 			}
+			// page.element.querySelector('.paged_area').style.color = red;
 		}
 
 		afterPageLayout(fragment, page, breakToken, chunker) {
@@ -31524,14 +31574,14 @@ img {
 				if (centerContent) {
 					centerWidth = window.getComputedStyle(center)["max-width"];
 
-					if(centerWidth === "none" || centerWidth === "auto") {
-						if(!leftContent && !rightContent){
+					if (centerWidth === "none" || centerWidth === "auto") {
+						if (!leftContent && !rightContent) {
 							marginGroup.style["grid-template-columns"] = "0 1fr 0";
-						}else if(leftContent){
-							if(!rightContent){
-								if(leftWidth !== "none" && leftWidth !== "auto"){
+						} else if (leftContent) {
+							if (!rightContent) {
+								if (leftWidth !== "none" && leftWidth !== "auto") {
 									marginGroup.style["grid-template-columns"] = leftWidth + " 1fr " + leftWidth;
-								}else {
+								} else {
 									marginGroup.style["grid-template-columns"] = "auto auto 1fr";
 									left.style["white-space"] = "nowrap";
 									center.style["white-space"] = "nowrap";
@@ -31543,17 +31593,17 @@ img {
 									left.style["white-space"] = "normal";
 									center.style["white-space"] = "normal";
 								}
-							}else {
-								if(leftWidth !== "none" && leftWidth !== "auto"){
-									if(rightWidth !== "none" && rightWidth !== "auto"){
+							} else {
+								if (leftWidth !== "none" && leftWidth !== "auto") {
+									if (rightWidth !== "none" && rightWidth !== "auto") {
 										marginGroup.style["grid-template-columns"] = leftWidth + " 1fr " + rightWidth;
-									}else {
+									} else {
 										marginGroup.style["grid-template-columns"] = leftWidth + " 1fr " + leftWidth;
 									}
-								}else {
-									if(rightWidth !== "none" && rightWidth !== "auto"){
+								} else {
+									if (rightWidth !== "none" && rightWidth !== "auto") {
 										marginGroup.style["grid-template-columns"] = rightWidth + " 1fr " + rightWidth;
-									}else {
+									} else {
 										marginGroup.style["grid-template-columns"] = "auto auto 1fr";
 										left.style["white-space"] = "nowrap";
 										center.style["white-space"] = "nowrap";
@@ -31563,9 +31613,9 @@ img {
 										let rightOuterWidth = right.offsetWidth;
 										let outerwidths = leftOuterWidth + centerOuterWidth + rightOuterWidth;
 										let newcenterWidth = centerOuterWidth * 100 / outerwidths;
-										if(newcenterWidth > 40){
+										if (newcenterWidth > 40) {
 											marginGroup.style["grid-template-columns"] = "minmax(16.66%, 1fr) minmax(33%, " + newcenterWidth + "%) minmax(16.66%, 1fr)";
-										}else {
+										} else {
 											marginGroup.style["grid-template-columns"] = "repeat(3, 1fr)";
 										}
 										left.style["white-space"] = "normal";
@@ -31574,10 +31624,10 @@ img {
 									}
 								}
 							}
-						}else {
-							if(rightWidth !== "none" && rightWidth !== "auto"){
+						} else {
+							if (rightWidth !== "none" && rightWidth !== "auto") {
 								marginGroup.style["grid-template-columns"] = rightWidth + " 1fr " + rightWidth;
-							}else {
+							} else {
 								marginGroup.style["grid-template-columns"] = "auto auto 1fr";
 								right.style["white-space"] = "nowrap";
 								center.style["white-space"] = "nowrap";
@@ -31590,32 +31640,32 @@ img {
 								center.style["white-space"] = "normal";
 							}
 						}
-					}else if(centerWidth !== "none" && centerWidth !== "auto"){
-						if(leftContent && leftWidth !== "none" && leftWidth !== "auto"){
+					} else if (centerWidth !== "none" && centerWidth !== "auto") {
+						if (leftContent && leftWidth !== "none" && leftWidth !== "auto") {
 							marginGroup.style["grid-template-columns"] = leftWidth + " " + centerWidth + " 1fr";
-						}else if(rightContent && rightWidth !== "none" && rightWidth !== "auto"){
+						} else if (rightContent && rightWidth !== "none" && rightWidth !== "auto") {
 							marginGroup.style["grid-template-columns"] = "1fr " + centerWidth + " " + rightWidth;
-						}else {
+						} else {
 							marginGroup.style["grid-template-columns"] = "1fr " + centerWidth + " 1fr";
 						}
 
 					}
 
-				}else {
-					if(leftContent){
-						if(!rightContent){
+				} else {
+					if (leftContent) {
+						if (!rightContent) {
 							marginGroup.style["grid-template-columns"] = "1fr 0 0";
-						}else {
-							if(leftWidth !== "none" && leftWidth !== "auto"){
-								if(rightWidth !== "none" && rightWidth !== "auto"){
+						} else {
+							if (leftWidth !== "none" && leftWidth !== "auto") {
+								if (rightWidth !== "none" && rightWidth !== "auto") {
 									marginGroup.style["grid-template-columns"] = leftWidth + " 1fr " + rightWidth;
-								}else {
+								} else {
 									marginGroup.style["grid-template-columns"] = leftWidth + " 0 1fr";
 								}
-							}else {
-								if(rightWidth !== "none" && rightWidth !== "auto"){
+							} else {
+								if (rightWidth !== "none" && rightWidth !== "auto") {
 									marginGroup.style["grid-template-columns"] = "1fr 0 " + rightWidth;
-								}else {
+								} else {
 									marginGroup.style["grid-template-columns"] = "auto 1fr auto";
 									left.style["white-space"] = "nowrap";
 									right.style["white-space"] = "nowrap";
@@ -31623,16 +31673,16 @@ img {
 									let rightOuterWidth = right.offsetWidth;
 									let outerwidths = leftOuterWidth + rightOuterWidth;
 									let newLeftWidth = leftOuterWidth * 100 / outerwidths;
-									marginGroup.style["grid-template-columns"] = "minmax(16.66%, " + newLeftWidth  + "%) 0 1fr";
+									marginGroup.style["grid-template-columns"] = "minmax(16.66%, " + newLeftWidth + "%) 0 1fr";
 									left.style["white-space"] = "normal";
 									right.style["white-space"] = "normal";
 								}
 							}
 						}
-					}else {
-						if(rightWidth !== "none" && rightWidth !== "auto"){
+					} else {
+						if (rightWidth !== "none" && rightWidth !== "auto") {
 							marginGroup.style["grid-template-columns"] = "1fr 0 " + rightWidth;
-						}else {
+						} else {
 							marginGroup.style["grid-template-columns"] = "0 0 1fr";
 						}
 					}
@@ -31660,66 +31710,66 @@ img {
 				if (middle) {
 					middleHeight = window.getComputedStyle(middle)["max-height"];
 
-					if(middleHeight === "none" || middleHeight === "auto") {
-						if(!topContent && !bottomContent){
+					if (middleHeight === "none" || middleHeight === "auto") {
+						if (!topContent && !bottomContent) {
 							marginGroup.style["grid-template-rows"] = "0 1fr 0";
-						}else if(topContent){
-							if(!bottomContent){
-								if(topHeight !== "none" && topHeight !== "auto"){
+						} else if (topContent) {
+							if (!bottomContent) {
+								if (topHeight !== "none" && topHeight !== "auto") {
 									marginGroup.style["grid-template-rows"] = topHeight + " calc(100% - " + topHeight + "*2) " + topHeight;
 								}
-							}else {
-								if(topHeight !== "none" && topHeight !== "auto"){
-									if(bottomHeight !== "none" && bottomHeight !== "auto"){
+							} else {
+								if (topHeight !== "none" && topHeight !== "auto") {
+									if (bottomHeight !== "none" && bottomHeight !== "auto") {
 										marginGroup.style["grid-template-rows"] = topHeight + " calc(100% - " + topHeight + " - " + bottomHeight + ") " + bottomHeight;
-									}else {
+									} else {
 										marginGroup.style["grid-template-rows"] = topHeight + " calc(100% - " + topHeight + "*2) " + topHeight;
 									}
-								}else {
-									if(bottomHeight !== "none" && bottomHeight !== "auto"){
+								} else {
+									if (bottomHeight !== "none" && bottomHeight !== "auto") {
 										marginGroup.style["grid-template-rows"] = bottomHeight + " calc(100% - " + bottomHeight + "*2) " + bottomHeight;
 									}
 								}
 							}
-						}else {
-							if(bottomHeight !== "none" && bottomHeight !== "auto"){
+						} else {
+							if (bottomHeight !== "none" && bottomHeight !== "auto") {
 								marginGroup.style["grid-template-rows"] = bottomHeight + " calc(100% - " + bottomHeight + "*2) " + bottomHeight;
 							}
 						}
-					}else {
-						if(topContent && topHeight !== "none" && topHeight !== "auto"){
-							marginGroup.style["grid-template-rows"] = topHeight +" " + middleHeight + " calc(100% - (" + topHeight + " + " + middleHeight + "))";
-						}else if(bottomContent && bottomHeight !== "none" && bottomHeight !== "auto"){
+					} else {
+						if (topContent && topHeight !== "none" && topHeight !== "auto") {
+							marginGroup.style["grid-template-rows"] = topHeight + " " + middleHeight + " calc(100% - (" + topHeight + " + " + middleHeight + "))";
+						} else if (bottomContent && bottomHeight !== "none" && bottomHeight !== "auto") {
 							marginGroup.style["grid-template-rows"] = "1fr " + middleHeight + " " + bottomHeight;
-						}else {
+						} else {
 							marginGroup.style["grid-template-rows"] = "calc((100% - " + middleHeight + ")/2) " + middleHeight + " calc((100% - " + middleHeight + ")/2)";
 						}
 
 					}
 
-				}else {
-					if(topContent){
-						if(!bottomContent){
+				} else {
+					if (topContent) {
+						if (!bottomContent) {
 							marginGroup.style["grid-template-rows"] = "1fr 0 0";
-						}else {
-							if(topHeight !== "none" && topHeight !== "auto"){
-								if(bottomHeight !== "none" && bottomHeight !== "auto"){
+						} else {
+							if (topHeight !== "none" && topHeight !== "auto") {
+								if (bottomHeight !== "none" && bottomHeight !== "auto") {
 									marginGroup.style["grid-template-rows"] = topHeight + " 1fr " + bottomHeight;
-								}else {
+								} else {
 									marginGroup.style["grid-template-rows"] = topHeight + " 0 1fr";
 								}
-							}else {
-								if(bottomHeight !== "none" && bottomHeight !== "auto"){
+							} else {
+								if (bottomHeight !== "none" && bottomHeight !== "auto") {
 									marginGroup.style["grid-template-rows"] = "1fr 0 " + bottomHeight;
-								}else {
+								} else {
 									marginGroup.style["grid-template-rows"] = "1fr 0 1fr";
 								}
 							}
 						}
-					}else {
-						if(bottomHeight !== "none" && bottomHeight !== "auto"){
+					} else {
+						if (bottomHeight !== "none" && bottomHeight !== "auto") {
 							marginGroup.style["grid-template-rows"] = "1fr 0 " + bottomHeight;
-						}else {
+						} else {
 							marginGroup.style["grid-template-rows"] = "0 0 1fr";
 						}
 					}
@@ -31839,7 +31889,7 @@ img {
 			};
 		}
 
-		createCalculatedDimension(property, items, important, operator="+") {
+		createCalculatedDimension(property, items, important, operator = "+") {
 			let children = new lib.List();
 			let calculations = new lib.List();
 
@@ -32039,9 +32089,15 @@ img {
 						} else if (prop.property === "break-before") {
 							let nodeBefore = displayedElementBefore(elements[i], parsed);
 
-							elements[i].setAttribute("data-break-before", prop.value);
-
+							// Breaks are only allowed between siblings, not between a box and its container.
+							// If we cannot find a node before we should not break!
+							// https://drafts.csswg.org/css-break-3/#break-propagation
 							if (nodeBefore) {
+								if (prop.value === "page" && needsPageBreak(elements[i], nodeBefore)) {
+									// we ignore this explicit page break because an implicit page break is already needed
+									continue;
+								}
+								elements[i].setAttribute("data-break-before", prop.value);
 								nodeBefore.setAttribute("data-next-break-before", prop.value);
 							}
 						} else if (prop.property === "page") {
@@ -32206,6 +32262,7 @@ img {
 
 			this.styleSheet = polisher.styleSheet;
 			this.counters = {};
+			this.resetCountersMap = new Map();
 		}
 
 		onDeclaration(declaration, dItem, dList, rule) {
@@ -32248,10 +32305,9 @@ img {
 		}
 
 		handleIncrement(declaration, rule) {
-			let identifier = declaration.value.children.first();
-			let number = declaration.value.children.getSize() > 1
-								&& declaration.value.children.last().value;
-			let name = identifier && identifier.name;
+			const identifier = declaration.value.children.first();
+			const number = declaration.value.children.getSize() > 1 ? declaration.value.children.last().value : 1;
+			const name = identifier && identifier.name;
 
 			if (name === "page" || name.indexOf("target-counter-") === 0) {
 				return;
@@ -32268,7 +32324,7 @@ img {
 
 			return counter.increments[selector] = {
 				selector: selector,
-				number: number || 1
+				number
 			};
 		}
 
@@ -32298,17 +32354,21 @@ img {
 				counter = this.counters[c];
 				this.processCounterIncrements(parsed, counter);
 				this.processCounterResets(parsed, counter);
-				this.addCounterValues(parsed, counter);
+				if (c !== "page") {
+					this.addCounterValues(parsed, counter);
+				}
 			}
 		}
 
 		scopeCounters(counters) {
 			let countersArray = [];
 			for (let c in counters) {
-				countersArray.push(`${counters[c].name} 0`);
+				if(c !== "page") {
+					countersArray.push(`${counters[c].name} 0`);
+				}
 			}
 			// Add to pages to allow cross page scope
-			this.insertRule(`.pagedjs_pages { counter-reset: ${countersArray.join(" ")} pages var(--pagedjs-page-count)}`);
+			this.insertRule(`.pagedjs_pages { counter-reset: ${countersArray.join(" ")} page 0 pages var(--pagedjs-page-count)}`);
 		}
 
 		insertRule(rule) {
@@ -32322,7 +32382,7 @@ img {
 				// Find elements for increments
 				let incrementElements = parsed.querySelectorAll(increment.selector);
 				// Add counter data
-				for (var i = 0; i < incrementElements.length; i++) {
+				for (let i = 0; i < incrementElements.length; i++) {
 					incrementElements[i].setAttribute("data-counter-"+ counter.name +"-increment", increment.number);
 					incrementElements[i].setAttribute("data-counter-increment", counter.name);
 				}
@@ -32344,8 +32404,8 @@ img {
 		}
 
 		addCounterValues(parsed, counter) {
-			let counterName = counter.name;
-			let elements = parsed.querySelectorAll("[data-counter-"+ counterName +"-reset], [data-counter-"+ counterName +"-increment]");
+			const counterName = counter.name;
+			const elements = parsed.querySelectorAll("[data-counter-"+ counterName +"-reset], [data-counter-"+ counterName +"-increment]");
 
 			let count = 0;
 			let element;
@@ -32353,7 +32413,7 @@ img {
 			let resetValue, incrementValue, resetDelta;
 			let incrementArray;
 
-			for (var i = 0; i < elements.length; i++) {
+			for (let i = 0; i < elements.length; i++) {
 				element = elements[i];
 				resetDelta = 0;
 				incrementArray = [];
@@ -32391,16 +32451,16 @@ img {
 		incrementCounterForElement(element, incrementArray) {
 			if (!element || !incrementArray || incrementArray.length === 0) return;
 
-			let ref = element.dataset.ref;
-			let prevIncrements = Array.from(this.styleSheet.cssRules).filter((rule) => {
+			const ref = element.dataset.ref;
+			const prevIncrements = Array.from(this.styleSheet.cssRules).filter((rule) => {
 				return rule.selectorText === `[data-ref="${element.dataset.ref}"]:not([data-split-from])`
 							 && rule.style[0] === "counter-increment";
 			});
 
-			let increments = [];
+			const increments = [];
 			for (let styleRule of prevIncrements) {
 				let values = styleRule.style.counterIncrement.split(" ");
-				for (var i = 0; i < values.length; i+=2) {
+				for (let i = 0; i < values.length; i+=2) {
 					increments.push(values[i] + " " + values[i+1]);
 				}
 			}
@@ -32413,8 +32473,14 @@ img {
 		afterPageLayout(pageElement, page) {
 			let pgreset = pageElement.querySelectorAll("[data-counter-page-reset]");
 			pgreset.forEach((reset) => {
-				let value = reset.datasetCounterPageReset;
-				this.styleSheet.insertRule(`[data-page-number="${pageElement.dataset.pageNumber}"] { counter-reset: page ${value} }`, this.styleSheet.cssRules.length);
+				const ref = reset.dataset && reset.dataset.ref;
+				if (ref && this.resetCountersMap.has(ref)) ; else {
+					if (ref) {
+						this.resetCountersMap.set(ref, "");
+					}
+					let value = reset.dataset.counterPageReset;
+					this.styleSheet.insertRule(`[data-page-number="${pageElement.dataset.pageNumber}"] { counter-increment: none; counter-reset: page ${value}; }`, this.styleSheet.cssRules.length);
+				}
 			});
 		}
 
@@ -32494,6 +32560,176 @@ img {
 		}
 	}
 
+	class PageCounterIncrement extends Handler {
+		constructor(chunker, polisher, caller) {
+			super(chunker, polisher, caller);
+
+			this.styleSheet = polisher.styleSheet;
+			this.pageCounter = {
+				name: "page",
+				increments: {},
+				resets: {}
+			};
+		}
+
+		onDeclaration(declaration, dItem, dList, rule) {
+			const property = declaration.property;
+
+			if (property === "counter-increment") {
+				let inc = this.handleIncrement(declaration, rule);
+				if (inc) {
+					dList.remove(dItem);
+				}
+			}
+		}
+
+		afterParsed(_) {
+			for (const inc in this.pageCounter.increments) {
+				const increment = this.pageCounter.increments[inc];
+				this.insertRule(`${increment.selector} { --pagedjs-page-counter-increment: ${increment.number} }`);
+			}
+		}
+
+		handleIncrement(declaration, rule) {
+			const identifier = declaration.value.children.first();
+			const number = declaration.value.children.getSize() > 1 ? declaration.value.children.last().value : 1;
+			const name = identifier && identifier.name;
+
+			if (name.indexOf("target-counter-") === 0) {
+				return;
+			}
+			// A counter named page is automatically created and incremented by 1 on every page of the document,
+			// unless the counter-increment property in the page context explicitly specifies a different increment for the page counter.
+			// https://www.w3.org/TR/css-page-3/#page-based-counters
+			if (name !== "page") {
+				return;
+			}
+			// the counter-increment property is not defined on the page context (i.e. @page rule), ignoring...
+			if (rule.ruleNode.name === "page" && rule.ruleNode.type === "Atrule") {
+				return;
+			}
+			const selector = lib.generate(rule.ruleNode.prelude);
+			return this.pageCounter.increments[selector] = {
+				selector: selector,
+				number
+			};
+		}
+
+		insertRule(rule) {
+			this.styleSheet.insertRule(rule, this.styleSheet.cssRules.length);
+		}
+	}
+
+	class NthOfType extends Handler {
+		constructor(chunker, polisher, caller) {
+			super(chunker, polisher, caller);
+
+			this.styleSheet = polisher.styleSheet;
+			this.selectors = {};
+		}
+
+		onRule(ruleNode, ruleItem, rulelist) {
+			let selector = lib.generate(ruleNode.prelude);
+			if (selector.match(/:(first|last|nth)-of-type/)) {
+				
+				let declarations = lib.generate(ruleNode.block);
+				declarations = declarations.replace(/[{}]/g,"");
+
+				let uuid = "nth-of-type-" + UUID();
+
+				selector.split(",").forEach((s) => {
+					if (!this.selectors[s]) {
+						this.selectors[s] = [uuid, declarations];
+					} else {
+						this.selectors[s][1] = `${this.selectors[s][1]};${declarations}` ;
+					}
+				});
+
+				rulelist.remove(ruleItem);
+			}
+		}
+
+		afterParsed(parsed) {
+			this.processSelectors(parsed, this.selectors);
+		}
+
+		processSelectors(parsed, selectors) {
+			// add the new attributes to matching elements
+			for (let s in selectors) {
+				let elements = parsed.querySelectorAll(s);
+
+				for (var i = 0; i < elements.length; i++) {
+					let dataNthOfType = elements[i].getAttribute("data-nth-of-type");
+
+					if (dataNthOfType && dataNthOfType != "") {
+						dataNthOfType = `${dataNthOfType},${selectors[s][0]}`;
+						elements[i].setAttribute("data-nth-of-type", dataNthOfType);
+					} else {
+						elements[i].setAttribute("data-nth-of-type", selectors[s][0]);
+					}
+				}
+
+				let rule = `*[data-nth-of-type*='${selectors[s][0]}'] { ${selectors[s][1]}; }`;
+				this.styleSheet.insertRule(rule, this.styleSheet.cssRules.length);
+			}
+		}
+	}
+
+	class Following extends Handler {
+		constructor(chunker, polisher, caller) {
+			super(chunker, polisher, caller);
+
+			this.styleSheet = polisher.styleSheet;
+			this.selectors = {};
+		}
+
+		onRule(ruleNode, ruleItem, rulelist) {
+			let selector = lib.generate(ruleNode.prelude);
+			if (selector.match(/\+/)) {
+				
+				let declarations = lib.generate(ruleNode.block);
+				declarations = declarations.replace(/[{}]/g,"");
+
+				let uuid = "following-" + UUID();
+
+				selector.split(",").forEach((s) => {
+					if (!this.selectors[s]) {
+						this.selectors[s] = [uuid, declarations];
+					} else {
+						this.selectors[s][1] = `${this.selectors[s][1]};${declarations}` ;
+					}
+				});
+
+				rulelist.remove(ruleItem);
+			}
+		}
+
+		afterParsed(parsed) {
+			this.processSelectors(parsed, this.selectors);
+		}
+
+		processSelectors(parsed, selectors) {
+			// add the new attributes to matching elements
+			for (let s in selectors) {
+				let elements = parsed.querySelectorAll(s);
+
+				for (var i = 0; i < elements.length; i++) {
+					let dataFollowing = elements[i].getAttribute("data-following");
+
+					if (dataFollowing && dataFollowing != "") {
+						dataFollowing = `${dataFollowing},${selectors[s][0]}`;
+						elements[i].setAttribute("data-following", dataFollowing);
+					} else {
+						elements[i].setAttribute("data-following", selectors[s][0]);
+					}
+				}
+
+				let rule = `*[data-following*='${selectors[s][0]}'] { ${selectors[s][1]}; }`;
+				this.styleSheet.insertRule(rule, this.styleSheet.cssRules.length);
+			}
+		}
+	}
+
 	var pagedMediaHandlers = [
 		AtPage,
 		Breaks,
@@ -32501,7 +32737,10 @@ img {
 		Splits,
 		Counters,
 		Lists,
-		PositionFixed
+		PositionFixed,
+		PageCounterIncrement,
+		NthOfType,
+		Following
 	];
 
 	class RunningHeaders extends Handler {
@@ -32919,7 +33158,7 @@ img {
 						variable: variable
 					};
 				});
-				
+
 				// Replace with counter
 				funcNode.name = "counter";
 				funcNode.children = new lib.List();
@@ -32941,7 +33180,7 @@ img {
 				let target = this.counterTargets[name];
 				let split = target.selector.split("::");
 				let query = split[0];
-				
+
 				let queried = chunker.pagesArea.querySelectorAll(query + ":not([data-" + target.variable + "])");
 
 				queried.forEach((selected, index) => {
@@ -32963,16 +33202,19 @@ img {
 						if (target.counter === "page") {
 							let pages = chunker.pagesArea.querySelectorAll(".pagedjs_page");
 							let pg = 0;
-							for (var i = 0; i < pages.length; i++) {
+							for (let i = 0; i < pages.length; i++) {
 								let styles = window.getComputedStyle(pages[i]);
 								let reset = styles["counter-reset"].replace("page", "").trim();
+								let increment = styles["counter-increment"].replace("page", "").trim();
 
 								if (reset !== "none") {
 									pg = parseInt(reset);
 								}
-								pg += 1;
+								if (increment !== "none") {
+									pg += parseInt(increment);
+								}
 
-								if (pages[i].contains( element )){
+								if (pages[i].contains(element)) {
 									break;
 								}
 							}
@@ -34169,7 +34411,7 @@ ready.then(async function () {
 })
 
 /* global Paged */
-class RepeatingTableHeaders extends Paged.Handler {
+class RepeatingTableElements extends Paged.Handler {
   constructor (chunker, polisher, caller) { // eslint-disable-line no-useless-constructor
     super(chunker, polisher, caller)
   }
@@ -34183,19 +34425,39 @@ class RepeatingTableHeaders extends Paged.Handler {
       const ref = table.dataset.ref
       // Find the node in the original source
       const sourceTable = chunker.source.querySelector("[data-ref='" + ref + "']")
-      // Find if there is a header
-      const header = sourceTable.querySelector('thead')
-      if (header) {
-        // Clone the header element
-        const clonedHeader = header.cloneNode(true)
-        // Insert the header at the start of the split table
-        table.insertBefore(clonedHeader, table.firstChild)
-      }
+      // Repeat the <thead> element (if exists)
+      this.repeatElement(sourceTable, table, ':scope > thead')
+      // Repeat the <colgroup> elements (if at least one exists)
+      this.repeatElements(sourceTable, table, ':scope > colgroup')
+      // Repeat the <caption> element (if exists)
+      this.repeatElement(sourceTable, table, ':scope > caption')
     })
+  }
+
+  repeatElement (sourceTable, table, querySelector) {
+    const element = sourceTable.querySelector(querySelector)
+    if (element) {
+      // Clone the element
+      const clonedElement = element.cloneNode(true)
+      // Insert the element at the start of the split table
+      table.insertBefore(clonedElement, table.firstChild)
+    }
+  }
+
+  repeatElements(sourceTable, table, querySelector) {
+    const elements = sourceTable.querySelectorAll(querySelector)
+    if (elements) {
+      elements.forEach((element) => {
+        // Clone the element
+        const clonedElement = element.cloneNode(true)
+        // Insert the element at the start of the split table
+        table.insertBefore(clonedElement, table.firstChild)
+      })
+    }
   }
 }
 
-Paged.registerHandlers(RepeatingTableHeaders)
+Paged.registerHandlers(RepeatingTableElements)
 
 </script>
 </body>
