@@ -2,11 +2,10 @@
 
 'use strict'
 
-process.title = 'asciidoctor-pdf'
+process.title = 'asciidoctor-web-pdf'
 const { PdfOptions, PdfInvoker } = require('../lib/cli.js')
 
 ;(async () => {
-  console.warn('WARN: `asciidoctor-pdf` is deprecated and will be removed in a future version, please use `asciidoctor-web-pdf` instead')
   const options = new PdfOptions().parse(process.argv)
   return new PdfInvoker(options).invoke()
 })()
