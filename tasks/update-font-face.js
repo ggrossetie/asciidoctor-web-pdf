@@ -1,7 +1,7 @@
 const fs = require('fs')
 const ospath = require('path')
-const cssDirectoryPath = `${__dirname}/../css`
-const fontsDirectoryPath = `${__dirname}/../fonts`
+const cssDirectoryPath = ospath.join(__dirname, '..', 'css')
+const fontsDirectoryPath = ospath.join(__dirname, '..', 'fonts')
 const fonts = fs.readdirSync(fontsDirectoryPath)
 
 // generate the @font-face definitions from the fonts directory
@@ -9,7 +9,7 @@ const startTag = '/* start:font-face */'
 const endTag = '/* end:font-face */'
 const data = []
 data.push(startTag)
-data.push(`/* Generated using ${ospath.relative(`${__dirname}/..`, __filename)} script */`)
+data.push(`/* Generated using ${ospath.relative(ospath.join(__dirname, '..'), __filename)} script */`)
 data.push('/* DO NOT MANUALLY EDIT */')
 for (const font of fonts) {
   const buff = fs.readFileSync(`${fontsDirectoryPath}/${font}`)
