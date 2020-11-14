@@ -354,6 +354,10 @@ describe('PDF converter', function () {
     await shouldBeVisuallyIdentical('document-with-counters')
   })
 
+  it('should display number or bullet on lists', async () => {
+    await shouldBeVisuallyIdentical('list')
+  })
+
   describe('Timeout', () => {
     beforeEach(function () {
       sinon.spy(console, 'error')
