@@ -11,6 +11,8 @@ const converter = require('../lib/converter.js')
 const { templates } = require('../lib/document/document-converter')
 converter.registerTemplateConverter(asciidoctor, templates)
 
+const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
+
 describe('Default converter', () => {
   describe('Language', () => {
     it('should have a default language', () => {
@@ -83,25 +85,25 @@ Guillaume Grossetie
   })
 
   it('should replace the default stylesheet with a custom stylesheet', () => {
-    const doc = asciidoctor.load('[.greetings]#Hello world#', { attributes: { stylesheet: `${__dirname}/fixtures/custom.css` } })
+    const doc = asciidoctor.load('[.greetings]#Hello world#', { attributes: { stylesheet: fixturesPath('custom.css') } })
     const $ = cheerio.load(doc.convert({ header_footer: true }))
     expect($('head').html()).to.not.have.string('Asciidoctor default stylesheet')
-    expect($(`head > link[href="${__dirname}/fixtures/custom.css"]`).length).to.equal(1)
+    expect($(`head > link[href="${fixturesPath('custom.css')}"]`).length).to.equal(1)
   })
 
   it('should load multiple stylesheets', () => {
-    const doc = asciidoctor.load('Hello world', { attributes: { stylesheet: `${__dirname}/fixtures/variable.css, ,${__dirname}/fixtures/theme.css,` } })
+    const doc = asciidoctor.load('Hello world', { attributes: { stylesheet: `${fixturesPath('variable.css')}, ,${fixturesPath('theme.css')},` } })
     const $ = cheerio.load(doc.convert({ header_footer: true }))
     expect($('head').html()).to.not.have.string('Asciidoctor default stylesheet')
-    expect($(`head > link[href="${__dirname}/fixtures/variable.css"]`).length).to.equal(1)
-    expect($(`head > link[href="${__dirname}/fixtures/theme.css"]`).length).to.equal(1)
+    expect($(`head > link[href="${fixturesPath('variable.css')}"]`).length).to.equal(1)
+    expect($(`head > link[href="${fixturesPath('theme.css')}"]`).length).to.equal(1)
   })
 
   it('should resolve the stylesheet when using a relative path', () => {
-    const doc = asciidoctor.load('[.greetings]#Hello world#', { attributes: { stylesheet: '@asciidoctor/core/dist/css/asciidoctor.css' } })
+    const doc = asciidoctor.load('[.greetings]#Hello world#', { attributes: { stylesheet: ospath.join('@asciidoctor', 'core', 'dist', 'css', 'asciidoctor.css') } })
     const $ = cheerio.load(doc.convert({ header_footer: true }))
     expect($('head').html()).to.not.have.string('Asciidoctor default stylesheet')
-    const href = ospath.resolve(`${__dirname}/../node_modules/@asciidoctor/core/dist/css/asciidoctor.css`)
+    const href = ospath.resolve(ospath.join(__dirname, '..', 'node_modules', '@asciidoctor', 'core', 'dist', 'css', 'asciidoctor.css'))
     expect($(`head > link[href="${href}"]`).length).to.equal(1)
   })
 
@@ -255,7 +257,7 @@ Just a preamble.`, { safe: 'safe' })
     })
 
     it('should use a template directory (Nunjucks)', () => {
-      const html = asciidoctor.convert('Hello *world*', { template_dirs: [`${__dirname}/fixtures/templates/nunjucks`] })
+      const html = asciidoctor.convert('Hello *world*', { template_dirs: [fixturesPath('templates', 'nunjucks')] })
       expect(html).to.equal('<p class="nunjucks">Hello <strong>world</strong></p>')
     })
   })

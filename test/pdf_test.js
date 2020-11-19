@@ -15,6 +15,10 @@ const converter = require('../lib/converter.js')
 const { templates } = require('../lib/document/document-converter')
 converter.registerTemplateConverter(asciidoctor, templates)
 
+const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
+const outputPath = (...paths) => ospath.join(__dirname, 'output', ...paths)
+const cssPath = (...paths) => ospath.join(__dirname, '..', 'css', ...paths)
+
 describe('PDF converter', function () {
   // launching an headless browser (especially on Travis) can take several tens of seconds
   this.timeout(30000)
@@ -71,17 +75,17 @@ describe('PDF converter', function () {
       outputBaseFileName = inputBaseFileName
     }
     const opts = {}
-    const outputFile = `${__dirname}/output/${outputBaseFileName}.pdf`
+    const outputFile = outputPath(`${outputBaseFileName}.pdf`)
     opts.attributes = attributes || {}
     opts.attributes.reproducible = ''
     opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/${inputBaseFileName}.adoc` }, opts, false)
+    await converter.convert(asciidoctor, { path: fixturesPath(`${inputBaseFileName}.adoc`) }, opts, false)
     expect(outputFile).to.be.visuallyIdentical(`${outputBaseFileName}.pdf`)
   }
 
   it('should not encode HTML entity in the PDF outline', async () => {
     const options = { attributes: { toc: 'macro' } }
-    const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toc-absent.pdf`, options)
+    const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-absent.pdf'), options)
     const refs = getOutlineRefs(pdfDoc)
     expect(refs.length).to.equal(9)
     expect(refs[2].get(PDFName.of('Dest')).encodedName).to.equal('/_section_2_black_white')
@@ -94,14 +98,14 @@ describe('PDF converter', function () {
   describe('PDF Outline', () => {
     it('should generate a PDF outline even if the TOC is absent from the output', async () => {
       const options = { attributes: { toc: 'macro' } }
-      const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toc-absent.pdf`, options)
+      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-absent.pdf'), options)
       const refs = getOutlineRefs(pdfDoc)
       expect(refs.length).to.equal(9)
       expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
     })
 
     it('should generate a PDF outline even if the TOC is not enabled', async () => {
-      const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toc-disabled.pdf`)
+      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-disabled.pdf'))
       const refs = getOutlineRefs(pdfDoc)
       expect(refs.length).to.equal(9)
       expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
@@ -109,7 +113,7 @@ describe('PDF converter', function () {
 
     it('should honor toclevels 1 when generating a PDF outline', async () => {
       const options = { attributes: { toclevels: 1 } }
-      const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toclevels-1.pdf`, options)
+      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toclevels-1.pdf'), options)
       const refs = getOutlineRefs(pdfDoc)
       expect(refs.length).to.equal(4)
       expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
@@ -117,7 +121,7 @@ describe('PDF converter', function () {
 
     it('should honor toclevels 3 when generating a PDF outline', async () => {
       const options = { attributes: { toclevels: 3 } }
-      const pdfDoc = await convert(`${__dirname}/fixtures/sections.adoc`, `${__dirname}/output/sections-toclevels-1.pdf`, options)
+      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toclevels-1.pdf'), options)
       const refs = getOutlineRefs(pdfDoc)
       expect(refs.length).to.equal(11)
       expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
@@ -308,7 +312,7 @@ describe('PDF converter', function () {
         }
         options.doctype = scenario.doctype
         const outputFileName = `page-break-${scenario.doctype}-preamble_${scenario.preamble}-section_${scenario.section}-toc_${scenario.toc}-title-page-attribute_${scenario['title-page-attribute']}.pdf`
-        const outputFile = `${__dirname}/output/${outputFileName}`
+        const outputFile = outputPath(outputFileName)
         let inputFileName
         if (scenario.preamble && scenario.section) {
           inputFileName = 'document-with-title-preamble-and-section.adoc'
@@ -317,7 +321,7 @@ describe('PDF converter', function () {
         } else {
           inputFileName = 'document-with-only-title.adoc'
         }
-        const inputFile = `${__dirname}/fixtures/${inputFileName}`
+        const inputFile = fixturesPath(inputFileName)
 
         const pdfDoc = await convert(inputFile, outputFile, options)
         expect(pdfDoc.getPages().length).to.equal(scenario['expected-page-number'])
@@ -328,7 +332,7 @@ describe('PDF converter', function () {
 
   it('should be able to set background color of title page', async () => {
     const attributes = {}
-    attributes.stylesheet = `${__dirname}/../css/asciidoctor.css,${__dirname}/../css/document.css,${__dirname}/../css/features/book.css,${__dirname}/fixtures/black-title-page.css`
+    attributes.stylesheet = `${cssPath('asciidoctor.css')},${cssPath('document.css')},${cssPath('features', 'book.css')},${fixturesPath('black-title-page.css')}`
     await shouldBeVisuallyIdentical('title-page', attributes, 'title-page-background-color')
   })
 
@@ -372,7 +376,7 @@ describe('PDF converter', function () {
         process.env.PUPPETEER_NAVIGATION_TIMEOUT = 1
         delete require.cache[require.resolve('../lib/converter.js')]
         const converter = require('../lib/converter.js')
-        await converter.convert(asciidoctor, { path: `${__dirname}/fixtures/title-page.adoc` }, {}, false)
+        await converter.convert(asciidoctor, { path: fixturesPath('title-page.adoc') }, {}, false)
         const call = console.error.getCall(0)
         expect(call).to.have.property('firstArg')
         expect(call.firstArg).to.equal('Unable to generate the PDF - Error: TimeoutError: Navigation timeout of 1 ms exceeded')
