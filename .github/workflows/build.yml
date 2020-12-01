@@ -28,7 +28,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgbm-dev ghostscript libpoppler-dev
+        sudo apt-get install -y libgbm-dev ghostscript poppler-utils
       if: ${{ runner.os == 'Linux' }}
     - name: Install dependencies
       run: |
