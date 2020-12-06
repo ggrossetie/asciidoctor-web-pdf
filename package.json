@@ -1,6 +1,6 @@
 {
   "name": "asciidoctor-pdf",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.11",
   "description": "A PDF converter for AsciiDoc based on Asciidoctor.js",
   "engines": {
     "node": ">=10",
