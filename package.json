@@ -10,12 +10,20 @@
     "asciidoctor-pdf": "bin/asciidoctor-pdf",
     "asciidoctor-web-pdf": "bin/asciidoctor-web-pdf"
   },
+  "pkg": {
+    "assets": [
+      "css/**/*.css",
+      "node_modules/@fortawesome/fontawesome-svg-core/*.css"
+    ],
+    "scripts": "lib/document/**/*.js"
+  },
   "files": [
     "bin",
     "lib",
     "css"
   ],
   "scripts": {
+    "dist": "rm -rf dist && node tasks/prepare_binaries.js",
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
@@ -56,6 +64,7 @@
     "mocha": "8.3.0",
     "nunjucks": "^3.2.1",
     "pixelmatch": "^5.1.0",
+    "pkg": "^4.4.9",
     "rimraf": "^3.0.0",
     "sinon": "^9.0.2",
     "standard": "16.0.3"
