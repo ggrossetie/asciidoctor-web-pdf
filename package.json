@@ -15,7 +15,9 @@
       "css/**/*.css",
       "node_modules/@fortawesome/fontawesome-svg-core/*.css"
     ],
-    "scripts": "lib/document/**/*.js"
+    "scripts": [
+      "lib/document/**/*.js"
+    ]
   },
   "files": [
     "bin",
@@ -23,7 +25,7 @@
     "css"
   ],
   "scripts": {
-    "dist": "rm -rf dist && node tasks/prepare_binaries.js",
+    "build": "rm -rf build && node tasks/prepare_binaries.js && ./tasks/prepare_binaries_zip.sh",
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
