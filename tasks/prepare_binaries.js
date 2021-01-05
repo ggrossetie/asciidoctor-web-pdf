@@ -87,7 +87,6 @@ async function main (builds) {
 }
 
 // allow invoking `node tasks/prepare_binaries.js` with win/linux/macos as the argument
-console.log(process.argv)
 if (process.argv.length > 2) {
   const platform = process.argv[2]
   if (platform in builds) {
