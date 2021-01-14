@@ -103,7 +103,7 @@ Many more features can be added by importing an existing JavaScript or CSS frame
 
 ### Running from pre-compiled binaries
 
-Asciidoctor Web PDF is available for each release as a zip file for 64-bit Windows, Linux and MacOS.
+Asciidoctor Web PDF is available for each release as a zip file for Windows 64-bit, Linux 64-bit and macOS 64-bit (x86-64).
 
 Go to the [releases](https://github.com/Mogztter/asciidoctor-web-pdf/releases) page and download the appropriate binary for your platform.
 Extract this to a folder of your choosing.

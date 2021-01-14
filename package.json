@@ -12,8 +12,7 @@
   },
   "pkg": {
     "assets": [
-      "css/**/*.css",
-      "node_modules/@fortawesome/fontawesome-svg-core/*.css"
+      "css/**/*.css"
     ],
     "scripts": [
       "lib/document/**/*.js"
@@ -25,7 +24,7 @@
     "css"
   ],
   "scripts": {
-    "build": "rm -rf build && node tasks/prepare_binaries.js && ./tasks/prepare_binaries_zip.sh",
+    "build": "node tasks/prepare_binaries.js",
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
@@ -60,6 +59,7 @@
   },
   "devDependencies": {
     "@asciidoctor/core": "^2.2.0",
+    "archiver": "^5.2.0",
     "chai": "4.3.0",
     "cheerio": "^1.0.0-rc.3",
     "dirty-chai": "2.0.1",
