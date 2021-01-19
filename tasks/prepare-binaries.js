@@ -1,6 +1,11 @@
 const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
+const readline = require('readline')
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
 
 const archiver = require('archiver')
 const { exec } = require('pkg')
@@ -35,9 +40,9 @@ async function getBrowsers (platforms) {
         path: path.resolve(path.join(buildDirPath, name, 'chromium'))
       })
       .download(puppeteer._preferredRevision, function (downloadBytes, totalBytes) {
-        process.stdout.cursorTo(0)
+        readline.cursorTo(process.stdout, 0)
         const percent = Math.round(downloadBytes / totalBytes * 100)
-        process.stdout.write(`Downloading browser for ${name.padEnd(5)} ${percent.toString().padStart(5)}%`)
+        rl.write(`Downloading browser for ${name.padEnd(5)} ${percent.toString().padStart(5)}%`)
       })
   }))
   console.log(`\nDownloads are completed`)
