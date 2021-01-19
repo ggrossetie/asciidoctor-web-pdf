@@ -82,4 +82,5 @@ jobs:
         run: |
           unzip asciidoctor-web-pdf-win.zip -d out
           ./out/asciidoctor-web-pdf.exe ./out/examples/document/basic-example.adoc -o basic.pdf
+        shell: cmd
         working-directory: build
