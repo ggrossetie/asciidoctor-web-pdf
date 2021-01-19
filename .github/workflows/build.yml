@@ -37,3 +37,49 @@ jobs:
       run: |
         npm run lint
         npm t
+    - name: Build binary
+      run: |
+        npm run build linux
+    - name: Smoke test
+      run: |
+        unzip asciidoctor-web-pdf-linux.zip -d out
+        ./out/asciidoctor-web-pdf ./out/examples/document/basic-example.adoc -o basic.pdf
+      working-directory: build
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: |
+          npm ci
+      - name: Build binary
+        run: |
+          npm run build mac
+      - name: Smoke test
+        run: |
+          unzip asciidoctor-web-pdf-mac.zip -d out
+          ./out/asciidoctor-web-pdf ./out/examples/document/basic-example.adoc -o basic.pdf
+        working-directory: build
+  build-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: |
+          npm ci
+      - name: Build binary
+        run: |
+          npm run build win
+      - name: Smoke test
+        run: |
+          unzip asciidoctor-web-pdf-win.zip -d out
+          ./out/asciidoctor-web-pdf.exe ./out/examples/document/basic-example.adoc -o basic.pdf
+        working-directory: build
