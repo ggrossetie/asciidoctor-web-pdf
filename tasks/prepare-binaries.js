@@ -21,7 +21,7 @@ const buildDirPath = path.join(__dirname, '..', buildDir)
 const platforms = {
   linux: { target: 'node12-linux-x64' },
   mac: { target: 'node12-macos-x64' },
-  win: { target: 'node12-macos-x64', suffix: '.exe', puppeteerPlatform: 'win64' }
+  win: { target: 'node12-win-x64', suffix: '.exe', puppeteerPlatform: 'win64' }
 }
 
 async function createPackage (platforms) {
