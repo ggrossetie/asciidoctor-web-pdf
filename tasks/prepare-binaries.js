@@ -45,7 +45,7 @@ async function getBrowsers (platforms) {
         rl.write(`Downloading browser for ${name.padEnd(5)} ${percent.toString().padStart(5)}%`)
       })
   }))
-  console.log(`\nDownloads are completed`)
+  console.log('\nBrowsers are downloaded/available')
 }
 
 function copyAssets (platforms) {
@@ -72,25 +72,24 @@ function copyAssets (platforms) {
 async function archive (platforms) {
   console.log('Zipping...')
   await Promise.all(Object.keys(platforms).map(async (platform) => {
-      const archive = archiver('zip', {
-        zlib: { level: 9 } // Maximize compression
-      })
-
-      // must not be in same dir where we are zipping
-      const zipOut = fs.createWriteStream(path.join(buildDirPath, `${appName}-${platform}.zip`))
-      zipOut.on('close', function () {
-        console.log(`Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`)
-      })
-      archive.on('error', function (err) {
-        throw err
-      })
-      // pipe archive to file stream
-      archive.pipe(zipOut)
-      // recursively add directory to _root_ of zip
-      archive.directory(path.join(buildDirPath, platform), false)
-      await archive.finalize()
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Maximize compression
     })
-  )
+
+    // must not be in same dir where we are zipping
+    const zipOut = fs.createWriteStream(path.join(buildDirPath, `${appName}-${platform}.zip`))
+    zipOut.on('close', function () {
+      console.log(`Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`)
+    })
+    archive.on('error', function (err) {
+      throw err
+    })
+    // pipe archive to file stream
+    archive.pipe(zipOut)
+    // recursively add directory to _root_ of zip
+    archive.directory(path.join(buildDirPath, platform), false)
+    await archive.finalize()
+  }))
 }
 
 async function main (platforms) {
