@@ -41,7 +41,7 @@
     "@ggrossetie/pagedjs": "0.1.43-next.1603099319",
     "chokidar": "3.5.1",
     "file-url": "3.0.0",
-    "fs-extra": "9.0.1",
+    "fs-extra": "9.1.0",
     "html-entities": "^1.2.1",
     "mathjax": "3.1.2",
     "pdf-lib": "^1.2.1",
