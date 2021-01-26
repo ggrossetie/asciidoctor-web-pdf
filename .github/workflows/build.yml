@@ -39,48 +39,45 @@ jobs:
         npm t
     - name: Build binary
       run: |
-        npm run build linux
+        npm run build
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: win-binary
+        path: build/asciidoctor-web-pdf-win.zip
+    - name: Upload macOS artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: mac-binary
+        path: build/asciidoctor-web-pdf-mac.zip
     - name: Smoke test
       run: |
         unzip asciidoctor-web-pdf-linux.zip -d out
         ./out/asciidoctor-web-pdf ./out/examples/document/basic-example.adoc -o basic.pdf
+        ls basic.pdf
       working-directory: build
-  build-macos:
+  test-macos:
+    needs: build
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Node 14.x
-        uses: actions/setup-node@v1
+      - uses: actions/download-artifact@v2
         with:
-          node-version: 14.x
-      - name: Install dependencies
-        run: |
-          npm ci
-      - name: Build binary
-        run: |
-          npm run build mac
+          name: mac-binary
       - name: Smoke test
         run: |
           unzip asciidoctor-web-pdf-mac.zip -d out
           ./out/asciidoctor-web-pdf ./out/examples/document/basic-example.adoc -o basic.pdf
-        working-directory: build
-  build-win:
+          ls basic.pdf
+  test-win:
+    needs: build
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Node 14.x
-        uses: actions/setup-node@v1
+      - uses: actions/download-artifact@v2
         with:
-          node-version: 14.x
-      - name: Install dependencies
-        run: |
-          npm ci
-      - name: Build binary
-        run: |
-          npm run build win
+          name: win-binary
       - name: Smoke test
         run: |
           unzip asciidoctor-web-pdf-win.zip -d out
           out\asciidoctor-web-pdf.exe out\examples\document\basic-example.adoc -o basic.pdf
+          ls basic.pdf
         shell: cmd
-        working-directory: build
