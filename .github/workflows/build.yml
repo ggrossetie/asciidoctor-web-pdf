@@ -17,6 +17,10 @@ jobs:
         node-version:
           - 12.x
           - 14.x
+        include:
+          - os: ubuntu-latest
+            ruby: '14.x'
+            primary: true
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
@@ -40,22 +44,26 @@ jobs:
     - name: Build binary
       run: |
         npm run build
+      if: matrix.primary
     - name: Upload Windows artifact
       uses: actions/upload-artifact@v2
       with:
         name: win-binary
         path: build/asciidoctor-web-pdf-win.zip
+      if: matrix.primary
     - name: Upload macOS artifact
       uses: actions/upload-artifact@v2
       with:
         name: mac-binary
         path: build/asciidoctor-web-pdf-mac.zip
+      if: matrix.primary
     - name: Smoke test
       run: |
         unzip asciidoctor-web-pdf-linux.zip -d out
         ./out/asciidoctor-web-pdf ./out/examples/document/basic-example.adoc -o basic.pdf
         ls basic.pdf
       working-directory: build
+      if: matrix.primary
   test-macos:
     needs: build
     runs-on: macos-latest
