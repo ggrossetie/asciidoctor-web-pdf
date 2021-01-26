@@ -19,7 +19,7 @@ jobs:
           - 14.x
         include:
           - os: ubuntu-latest
-            ruby: '14.x'
+            node-version: '14.x'
             primary: true
     runs-on: ${{ matrix.os }}
     steps:
