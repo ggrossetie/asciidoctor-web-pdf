@@ -223,6 +223,13 @@ You can provide a custom stylesheet using the `stylesheet` attribute. A custom s
 
     $ asciidoctor-web-pdf document.adoc -a stylesheet="custom.css"
 
+**TIP:** You can also provide a custom stylesheet **in addition** to all the default styles using the `+` prefix:
+
+    $ asciidoctor-web-pdf document.adoc -a stylesheet="+custom.css"
+
+Notice the `+` before `custom.css`, it means that the stylesheet will be included after all the default styles.
+This is particularly useful when you want to override a few styles.
+
 The `stylesheet` attribute can accept multiple comma-delimited values (without spaces).
 This can be used to begin with a base stylesheet and then apply supplementary content.
 
