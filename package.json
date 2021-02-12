@@ -45,7 +45,7 @@
     "@asciidoctor/cli": "3.4.0",
     "@fortawesome/fontawesome-svg-core": "1.2.34",
     "@fortawesome/free-brands-svg-icons": "5.15.1",
-    "@fortawesome/free-regular-svg-icons": "5.15.1",
+    "@fortawesome/free-regular-svg-icons": "5.15.2",
     "@fortawesome/free-solid-svg-icons": "5.15.2",
     "@ggrossetie/pagedjs": "0.1.43-next.1603099319",
     "chokidar": "3.5.1",
