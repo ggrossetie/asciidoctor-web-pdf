@@ -1,0 +1,30 @@
+.contact-us {
+  width: 6cm;
+  position: running(runningContact)
+}
+
+@page {
+  margin: 1cm 2cm 4cm 2cm;
+}
+
+@page :right {
+  @bottom-left {
+    content: element(runningContact)
+  }
+
+  @bottom-right {
+    content: counter(page);
+    margin: 10pt 10pt 30pt 0;
+  }
+}
+
+@page :left {
+  @bottom-right {
+    content: element(runningContact)
+  }
+
+  @bottom-left {
+    content: counter(page);
+    margin: 10pt 0 30pt 10pt;
+  }
+}
