@@ -2,5 +2,6 @@ node_modules/
 *_temp.html
 /test/output/*.pdf
 /test/fixtures/*.html
+!/test/fixtures/*docinfo*-pdf.html
 /test/output/visual-comparison-workdir/
 build

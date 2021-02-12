@@ -223,18 +223,105 @@ You can provide a custom stylesheet using the `stylesheet` attribute. A custom s
 
     $ asciidoctor-web-pdf document.adoc -a stylesheet="custom.css"
 
-The `stylesheet` attribute can accept multiple comma delimited values (without spaces).
+The `stylesheet` attribute can accept multiple comma-delimited values (without spaces).
 This can be used to begin with a base stylesheet and then apply supplementary content.
 
     $ asciidoctor-web-pdf document.adoc -a stylesheet="custom.css,override.css"
 
-It's also possible to use the default stylesheet and add custom styles with a custom stylesheet. All default stylesheets are available under the prefix `asciidoctor-pdf/css/`:
+It's also possible to use the default stylesheet and add custom styles with a custom stylesheet.
+All default stylesheets are available under the prefix `asciidoctor-pdf/css/`:
 
     $ asciidoctor-web-pdf document.adoc -a stylesheet="asciidoctor-pdf/css/asciidoctor.css,asciidoctor-pdf/css/document.css,custom.css"
 
 You can also specify where the stylesheets are located with the `stylesdir` attribute.
 
     $ asciidoctor-web-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
+
+**Docinfo**
+
+You can add custom content to the head, header or footer of the output document using docinfo files.
+Docinfo files are useful for injecting auxiliary metadata, stylesheet, and script information into the output not added by the converter.
+
+In addition, you can add running content to the output document.
+Running content can then be positioned via CSS on the [top, bottom, left or right margins of pages](https://www.w3.org/TR/css-page-3/#margin-boxes).
+This can come in handy when you want to repeat complex elements (address, contact...) on all pages for documents like invoices or reports.
+If you want to learn more about running elements, please read the following section **Running elements**.
+
+**IMPORTANT**: You will need to declare running elements as running content via CSS.
+Otherwise, running elements will be visible on the page. 
+
+To enable docinfo files, you need to configure the scope using the `docinfo` attribute.
+The scope defines if the docinfo files apply for a specific document ("private") or for all documents in the same directory ("shared").
+
+| Mode	| Location | Behavior | Docinfo file name |
+| ----- | -------- | -------- | ----------------- |
+| Private | Head   | Adds content to `<head>` for `<docname>.adoc` files. | `<docname>-docinfo-pdf.html` |
+| Private | Header | Adds content to start of document for `<docname>.adoc` files. | `<docname>-docinfo-header-pdf.html` |
+| Private | Footer | Adds content to end of document for `<docname>.adoc` files. | `<docname>-docinfo-footer-pdf.html` |
+| Private | Running | Adds running content to start of document for `<docname>.adoc` files. | `<docname>-docinfo-running-pdf.html` |
+| Shared | Head | Adds content to `<head>` for any document in same directory. | `docinfo-pdf.html` |
+| Shared | Header | Adds content to start of document for any document in same directory. | `docinfo-header-pdf.html` |
+| Shared | Footer | Adds content to end of document for any document in same directory. | `docinfo-footer-pdf.html` |
+| Shared | Running | Adds running content to start for any document in same directory. | `docinfo-running-pdf.html` |
+
+To specify which file(s) you want to apply, set the docinfo attribute to any combination of these values:
+
+- `private-head`
+- `private-header`
+- `private-footer`
+- `private-running`
+- `private` (alias for `private-head,private-header,private-footer,private-running`)
+- `shared-head`
+- `shared-header`
+- `shared-footer`
+- `shared-running`
+- `shared` (alias for `shared-head,shared-header,shared-footer,shared-running`)
+
+Setting `docinfo` with no value is equivalent to setting the value to `private`.
+
+For example:
+
+```
+:docinfo: shared,private-footer
+```
+
+This docinfo configuration will apply the shared docinfo head, header, running and footer files, if they exist, as well as the private footer file, if it exists.
+
+**Running elements**
+
+Running elements can be positioned on the [top, bottom, left or right margins of pages](https://www.w3.org/TR/css-page-3/#margin-boxes).
+Let's take a concrete example where we want to display an address block in the bottom left box of every page.
+
+```html
+<address class="contact-us">
+  <strong>Example Inc.</strong><br>
+  1234 Example Street<br>
+  Antartica, Example 0987<br>
+  <abbr title="Phone">P:</abbr> (123) 456-7890
+</address>
+```
+
+First, you will to define your element as running using the `position` property.
+Here, we are using `runningContact` as an identifier, but you can use any name that makes sense to you:
+
+```css
+.contact-us {
+  position: running(runningContact)
+}
+```
+
+Then, place the element into a margin box with the `element()` function via the `content` property:
+
+```css
+@page {
+  @bottom-left {
+    content: element(runningContact)
+  }
+}
+```
+
+As you can see, we are using the identifier `runningContact` defined earlier.
+The above definition will effectively remove the `.contact-us` element from the page and repeat it on every page in the bottom left box.
 
 **Asciidoctor extensions**
 
