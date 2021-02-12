@@ -101,9 +101,18 @@ Many more features can be added by importing an existing JavaScript or CSS frame
 
 ## Installation
 
-### Requirements
+### Running from pre-compiled binaries
 
-You need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor Web PDF.
+Asciidoctor Web PDF is available for each release as a zip file for Windows 64-bit, Linux 64-bit and macOS 64-bit (x86-64).
+
+Go to the [releases](https://github.com/Mogztter/asciidoctor-web-pdf/releases) page and download the appropriate binary for your platform.
+Extract this to a folder of your choosing.
+
+From a command line in this folder you can then run the `asciidoctor-web-pdf` command.
+
+### Running from Source
+
+To run from source, you need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor Web PDF.
 The best way to install Node is to use _nvm_ (Node Version Manager).
 
 <details>
@@ -133,7 +142,7 @@ The above commands will install Node v12.13.0 and enable it.
 We recommend using the latest long term support (LTS) release of Node.
 While you can use other versions of Node, Asciidoctor Web PDF is only tested against active LTS releases.
 
-### Install globally using npm
+#### Install globally using npm
 
 To install Asciidoctor Web PDF package globally, open a terminal and type:
 
@@ -162,7 +171,7 @@ CLI version 3.4.0
 $ yarn global add @asciidoctor/core asciidoctor-pdf
 ```
 
-### Install in a project directory (alternative install)
+#### Install in a project directory (alternative install)
 
 You can opt to install Asciidoctor Web PDF in a project directory, such as the directory where your AsciiDoc files are stored.
 To install Asciidoctor Web PDF in a project directory, move into your project directory and type:

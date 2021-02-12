@@ -10,12 +10,21 @@
     "asciidoctor-pdf": "bin/asciidoctor-pdf",
     "asciidoctor-web-pdf": "bin/asciidoctor-web-pdf"
   },
+  "pkg": {
+    "assets": [
+      "css/**/*.css"
+    ],
+    "scripts": [
+      "lib/document/**/*.js"
+    ]
+  },
   "files": [
     "bin",
     "lib",
     "css"
   ],
   "scripts": {
+    "build": "node tasks/prepare-binaries.js",
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
@@ -50,12 +59,14 @@
   },
   "devDependencies": {
     "@asciidoctor/core": "^2.2.0",
+    "archiver": "^5.2.0",
     "chai": "4.3.0",
     "cheerio": "^1.0.0-rc.3",
     "dirty-chai": "2.0.1",
     "mocha": "8.3.0",
     "nunjucks": "^3.2.1",
     "pixelmatch": "^5.1.0",
+    "pkg": "^4.4.9",
     "rimraf": "^3.0.0",
     "sinon": "^9.0.2",
     "standard": "16.0.3"
