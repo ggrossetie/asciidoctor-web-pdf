@@ -349,7 +349,7 @@ Here's a complete example:
 </address>
 ```
 
-3. Create a file named _style.css_ with the following content:
+3. Create a file named _report.css_ with the following content:
 
 ```css
 .contact-us {
@@ -386,11 +386,25 @@ Here's a complete example:
 
 4. Open a terminal and type:
 
-    $ asciidoctor-web-pdf report.adoc -a stylesheet="+style.css"
+    $ asciidoctor-web-pdf report.adoc -a stylesheet="+report.css"
 
 The above command will create a file named _report.pdf_ which should look like:
 
 <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/images/complex-footer.png" alt="complex-footer" height="300px" />
+
+**TIP**: Please note that, in this case, you don't need to use a docinfo file, you can declare the "contact us" block directly in the AsciiDoc file.
+In other words, you should get the same result if you are using the following content:
+
+```
+= 2021 Annual Report
+
+[.contact-us]
+--
+*Handicap International* +
+138, avenue des Frères Lumière +
+69008 Lyon - France
+--
+```
 
 **Asciidoctor extensions**
 
