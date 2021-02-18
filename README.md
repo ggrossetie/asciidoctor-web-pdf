@@ -330,6 +330,82 @@ Then, place the element into a margin box with the `element()` function via the 
 As you can see, we are using the identifier `runningContact` defined earlier.
 The above definition will effectively remove the `.contact-us` element from the page and repeat it on every page in the bottom left box.
 
+Here's a complete example:
+
+1. Create a file named _report.adoc_ with the following content:
+
+```
+= 2021 Annual Report
+:docinfo: private
+```
+
+2. Create a file named _report-docinfo-running-pdf.html_ with the following content:
+
+```html
+<address class="contact-us">
+  <strong>Handicap International</strong><br>
+  138, avenue des Frères Lumière<br>
+  69008 Lyon - France
+</address>
+```
+
+3. Create a file named _report.css_ with the following content:
+
+```css
+.contact-us {
+  width: 6cm;
+  position: running(runningContact)
+}
+
+@page {
+  margin: 1cm 2cm 4cm 2cm;
+}
+
+@page :right {
+  @bottom-left {
+    content: element(runningContact)
+  }
+
+  @bottom-right {
+    content: counter(page);
+    margin: 10pt 10pt 30pt 0;
+  }
+}
+
+@page :left {
+  @bottom-right {
+    content: element(runningContact)
+  }
+
+  @bottom-left {
+    content: counter(page);
+    margin: 10pt 0 30pt 10pt;
+  }
+}
+```
+
+4. Open a terminal and type:
+
+    $ asciidoctor-web-pdf report.adoc -a stylesheet="+report.css"
+
+The above command will create a file named _report.pdf_ which should look like:
+
+<img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/images/complex-footer.png" alt="complex-footer" height="300px" />
+
+**TIP**: Please note that, in this case, you don't need to use a docinfo file, you can declare the "contact us" block directly in the AsciiDoc file.
+In other words, you should get the same result if you are using the following content:
+
+```
+= 2021 Annual Report
+
+[.contact-us]
+--
+*Handicap International* +
+138, avenue des Frères Lumière +
+69008 Lyon - France
+--
+```
+
 **Asciidoctor extensions**
 
 Asciidoctor Web PDF can use Asciidoctor extensions written in JavaScript from the CLI.
