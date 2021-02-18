@@ -28,7 +28,8 @@
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
-    "lint": "standard lib/**.js test/**.js tasks/**js"
+    "lint": "standard lib/**.js test/**.js tasks/**js",
+    "publish": "node tasks/publish.js"
   },
   "repository": {
     "type": "git",
@@ -63,8 +64,10 @@
     "chai": "4.3.0",
     "cheerio": "^1.0.0-rc.3",
     "dirty-chai": "2.0.1",
+    "libnpmpublish": "^4.0.0",
     "mocha": "8.3.0",
     "nunjucks": "^3.2.1",
+    "pacote": "^11.2.6",
     "pixelmatch": "^5.1.0",
     "pkg": "^4.4.9",
     "rimraf": "^3.0.0",
