@@ -244,6 +244,51 @@ You can also specify where the stylesheets are located with the `stylesdir` attr
 
     $ asciidoctor-web-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
 
+**Front cover image**
+
+When using a title page (see above), you might want to set a front cover image.
+To do that, you will need to add a few lines of CSS.
+
+Here's a complete example:
+
+1. Create a file named _orly.adoc_ with the following content:
+
+```
+= Hoping This Works
+:doctype: book
+
+== Guessing
+
+The first step is guessing.
+```
+
+We are using `:doctype: book` to get a title page. 
+
+2. Create a file named _orly.css_ with the following content:
+
+```css
+@page :first {
+  background-size: contain;
+  background-image: url("./orly.jpg");
+}
+
+/* move the book title to the correct location */
+#cover > h1 {
+  color: white;
+  margin-top: 8cm;
+  font-size: 7rem;
+}
+```
+
+3. Download the image [_orly.jpg_](https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/document/orly.jpg) and put it next to the _orly.adoc_ file.
+4. Open a terminal and type:
+
+    $ asciidoctor-web-pdf orly.adoc -a stylesheet="+orly.css"
+
+The above command will create a file named _orly.pdf_ which should look like:
+
+<img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/images/front-cover-image.png" alt="front-cover-image" height="300px" />
+
 **Docinfo**
 
 You can add custom content to the head, header or footer of the output document using docinfo files.

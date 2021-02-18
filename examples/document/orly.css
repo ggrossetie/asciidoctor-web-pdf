@@ -1,0 +1,11 @@
+@page :first {
+  background-size: contain;
+  background-image: url("./orly.jpg");
+}
+
+/* move the book title to the correct location */
+#cover > h1 {
+  color: white;
+  margin-top: 8cm;
+  font-size: 7rem;
+}
