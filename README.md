@@ -280,7 +280,7 @@ We are using `:doctype: book` to get a title page.
 }
 ```
 
-3. Download the image [_orly.jpg_](https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/document/orly.jpg) and put it next to the _orly.adoc_ file.
+3. Download the image [_orly.jpg_](https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/document/orly.jpg) and put it next to the _orly.adoc_ file.
 4. Open a terminal and type:
 
     $ asciidoctor-web-pdf orly.adoc -a stylesheet="+orly.css"
