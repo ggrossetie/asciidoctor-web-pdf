@@ -1,0 +1,20 @@
+## Summary
+
+{{ summary }}
+
+##  Release meta
+
+Released on: {{ releaseDate }}
+Released by: {{ releasedBy }}GitHub Actions
+Published by: {{ publishedBy }}GitHub Actions
+
+Logs: [full diff](https://github.com/mogztter/asciidoctor-pdf.js/compare/{{ previousVersion }}...{{ releaseVersion }})
+
+## Changelog
+
+{% for title, description in changelog %}
+### {{ title }}
+
+{{ description }}
+
+{% endfor %}
