@@ -50,6 +50,7 @@ jobs:
         run: |
           npm run build
           npm run publish
+      - run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # create the GitHub release
       - name: Create release
         id: create_release
@@ -69,7 +70,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/asciidoctor-web-pdf-mac.zip
-          asset_name: asciidoctor-web-pdf-mac-${{ github.ref }}.zip
+          asset_name: asciidoctor-web-pdf-mac-${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
       - name: Upload Windows binary (zip)
         uses: actions/upload-release-asset@v1.0.1
@@ -78,7 +79,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/asciidoctor-web-pdf-win.zip
-          asset_name: asciidoctor-web-pdf-win-${{ github.ref }}.zip
+          asset_name: asciidoctor-web-pdf-win-${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
       - name: Upload Linux binary (zip)
         uses: actions/upload-release-asset@v1.0.1
@@ -87,5 +88,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/asciidoctor-web-pdf-linux.zip
-          asset_name: asciidoctor-web-pdf-linux-${{ github.ref }}.zip
+          asset_name: asciidoctor-web-pdf-linux-${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
