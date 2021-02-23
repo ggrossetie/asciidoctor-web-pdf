@@ -145,13 +145,15 @@ While you can use other versions of Node, Asciidoctor Web PDF is only tested aga
 #### Install in a project director
 
 You can opt to install Asciidoctor Web PDF in a project directory, such as the directory where your AsciiDoc files are stored.
+If you don't have a _package.json_ file in your project directory, you can create one using:
+
+    $ npm init -y
+
 To install Asciidoctor Web PDF in a project directory, move into your project directory and type:
 
     $ npm i @asciidoctor/core asciidoctor-pdf --save-dev
 
-The dependencies will be in installed under the `node_modules` folder in the current directory.
-
-**NOTE:** If you are using a recent version of npm the above command will automatically create a _package.json_ (if it didn't exist) and save all modules listed as `devDependencies` in it.
+The dependencies will be in installed under the `node_modules` folder in the current directory and npm will save all modules listed as `devDependencies` in the _package.json_ file.
 
 Verify that the `asciidoctor-web-pdf` command is available.
 If you are running a recent version of npm, you can use either: `npm x asciidoctor-web-pdf --version` (or `npx asciidoctor-web-pdf --version`)
