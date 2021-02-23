@@ -200,13 +200,13 @@ If you get the following error, make sure that [all the necessary dependencies a
 
 The standard document layout can be configured depending on your needs.
 
-**STEM support**
+#### STEM support
 
 To activate equation and formula support, set the `stem` attribute in the document's header (or by passing the attribute to the command line):
 
     $ asciidoctor-web-pdf document.adoc -a stem
 
-**Title page**
+#### Title page
 
 The title page is enabled if either of these conditions are met:
 
@@ -217,7 +217,7 @@ The title page is enabled if either of these conditions are met:
 $ asciidoctor-web-pdf document.adoc -a title-page
 ```
 
-**Custom styles**
+#### Custom styles
 
 You can provide a custom stylesheet using the `stylesheet` attribute. A custom stylesheet does completely replace the default stylesheet.
 
@@ -244,7 +244,7 @@ You can also specify where the stylesheets are located with the `stylesdir` attr
 
     $ asciidoctor-web-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
 
-**Front cover image**
+#### Front cover image
 
 When using a title page (see above), you might want to set a front cover image.
 To do that, you will need to add a few lines of CSS.
@@ -289,7 +289,7 @@ The above command will create a file named _orly.pdf_ which should look like:
 
 <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/images/front-cover-image.png" alt="front-cover-image" height="300px" />
 
-**Docinfo**
+#### Docinfo
 
 You can add custom content to the head, header or footer of the output document using docinfo files.
 Docinfo files are useful for injecting auxiliary metadata, stylesheet, and script information into the output not added by the converter.
@@ -339,7 +339,7 @@ For example:
 
 This docinfo configuration will apply the shared docinfo head, header, running and footer files, if they exist, as well as the private footer file, if it exists.
 
-**Running elements**
+#### Running elements
 
 Running elements can be positioned on the [top, bottom, left or right margins of pages](https://www.w3.org/TR/css-page-3/#margin-boxes).
 Let's take a concrete example where we want to display an address block in the bottom left box of every page.
@@ -451,7 +451,7 @@ In other words, you should get the same result if you are using the following co
 --
 ```
 
-**Asciidoctor extensions**
+#### Asciidoctor extensions
 
 Asciidoctor Web PDF can use Asciidoctor extensions written in JavaScript from the CLI.
 For instance, if you want to use the [Asciidoctor Kroki](https://github.com/mogztter/asciidoctor-kroki) extension, you first need to install it:
@@ -486,7 +486,7 @@ module.exports.register = function (registry) {
 }
 ```
 
-**Diagrams**
+#### Diagrams
 
 You can use the [Asciidoctor Kroki extension](https://github.com/Mogztter/asciidoctor-kroki) to render diagrams in your PDF.
 In this example, we create a file named `piracy.adoc` with the following content:
