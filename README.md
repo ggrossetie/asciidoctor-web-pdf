@@ -133,10 +133,10 @@ The above command will install the latest LTS release of Node and automatically 
 Follow these [installation instructions](https://github.com/coreybutler/nvm-windows#installation--upgrades) to set up nvm on your machine. <br/>
 Once you've installed nvm, open a new, regular PowerShell terminal, and install Node using nvm.
 
-    $ nvm install 12.13.0
-    $ nvm use 12.13.0
+    $ nvm install 14.15.5
+    $ nvm use 14.15.5
 
-The above commands will install Node v12.13.0 and enable it.
+The above commands will install Node v14.15.5 and enable it.
 </details>
 
 We recommend using the latest long term support (LTS) release of Node.
@@ -163,7 +163,7 @@ If installation was successful, the command should report the version of Asciido
 ```console
 $ npx asciidoctor-web-pdf --version
 Asciidoctor Web PDF 1.0.0-alpha.12 using Asciidoctor.js 2.2.1 (Asciidoctor 2.0.12) [https://asciidoctor.org]
-Runtime Environment (node v12.18.4 on linux)
+Runtime Environment (node v14.15.5 on linux)
 CLI version 3.4.0
 ```
 
