@@ -101,16 +101,16 @@ Many more features can be added by importing an existing JavaScript or CSS frame
 
 ## Installation
 
-### Running from pre-compiled binaries
+### Run from pre-compiled binaries
 
 Asciidoctor Web PDF is available for each release as a zip file for Windows 64-bit, Linux 64-bit and macOS 64-bit (x86-64).
 
-Go to the [releases](https://github.com/Mogztter/asciidoctor-web-pdf/releases) page and download the appropriate binary for your platform.
+Go to the [releases](https://github.com/Mogztter/asciidoctor-web-pdf/releases) page and download the appropriate binary for your platform (under "Assets").
 Extract this to a folder of your choosing.
 
 From a command line in this folder you can then run the `asciidoctor-web-pdf` command.
 
-### Running from Source
+### Install using npm
 
 To run from source, you need [Node](https://nodejs.org) installed on your machine to install and run Asciidoctor Web PDF.
 The best way to install Node is to use _nvm_ (Node Version Manager).
@@ -131,25 +131,55 @@ The above command will install the latest LTS release of Node and automatically 
 **Install nvm and Node on Windows**
 
 Follow these [installation instructions](https://github.com/coreybutler/nvm-windows#installation--upgrades) to set up nvm on your machine. <br/>
-Once you've installed nvm, open an new, regular PowerShell terminal, and install Node using nvm.
+Once you've installed nvm, open a new, regular PowerShell terminal, and install Node using nvm.
 
-    $ nvm install 12.13.0
-    $ nvm use 12.13.0
+    $ nvm install 14.15.5
+    $ nvm use 14.15.5
 
-The above commands will install Node v12.13.0 and enable it.
+The above commands will install Node v14.15.5 and enable it.
 </details>
 
 We recommend using the latest long term support (LTS) release of Node.
 While you can use other versions of Node, Asciidoctor Web PDF is only tested against active LTS releases.
 
+#### Install in a project director
+
+You can opt to install Asciidoctor Web PDF in a project directory, such as the directory where your AsciiDoc files are stored.
+If you don't have a _package.json_ file in your project directory, you can create one using:
+
+    $ npm init -y
+
+To install Asciidoctor Web PDF in a project directory, move into your project directory and type:
+
+    $ npm i @asciidoctor/core asciidoctor-pdf --save-dev
+
+The dependencies will be in installed under the `node_modules` folder in the current directory and npm will save all modules listed as `devDependencies` in the _package.json_ file.
+
+Verify that the `asciidoctor-web-pdf` command is available.
+If you are running a recent version of npm, you can use either: `npm x asciidoctor-web-pdf --version` (or `npx asciidoctor-web-pdf --version`)
+
+**TIP:** If you are running an older version, you might need to use the longer format: `$(npm bin)/asciidoctor-web-pdf --version`.
+
+If installation was successful, the command should report the version of Asciidoctor Web PDF.
+
+```console
+$ npx asciidoctor-web-pdf --version
+Asciidoctor Web PDF 1.0.0-alpha.12 using Asciidoctor.js 2.2.1 (Asciidoctor 2.0.12) [https://asciidoctor.org]
+Runtime Environment (node v14.15.5 on linux)
+CLI version 3.4.0
+```
+
 #### Install globally using npm
+
+**IMPORTANT:** This installation procedure is only applicable if you are not using a Node.js version manager like _nvm_ (Node Version Manager).
+Otherwise, _npm_ will try to install Asciidoctor Web PDF in the system space which has proven to be unreliable!
 
 To install Asciidoctor Web PDF package globally, open a terminal and type:
 
     $ npm i -g @asciidoctor/core asciidoctor-pdf
 
-**NOTE:** We recommend installing Asciidoctor Web PDF globally to make the `asciidoctor-web-pdf` command available on your `PATH`.
-However, you can also install Asciidoctor Web PDF in a project directory if you prefer.
+**NOTE:** Installing Asciidoctor Web PDF globally makes `asciidoctor-web-pdf` command available on your `PATH`.
+In other words, the command `asciidoctor-web-pdf` will be available globally, so you can run it from any directory.
 
 Verify that the `asciidoctor-web-pdf` command is available on your `PATH` by running:
 
@@ -157,32 +187,12 @@ Verify that the `asciidoctor-web-pdf` command is available on your `PATH` by run
 
 **NOTE:** If you get an error about [Executions Policies](https://go.microsoft.com/fwlink/?LinkID=135170) when running this command on PowerShell, try to use the following command instead: `$ asciidoctor-web-pdf.cmd --version`.
 
-If installation was successful, the command should report the version of Asciidoctor Web PDF.
-
-```console
-$ asciidoctor-web-pdf --version
-Asciidoctor Web PDF 1.0.0-alpha.10 using Asciidoctor.js 2.2.0 (Asciidoctor 2.0.10) [https://asciidoctor.org]
-Runtime Environment (node v12.18.4 on linux)
-CLI version 3.4.0
-```
-
-**NOTE:** If you prefer Yarn over npm, use this command to install the Asciidoctor Web PDF package:
+**TIP:** If you prefer Yarn over npm, use this command to install the Asciidoctor Web PDF package:
 ```
 $ yarn global add @asciidoctor/core asciidoctor-pdf
 ```
 
-#### Install in a project directory (alternative install)
-
-You can opt to install Asciidoctor Web PDF in a project directory, such as the directory where your AsciiDoc files are stored.
-To install Asciidoctor Web PDF in a project directory, move into your project directory and type:
-
-    $ npm i @asciidoctor/core asciidoctor-pdf
-
-Dropping the `-g` flag installs the package under the `node_modules` folder in the current directory.
-
-Verify that the `asciidoctor-web-pdf` command is available by running `$(npm bin)/asciidoctor-web-pdf --version`.
-
-## Getting started
+## Get started
 
 Asciidoctor Web PDF provides a standard document layout.
 To convert an AsciiDoc document using this layout, open a terminal and type:  
@@ -624,7 +634,7 @@ It will produce a file named `examples/cheat-sheet/maven-security-cheat-sheet.pd
 ## How does it work?
 
 Asciidoctor Web PDF is using an HTML 5 converter to convert an AsciiDoc document to an HTML 5 page.
-[Puppeteer](https://github.com/GoogleChrome/puppeteer) will then run an headless Chrome to generate a PDF from the HTML 5 page.
+[Puppeteer](https://github.com/GoogleChrome/puppeteer) will then run a headless Chrome to generate a PDF from the HTML 5 page.
 
 To paginate content in the browser, we are using [Paged.js](https://www.pagedmedia.org/paged-js/),
 an open-source library, that acts as a _polyfill_ for [Paged Media](https://www.w3.org/TR/css-page-3/) and [Generated Content for Paged Media](https://www.w3.org/TR/css-gcpm-3/) W3C specifications.
