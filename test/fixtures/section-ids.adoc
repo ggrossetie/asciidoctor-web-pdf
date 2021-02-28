@@ -1,0 +1,20 @@
+= Title
+:doctype: book
+:toc:
+
+== Un peu de Français
+
+French is too difficult? you want to learn xref:_hola_qué_tal[Spanish]?
+
+== 100% AsciiDoc
+
+Bla bla bla.
+
+== ¡Hola, qué tal!
+
+Bla bla bla.
+Let's go back to xref:_un_peu_de_français[French].
+
+== Choking 😲
+
+Bla bla bla.
