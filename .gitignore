@@ -5,3 +5,4 @@ node_modules/
 !/test/fixtures/*docinfo*-pdf.html
 /test/output/visual-comparison-workdir/
 build
+.idea/
