@@ -61,7 +61,7 @@
   "devDependencies": {
     "@asciidoctor/core": "^2.2.0",
     "archiver": "^5.2.0",
-    "chai": "4.3.3",
+    "chai": "4.3.4",
     "cheerio": "^1.0.0-rc.3",
     "dirty-chai": "2.0.1",
     "libnpmpublish": "^4.0.0",
