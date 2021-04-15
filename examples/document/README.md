@@ -19,5 +19,3 @@ $ asciidoctor-web-pdf report.adoc -a stylesheet="+./report.css"
 $ npm i asciidoctor-kroki
 $ asciidoctor-web-pdf --require asciidoctor-kroki piracy.adoc 
 ```
-
-
