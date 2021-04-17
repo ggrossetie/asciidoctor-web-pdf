@@ -64,13 +64,29 @@ jobs:
         name: mac-binary
         path: build/asciidoctor-web-pdf-mac.zip
       if: matrix.primary
-    - name: Smoke test
-      run: |
-        unzip asciidoctor-web-pdf-linux.zip -d out
-        ./out/asciidoctor-web-pdf-linux-${{ steps.package_info.outputs.version }}/asciidoctor-web-pdf ./out/asciidoctor-web-pdf-linux-${{ steps.package_info.outputs.version }}/examples/document/basic-example.adoc -o basic.pdf
-        ls basic.pdf
-      working-directory: build
+    - name: Upload Linux artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux-binary
+        path: build/asciidoctor-web-pdf-linux.zip
       if: matrix.primary
+  test-linux:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: linux-binary
+      - name: Unzip
+        run: |
+          unzip asciidoctor-web-pdf-linux.zip -d out
+      - name: Smoke test
+        run: |
+          cd out/asciidoctor-web-pdf-linux-${{ needs.build.outputs.version }}
+          rm -rf basic.pdf
+          ./asciidoctor-web-pdf ./examples/document/basic-example.adoc -o basic.pdf
+          ls basic.pdf
+          test -f basic.pdf -a -s basic.pdf
   test-macos:
     needs: build
     runs-on: macos-latest
@@ -78,11 +94,16 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: mac-binary
-      - name: Smoke test
+      - name: Unzip
         run: |
           unzip asciidoctor-web-pdf-mac.zip -d out
-          ./out/asciidoctor-web-pdf-mac-${{ needs.build.outputs.version }}/asciidoctor-web-pdf ./out/asciidoctor-web-pdf-mac-${{ needs.build.outputs.version }}/examples/document/basic-example.adoc -o basic.pdf
+      - name: Smoke test
+        run: |
+          cd out/asciidoctor-web-pdf-mac-${{ needs.build.outputs.version }}
+          rm -rf basic.pdf
+          ./asciidoctor-web-pdf ./examples/document/basic-example.adoc -o basic.pdf
           ls basic.pdf
+          test -f basic.pdf -a -s basic.pdf
   test-win:
     needs: build
     runs-on: windows-latest
@@ -90,9 +111,12 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: win-binary
-      - name: Smoke test
+      - name: Unzip
         run: |
           unzip asciidoctor-web-pdf-win.zip -d out
-          out\asciidoctor-web-pdf-win-${{ needs.build.outputs.version }}\asciidoctor-web-pdf.exe out\asciidoctor-web-pdf-win-${{ needs.build.outputs.version }}\examples\document\basic-example.adoc -o basic.pdf
+      - name: Smoke test
+        run: |
+          cd out\asciidoctor-web-pdf-win-${{ needs.build.outputs.version }}
+          asciidoctor-web-pdf.exe examples\document\basic-example.adoc -o basic.pdf
           ls basic.pdf
         shell: cmd
