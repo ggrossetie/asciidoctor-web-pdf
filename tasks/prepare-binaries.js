@@ -114,13 +114,13 @@ async function asyncMain (platforms) {
     fsExtra.ensureDirSync(chromiumDir)
   }
 
-  if (isDryrun() && true) {
+  if (isDryrun()) {
     console.log('skipping browser download ..')
   } else {
     // get browser
     await getBrowsers(platforms)
   }
-  if (isDryrun() && false) {
+  if (isDryrun()) {
     console.log('skipping package creation ..')
   } else {
     // using pkg create the binary for asciidoctor-web-pdf
@@ -134,10 +134,6 @@ async function asyncMain (platforms) {
 
 function isDryrun () {
   return process.env.DRY_RUN !== undefined
-}
-
-function sleep (milliseconds) {
-  return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
 function exit (exitcode) {
