@@ -34,7 +34,7 @@ async function createPackage (platforms) {
 async function getBrowsers (platforms) {
   await Promise.all(Object.entries(platforms).map(async ([name, platform], index) => {
     const puppeteerPlatform = platform.puppeteerPlatform || name
-    await puppeteer
+    return puppeteer
       .createBrowserFetcher({
         platform: puppeteerPlatform, // one of: linux, mac, win32 or win64
         path: path.resolve(path.join(buildDirPath, name, 'chromium'))
@@ -71,28 +71,38 @@ function copyAssets (platforms) {
 
 async function archive (platforms) {
   console.log('Zipping...')
-  await Promise.all(Object.keys(platforms).map(async (platform) => {
+
+  const promises = Object.keys(platforms).map(async (platform) => {
+    const rootname = `${appName}-${platform}`
     const archive = archiver('zip', {
       zlib: { level: 9 } // Maximize compression
     })
 
-    // must not be in same dir where we are zipping
-    const zipOut = fs.createWriteStream(path.join(buildDirPath, `${appName}-${platform}.zip`))
-    zipOut.on('close', function () {
-      console.log(`Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`)
-    })
-    archive.on('error', function (err) {
-      throw err
-    })
+    const zipOut = fs.createWriteStream(path.join(buildDirPath, `${rootname}.zip`))
+
     // pipe archive to file stream
     archive.pipe(zipOut)
+
+    // must not be in same dir where we are zipping
+    const p0 = new Promise((resolve, reject) => {
+      zipOut.on('close', function () {
+        console.log(`Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`)
+        resolve()
+      })
+      zipOut.on('error', reject)
+      archive.on('error', reject)
+    })
+
     // recursively add directory to _root_ of zip
-    archive.directory(path.join(buildDirPath, platform), false)
-    await archive.finalize()
-  }))
+    archive.directory(path.join(buildDirPath, platform), rootname, {})
+
+    const p1 = archive.finalize()
+    return Promise.all([p0, p1])
+  })
+  return Promise.all(promises)
 }
 
-async function main (platforms) {
+async function asyncMain (platforms) {
   // remove existing build dir
   console.log(`Remove ${buildDir} directory`)
   fsExtra.removeSync(buildDirPath)
@@ -104,36 +114,64 @@ async function main (platforms) {
     fsExtra.ensureDirSync(chromiumDir)
   }
 
-  // get browser
-  await getBrowsers(platforms)
-
-  // using pkg create the binary for asciidoctor-web-pdf
-  await createPackage(platforms)
-
+  if (isDryrun() && true) {
+    console.log('skipping browser download ..')
+  } else {
+    // get browser
+    await getBrowsers(platforms)
+  }
+  if (isDryrun() && false) {
+    console.log('skipping package creation ..')
+  } else {
+    // using pkg create the binary for asciidoctor-web-pdf
+    await createPackage(platforms)
+  }
   // copy MathJax and the css/examples/fonts folders
   copyAssets(platforms)
 
-  await archive(platforms)
+  return archive(platforms)
 }
 
-// allow invoking `node tasks/prepare-binaries.js` with linux/mac/win as the argument
-// e.g. `npm run build linux`
-;(async () => {
-  try {
-    if (process.argv.length > 2) {
-      const platform = process.argv[2]
-      if (platform in platforms) {
-        const singleBuild = {}
-        singleBuild[platform] = platforms[platform]
-        await main(singleBuild)
-      } else {
-        console.error(`${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`)
-      }
-    } else {
-      await main(platforms)
-    }
-  } catch (err) {
-    console.error(err)
-    process.exit(1)
+function isDryrun () {
+  return process.env.DRY_RUN !== undefined
+}
+
+function sleep (milliseconds) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+function exit (exitcode) {
+  if (isDryrun() && exitcode === 0) {
+    console.warn('dry run: generated output *not* useful for production.')
   }
-})()
+  process.exit(exitcode)
+}
+
+function main () {
+  // allow invoking `node tasks/prepare-binaries.js` with linux/mac/win as the argument
+  // e.g. `npm run build linux`
+  (async () => {
+    try {
+      if (process.argv.length > 2) {
+        const platform = process.argv[2]
+        if (platform in platforms) {
+          const singleBuild = {}
+          singleBuild[platform] = platforms[platform]
+          await asyncMain(singleBuild)
+          exit(0)
+        } else {
+          console.error(`${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`)
+        }
+      } else {
+        await asyncMain(platforms)
+        exit(0)
+      }
+    } catch (err) {
+      console.error(err)
+      exit(1)
+    }
+  })()
+}
+
+// run main function
+main()
