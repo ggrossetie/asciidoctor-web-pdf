@@ -32,7 +32,7 @@ async function createPackage (platforms) {
 }
 
 async function getBrowsers (platforms) {
-  await Promise.all(Object.entries(platforms).map(async ([name, platform], index) => {
+  return Promise.all(Object.entries(platforms).map(async ([name, platform], index) => {
     const puppeteerPlatform = platform.puppeteerPlatform || name
     return puppeteer
       .createBrowserFetcher({
@@ -45,7 +45,6 @@ async function getBrowsers (platforms) {
         rl.write(`Downloading browser for ${name.padEnd(5)} ${percent.toString().padStart(5)}%`)
       })
   }))
-  console.log('\nBrowsers are downloaded/available')
 }
 
 function copyAssets (platforms) {
@@ -71,8 +70,7 @@ function copyAssets (platforms) {
 
 async function archive (platforms) {
   console.log('Zipping...')
-
-  const promises = Object.keys(platforms).map(async (platform) => {
+  return Object.keys(platforms).map(async (platform) => {
     const rootname = `${appName}-${platform}`
     const archive = archiver('zip', {
       zlib: { level: 9 } // Maximize compression
@@ -84,7 +82,7 @@ async function archive (platforms) {
     archive.pipe(zipOut)
 
     // must not be in same dir where we are zipping
-    const p0 = new Promise((resolve, reject) => {
+    const zipClose = new Promise((resolve, reject) => {
       zipOut.on('close', function () {
         console.log(`Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`)
         resolve()
@@ -94,15 +92,14 @@ async function archive (platforms) {
     })
 
     // recursively add directory to _root_ of zip
-    archive.directory(path.join(buildDirPath, platform), rootname, {})
+    archive.directory(path.join(buildDirPath, platform), '', {})
 
-    const p1 = archive.finalize()
-    return Promise.all([p0, p1])
+    const archiveFinalize = archive.finalize()
+    return Promise.all([zipClose, archiveFinalize])
   })
-  return Promise.all(promises)
 }
 
-async function asyncMain (platforms) {
+async function main (platforms) {
   // remove existing build dir
   console.log(`Remove ${buildDir} directory`)
   fsExtra.removeSync(buildDirPath)
@@ -119,6 +116,7 @@ async function asyncMain (platforms) {
   } else {
     // get browser
     await getBrowsers(platforms)
+    console.log('\nBrowsers are downloaded/available')
   }
   if (isDryrun()) {
     console.log('skipping package creation ..')
@@ -136,38 +134,24 @@ function isDryrun () {
   return process.env.DRY_RUN !== undefined
 }
 
-function exit (exitcode) {
-  if (isDryrun() && exitcode === 0) {
-    console.warn('dry run: generated output *not* useful for production.')
-  }
-  process.exit(exitcode)
-}
-
-function main () {
-  // allow invoking `node tasks/prepare-binaries.js` with linux/mac/win as the argument
-  // e.g. `npm run build linux`
-  (async () => {
-    try {
-      if (process.argv.length > 2) {
-        const platform = process.argv[2]
-        if (platform in platforms) {
-          const singleBuild = {}
-          singleBuild[platform] = platforms[platform]
-          await asyncMain(singleBuild)
-          exit(0)
-        } else {
-          console.error(`${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`)
-        }
+// allow invoking `node tasks/prepare-binaries.js` with linux/mac/win as the argument
+// e.g. `npm run build linux`
+;(async () => {
+  try {
+    if (process.argv.length > 2) {
+      const platform = process.argv[2]
+      if (platform in platforms) {
+        const singleBuild = {}
+        singleBuild[platform] = platforms[platform]
+        await main(singleBuild)
       } else {
-        await asyncMain(platforms)
-        exit(0)
+        console.error(`${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`)
       }
-    } catch (err) {
-      console.error(err)
-      exit(1)
+    } else {
+      await main(platforms)
     }
-  })()
-}
-
-// run main function
-main()
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
+})()
