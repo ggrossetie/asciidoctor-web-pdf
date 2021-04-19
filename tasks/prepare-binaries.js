@@ -70,7 +70,7 @@ function copyAssets (platforms) {
 
 async function archive (platforms) {
   console.log('Zipping...')
-  return Object.keys(platforms).map(async (platform) => {
+  return Promise.all(Object.keys(platforms).map(async (platform) => {
     const rootname = `${appName}-${platform}`
     const archive = archiver('zip', {
       zlib: { level: 9 } // Maximize compression
@@ -96,7 +96,7 @@ async function archive (platforms) {
 
     const archiveFinalize = archive.finalize()
     return Promise.all([zipClose, archiveFinalize])
-  })
+  }))
 }
 
 async function main (platforms) {
