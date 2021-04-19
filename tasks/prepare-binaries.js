@@ -134,6 +134,13 @@ function isDryrun () {
   return process.env.DRY_RUN !== undefined
 }
 
+function exit (exitcode) {
+  if (isDryrun() && exitcode === 0) {
+    console.warn('dry run: generated output *not* useful for production.')
+  }
+  process.exit(exitcode)
+}
+
 // allow invoking `node tasks/prepare-binaries.js` with linux/mac/win as the argument
 // e.g. `npm run build linux`
 ;(async () => {
@@ -144,11 +151,13 @@ function isDryrun () {
         const singleBuild = {}
         singleBuild[platform] = platforms[platform]
         await main(singleBuild)
+        exit(0)
       } else {
         console.error(`${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`)
       }
     } else {
       await main(platforms)
+      exit(0)
     }
   } catch (err) {
     console.error(err)
