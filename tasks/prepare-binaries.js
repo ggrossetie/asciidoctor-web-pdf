@@ -2,14 +2,21 @@ const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
 const readline = require('readline')
+const archiver = require('archiver')
+const { exec } = require('pkg')
+const puppeteer = require('puppeteer')
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
 
-const archiver = require('archiver')
-const { exec } = require('pkg')
-const puppeteer = require('puppeteer')
+// When creating a readline.Interface using stdin as input, the program will not terminate until it
+// receives EOF (Ctrl+D on Linux/macOS, Ctrl+Z followed by Return on Windows). If you want your
+// application to exit without waiting for user input, you can unref the standard input stream.
+// Reference: https://nodejs.org/api/readline.html#readline_readline
+
+process.stdin.unref()
 
 const appName = 'asciidoctor-web-pdf'
 const buildDir = 'build'
@@ -23,6 +30,8 @@ const platforms = {
   mac: { target: 'node12-macos-x64' },
   win: { target: 'node12-win-x64', suffix: '.exe', puppeteerPlatform: 'win64' }
 }
+
+const version = require('../package.json').version
 
 async function createPackage (platforms) {
   for (const [name, platform] of Object.entries(platforms)) {
@@ -75,9 +84,10 @@ async function archive (platforms) {
     const archive = archiver('zip', {
       zlib: { level: 9 } // Maximize compression
     })
-
+    const archiveName = `${appName}-${platform}`
+    const rootFolder = `${archiveName}-v${version}`
     // must not be in same dir where we are zipping
-    const zipOut = fs.createWriteStream(path.join(buildDirPath, `${appName}-${platform}.zip`))
+    const zipOut = fs.createWriteStream(path.join(buildDirPath, `${archiveName}.zip`))
     zipOut.on('close', function () {
       console.log(`Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`)
     })
@@ -86,8 +96,8 @@ async function archive (platforms) {
     })
     // pipe archive to file stream
     archive.pipe(zipOut)
-    // recursively add directory to _root_ of zip
-    archive.directory(path.join(buildDirPath, platform), false)
+    // recursively add directory to folder ${archiveName}-${version}
+    archive.directory(path.join(buildDirPath, platform), rootFolder, {})
     await archive.finalize()
   }))
 }
