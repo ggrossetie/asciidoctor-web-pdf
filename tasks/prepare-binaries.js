@@ -1,22 +1,9 @@
 const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
-const readline = require('readline')
 const archiver = require('archiver')
 const { exec } = require('pkg')
 const puppeteer = require('puppeteer')
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
-// When creating a readline.Interface using stdin as input, the program will not terminate until it
-// receives EOF (Ctrl+D on Linux/macOS, Ctrl+Z followed by Return on Windows). If you want your
-// application to exit without waiting for user input, you can unref the standard input stream.
-// Reference: https://nodejs.org/api/readline.html#readline_readline
-
-process.stdin.unref()
 
 const appName = 'asciidoctor-web-pdf'
 const buildDir = 'build'
@@ -49,9 +36,8 @@ async function getBrowsers (platforms) {
         path: path.resolve(path.join(buildDirPath, name, 'chromium'))
       })
       .download(puppeteer._preferredRevision, function (downloadBytes, totalBytes) {
-        readline.cursorTo(process.stdout, 0)
         const percent = Math.round(downloadBytes / totalBytes * 100)
-        rl.write(`Downloading browser for ${name.padEnd(5)} ${percent.toString().padStart(5)}%`)
+        console.log('\x1B[1A\x1B[K' + `Downloading browser for ${name.padEnd(5)} ${percent.toString().padStart(5)}%`)
       })
   }))
   console.log('\nBrowsers are downloaded/available')
