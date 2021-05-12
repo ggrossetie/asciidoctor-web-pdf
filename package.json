@@ -25,6 +25,9 @@
   ],
   "scripts": {
     "build": "node tasks/prepare-binaries.js",
+    "build-mac": "node tasks/prepare-binaries.js mac",
+    "build-linux": "node tasks/prepare-binaries.js linux",
+    "build-win": "node tasks/prepare-binaries.js win",
     "test": "npm run test:smoke && npm run test:js",
     "test:smoke": "./bin/asciidoctor-pdf --version",
     "test:js": "mocha test/**_test.js",
