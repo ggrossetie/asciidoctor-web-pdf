@@ -1,22 +1,9 @@
 const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
-const readline = require('readline')
 const archiver = require('archiver')
 const { exec } = require('pkg')
 const puppeteer = require('puppeteer')
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
-// When creating a readline.Interface using stdin as input, the program will not terminate until it
-// receives EOF (Ctrl+D on Linux/macOS, Ctrl+Z followed by Return on Windows). If you want your
-// application to exit without waiting for user input, you can unref the standard input stream.
-// Reference: https://nodejs.org/api/readline.html#readline_readline
-
-process.stdin.unref()
 
 const appName = 'asciidoctor-web-pdf'
 const buildDir = 'build'
@@ -41,20 +28,22 @@ async function createPackage (platforms) {
 }
 
 async function getBrowsers (platforms) {
-  await Promise.all(Object.entries(platforms).map(async ([name, platform], index) => {
+  console.log('\n')
+  const downloadProgress = Object.assign({}, ...Object.keys(platforms).map((key) => ({ [key]: 0 })))
+  return Promise.all(Object.entries(platforms).map(async ([name, platform], index) => {
     const puppeteerPlatform = platform.puppeteerPlatform || name
-    await puppeteer
+    return puppeteer
       .createBrowserFetcher({
         platform: puppeteerPlatform, // one of: linux, mac, win32 or win64
         path: path.resolve(path.join(buildDirPath, name, 'chromium'))
       })
       .download(puppeteer._preferredRevision, function (downloadBytes, totalBytes) {
-        readline.cursorTo(process.stdout, 0)
-        const percent = Math.round(downloadBytes / totalBytes * 100)
-        rl.write(`Downloading browser for ${name.padEnd(5)} ${percent.toString().padStart(5)}%`)
+        downloadProgress[name] = Math.round(downloadBytes / totalBytes * 100)
+        const entries = Object.entries(downloadProgress)
+        const status = `Downloading ${entries.length > 1 ? 'browsers' : 'browser'} [${entries.map(([name, percent]) => `${name}: ${percent.toString().padStart(2)}%`).join(', ')}]`
+        console.log('\x1B[1A\x1B[K' + status)
       })
   }))
-  console.log('\nBrowsers are downloaded/available')
 }
 
 function copyAssets (platforms) {
@@ -116,6 +105,7 @@ async function main (platforms) {
 
   // get browser
   await getBrowsers(platforms)
+  console.log('\nBrowsers are downloaded/available')
 
   // using pkg create the binary for asciidoctor-web-pdf
   await createPackage(platforms)
