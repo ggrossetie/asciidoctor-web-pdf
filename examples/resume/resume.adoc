@@ -1,6 +1,13 @@
 = Chargée de projet culturel
 Léa Rumiz
 
+// This block is intended to be us as running footer, i.e. some information
+// to be in each page's footer.
+[.running-footer]
+--
+*Résumé Léa Rumiz* +
+--
+
 [.info]
 == !
 
