@@ -142,7 +142,7 @@ The above commands will install Node v14.15.5 and enable it.
 We recommend using the latest long term support (LTS) release of Node.
 While you can use other versions of Node, Asciidoctor Web PDF is only tested against active LTS releases.
 
-#### Install in a project director
+#### Install in a project directory
 
 You can opt to install Asciidoctor Web PDF in a project directory, such as the directory where your AsciiDoc files are stored.
 If you don't have a _package.json_ file in your project directory, you can create one using:
