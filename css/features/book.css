@@ -43,3 +43,7 @@
     content: normal;
   }
 }
+
+[data-id="content"] [data-id="toc"] {
+  border: none;
+}
