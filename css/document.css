@@ -263,14 +263,10 @@ The leader works by filling the li with dots, and arranging for the <a> and a::a
   padding-right: 0.25rem;
 }
 
-[data-id="content"] [data-id="toc"] {
-  border: none;
-}
-
 .front-matter {
   page: front;
 }
 
-[data-after-page="preamble"] {
+#content {
   counter-reset: page 1;
 }
