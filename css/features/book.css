@@ -44,6 +44,6 @@
   }
 }
 
-[data-id="content"] [data-id="toc"] {
+#toc.toc {
   border: none;
 }
