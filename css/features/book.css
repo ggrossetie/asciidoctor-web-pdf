@@ -40,10 +40,14 @@
     margin: 0;
     padding: 0;
     border: none;
-    content: normal;
+    content: none;
   }
 }
 
 #toc.toc {
   border: none;
+}
+
+#preamble-book-filler {
+  display: none;
 }
