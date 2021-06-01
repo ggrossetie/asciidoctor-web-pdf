@@ -45,9 +45,9 @@
   "dependencies": {
     "@asciidoctor/cli": "^3.5.0",
     "@fortawesome/fontawesome-svg-core": "1.2.34",
-    "@fortawesome/free-brands-svg-icons": "5.15.2",
+    "@fortawesome/free-brands-svg-icons": "5.15.3",
     "@fortawesome/free-regular-svg-icons": "5.15.2",
-    "@fortawesome/free-solid-svg-icons": "5.15.2",
+    "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@ggrossetie/pagedjs": "0.1.43-next.1613141153",
     "chokidar": "3.5.1",
     "file-url": "3.0.0",
@@ -55,7 +55,7 @@
     "html-entities": "^2.1.0",
     "mathjax": "3.1.2",
     "pdf-lib": "^1.2.1",
-    "puppeteer": "9.1.1",
+    "puppeteer": "10.0.0",
     "yargs": "16.2.0"
   },
   "devDependencies": {
@@ -69,7 +69,7 @@
     "nunjucks": "^3.2.1",
     "pacote": "^11.2.6",
     "pixelmatch": "^5.1.0",
-    "pkg": "^4.4.9",
+    "pkg": "^5.2.1",
     "rimraf": "^3.0.0",
     "sinon": "^11.1.1",
     "standard": "16.0.3"
