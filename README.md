@@ -349,8 +349,6 @@ For example:
 
 This docinfo configuration will apply the shared docinfo head, header, running and footer files, if they exist, as well as the private footer file, if it exists.
 
-
-
 #### Running elements
 
 Running elements can be positioned on the [top, bottom, left or right margins of pages](https://www.w3.org/TR/css-page-3/#margin-boxes).
