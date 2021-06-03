@@ -319,11 +319,11 @@ The scope defines if the docinfo files apply for a specific document ("private")
 | ----- | -------- | -------- | ----------------- |
 | Private | Head   | Adds content to `<head>` for `<docname>.adoc` files. | `<docname>-docinfo-pdf.html` |
 | Private | Header | Adds content to start of document for `<docname>.adoc` files. | `<docname>-docinfo-header-pdf.html` |
-| Private | Footer | Adds content to end of document for `<docname>.adoc` files. | `<docname>-docinfo-footer-pdf.html` |
+| Private | Footer | Adds content to end of document for `<docname>.adoc` files. Useful for supporting [Paged.js hooks and custom JavaScript](https://www.pagedjs.org/documentation/11-hooks/) | `<docname>-docinfo-footer-pdf.html` |
 | Private | Running | Adds running content to start of document for `<docname>.adoc` files. | `<docname>-docinfo-running-pdf.html` |
 | Shared | Head | Adds content to `<head>` for any document in same directory. | `docinfo-pdf.html` |
 | Shared | Header | Adds content to start of document for any document in same directory. | `docinfo-header-pdf.html` |
-| Shared | Footer | Adds content to end of document for any document in same directory. | `docinfo-footer-pdf.html` |
+| Shared | Footer | Adds content to end of document for any document in same directory. Useful for supporting [Paged.js hooks and custom JavaScript](https://www.pagedjs.org/documentation/11-hooks/)| `docinfo-footer-pdf.html` |
 | Shared | Running | Adds running content to start for any document in same directory. | `docinfo-running-pdf.html` |
 
 To specify which file(s) you want to apply, set the docinfo attribute to any combination of these values:
