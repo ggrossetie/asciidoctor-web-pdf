@@ -49,7 +49,7 @@
     "@fortawesome/free-regular-svg-icons": "5.15.3",
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@ggrossetie/pagedjs": "0.1.43-next.1613141153",
-    "chokidar": "3.5.1",
+    "chokidar": "3.5.2",
     "file-url": "3.0.0",
     "fs-extra": "9.1.0",
     "html-entities": "^2.1.0",
