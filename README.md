@@ -9,59 +9,59 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
 <table>
   <tr align="center">
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/document/document.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/document/document_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/document/document.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/document/document_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/letter/letter.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/letter/letter_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/letter/letter_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/book/book.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/book/book_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/book/book.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/book/book_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf">
-      <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf">
+      <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png" />
       </a>
     </td>
   </tr>
   <tr align="center">
     <td with="25%">
       Document<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/document/"> source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/document/document.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/main/examples/document/"> source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/document/document.pdf"> PDF </a>
     </td>
     <td with="25%">
       Letter<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/letter/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/letter/letter.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/main/examples/letter/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf"> PDF </a>
     </td>
     <td with="25%">
       Book<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/book/"> source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/book/book.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/main/examples/book/"> source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/book/book.pdf"> PDF </a>
     </td>
     <td with="25%">
       Cheat sheet<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/cheat-sheet/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/cheat-sheet/maven-security-cheat-sheet.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/main/examples/cheat-sheet/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf"> PDF </a>
     </td>
   </tr>
 </table>
 <table>
   <tr align="center">
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/resume/resume.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/resume/resume_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/resume/resume_screenshot.png" />
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/slides/ioslides/presentation.pdf">
-        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/slides/ioslides/presentation_screenshot.png" />
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/slides/ioslides/presentation.pdf">
+        <img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/slides/ioslides/presentation_screenshot.png" />
       </a>
     </td>
     <td width="25%"></td>
@@ -70,13 +70,13 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
   <tr align="center">
     <td width="25%">
       Resume<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/resume/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/resume/resume.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/main/examples/resume/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf"> PDF </a>
     </td>
     <td width="25%">
       Slides<br/>
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/master/examples/slides/ioslides/"> Source </a> /
-      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/slides/ioslides/presentation.pdf"> PDF </a>
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/tree/main/examples/slides/ioslides/"> Source </a> /
+      <a href="https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/slides/ioslides/presentation.pdf"> PDF </a>
     </td>
     <td width="25%"></td>
     <td width="25%"></td>
@@ -290,14 +290,14 @@ We are using `:doctype: book` to get a title page.
 }
 ```
 
-3. Download the image [_orly.jpg_](https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/document/orly.jpg) and put it next to the _orly.adoc_ file.
+3. Download the image [_orly.jpg_](https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/document/orly.jpg) and put it next to the _orly.adoc_ file.
 4. Open a terminal and type:
 
     $ asciidoctor-web-pdf orly.adoc -a stylesheet="+orly.css"
 
 The above command will create a file named _orly.pdf_ which should look like:
 
-<img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/images/front-cover-image.png" alt="front-cover-image" height="300px" />
+<img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/images/front-cover-image.png" alt="front-cover-image" height="300px" />
 
 #### Docinfo
 
@@ -445,7 +445,7 @@ Here's a complete example:
 
 The above command will create a file named _report.pdf_ which should look like:
 
-<img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/master/examples/images/complex-footer.png" alt="complex-footer" height="300px" />
+<img src="https://github.com/Mogztter/asciidoctor-web-pdf/raw/main/examples/images/complex-footer.png" alt="complex-footer" height="300px" />
 
 **TIP**: Please note that, in this case, you don't need to use a docinfo file, you can declare the "contact us" block directly in the AsciiDoc file.
 In other words, you should get the same result if you are using the following content:
@@ -537,7 +537,7 @@ You can use the following command to generate a PDF:
 
     $ asciidoctor-web-pdf --require asciidoctor-kroki piracy.adoc
 
-Here's the result: [piracy.pdf](https://github.com/Mogztter/asciidoctor-web-pdf/blob/master/examples/document/piracy.pdf)
+Here's the result: [piracy.pdf](https://github.com/Mogztter/asciidoctor-web-pdf/blob/main/examples/document/piracy.pdf)
 
 ## Custom layout
 
