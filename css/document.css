@@ -26,6 +26,7 @@ nested elements once that breaks across two pages.
   width: 100%;
   cursor: default;
 }
+
 .admonitionblock > table td.icon .fa-layers {
   height: 100%;
   width: 100%;
@@ -269,4 +270,29 @@ The leader works by filling the li with dots, and arranging for the <a> and a::a
 
 #content {
   counter-reset: page 1;
+}
+
+/* footnotes */
+@page {
+  @footnote {
+    float: bottom;
+    /*border-top: solid black thin;
+    padding-top: 8pt;*/
+  }
+}
+
+span.footnote {
+  float: footnote;
+}
+
+[data-footnote-call]::after {
+  content: "[" counter(footnote) "]";
+}
+
+.pagedjs_area a[data-footnote-call] {
+  cursor: pointer;
+}
+
+[data-footnote-call]::after {
+  content: "[" counter(footnote) "]";
 }
