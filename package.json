@@ -48,7 +48,7 @@
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
-    "@ggrossetie/pagedjs": "0.1.43-next.1613141153",
+    "@ggrossetie/pagedjs": "0.2.0-next.1623590414",
     "chokidar": "3.5.2",
     "file-url": "3.0.0",
     "fs-extra": "9.1.0",
