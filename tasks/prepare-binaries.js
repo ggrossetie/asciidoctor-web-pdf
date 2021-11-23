@@ -27,8 +27,12 @@ async function createPackage (platforms) {
   }
 }
 
-async function getBrowsers (platforms) {
-  console.log('\n')
+async function getBrowsers (platforms, showProgress) {
+  if (showProgress) {
+    console.log('\n')
+  } else {
+    console.log(`Downloading ${Object.keys(platforms).length > 1 ? 'browsers' : 'browser'}: ${Object.keys(platforms).join(', ')}...`)
+  }
   const downloadProgress = Object.assign({}, ...Object.keys(platforms).map((key) => ({ [key]: 0 })))
   return Promise.all(Object.entries(platforms).map(async ([name, platform], index) => {
     const puppeteerPlatform = platform.puppeteerPlatform || name
@@ -38,10 +42,12 @@ async function getBrowsers (platforms) {
         path: path.resolve(path.join(buildDirPath, name, 'chromium'))
       })
       .download(puppeteer._preferredRevision, function (downloadBytes, totalBytes) {
-        downloadProgress[name] = Math.round(downloadBytes / totalBytes * 100)
-        const entries = Object.entries(downloadProgress)
-        const status = `Downloading ${entries.length > 1 ? 'browsers' : 'browser'} [${entries.map(([name, percent]) => `${name}: ${percent.toString().padStart(2)}%`).join(', ')}]`
-        console.log('\x1B[1A\x1B[K' + status)
+        if (showProgress) {
+          downloadProgress[name] = Math.round(downloadBytes / totalBytes * 100)
+          const entries = Object.entries(downloadProgress)
+          const status = `Downloading ${entries.length > 1 ? 'browsers' : 'browser'} [${entries.map(([name, percent]) => `${name}: ${percent.toString().padStart(2)}%`).join(', ')}]`
+          console.log('\x1B[1A\x1B[K' + status)
+        }
       })
   }))
 }
@@ -91,7 +97,7 @@ async function archive (platforms) {
   }))
 }
 
-async function main (platforms) {
+async function main (platforms, options) {
   // remove existing build dir
   console.log(`Remove ${buildDir} directory`)
   fsExtra.removeSync(buildDirPath)
@@ -104,7 +110,7 @@ async function main (platforms) {
   }
 
   // get browser
-  await getBrowsers(platforms)
+  await getBrowsers(platforms, options.showProgress)
   console.log('\nBrowsers are downloaded/available')
 
   // using pkg create the binary for asciidoctor-web-pdf
@@ -120,17 +126,25 @@ async function main (platforms) {
 // e.g. `npm run build linux`
 ;(async () => {
   try {
-    if (process.argv.length > 2) {
-      const platform = process.argv[2]
+    let args = process.argv.slice(2)
+    const options = { showProgress: true }
+    if (args.length > 0) {
+      if (args.includes('--no-progress')) {
+        args = args.filter(e => e !== '--no-progress')
+        options.showProgress = false
+      }
+    }
+    if (args.length > 0) {
+      const platform = args[0]
       if (platform in platforms) {
         const singleBuild = {}
         singleBuild[platform] = platforms[platform]
-        await main(singleBuild)
+        await main(singleBuild, options)
       } else {
         console.error(`${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`)
       }
     } else {
-      await main(platforms)
+      await main(platforms, options)
     }
   } catch (err) {
     console.error(err)

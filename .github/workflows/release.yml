@@ -48,7 +48,7 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npm run build
+          npm run build -- --no-progress
           npm run publish
       - run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # create the GitHub release
