@@ -72,7 +72,7 @@
     "pkg": "^5.2.1",
     "rimraf": "^3.0.0",
     "sinon": "^12.0.1",
-    "standard": "16.0.3"
+    "standard": "16.0.4"
   },
   "peerDependencies": {
     "@asciidoctor/core": "^2.2.0"
