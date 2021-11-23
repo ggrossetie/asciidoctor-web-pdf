@@ -1,6 +1,6 @@
 # Asciidoctor Web PDF
 
-[![Build](https://github.com/Mogztter/asciidoctor-web-pdf/workflows/Build/badge.svg)](https://github.com/Mogztter/asciidoctor-web-pdf/actions?query=workflow%3ABuild)
+[![Build](https://github.com/Mogztter/asciidoctor-web-pdf/actions/workflows/build.yml/badge.svg)](https://github.com/Mogztter/asciidoctor-web-pdf/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
 
 A PDF converter for AsciiDoc based on web technologies.
