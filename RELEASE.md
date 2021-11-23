@@ -3,7 +3,7 @@
 How to perform a release.
 
 1. Run `npm version x.y.z` at the root of the repository
-2. Push your changes with the tag: `git push origin master --tags`
+2. Push your changes with the tag: `git push origin main --tags`
 
 The release process is automated and relies on GitHub Actions.
 It will automatically publish the `asciidoctor-pdf` package on https://npmjs.com.
