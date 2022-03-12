@@ -15,6 +15,10 @@
         "pacote"
       ],
       "enabled": false
+    },
+    {
+      "matchPackagePatterns": ["puppeteer"],
+      "groupName": "Puppeteer package"
     }
   ],
   "lockFileMaintenance": {
