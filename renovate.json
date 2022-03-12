@@ -4,12 +4,20 @@
   "separateMajorMinor": false,
   "extends": [
     ":preserveSemverRanges",
-    "group:all",
     "schedule:monthly",
     ":maintainLockFilesMonthly"
   ],
   "packageRules": [
     {
+      "matchManagers": ["npm"],
+      "groupName": "Node dependencies"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "matchManagers": ["npm"],
       "matchPackagePatterns": [
         "libnpmpublish",
         "pacote"
@@ -17,14 +25,12 @@
       "enabled": false
     },
     {
+      "matchManagers": ["npm"],
       "matchPackagePatterns": ["puppeteer"],
       "groupName": "Puppeteer package"
     }
   ],
   "lockFileMaintenance": {
-    "extends": [
-      "group:all"
-    ],
     "commitMessageAction": "Update"
   }
 }
