@@ -25,14 +25,14 @@ jobs:
     outputs:
       version: ${{ steps.package_info.outputs.version }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Current version
       id: package_info
       run: |
         VERSION=$(node -e 'console.log(require("./package.json").version)')
         echo "::set-output name=version::v$VERSION"
     - name: Set up Node ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     # libgbm-dev is required by Puppeteer 3+
@@ -53,19 +53,19 @@ jobs:
         npm run build
       if: matrix.primary
     - name: Upload Windows artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: win-binary
         path: build/asciidoctor-web-pdf-win.zip
       if: matrix.primary
     - name: Upload macOS artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: mac-binary
         path: build/asciidoctor-web-pdf-mac.zip
       if: matrix.primary
     - name: Upload Linux artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: linux-binary
         path: build/asciidoctor-web-pdf-linux.zip
@@ -74,7 +74,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: linux-binary
       - name: Unzip
@@ -91,7 +91,7 @@ jobs:
     needs: build
     runs-on: macos-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: mac-binary
       - name: Unzip
@@ -108,7 +108,7 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: win-binary
       - name: Unzip
