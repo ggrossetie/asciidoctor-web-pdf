@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
       # libgbm-dev is required by Puppeteer 3+
@@ -30,8 +30,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
       # libgbm-dev is required by Puppeteer 3+
@@ -54,7 +54,7 @@ jobs:
       # create the GitHub release
       - name: Create release
         id: create_release
-        uses: actions/create-release@v1.0.0
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -64,7 +64,7 @@ jobs:
           prerelease: true
       # upload assets
       - name: Upload macOS binary (zip)
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -73,7 +73,7 @@ jobs:
           asset_name: asciidoctor-web-pdf-mac-${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
       - name: Upload Windows binary (zip)
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -82,7 +82,7 @@ jobs:
           asset_name: asciidoctor-web-pdf-win-${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
       - name: Upload Linux binary (zip)
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
