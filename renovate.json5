@@ -26,6 +26,12 @@
     },
     {
       "matchManagers": ["npm"],
+      // version 4.0.0 requires Node.js 12+ and is only available as an ESM module (so we cannot use require from CommonJS)
+      "matchPackagePatterns": ["file-url"],
+      "enabled": false
+    },
+    {
+      "matchManagers": ["npm"],
       "matchPackagePatterns": ["puppeteer"],
       "groupName": "Puppeteer package"
     }
