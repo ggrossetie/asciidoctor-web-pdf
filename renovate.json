@@ -8,6 +8,15 @@
     "schedule:monthly",
     ":maintainLockFilesMonthly"
   ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "libnpmpublish",
+        "pacote"
+      ],
+      "enabled": false
+    }
+  ],
   "lockFileMaintenance": {
     "extends": [
       "group:all"
