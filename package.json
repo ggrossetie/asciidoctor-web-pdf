@@ -67,7 +67,7 @@
     "libnpmpublish": "^4.0.0",
     "mocha": "9.2.2",
     "nunjucks": "^3.2.1",
-    "pacote": "^12.0.2",
+    "pacote": "^13.0.4",
     "pixelmatch": "^5.1.0",
     "pkg": "^5.2.1",
     "rimraf": "^3.0.0",
