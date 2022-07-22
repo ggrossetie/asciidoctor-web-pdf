@@ -1,5 +1,6 @@
 node_modules/
 *_temp.html
+test/reference/output/
 /test/output/*.pdf
 /test/fixtures/*.html
 !/test/fixtures/*docinfo*-pdf.html
