@@ -41,7 +41,7 @@ async function getBrowsers (platforms, showProgress) {
         platform: puppeteerPlatform, // one of: linux, mac, win32 or win64
         path: path.resolve(path.join(buildDirPath, name, 'chromium'))
       })
-      .download(puppeteer._preferredRevision, function (downloadBytes, totalBytes) {
+      .download(puppeteer.default._preferredRevision, function (downloadBytes, totalBytes) {
         if (showProgress) {
           downloadProgress[name] = Math.round(downloadBytes / totalBytes * 100)
           const entries = Object.entries(downloadProgress)
