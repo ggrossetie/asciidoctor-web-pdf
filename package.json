@@ -30,7 +30,7 @@
     "test:js": "mocha test/**_test.js",
     "lint": "standard lib/**.js test/**.js tasks/**js",
     "publish": "node tasks/publish.js",
-    "test:update-linux-reference": "docker build -f test/Dockerfile -t asciidoctor-web-pdf/test . && docker run --name asciidoctorwebpdftest asciidoctor-web-pdf/test:latest && docker cp asciidoctorwebpdftest:/app/test/output ./test/reference/linux/"
+    "test:update-linux-reference": "docker build -f test/Dockerfile -t asciidoctor-web-pdf/test . && docker run --name asciidoctorwebpdftest asciidoctor-web-pdf/test:latest; docker cp asciidoctorwebpdftest:/app/test/output/. ./test/reference/linux/ && docker rm asciidoctorwebpdftest"
   },
   "repository": {
     "type": "git",

@@ -9,14 +9,14 @@ RUN apt-get update \
 USER asciidoc
 WORKDIR /app
 
+COPY --chown=asciidoc:asciidoc package.json package-lock.json ./
+RUN npm ci && npm cache clean --force
+
 COPY --chown=asciidoc:asciidoc lib ./lib
 COPY --chown=asciidoc:asciidoc bin ./bin
 COPY --chown=asciidoc:asciidoc css ./css
 COPY --chown=asciidoc:asciidoc fonts ./fonts
 COPY --chown=asciidoc:asciidoc test ./test
-
-COPY --chown=asciidoc:asciidoc package.json package-lock.json ./
-RUN npm ci
 
 ENV DEBUG=1
 CMD npm t
