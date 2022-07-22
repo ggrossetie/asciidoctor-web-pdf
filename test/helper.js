@@ -1,5 +1,6 @@
 const ospath = require('path')
 const fs = require('fs')
+const os = require('os')
 const childProcess = require('child_process')
 const PNG = require('pngjs').PNG
 const pixelmatch = require('pixelmatch')
@@ -23,11 +24,12 @@ function computeImageDifferences (referenceBuffer, actualBuffer, diffFilename) {
 }
 
 function toVisuallyMatch (referenceFilename, actualPath) {
+  const platform = os.platform() === 'darwin' ? 'macos' : 'linux'
   let referencePath
   if (ospath.isAbsolute(referenceFilename)) {
     referencePath = referenceFilename
   } else {
-    referencePath = ospath.join(__dirname, 'reference', referenceFilename)
+    referencePath = ospath.join(__dirname, 'reference', platform, referenceFilename)
   }
 
   if (!fs.existsSync(actualPath)) {
@@ -45,7 +47,7 @@ function toVisuallyMatch (referenceFilename, actualPath) {
   let pixels = 0
   const tmpFiles = [actualPath]
 
-  const currentFilenameRegexp = new RegExp(`${actualBasename}-(?:actual|reference)-([0-9]+).png`)
+  const currentFilenameRegexp = new RegExp(`${actualBasename}-(?:actual|reference)-(\\d+).png`)
   const files = fs.readdirSync(imagesOutputDir)
   const indexes = new Set(files
     .filter((name) => name.match(currentFilenameRegexp))
