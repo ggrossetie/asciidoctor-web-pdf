@@ -1,0 +1,7 @@
+table {
+  break-inside: auto;
+}
+
+tr {
+  break-inside: avoid;
+}

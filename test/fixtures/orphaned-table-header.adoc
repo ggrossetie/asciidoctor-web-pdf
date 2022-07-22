@@ -1,0 +1,66 @@
+:stylesheet: +orphaned-table-header.css
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+test
+
+[cols='1a,3a']
+|===
+|test header |test header
+
+|test row 1
+|test row 1
+
+|test row 2
+|test row 2
+|===
