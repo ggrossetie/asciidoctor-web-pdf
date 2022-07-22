@@ -362,6 +362,10 @@ describe('PDF converter', function () {
     await shouldBeVisuallyIdentical('list')
   })
 
+  it('should remove orphaned table headers', async () => {
+    await shouldBeVisuallyIdentical('orphaned-table-header')
+  })
+
   describe('Timeout', () => {
     beforeEach(function () {
       sinon.spy(console, 'error')
