@@ -6,10 +6,13 @@ default: packageDocker
 
 packageDocker:
 ifeq ($(MULTI_ARCH_AVAILABLE), 0)
-	docker buildx build -o type="image,push=false" --platform linux/amd64,linux/arm64 --tag asciidoctor/web-pdf:latest .
+	docker buildx build --tag asciidoctor/web-pdf:latest -o type="image,push=false" --platform linux/amd64,linux/arm64 .
 else
 	docker build -t asciidoctor/web-pdf .
 endif
+
+packageLocalDocker:
+	docker build -t asciidoctor/web-pdf:latest .
 
 testDocker:
 	echo "= Test" | docker run -i asciidoctor/web-pdf:latest -a reproducible - > test/output/docker-smoke-test.pdf
