@@ -15,11 +15,12 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 12.x
-          - 14.x
+          - 14
+          - 16
+          - 18
         include:
           - os: ubuntu-latest
-            node-version: '14.x'
+            node-version: '16'
             primary: true
     runs-on: ${{ matrix.os }}
     outputs:
@@ -48,6 +49,17 @@ jobs:
       run: |
         npm run lint
         npm t
+    - name: Setup Docker
+      # taken from https://github.com/docker/github-actions/blob/0f18e2abad9a4ac2963d2516246787375b5ec917/Dockerfile#L32
+      run: curl -fL https://download.docker.com/linux/static/stable/x86_64/docker-20.10.4.tgz | tar xzO docker/docker > docker && sudo mv -f docker /usr/bin/docker && sudo chmod +x /usr/bin/docker
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Build container image
+      run: make packageDocker
+    - name: Smoke test
+      run: make testDocker
     - name: Build binary
       run: |
         npm run build

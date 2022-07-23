@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
       # libgbm-dev is required by Puppeteer 3+
       - name: Install system dependencies
         run: |
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
       # libgbm-dev is required by Puppeteer 3+
       - name: Install system dependencies
         run: |
