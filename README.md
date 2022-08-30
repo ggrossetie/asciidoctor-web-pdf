@@ -192,6 +192,39 @@ Verify that the `asciidoctor-web-pdf` command is available on your `PATH` by run
 $ yarn global add @asciidoctor/core asciidoctor-pdf
 ```
 
+### Using Docker
+
+Currently, there is no public image yet pushed in a public docker registry.
+
+Therefore, you can build your own custom docker image.
+
+The base image is from the official [puppeteer](https://github.com/puppeteer/puppeteer/pkgs/container/puppeteer), which contains puppeteer and google-chrome for pdf generation.
+
+To build the docker image. The target image name in this example is `adoc2web`.
+
+```bash
+cd docker
+docker build . -t adoc2web
+```
+
+Check installation in docker container.
+
+```bash
+docker run --rm adoc2web asciidoctor-web-pdf --version
+
+Asciidoctor Web PDF 1.0.0-alpha.14 using Asciidoctor.js 2.2.6 (Asciidoctor 2.0.17) [https://asciidoctor.org]
+Runtime Environment (node v16.17.0 on linux)
+CLI version 3.5.0
+```
+
+To render a cheatsheet for instance
+
+```bash
+docker run --rm \ 
+  --volume $PWD:/usr/src/app adoc2web \ 
+  asciidoctor-web-pdf maven-security-cheat-sheet.adoc --template-require ./snyk/template.js
+```
+
 ## Get started
 
 Asciidoctor Web PDF provides a standard document layout.
