@@ -192,6 +192,53 @@ Verify that the `asciidoctor-web-pdf` command is available on your `PATH` by run
 $ yarn global add @asciidoctor/core asciidoctor-pdf
 ```
 
+### Using Docker
+
+Currently, the Docker image is not yet published on [Docker Hub](https://hub.docker.com/).
+
+Therefore, you will need to build the Docker image from the Dockerfile.
+
+The base image is from the official [puppeteer repository] (https://github.com/puppeteer/puppeteer/pkgs/container/puppeteer), which contains puppeteer and Google Chrome for PDF generation.
+
+To build the Docker image, clone this repository and type the following commands: 
+
+```bash
+cd docker
+docker build . -t asciidoctor-web-pdf:latest
+```
+
+Verify that the Docker image is working by running:
+
+```bash
+docker run --rm asciidoctor-web-pdf asciidoctor-web-pdf --version
+
+Asciidoctor Web PDF 1.0.0-alpha.14 using Asciidoctor.js 2.2.6 (Asciidoctor 2.0.17) [https://asciidoctor.org]
+Runtime Environment (node v16.17.0 on linux)
+CLI version 3.5.0
+```
+
+If you want to render the cheatsheet example, move to the root of this repository and type:
+
+```bash
+cd examples/cheat-sheet
+docker run -i --rm \
+  --volume=$PWD:"/usr/src/app" \
+  -u $(id -u ${USER}):$(id -g ${USER}) \
+  asciidoctor-web-pdf:latest asciidoctor-web-pdf \
+  --template-require ./snyk/template.js maven-security-cheat-sheet.adoc 
+```
+
+The `--volume` option will mount your local copy of the Asciidoctor Web PDF repository on the container.
+Since it is a non-root user we have to map our user to `asciidoctor` user in the container.
+
+You can also use `stdin` and `stdout` without the need of volumes.
+
+```bash
+cd examples/document
+cat document.adoc | docker run -i --rm -a stdin -a stdout -a stderr asciidoctor-web-pdf:latest \
+ asciidoctor-web-pdf - > doc.pdf
+```
+
 ## Get started
 
 Asciidoctor Web PDF provides a standard document layout.
