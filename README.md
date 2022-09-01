@@ -200,7 +200,7 @@ Therefore, you will need to build the Docker image from the Dockerfile.
 
 The base image is from the official [puppeteer repository] (https://github.com/puppeteer/puppeteer/pkgs/container/puppeteer), which contains puppeteer and Google Chrome for PDF generation.
 
-To build the docker image. The target image name in this example is `adoc2web`.
+To build the Docker image, clone this repository and type the following commands: 
 
 ```bash
 cd docker
