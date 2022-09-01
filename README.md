@@ -217,7 +217,7 @@ Runtime Environment (node v16.17.0 on linux)
 CLI version 3.5.0
 ```
 
-To render a cheatsheet for instance
+If you want to render the cheatsheet example, move to the root of this repository and type:
 
 ```bash
 docker run --rm \ 
