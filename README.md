@@ -220,12 +220,24 @@ CLI version 3.5.0
 If you want to render the cheatsheet example, move to the root of this repository and type:
 
 ```bash
-docker run --rm \ 
-  --volume $PWD:/usr/src/app asciidoctor-web-pdf \ 
-  asciidoctor-web-pdf maven-security-cheat-sheet.adoc --template-require ./snyk/template.js
+cd examples/cheat-sheet
+docker run -i --rm \
+  --volume=$PWD:"/usr/src/app" \
+  -u $(id -u ${USER}):$(id -g ${USER}) \
+  asciidoctor-web-pdf:latest asciidoctor-web-pdf \
+  --template-require ./snyk/template.js maven-security-cheat-sheet.adoc 
 ```
 
 The `--volume` option will mount your local copy of the Asciidoctor Web PDF repository on the container.
+Since it is a non-root user we have to map our user to `asciidoctor` user in the container.
+
+You can also use `stdin` and `stdout` without the need of volumes.
+
+```bash
+cd examples/document
+cat document.adoc | docker run -i --rm -a stdin -a stdout -a stderr asciidoctor-web-pdf:latest \
+ asciidoctor-web-pdf - > doc.pdf
+```
 
 ## Get started
 
