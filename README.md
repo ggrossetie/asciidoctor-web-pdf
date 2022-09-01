@@ -204,13 +204,13 @@ To build the Docker image, clone this repository and type the following commands
 
 ```bash
 cd docker
-docker build . -t adoc2web
+docker build . -t asciidoctor-web-pdf:latest
 ```
 
 Verify that the Docker image is working by running:
 
 ```bash
-docker run --rm adoc2web asciidoctor-web-pdf --version
+docker run --rm asciidoctor-web-pdf asciidoctor-web-pdf --version
 
 Asciidoctor Web PDF 1.0.0-alpha.14 using Asciidoctor.js 2.2.6 (Asciidoctor 2.0.17) [https://asciidoctor.org]
 Runtime Environment (node v16.17.0 on linux)
@@ -221,11 +221,12 @@ If you want to render the cheatsheet example, move to the root of this repositor
 
 ```bash
 docker run --rm \ 
-  --volume $PWD:/usr/src/app adoc2web \ 
+  --volume $PWD:/usr/src/app asciidoctor-web-pdf \ 
   asciidoctor-web-pdf maven-security-cheat-sheet.adoc --template-require ./snyk/template.js
 ```
 
 The `--volume` option will mount your local copy of the Asciidoctor Web PDF repository on the container.
+
 ## Get started
 
 Asciidoctor Web PDF provides a standard document layout.
