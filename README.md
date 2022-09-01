@@ -196,7 +196,7 @@ $ yarn global add @asciidoctor/core asciidoctor-pdf
 
 Currently, the Docker image is not yet published on [Docker Hub](https://hub.docker.com/).
 
-Therefore, you can build your own custom docker image.
+Therefore, you will need to build the Docker image from the Dockerfile.
 
 The base image is from the official [puppeteer](https://github.com/puppeteer/puppeteer/pkgs/container/puppeteer), which contains puppeteer and google-chrome for pdf generation.
 
