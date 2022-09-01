@@ -207,7 +207,7 @@ cd docker
 docker build . -t adoc2web
 ```
 
-Check installation in docker container.
+Verify that the Docker image is working by running:
 
 ```bash
 docker run --rm adoc2web asciidoctor-web-pdf --version
