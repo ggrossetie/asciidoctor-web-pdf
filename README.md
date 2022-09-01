@@ -194,7 +194,7 @@ $ yarn global add @asciidoctor/core asciidoctor-pdf
 
 ### Using Docker
 
-Currently, there is no public image yet pushed in a public docker registry.
+Currently, the Docker image is not yet published on [Docker Hub](https://hub.docker.com/).
 
 Therefore, you can build your own custom docker image.
 
