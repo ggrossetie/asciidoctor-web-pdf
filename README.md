@@ -225,6 +225,7 @@ docker run --rm \
   asciidoctor-web-pdf maven-security-cheat-sheet.adoc --template-require ./snyk/template.js
 ```
 
+The `--volume` option will mount your local copy of the Asciidoctor Web PDF repository on the container.
 ## Get started
 
 Asciidoctor Web PDF provides a standard document layout.
