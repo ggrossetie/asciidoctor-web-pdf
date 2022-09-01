@@ -198,7 +198,7 @@ Currently, the Docker image is not yet published on [Docker Hub](https://hub.doc
 
 Therefore, you will need to build the Docker image from the Dockerfile.
 
-The base image is from the official [puppeteer](https://github.com/puppeteer/puppeteer/pkgs/container/puppeteer), which contains puppeteer and google-chrome for pdf generation.
+The base image is from the official [puppeteer repository] (https://github.com/puppeteer/puppeteer/pkgs/container/puppeteer), which contains puppeteer and Google Chrome for PDF generation.
 
 To build the docker image. The target image name in this example is `adoc2web`.
 
