@@ -1,6 +1,6 @@
 FROM node:16
 # LABEL org.opencontainers.image.authors="Mogztter#Guillaume Grossetie"
-LABEL version="15.4.0"
+# LABEL version=""
 LABEL description="This docker image contains \
 asciidoctor-web-pdf to generate websites and pdf from asciidoc(tor)."
 
