@@ -2,6 +2,7 @@
 
 [![Build](https://github.com/Mogztter/asciidoctor-web-pdf/actions/workflows/build.yml/badge.svg)](https://github.com/Mogztter/asciidoctor-web-pdf/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
+[![Docker image](https://img.shields.io/docker/v/ggrossetie/asciidoctor-web-pdf)](https://hub.docker.com/r/ggrossetie/asciidoctor-web-pdf)
 
 A PDF converter for AsciiDoc based on web technologies.
 It allows complex layouts to be defined with CSS and JavaScript, while writing the content in AsciiDoc.
@@ -194,23 +195,10 @@ $ yarn global add @asciidoctor/core asciidoctor-pdf
 
 ### Using Docker
 
-Currently, the Docker image is not yet published on [Docker Hub](https://hub.docker.com/).
-Therefore, you will need to build the Docker image from the Dockerfile.
-
-To build the Docker image, clone this repository and type the following commands: 
-
 ```bash
-docker build . -t asciidoctor-web-pdf:latest
-```
+docker run --rm ggrossetie/asciidoctor-web-pdf --version
 
-**NOTE:** If `make` is installed on your system you can use: `make packageLocalDocker` 
-
-Verify that the Docker image is working by running:
-
-```bash
-docker run --rm asciidoctor-web-pdf --version
-
-Asciidoctor Web PDF 1.0.0-alpha.14 using Asciidoctor.js 2.2.6 (Asciidoctor 2.0.17) [https://asciidoctor.org]
+Asciidoctor Web PDF 1.0.0-alpha.16 using Asciidoctor.js 2.2.6 (Asciidoctor 2.0.17) [https://asciidoctor.org]
 Runtime Environment (node v16.17.0 on linux)
 CLI version 3.5.0
 ```
@@ -221,7 +209,7 @@ If you want to render the cheatsheet example, move to the root of this repositor
 docker run -i --rm \
   --volume=$PWD/examples/cheat-sheet:"/usr/app" \
   -u $(id -u ${USER}):$(id -g ${USER}) \
-  asciidoctor-web-pdf:latest \
+  ggrossetie/asciidoctor-web-pdf:latest \
   --template-require ./snyk/template.js maven-security-cheat-sheet.adoc 
 ```
 
@@ -231,7 +219,7 @@ Since it is a non-root user we have to map our user to `asciidoctor` user in the
 You can also use `stdin` and `stdout` without the need of volumes.
 
 ```bash
-cat examples/document/basic-example.adoc | docker run -i --rm asciidoctor-web-pdf:latest - > doc.pdf
+cat examples/document/basic-example.adoc | docker run -i --rm ggrossetie/asciidoctor-web-pdf:latest - > doc.pdf
 ```
 
 ## Get started
