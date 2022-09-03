@@ -3,8 +3,8 @@
   "version": "1.0.0-alpha.16",
   "description": "A PDF converter for AsciiDoc based on web technologies",
   "engines": {
-    "node": ">=12",
-    "npm": ">=6.0.0"
+    "node": ">=16",
+    "npm": ">=8.0.0"
   },
   "bin": {
     "asciidoctor-pdf": "bin/asciidoctor-pdf",
@@ -74,7 +74,7 @@
     "nunjucks": "~3.2",
     "pacote": "~12.0",
     "pixelmatch": "~5.1",
-    "pkg": "~5.2",
+    "pkg": "~5.8",
     "rimraf": "~3.0",
     "sinon": "~13.0",
     "standard": "~16.0"

@@ -13,9 +13,9 @@ const buildDirPath = path.join(__dirname, '..', buildDir)
 // Can specify linux/mac/win as first argument to only build one of these platforms
 
 const platforms = {
-  linux: { target: 'node12-linux-x64' },
-  mac: { target: 'node12-macos-x64' },
-  win: { target: 'node12-win-x64', suffix: '.exe', puppeteerPlatform: 'win64' }
+  linux: { target: 'node16-linux-x64' },
+  mac: { target: 'node16-macos-x64' },
+  win: { target: 'node16-win-x64', suffix: '.exe', puppeteerPlatform: 'win64' }
 }
 
 const version = require('../package.json').version
