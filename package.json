@@ -1,7 +1,7 @@
 {
   "name": "asciidoctor-pdf",
   "version": "1.0.0-alpha.16",
-  "description": "A PDF converter for AsciiDoc based on Asciidoctor.js",
+  "description": "A PDF converter for AsciiDoc based on web technologies",
   "engines": {
     "node": ">=12",
     "npm": ">=6.0.0"
@@ -34,15 +34,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mogztter/asciidoctor-pdf.js.git"
+    "url": "git+https://github.com/Mogztter/asciidoctor-web-pdf.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "asciidoc",
+    "asciidoctor",
+    "pdf"
+  ],
+  "author": "Guillaume Grossetie (https://github.com/mogztter)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Mogztter/asciidoctor-pdf.js/issues"
+    "url": "https://github.com/Mogztter/asciidoctor-web-pdf/issues"
   },
-  "homepage": "https://github.com/Mogztter/asciidoctor-pdf.js#readme",
+  "homepage": "https://github.com/Mogztter/asciidoctor-web-pdf#readme",
   "dependencies": {
     "@asciidoctor/cli": "~3.5",
     "@fortawesome/fontawesome-svg-core": "6.2.0",
