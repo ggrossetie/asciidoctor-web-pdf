@@ -35,6 +35,8 @@ COPY --chown=asciidoctor:asciidoctor --from=builder /app/node_modules/mathjax/es
 
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/lib/chromium/chrome
 
+RUN mkdir /usr/app && chown asciidoctor:asciidoctor /usr/app
+
 USER asciidoctor
 WORKDIR /usr/app
 

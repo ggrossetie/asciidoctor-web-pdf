@@ -15,7 +15,7 @@ packageLocalDocker:
 	docker build -t asciidoctor-web-pdf:latest .
 
 testDocker:
-	echo "= Test" | docker run -i asciidoctor-web-pdf:latest -a reproducible - > test/output/docker-smoke-test.pdf
+	echo "= Test" | docker run -i --rm asciidoctor-web-pdf:latest -a reproducible - > test/output/docker-smoke-test.pdf
 	md5sum -c test/docker-smoke-test.md5sum
 
 publishDocker:
