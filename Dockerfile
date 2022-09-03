@@ -30,8 +30,8 @@ RUN addgroup -g 1000 asciidoctor && adduser -D -G asciidoctor -u 1000 asciidocto
 RUN apk add --quiet --no-cache --update chromium font-noto-emoji ttf-freefont font-noto \
      && fc-cache -f
 
-COPY --chown=asciidoctor/asciidoctor --from=builder /app/app.bin /usr/bin/asciidoctor-web-pdf
-COPY --chown=asciidoctor/asciidoctor --from=builder /app/node_modules/mathjax/es5 /usr/bin/assets/mathjax
+COPY --chown=asciidoctor:asciidoctor --from=builder /app/app.bin /usr/bin/asciidoctor-web-pdf
+COPY --chown=asciidoctor:asciidoctor --from=builder /app/node_modules/mathjax/es5 /usr/bin/assets/mathjax
 
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/lib/chromium/chrome
 
