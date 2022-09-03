@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/Mogztter/asciidoctor-web-pdf/actions/workflows/build.yml/badge.svg)](https://github.com/Mogztter/asciidoctor-web-pdf/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
-[![Docker image](https://img.shields.io/docker/v/ggrossetie/asciidoctor-web-pdf)](https://hub.docker.com/r/ggrossetie/asciidoctor-web-pdf)
+[![Docker image](https://img.shields.io/docker/v/ggrossetie/asciidoctor-web-pdf?label=Docker%20image)](https://hub.docker.com/r/ggrossetie/asciidoctor-web-pdf)
 
 A PDF converter for AsciiDoc based on web technologies.
 It allows complex layouts to be defined with CSS and JavaScript, while writing the content in AsciiDoc.
