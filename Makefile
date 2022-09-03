@@ -22,4 +22,4 @@ publishDocker:
 ifndef RELEASE_VERSION
 	$(error RELEASE_VERSION is undefined)
 endif
-	docker buildx build --push --platform linux/amd64,linux/arm64 --tag asciidoctor-web-pdf:latest --tag asciidoctor-web-pdf:${RELEASE_VERSION} .
+	docker buildx build --push --platform linux/amd64,linux/arm64 --tag ggrossetie/asciidoctor-web-pdf:latest --tag ggrossetie/asciidoctor-web-pdf:${RELEASE_VERSION} .
