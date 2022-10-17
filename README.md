@@ -666,7 +666,7 @@ It will produce a file named `examples/cheat-sheet/maven-security-cheat-sheet.pd
 Asciidoctor Web PDF is using an HTML 5 converter to convert an AsciiDoc document to an HTML 5 page.
 [Puppeteer](https://github.com/GoogleChrome/puppeteer) will then run a headless Chrome to generate a PDF from the HTML 5 page.
 
-To paginate content in the browser, we are using [Paged.js](https://www.pagedmedia.org/paged-js/),
+To paginate content in the browser, we are using [Paged.js](https://pagedjs.org/),
 an open-source library, that acts as a _polyfill_ for [Paged Media](https://www.w3.org/TR/css-page-3/) and [Generated Content for Paged Media](https://www.w3.org/TR/css-gcpm-3/) W3C specifications.
 
 This project is heavily inspired by [ReLaXed](https://github.com/RelaxedJS/ReLaXed).
