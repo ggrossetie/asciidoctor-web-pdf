@@ -1,4 +1,4 @@
-FROM node:16.16.0-bullseye-slim
+FROM node:19.4.0-bullseye-slim
 
 RUN addgroup --gid 1001 asciidoc && adduser --disabled-password --ingroup asciidoc -u 1001 asciidoc
 
