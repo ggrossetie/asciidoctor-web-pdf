@@ -53,12 +53,12 @@
     "@fortawesome/free-brands-svg-icons": "6.2.1",
     "@fortawesome/free-regular-svg-icons": "6.2.1",
     "@fortawesome/free-solid-svg-icons": "6.2.1",
-    "@ggrossetie/pagedjs": "0.2.0-next.1623590414",
     "chokidar": "~3.5",
     "file-url": "~3.0",
     "fs-extra": "~11.1.0",
     "html-entities": "~2.3",
     "mathjax": "3.2.2",
+    "pagedjs": "^0.4.3",
     "pdf-lib": "~1.17",
     "puppeteer": "15.4.0",
     "yargs": "17.6.2"
