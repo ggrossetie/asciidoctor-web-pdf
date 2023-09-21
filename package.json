@@ -58,6 +58,7 @@
     "fs-extra": "~11.1.0",
     "html-entities": "~2.3",
     "mathjax": "3.2.2",
+    "pagedjs": "^0.4.3",
     "pdf-lib": "~1.17",
     "puppeteer": "15.4.0",
     "yargs": "17.6.2"
