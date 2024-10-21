@@ -60,7 +60,7 @@
     "html-entities": "~2.3",
     "mathjax": "3.2.2",
     "pdf-lib": "~1.17",
-    "puppeteer": "15.4.0",
+    "puppeteer": "23.6.0",
     "yargs": "17.6.2"
   },
   "devDependencies": {
