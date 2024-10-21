@@ -23,7 +23,7 @@ RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 npm ci
 RUN /usr/local/bin/pkg bin/asciidoctor-web-pdf --config package.json --targets ${NODE}-${PLATFORM}-$([ "$TARGETARCH" == "amd64" ] && echo "x64" || echo "$TARGETARCH") -o app.bin
 
 # Create the image
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.16.2
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.20.3
 
 RUN addgroup -g 1000 asciidoctor && adduser -D -G asciidoctor -u 1000 asciidoctor
 
