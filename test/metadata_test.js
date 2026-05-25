@@ -25,7 +25,11 @@ const assertMetadataEqual = (pdf, metadataKey, expectedValue) => {
   const metadata = pdf.context.lookup(pdf.context.trailerInfo.Info)
   const pdfValue = metadata.get(PDFName.of(metadataKey))
   if (pdfValue instanceof PDFHexString) {
-    assert.strictEqual(decodePDFHexValue(pdfValue.value), expectedValue, metadataKey)
+    assert.strictEqual(
+      decodePDFHexValue(pdfValue.value),
+      expectedValue,
+      metadataKey,
+    )
   } else {
     assert.strictEqual(pdfValue.value, expectedValue, metadataKey)
   }
@@ -39,23 +43,34 @@ const toPdfWithMetadata = async (content, options) => {
 
 describe('PDF metadata', () => {
   it('should add metadata from attributes', async () => {
-    const pdfWithMetadata = await toPdfWithMetadata(`= The Dangerous and Thrilling Documentation Chronicles
+    const pdfWithMetadata =
+      await toPdfWithMetadata(`= The Dangerous and Thrilling Documentation Chronicles
 Guillaume Grossetie <ggrossetie@asciidoctor.org>
 v1.0, 2019-11-05
 :keywords: pdf,asciidoctor,doc
 
 content`)
 
-    assertMetadataEqual(pdfWithMetadata, 'Title', 'The Dangerous and Thrilling Documentation Chronicles')
+    assertMetadataEqual(
+      pdfWithMetadata,
+      'Title',
+      'The Dangerous and Thrilling Documentation Chronicles',
+    )
     assertMetadataEqual(pdfWithMetadata, 'Author', 'Guillaume Grossetie')
     assertMetadataEqual(pdfWithMetadata, 'Subject', '')
     assertMetadataEqual(pdfWithMetadata, 'Keywords', 'pdf asciidoctor doc')
     assertMetadataEqual(pdfWithMetadata, 'Producer', 'Guillaume Grossetie')
-    assertMetadataEqual(pdfWithMetadata, 'Creator', `Asciidoctor Web PDF ${pkgVersion}`)
+    assertMetadataEqual(
+      pdfWithMetadata,
+      'Creator',
+      `Asciidoctor Web PDF ${pkgVersion}`,
+    )
   })
 
   it('should add epoch unix at start date if reproducible attribute is set', async () => {
-    const pdfWithMetadata = await toPdfWithMetadata('', { attributes: { reproducible: true } })
+    const pdfWithMetadata = await toPdfWithMetadata('', {
+      attributes: { reproducible: true },
+    })
 
     assertMetadataEqual(pdfWithMetadata, 'CreationDate', 'D:19700101000000Z')
     assertMetadataEqual(pdfWithMetadata, 'ModDate', 'D:19700101000000Z')
@@ -104,7 +119,10 @@ content`)
 
 content`)
 
-    assert.strictEqual(pdfWithMetadata.catalog.get(PDFName.of('Lang')).value, 'en')
+    assert.strictEqual(
+      pdfWithMetadata.catalog.get(PDFName.of('Lang')).value,
+      'en',
+    )
   })
 
   it('should set Lang field to value of lang attribute', async () => {
@@ -113,7 +131,10 @@ content`)
 
 content`)
 
-    assert.strictEqual(pdfWithMetadata.catalog.get(PDFName.of('Lang')).value, 'de')
+    assert.strictEqual(
+      pdfWithMetadata.catalog.get(PDFName.of('Lang')).value,
+      'de',
+    )
   })
 
   it('should not set Lang field when nolang attribute is set', async () => {
@@ -122,6 +143,9 @@ content`)
 
 content`)
 
-    assert.strictEqual(pdfWithMetadata.catalog.get(PDFName.of('Lang')), undefined)
+    assert.strictEqual(
+      pdfWithMetadata.catalog.get(PDFName.of('Lang')),
+      undefined,
+    )
   })
 })

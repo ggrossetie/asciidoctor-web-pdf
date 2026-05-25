@@ -5,31 +5,43 @@ const childProcess = require('child_process')
 const PNG = require('pngjs').PNG
 const pixelmatch = require('pixelmatch')
 
-function outputDir () {
+function outputDir() {
   return ospath.join(__dirname, 'output')
 }
 
-function outputFile (path) {
+function outputFile(path) {
   return ospath.join(outputDir(), path)
 }
 
-function computeImageDifferences (referenceBuffer, actualBuffer, diffFilename) {
+function computeImageDifferences(referenceBuffer, actualBuffer, diffFilename) {
   const referenceImage = PNG.sync.read(referenceBuffer)
   const actualImage = PNG.sync.read(actualBuffer)
   const { width, height } = referenceImage
   const diff = new PNG({ width, height })
-  const numDiffPixels = pixelmatch(referenceImage.data, actualImage.data, diff.data, width, height, { threshold: 0.1 })
+  const numDiffPixels = pixelmatch(
+    referenceImage.data,
+    actualImage.data,
+    diff.data,
+    width,
+    height,
+    { threshold: 0.1 },
+  )
   fs.writeFileSync(diffFilename, PNG.sync.write(diff))
   return numDiffPixels
 }
 
-function toVisuallyMatch (referenceFilename, actualPath) {
+function toVisuallyMatch(referenceFilename, actualPath) {
   const platform = os.platform() === 'darwin' ? 'macos' : 'linux'
   let referencePath
   if (ospath.isAbsolute(referenceFilename)) {
     referencePath = referenceFilename
   } else {
-    referencePath = ospath.join(__dirname, 'reference', platform, referenceFilename)
+    referencePath = ospath.join(
+      __dirname,
+      'reference',
+      platform,
+      referenceFilename,
+    )
   }
 
   if (!fs.existsSync(actualPath)) {
@@ -41,17 +53,29 @@ function toVisuallyMatch (referenceFilename, actualPath) {
   }
   const actualBasename = ospath.basename(actualPath, '.pdf')
   const outputBasename = ospath.join(imagesOutputDir, `${actualBasename}`)
-  childProcess.execFileSync('pdftocairo', ['-png', actualPath, `${outputBasename}-actual`])
-  childProcess.execFileSync('pdftocairo', ['-png', referencePath, `${outputBasename}-reference`])
+  childProcess.execFileSync('pdftocairo', [
+    '-png',
+    actualPath,
+    `${outputBasename}-actual`,
+  ])
+  childProcess.execFileSync('pdftocairo', [
+    '-png',
+    referencePath,
+    `${outputBasename}-reference`,
+  ])
 
   let pixels = 0
   const tmpFiles = [actualPath]
 
-  const currentFilenameRegexp = new RegExp(`${actualBasename}-(?:actual|reference)-(\\d+).png`)
+  const currentFilenameRegexp = new RegExp(
+    `${actualBasename}-(?:actual|reference)-(\\d+).png`,
+  )
   const files = fs.readdirSync(imagesOutputDir)
-  const indexes = new Set(files
-    .filter((name) => name.match(currentFilenameRegexp))
-    .map((name) => name.match(currentFilenameRegexp)[1]))
+  const indexes = new Set(
+    files
+      .filter((name) => name.match(currentFilenameRegexp))
+      .map((name) => name.match(currentFilenameRegexp)[1]),
+  )
   for (const idx of indexes) {
     const referencePageFilename = `${outputBasename}-reference-${idx}.png`
     const referencePageExists = fs.existsSync(referencePageFilename)
@@ -65,14 +89,22 @@ function toVisuallyMatch (referenceFilename, actualPath) {
     }
     const referenceBuffer = fs.readFileSync(referencePageFilename)
     const actualBuffer = fs.readFileSync(actualPageFilename)
-    if (referencePageExists && actualPageExists && referenceBuffer.compare(actualBuffer) === 0) {
+    if (
+      referencePageExists &&
+      actualPageExists &&
+      referenceBuffer.compare(actualBuffer) === 0
+    ) {
       continue
     }
-    pixels += computeImageDifferences(referenceBuffer, actualBuffer, `${outputBasename}-diff-${idx}.png`)
+    pixels += computeImageDifferences(
+      referenceBuffer,
+      actualBuffer,
+      `${outputBasename}-diff-${idx}.png`,
+    )
   }
   if (pixels > 0) {
     if (typeof process.env.DEBUG === 'undefined') {
-      tmpFiles.forEach((file) => fs.unlinkSync(file))
+      for (const file of tmpFiles) fs.unlinkSync(file)
     }
   }
   return pixels

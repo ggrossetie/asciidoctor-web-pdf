@@ -9,7 +9,9 @@ const startTag = '/* start:font-face */'
 const endTag = '/* end:font-face */'
 const data = []
 data.push(startTag)
-data.push(`/* Generated using ${ospath.relative(ospath.join(__dirname, '..'), __filename)} script */`)
+data.push(
+  `/* Generated using ${ospath.relative(ospath.join(__dirname, '..'), __filename)} script */`,
+)
 data.push('/* DO NOT MANUALLY EDIT */')
 for (const font of fonts) {
   const buff = fs.readFileSync(`${fontsDirectoryPath}/${font}`)
@@ -35,7 +37,9 @@ for (const font of fonts) {
   } else if (fontType.startsWith('Bold')) {
     fontWeight = 700
   } else {
-    throw new Error('Unable to determine the font weight from the name. Aborting...')
+    throw new Error(
+      'Unable to determine the font weight from the name. Aborting...',
+    )
   }
   let fontStyle = 'normal'
   if (fontType.includes('Italic')) {
