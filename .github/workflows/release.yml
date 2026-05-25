@@ -36,21 +36,26 @@ jobs:
           npm t
       - name: Build binaries
         run: npm run build -- --no-progress
-      - name: Upload Windows artifact
+      - name: Upload Windows x64 artifact
         uses: actions/upload-artifact@v7
         with:
-          name: win-binary
-          path: build/asciidoctor-web-pdf-win.zip
-      - name: Upload macOS artifact
+          name: win-x64-binary
+          path: build/asciidoctor-web-pdf-win-x64.zip
+      - name: Upload macOS arm64 artifact
         uses: actions/upload-artifact@v7
         with:
-          name: mac-binary
-          path: build/asciidoctor-web-pdf-mac.zip
-      - name: Upload Linux artifact
+          name: mac-arm64-binary
+          path: build/asciidoctor-web-pdf-mac-arm64.zip
+      - name: Upload Linux x64 artifact
         uses: actions/upload-artifact@v7
         with:
-          name: linux-binary
-          path: build/asciidoctor-web-pdf-linux.zip
+          name: linux-x64-binary
+          path: build/asciidoctor-web-pdf-linux-x64.zip
+      - name: Upload Linux arm64 artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-arm64-binary
+          path: build/asciidoctor-web-pdf-linux-arm64.zip
 
   publish:
     needs: build
@@ -87,9 +92,10 @@ jobs:
           gh release create "v${{ inputs.version }}" \
             --title "v${{ inputs.version }}" \
             $PRERELEASE_FLAG \
-            build/asciidoctor-web-pdf-win.zip \
-            build/asciidoctor-web-pdf-mac.zip \
-            build/asciidoctor-web-pdf-linux.zip
+            build/asciidoctor-web-pdf-win-x64.zip \
+            build/asciidoctor-web-pdf-mac-arm64.zip \
+            build/asciidoctor-web-pdf-linux-x64.zip \
+            build/asciidoctor-web-pdf-linux-arm64.zip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

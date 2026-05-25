@@ -51,34 +51,39 @@ jobs:
     - name: Build binary
       run: |
         npm run build
-    - name: Upload Windows artifact
+    - name: Upload Windows x64 artifact
       uses: actions/upload-artifact@v4
       with:
-        name: win-binary
-        path: build/asciidoctor-web-pdf-win.zip
-    - name: Upload macOS artifact
+        name: win-x64-binary
+        path: build/asciidoctor-web-pdf-win-x64.zip
+    - name: Upload macOS arm64 artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mac-binary
-        path: build/asciidoctor-web-pdf-mac.zip
-    - name: Upload Linux artifact
+        name: mac-arm64-binary
+        path: build/asciidoctor-web-pdf-mac-arm64.zip
+    - name: Upload Linux x64 artifact
       uses: actions/upload-artifact@v4
       with:
-        name: linux-binary
-        path: build/asciidoctor-web-pdf-linux.zip
+        name: linux-x64-binary
+        path: build/asciidoctor-web-pdf-linux-x64.zip
+    - name: Upload Linux arm64 artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-arm64-binary
+        path: build/asciidoctor-web-pdf-linux-arm64.zip
   test-linux:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: linux-binary
+          name: linux-x64-binary
       - name: Unzip
         run: |
-          unzip asciidoctor-web-pdf-linux.zip -d out
+          unzip asciidoctor-web-pdf-linux-x64.zip -d out
       - name: Smoke test
         run: |
-          cd out/asciidoctor-web-pdf-linux-${{ needs.build.outputs.version }}
+          cd out/asciidoctor-web-pdf-linux-x64-${{ needs.build.outputs.version }}
           rm -rf basic.pdf
           ./asciidoctor-web-pdf ./examples/document/basic-example.adoc -o basic.pdf
           ls basic.pdf
@@ -89,13 +94,13 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: mac-binary
+          name: mac-arm64-binary
       - name: Unzip
         run: |
-          unzip asciidoctor-web-pdf-mac.zip -d out
+          unzip asciidoctor-web-pdf-mac-arm64.zip -d out
       - name: Smoke test
         run: |
-          cd out/asciidoctor-web-pdf-mac-${{ needs.build.outputs.version }}
+          cd out/asciidoctor-web-pdf-mac-arm64-${{ needs.build.outputs.version }}
           rm -rf basic.pdf
           ./asciidoctor-web-pdf ./examples/document/basic-example.adoc -o basic.pdf
           ls basic.pdf
@@ -106,13 +111,13 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: win-binary
+          name: win-x64-binary
       - name: Unzip
         run: |
-          unzip asciidoctor-web-pdf-win.zip -d out
+          unzip asciidoctor-web-pdf-win-x64.zip -d out
       - name: Smoke test
         run: |
-          cd out\asciidoctor-web-pdf-win-${{ needs.build.outputs.version }}
+          cd out\asciidoctor-web-pdf-win-x64-${{ needs.build.outputs.version }}
           asciidoctor-web-pdf.exe examples\document\basic-example.adoc -o basic.pdf
           ls basic.pdf
         shell: cmd
