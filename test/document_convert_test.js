@@ -1,10 +1,7 @@
-/* global it, describe */
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
 const cheerio = require('cheerio')
 const ospath = require('path')
-const chai = require('chai')
-const expect = chai.expect
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
 
 const asciidoctor = require('@asciidoctor/core')()
 const DocumentConverter = require('../lib/document/document-converter')
@@ -26,7 +23,7 @@ Guillaume Grossetie
 
 == Section`, { backend: 'custom-web-pdf' })
     const $ = cheerio.load(doc.convert({ header_footer: true }))
-    expect($('h1').text()).to.equal('Static title')
+    assert.strictEqual($('h1').text(), 'Static title')
   })
 
   describe('Docinfo', () => {
@@ -39,8 +36,8 @@ Guillaume Grossetie
         to_file: false,
         attributes: { docinfo: 'shared' }
       }))
-      expect($('head > meta[name="keywords"]').attr('content')).to.equal('journalism, press')
-      expect($('head > script[src="debug.js"]').length).to.equal(1)
+      assert.strictEqual($('head > meta[name="keywords"]').attr('content'), 'journalism, press')
+      assert.strictEqual($('head > script[src="debug.js"]').length, 1)
     })
     it('should include private (footer) docinfo', () => {
       asciidoctor.ConverterFactory.register(new DocumentConverter(), ['web-pdf'])
@@ -51,7 +48,7 @@ Guillaume Grossetie
         to_file: false,
         attributes: { docinfo: 'private-footer' }
       }))
-      expect($('footer').text()).to.equal('This is the end.')
+      assert.strictEqual($('footer').text(), 'This is the end.')
     })
     it('should include private (running) docinfo', () => {
       asciidoctor.ConverterFactory.register(new DocumentConverter(), ['web-pdf'])
@@ -62,7 +59,7 @@ Guillaume Grossetie
         to_file: false,
         attributes: { docinfo: 'private-running' }
       }))
-      expect($('body > .contact-us').length).to.equal(1)
+      assert.strictEqual($('body > .contact-us').length, 1)
     })
   })
 })

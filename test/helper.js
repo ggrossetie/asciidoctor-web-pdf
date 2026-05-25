@@ -33,7 +33,7 @@ function toVisuallyMatch (referenceFilename, actualPath) {
   }
 
   if (!fs.existsSync(actualPath)) {
-    return false
+    throw new Error(`File does not exist: ${actualPath}`)
   }
   const imagesOutputDir = outputFile('visual-comparison-workdir')
   if (!fs.existsSync(imagesOutputDir)) {
@@ -74,25 +74,8 @@ function toVisuallyMatch (referenceFilename, actualPath) {
     if (typeof process.env.DEBUG === 'undefined') {
       tmpFiles.forEach((file) => fs.unlinkSync(file))
     }
-    return pixels
-  } else {
-    return pixels
   }
+  return pixels
 }
 
-module.exports = (chai) => {
-  chai.use(function (_chai, _) {
-    _chai.Assertion.addMethod('visuallyIdentical', function (reference) {
-      const obj = this._obj
-      const result = toVisuallyMatch(reference, obj)
-      const objRelativePath = ospath.relative(__dirname, obj)
-      this.assert(
-        result === 0
-        , `expected ${objRelativePath} to be visually identical to reference/${reference} but has ${result} pixels difference`
-        , `expected ${objRelativePath} to not be visually identical to reference/${reference} but has 0 pixel difference`
-        , 0
-        , result
-      )
-    })
-  })
-}
+module.exports = { toVisuallyMatch }

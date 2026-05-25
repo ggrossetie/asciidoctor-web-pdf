@@ -1,8 +1,5 @@
-/* global it, describe */
-const chai = require('chai')
-const expect = chai.expect
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
 
 const { PdfOptions, PdfInvoker, processor } = require('../lib/cli.js')
 
@@ -11,10 +8,10 @@ describe('CLI', () => {
     const options = new PdfOptions().parse(['node', 'asciidoctor-pdf', 'doc.adoc'])
     const pdfInvoker = new PdfInvoker(options)
     const attributes = pdfInvoker.options.options.attributes
-    expect(attributes).to.include('env-web-pdf')
-    expect(attributes).to.include('env=web-pdf')
+    assert.ok(attributes.includes('env-web-pdf'))
+    assert.ok(attributes.includes('env=web-pdf'))
     const html = processor.convert('{env}', Object.assign({}, pdfInvoker.options.options, { standalone: false }))
-    expect(html).to.equal(`<div class="paragraph">
+    assert.strictEqual(html, `<div class="paragraph">
 <p>web-pdf</p>
 </div>`)
   })
@@ -22,11 +19,11 @@ describe('CLI', () => {
     const options = new PdfOptions().parse(['node', 'asciidoctor-pdf', 'doc.adoc', '-a', 'env=pdf'])
     const pdfInvoker = new PdfInvoker(options)
     const attributes = pdfInvoker.options.options.attributes
-    expect(attributes).to.include('env-web-pdf')
-    expect(attributes).to.include('env=web-pdf')
-    expect(attributes).to.include('env=pdf')
+    assert.ok(attributes.includes('env-web-pdf'))
+    assert.ok(attributes.includes('env=web-pdf'))
+    assert.ok(attributes.includes('env=pdf'))
     const html = processor.convert('{env}', Object.assign({}, pdfInvoker.options.options, { standalone: false }))
-    expect(html).to.equal(`<div class="paragraph">
+    assert.strictEqual(html, `<div class="paragraph">
 <p>pdf</p>
 </div>`)
   })
