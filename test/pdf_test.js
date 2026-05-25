@@ -10,10 +10,9 @@ const dirtyChai = require('dirty-chai')
 chai.use(dirtyChai)
 require('./helper.js')(chai)
 
-const asciidoctor = require('@asciidoctor/core')()
 const converter = require('../lib/converter.js')
 const { templates } = require('../lib/document/document-converter')
-converter.registerTemplateConverter(asciidoctor, templates)
+converter.registerTemplateConverter(templates)
 
 const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 const outputPath = (...paths) => ospath.join(__dirname, 'output', ...paths)
@@ -66,7 +65,7 @@ describe('PDF converter', function () {
   const convert = async (inputFile, outputFile, options) => {
     const opts = options || {}
     opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: inputFile }, opts, false)
+    await converter.convert({ path: inputFile }, opts, false)
     return PDFDocument.load(fs.readFileSync(outputFile))
   }
 
@@ -79,7 +78,7 @@ describe('PDF converter', function () {
     opts.attributes = attributes || {}
     opts.attributes.reproducible = ''
     opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: fixturesPath(`${inputBaseFileName}.adoc`) }, opts, false)
+    await converter.convert({ path: fixturesPath(`${inputBaseFileName}.adoc`) }, opts, false)
     expect(outputFile).to.be.visuallyIdentical(`${outputBaseFileName}.pdf`)
   }
 

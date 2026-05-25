@@ -5,7 +5,7 @@ const expect = chai.expect
 const dirtyChai = require('dirty-chai')
 chai.use(dirtyChai)
 
-const asciidoctor = require('@asciidoctor/core')()
+const { load } = require('@asciidoctor/core')
 const { addMetadata } = require('../lib/metadata.js')
 const { version: pkgVersion } = require('../package.json')
 
@@ -35,7 +35,7 @@ const expectEqual = (pdf, metadataKey, expectedValue) => {
 }
 
 const toPdfWithMetadata = async (content, options) => {
-  const doc = asciidoctor.load(content, options)
+  const doc = await load(content, options)
   const pdfDoc = await PDFDocument.create()
   return addMetadata(pdfDoc, doc)
 }
