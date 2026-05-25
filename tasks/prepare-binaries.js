@@ -15,44 +15,64 @@ const buildDirPath = path.join(__dirname, '..', buildDir)
 const platforms = {
   linux: { target: 'node16-linux-x64' },
   mac: { target: 'node16-macos-x64' },
-  win: { target: 'node16-win-x64', suffix: '.exe', puppeteerPlatform: 'win64' }
+  win: { target: 'node16-win-x64', suffix: '.exe', puppeteerPlatform: 'win64' },
 }
 
 const version = require('../package.json').version
 
-async function createPackage (platforms) {
+async function createPackage(platforms) {
   for (const [name, platform] of Object.entries(platforms)) {
     console.log(`Building ${appName} for: ${name}`)
-    await exec([`bin/${appName}`, '--config', 'package.json', '--target', platform.target, '--output', `./${buildDir}/${name}/${appName}${platform.suffix || ''}`])
+    await exec([
+      `bin/${appName}`,
+      '--config',
+      'package.json',
+      '--target',
+      platform.target,
+      '--output',
+      `./${buildDir}/${name}/${appName}${platform.suffix || ''}`,
+    ])
   }
 }
 
-async function getBrowsers (platforms, showProgress) {
+async function getBrowsers(platforms, showProgress) {
   if (showProgress) {
     console.log('\n')
   } else {
-    console.log(`Downloading ${Object.keys(platforms).length > 1 ? 'browsers' : 'browser'}: ${Object.keys(platforms).join(', ')}...`)
+    console.log(
+      `Downloading ${Object.keys(platforms).length > 1 ? 'browsers' : 'browser'}: ${Object.keys(platforms).join(', ')}...`,
+    )
   }
-  const downloadProgress = Object.assign({}, ...Object.keys(platforms).map((key) => ({ [key]: 0 })))
-  return Promise.all(Object.entries(platforms).map(async ([name, platform], index) => {
-    const puppeteerPlatform = platform.puppeteerPlatform || name
-    return puppeteer
-      .createBrowserFetcher({
-        platform: puppeteerPlatform, // one of: linux, mac, win32 or win64
-        path: path.resolve(path.join(buildDirPath, name, 'chromium'))
-      })
-      .download(puppeteer.default._preferredRevision, function (downloadBytes, totalBytes) {
-        if (showProgress) {
-          downloadProgress[name] = Math.round(downloadBytes / totalBytes * 100)
-          const entries = Object.entries(downloadProgress)
-          const status = `Downloading ${entries.length > 1 ? 'browsers' : 'browser'} [${entries.map(([name, percent]) => `${name}: ${percent.toString().padStart(2)}%`).join(', ')}]`
-          console.log('\x1B[1A\x1B[K' + status)
-        }
-      })
-  }))
+  const downloadProgress = Object.assign(
+    {},
+    ...Object.keys(platforms).map((key) => ({ [key]: 0 })),
+  )
+  return Promise.all(
+    Object.entries(platforms).map(async ([name, platform], index) => {
+      const puppeteerPlatform = platform.puppeteerPlatform || name
+      return puppeteer
+        .createBrowserFetcher({
+          platform: puppeteerPlatform, // one of: linux, mac, win32 or win64
+          path: path.resolve(path.join(buildDirPath, name, 'chromium')),
+        })
+        .download(
+          puppeteer.default._preferredRevision,
+          (downloadBytes, totalBytes) => {
+            if (showProgress) {
+              downloadProgress[name] = Math.round(
+                (downloadBytes / totalBytes) * 100,
+              )
+              const entries = Object.entries(downloadProgress)
+              const status = `Downloading ${entries.length > 1 ? 'browsers' : 'browser'} [${entries.map(([name, percent]) => `${name}: ${percent.toString().padStart(2)}%`).join(', ')}]`
+              console.log('\x1B[1A\x1B[K' + status)
+            }
+          },
+        )
+    }),
+  )
 }
 
-function copyAssets (platforms) {
+function copyAssets(platforms) {
   for (const platform of Object.keys(platforms)) {
     console.log(`Copying MathJax / examples / css / fonts into ${platform}`)
     const outDir = path.join(buildDirPath, platform)
@@ -63,41 +83,52 @@ function copyAssets (platforms) {
     fsExtra.ensureDirSync(mathjaxBinaryDir)
 
     // done like this to make it more "findable"
-    const mathjaxDir = path.dirname(require.resolve('mathjax/es5/tex-chtml-full.js'))
+    const mathjaxDir = path.dirname(
+      require.resolve('mathjax/es5/tex-chtml-full.js'),
+    )
     fsExtra.copySync(mathjaxDir, mathjaxBinaryDir)
 
     const copyDirs = ['css', 'examples', 'fonts']
     for (const copyDir of copyDirs) {
-      fsExtra.copySync(path.join(__dirname, '..', copyDir), path.join(outDir, copyDir))
+      fsExtra.copySync(
+        path.join(__dirname, '..', copyDir),
+        path.join(outDir, copyDir),
+      )
     }
   }
 }
 
-async function archive (platforms) {
+async function archive(platforms) {
   console.log('Zipping...')
-  await Promise.all(Object.keys(platforms).map(async (platform) => {
-    const archive = archiver('zip', {
-      zlib: { level: 9 } // Maximize compression
-    })
-    const archiveName = `${appName}-${platform}`
-    const rootFolder = `${archiveName}-v${version}`
-    // must not be in same dir where we are zipping
-    const zipOut = fs.createWriteStream(path.join(buildDirPath, `${archiveName}.zip`))
-    zipOut.on('close', function () {
-      console.log(`Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`)
-    })
-    archive.on('error', function (err) {
-      throw err
-    })
-    // pipe archive to file stream
-    archive.pipe(zipOut)
-    // recursively add directory to folder ${archiveName}-${version}
-    archive.directory(path.join(buildDirPath, platform), rootFolder, {})
-    await archive.finalize()
-  }))
+  await Promise.all(
+    Object.keys(platforms).map(async (platform) => {
+      const archive = archiver('zip', {
+        zlib: { level: 9 }, // Maximize compression
+      })
+      const archiveName = `${appName}-${platform}`
+      const rootFolder = `${archiveName}-v${version}`
+      // must not be in same dir where we are zipping
+      const zipOut = fs.createWriteStream(
+        path.join(buildDirPath, `${archiveName}.zip`),
+      )
+      zipOut.on('close', () => {
+        console.log(
+          `Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`,
+        )
+      })
+      archive.on('error', (err) => {
+        throw err
+      })
+      // pipe archive to file stream
+      archive.pipe(zipOut)
+      // recursively add directory to folder ${archiveName}-${version}
+      archive.directory(path.join(buildDirPath, platform), rootFolder, {})
+      await archive.finalize()
+    }),
+  )
 }
 
-async function main (platforms, options) {
+async function main(platforms, options) {
   // remove existing build dir
   console.log(`Remove ${buildDir} directory`)
   fsExtra.removeSync(buildDirPath)
@@ -121,7 +152,6 @@ async function main (platforms, options) {
 
   await archive(platforms)
 }
-
 // allow invoking `node tasks/prepare-binaries.js` with linux/mac/win as the argument
 // e.g. `npm run build linux`
 ;(async () => {
@@ -130,7 +160,7 @@ async function main (platforms, options) {
     const options = { showProgress: true }
     if (args.length > 0) {
       if (args.includes('--no-progress')) {
-        args = args.filter(e => e !== '--no-progress')
+        args = args.filter((e) => e !== '--no-progress')
         options.showProgress = false
       }
     }
@@ -141,7 +171,9 @@ async function main (platforms, options) {
         singleBuild[platform] = platforms[platform]
         await main(singleBuild, options)
       } else {
-        console.error(`${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`)
+        console.error(
+          `${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`,
+        )
       }
     } else {
       await main(platforms, options)

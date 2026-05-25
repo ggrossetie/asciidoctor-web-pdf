@@ -1,1 +1,1 @@
-console.log('debug');
+console.log('debug')

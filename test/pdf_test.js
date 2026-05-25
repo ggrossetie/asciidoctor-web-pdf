@@ -1,4 +1,12 @@
-const { describe, it, before, after, beforeEach, afterEach, mock } = require('node:test')
+const {
+  describe,
+  it,
+  before,
+  after,
+  beforeEach,
+  afterEach,
+  mock,
+} = require('node:test')
 const assert = require('node:assert/strict')
 const fs = require('fs')
 const { PDFDocument, PDFName, PDFDict } = require('pdf-lib')
@@ -15,10 +23,14 @@ const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 const outputPath = (...paths) => ospath.join(__dirname, 'output', ...paths)
 const cssPath = (...paths) => ospath.join(__dirname, '..', 'css', ...paths)
 
-function assertVisuallyIdentical (outputFile, reference) {
+function assertVisuallyIdentical(outputFile, reference) {
   const pixelDiff = helper.toVisuallyMatch(reference, outputFile)
   const relPath = ospath.relative(__dirname, outputFile)
-  assert.strictEqual(pixelDiff, 0, `expected ${relPath} to be visually identical to reference/${reference} but has ${pixelDiff} pixels difference`)
+  assert.strictEqual(
+    pixelDiff,
+    0,
+    `expected ${relPath} to be visually identical to reference/${reference} but has ${pixelDiff} pixels difference`,
+  )
 }
 
 describe('PDF converter', () => {
@@ -37,14 +49,18 @@ describe('PDF converter', () => {
   })
 
   const getOutlineRefs = (pdfDoc) => {
-    const values = pdfDoc.context.lookup(pdfDoc.catalog.get(PDFName.of('Outlines'))).context.indirectObjects.values()
+    const values = pdfDoc.context
+      .lookup(pdfDoc.catalog.get(PDFName.of('Outlines')))
+      .context.indirectObjects.values()
     const dicts = []
     for (const v of values) {
       if (v instanceof PDFDict) {
         dicts.push(v.dict)
       }
     }
-    return dicts.filter((d) => Array.from(d.keys()).includes(PDFName.of('Dest')))
+    return dicts.filter((d) =>
+      Array.from(d.keys()).includes(PDFName.of('Dest')),
+    )
   }
 
   const decodePDFHexStringValue = (value) => {
@@ -67,7 +83,11 @@ describe('PDF converter', () => {
     return PDFDocument.load(fs.readFileSync(outputFile))
   }
 
-  const shouldBeVisuallyIdentical = async (inputBaseFileName, attributes, outputBaseFileName) => {
+  const shouldBeVisuallyIdentical = async (
+    inputBaseFileName,
+    attributes,
+    outputBaseFileName,
+  ) => {
     if (typeof outputBaseFileName === 'undefined') {
       outputBaseFileName = inputBaseFileName
     }
@@ -76,52 +96,103 @@ describe('PDF converter', () => {
     opts.attributes = attributes || {}
     opts.attributes.reproducible = ''
     opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: fixturesPath(`${inputBaseFileName}.adoc`) }, opts, false)
+    await converter.convert(
+      asciidoctor,
+      { path: fixturesPath(`${inputBaseFileName}.adoc`) },
+      opts,
+      false,
+    )
     assertVisuallyIdentical(outputFile, `${outputBaseFileName}.pdf`)
   }
 
   it('should not encode HTML entity in the PDF outline', async () => {
     const options = { attributes: { toc: 'macro' } }
-    const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-absent.pdf'), options)
+    const pdfDoc = await convert(
+      fixturesPath('sections.adoc'),
+      outputPath('sections-toc-absent.pdf'),
+      options,
+    )
     const refs = getOutlineRefs(pdfDoc)
     assert.strictEqual(refs.length, 9)
-    assert.strictEqual(refs[2].get(PDFName.of('Dest')).encodedName, '/_section_2_black_white')
-    assert.strictEqual(decodePDFHexStringValue(refs[2].get(PDFName.of('Title')).value), 'Section 2: Black & White')
-    assert.strictEqual(refs[5].get(PDFName.of('Dest')).encodedName, '/_section_3_typographic_quotes')
-    assert.strictEqual(decodePDFHexStringValue(refs[5].get(PDFName.of('Title')).value), 'Section 3: “Typographic quotes”')
-    assert.strictEqual(decodePDFHexStringValue(refs[7].get(PDFName.of('Title')).value), 'Section 4: Asterisk hex * and decimal *')
+    assert.strictEqual(
+      refs[2].get(PDFName.of('Dest')).encodedName,
+      '/_section_2_black_white',
+    )
+    assert.strictEqual(
+      decodePDFHexStringValue(refs[2].get(PDFName.of('Title')).value),
+      'Section 2: Black & White',
+    )
+    assert.strictEqual(
+      refs[5].get(PDFName.of('Dest')).encodedName,
+      '/_section_3_typographic_quotes',
+    )
+    assert.strictEqual(
+      decodePDFHexStringValue(refs[5].get(PDFName.of('Title')).value),
+      'Section 3: “Typographic quotes”',
+    )
+    assert.strictEqual(
+      decodePDFHexStringValue(refs[7].get(PDFName.of('Title')).value),
+      'Section 4: Asterisk hex * and decimal *',
+    )
   })
 
   describe('PDF Outline', () => {
     it('should generate a PDF outline even if the TOC is absent from the output', async () => {
       const options = { attributes: { toc: 'macro' } }
-      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-absent.pdf'), options)
+      const pdfDoc = await convert(
+        fixturesPath('sections.adoc'),
+        outputPath('sections-toc-absent.pdf'),
+        options,
+      )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 9)
-      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
+      assert.strictEqual(
+        refs[0].get(PDFName.of('Dest')).encodedName,
+        '/_section_1',
+      )
     })
 
     it('should generate a PDF outline even if the TOC is not enabled', async () => {
-      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-disabled.pdf'))
+      const pdfDoc = await convert(
+        fixturesPath('sections.adoc'),
+        outputPath('sections-toc-disabled.pdf'),
+      )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 9)
-      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
+      assert.strictEqual(
+        refs[0].get(PDFName.of('Dest')).encodedName,
+        '/_section_1',
+      )
     })
 
     it('should honor toclevels 1 when generating a PDF outline', async () => {
       const options = { attributes: { toclevels: 1 } }
-      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toclevels-1.pdf'), options)
+      const pdfDoc = await convert(
+        fixturesPath('sections.adoc'),
+        outputPath('sections-toclevels-1.pdf'),
+        options,
+      )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 4)
-      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
+      assert.strictEqual(
+        refs[0].get(PDFName.of('Dest')).encodedName,
+        '/_section_1',
+      )
     })
 
     it('should honor toclevels 3 when generating a PDF outline', async () => {
       const options = { attributes: { toclevels: 3 } }
-      const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toclevels-1.pdf'), options)
+      const pdfDoc = await convert(
+        fixturesPath('sections.adoc'),
+        outputPath('sections-toclevels-1.pdf'),
+        options,
+      )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 11)
-      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
+      assert.strictEqual(
+        refs[0].get(PDFName.of('Dest')).encodedName,
+        '/_section_1',
+      )
     })
   })
 
@@ -133,7 +204,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'preamble',
         'title-page-attribute': false,
-        'expected-page-number': 4
+        'expected-page-number': 4,
       },
       {
         doctype: 'book',
@@ -141,7 +212,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'auto',
         'title-page-attribute': false,
-        'expected-page-number': 4
+        'expected-page-number': 4,
       },
       {
         doctype: 'book',
@@ -149,7 +220,7 @@ describe('PDF converter', () => {
         section: false,
         toc: false,
         'title-page-attribute': false,
-        'expected-page-number': 1
+        'expected-page-number': 1,
       },
       {
         doctype: 'book',
@@ -157,7 +228,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'auto',
         'title-page-attribute': false,
-        'expected-page-number': 3
+        'expected-page-number': 3,
       },
       {
         doctype: 'book',
@@ -165,7 +236,7 @@ describe('PDF converter', () => {
         section: true,
         toc: false,
         'title-page-attribute': false,
-        'expected-page-number': 2
+        'expected-page-number': 2,
       },
       {
         doctype: 'book',
@@ -173,7 +244,7 @@ describe('PDF converter', () => {
         section: true,
         toc: false,
         'title-page-attribute': false,
-        'expected-page-number': 3
+        'expected-page-number': 3,
       },
       {
         doctype: 'article',
@@ -181,7 +252,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'preamble',
         'title-page-attribute': false,
-        'expected-page-number': 1
+        'expected-page-number': 1,
       },
       {
         doctype: 'article',
@@ -189,7 +260,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'auto',
         'title-page-attribute': false,
-        'expected-page-number': 1
+        'expected-page-number': 1,
       },
       {
         doctype: 'article',
@@ -197,7 +268,7 @@ describe('PDF converter', () => {
         section: false,
         toc: false,
         'title-page-attribute': false,
-        'expected-page-number': 1
+        'expected-page-number': 1,
       },
       {
         doctype: 'article',
@@ -205,7 +276,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'auto',
         'title-page-attribute': false,
-        'expected-page-number': 1
+        'expected-page-number': 1,
       },
       {
         doctype: 'article',
@@ -213,7 +284,7 @@ describe('PDF converter', () => {
         section: true,
         toc: false,
         'title-page-attribute': false,
-        'expected-page-number': 1
+        'expected-page-number': 1,
       },
       {
         doctype: 'article',
@@ -221,7 +292,7 @@ describe('PDF converter', () => {
         section: true,
         toc: false,
         'title-page-attribute': false,
-        'expected-page-number': 1
+        'expected-page-number': 1,
       },
       {
         doctype: 'article',
@@ -229,7 +300,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'preamble',
         'title-page-attribute': true,
-        'expected-page-number': 3
+        'expected-page-number': 3,
       },
       {
         doctype: 'article',
@@ -237,7 +308,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'auto',
         'title-page-attribute': true,
-        'expected-page-number': 3
+        'expected-page-number': 3,
       },
       // disabled from now until https://gitlab.pagedmedia.org/tools/pagedjs/issues/164 is fixed.
       // currently, paged.js will produce an empty page.
@@ -257,7 +328,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'auto',
         'title-page-attribute': true,
-        'expected-page-number': 3
+        'expected-page-number': 3,
       },
       {
         doctype: 'article',
@@ -265,7 +336,7 @@ describe('PDF converter', () => {
         section: true,
         toc: false,
         'title-page-attribute': true,
-        'expected-page-number': 2
+        'expected-page-number': 2,
       },
       {
         doctype: 'article',
@@ -273,8 +344,8 @@ describe('PDF converter', () => {
         section: true,
         toc: false,
         'title-page-attribute': true,
-        'expected-page-number': 2
-      }
+        'expected-page-number': 2,
+      },
     ]
     for (const scenario of scenarios) {
       const features = []
@@ -321,7 +392,10 @@ describe('PDF converter', () => {
         const inputFile = fixturesPath(inputFileName)
 
         const pdfDoc = await convert(inputFile, outputFile, options)
-        assert.strictEqual(pdfDoc.getPages().length, scenario['expected-page-number'])
+        assert.strictEqual(
+          pdfDoc.getPages().length,
+          scenario['expected-page-number'],
+        )
         assertVisuallyIdentical(outputFile, outputFileName)
       })
     }
@@ -330,7 +404,11 @@ describe('PDF converter', () => {
   it('should be able to set background color of title page', async () => {
     const attributes = {}
     attributes.stylesheet = `${cssPath('asciidoctor.css')},${cssPath('document.css')},${cssPath('features', 'book.css')},${fixturesPath('black-title-page.css')}`
-    await shouldBeVisuallyIdentical('title-page', attributes, 'title-page-background-color')
+    await shouldBeVisuallyIdentical(
+      'title-page',
+      attributes,
+      'title-page-background-color',
+    )
   })
 
   it('should repeat column group, caption and table header', async () => {
@@ -379,9 +457,17 @@ describe('PDF converter', () => {
         process.env.PUPPETEER_NAVIGATION_TIMEOUT = 1
         delete require.cache[require.resolve('../lib/converter.js')]
         const converter = require('../lib/converter.js')
-        await converter.convert(asciidoctor, { path: fixturesPath('title-page.adoc') }, {}, false)
+        await converter.convert(
+          asciidoctor,
+          { path: fixturesPath('title-page.adoc') },
+          {},
+          false,
+        )
         assert.ok(errorMock.mock.calls.length > 0)
-        assert.strictEqual(errorMock.mock.calls[0].arguments[0], 'Unable to generate the PDF - Error: TimeoutError: Navigation timeout of 1 ms exceeded')
+        assert.strictEqual(
+          errorMock.mock.calls[0].arguments[0],
+          'Unable to generate the PDF - Error: TimeoutError: Navigation timeout of 1 ms exceeded',
+        )
       } finally {
         delete process.env.PUPPETEER_NAVIGATION_TIMEOUT
       }
