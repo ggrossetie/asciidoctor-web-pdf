@@ -1,14 +1,10 @@
-/* global it, describe, before, after, beforeEach, afterEach */
+const { describe, it, before, after, beforeEach, afterEach, mock } = require('node:test')
+const assert = require('node:assert/strict')
 const fs = require('fs')
 const { PDFDocument, PDFName, PDFDict } = require('pdf-lib')
-const chai = require('chai')
-const sinon = require('sinon')
 const rimraf = require('rimraf')
 const ospath = require('path')
-const expect = chai.expect
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
-require('./helper.js')(chai)
+const helper = require('./helper.js')
 
 const asciidoctor = require('@asciidoctor/core')()
 const converter = require('../lib/converter.js')
@@ -19,20 +15,21 @@ const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 const outputPath = (...paths) => ospath.join(__dirname, 'output', ...paths)
 const cssPath = (...paths) => ospath.join(__dirname, '..', 'css', ...paths)
 
-describe('PDF converter', function () {
-  // launching an headless browser (especially on Travis) can take several tens of seconds
-  this.timeout(30000)
+function assertVisuallyIdentical (outputFile, reference) {
+  const pixelDiff = helper.toVisuallyMatch(reference, outputFile)
+  const relPath = ospath.relative(__dirname, outputFile)
+  assert.strictEqual(pixelDiff, 0, `expected ${relPath} to be visually identical to reference/${reference} but has ${pixelDiff} pixels difference`)
+}
 
+describe('PDF converter', () => {
   before(() => {
     const outputDir = ospath.join(__dirname, 'output')
     rimraf.sync(outputDir)
     fs.mkdirSync(outputDir)
   })
 
-  after(function () {
-    // clean the output directory if there's no failed tests (and if the DEBUG environment variable is absent).
-    const failedTests = this.test.parent.tests.filter(t => t.state === 'failed')
-    if (failedTests.length === 0 && typeof process.env.DEBUG === 'undefined') {
+  after(() => {
+    if (typeof process.env.DEBUG === 'undefined') {
       const outputDir = ospath.join(__dirname, 'output')
       rimraf.sync(outputDir)
       fs.mkdirSync(outputDir)
@@ -80,19 +77,19 @@ describe('PDF converter', function () {
     opts.attributes.reproducible = ''
     opts.to_file = outputFile
     await converter.convert(asciidoctor, { path: fixturesPath(`${inputBaseFileName}.adoc`) }, opts, false)
-    expect(outputFile).to.be.visuallyIdentical(`${outputBaseFileName}.pdf`)
+    assertVisuallyIdentical(outputFile, `${outputBaseFileName}.pdf`)
   }
 
   it('should not encode HTML entity in the PDF outline', async () => {
     const options = { attributes: { toc: 'macro' } }
     const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-absent.pdf'), options)
     const refs = getOutlineRefs(pdfDoc)
-    expect(refs.length).to.equal(9)
-    expect(refs[2].get(PDFName.of('Dest')).encodedName).to.equal('/_section_2_black_white')
-    expect(decodePDFHexStringValue(refs[2].get(PDFName.of('Title')).value)).to.equal('Section 2: Black & White')
-    expect(refs[5].get(PDFName.of('Dest')).encodedName).to.equal('/_section_3_typographic_quotes')
-    expect(decodePDFHexStringValue(refs[5].get(PDFName.of('Title')).value)).to.equal('Section 3: “Typographic quotes”')
-    expect(decodePDFHexStringValue(refs[7].get(PDFName.of('Title')).value)).to.equal('Section 4: Asterisk hex * and decimal *')
+    assert.strictEqual(refs.length, 9)
+    assert.strictEqual(refs[2].get(PDFName.of('Dest')).encodedName, '/_section_2_black_white')
+    assert.strictEqual(decodePDFHexStringValue(refs[2].get(PDFName.of('Title')).value), 'Section 2: Black & White')
+    assert.strictEqual(refs[5].get(PDFName.of('Dest')).encodedName, '/_section_3_typographic_quotes')
+    assert.strictEqual(decodePDFHexStringValue(refs[5].get(PDFName.of('Title')).value), 'Section 3: “Typographic quotes”')
+    assert.strictEqual(decodePDFHexStringValue(refs[7].get(PDFName.of('Title')).value), 'Section 4: Asterisk hex * and decimal *')
   })
 
   describe('PDF Outline', () => {
@@ -100,31 +97,31 @@ describe('PDF converter', function () {
       const options = { attributes: { toc: 'macro' } }
       const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-absent.pdf'), options)
       const refs = getOutlineRefs(pdfDoc)
-      expect(refs.length).to.equal(9)
-      expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
+      assert.strictEqual(refs.length, 9)
+      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
     })
 
     it('should generate a PDF outline even if the TOC is not enabled', async () => {
       const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toc-disabled.pdf'))
       const refs = getOutlineRefs(pdfDoc)
-      expect(refs.length).to.equal(9)
-      expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
+      assert.strictEqual(refs.length, 9)
+      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
     })
 
     it('should honor toclevels 1 when generating a PDF outline', async () => {
       const options = { attributes: { toclevels: 1 } }
       const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toclevels-1.pdf'), options)
       const refs = getOutlineRefs(pdfDoc)
-      expect(refs.length).to.equal(4)
-      expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
+      assert.strictEqual(refs.length, 4)
+      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
     })
 
     it('should honor toclevels 3 when generating a PDF outline', async () => {
       const options = { attributes: { toclevels: 3 } }
       const pdfDoc = await convert(fixturesPath('sections.adoc'), outputPath('sections-toclevels-1.pdf'), options)
       const refs = getOutlineRefs(pdfDoc)
-      expect(refs.length).to.equal(11)
-      expect(refs[0].get(PDFName.of('Dest')).encodedName).to.equal('/_section_1')
+      assert.strictEqual(refs.length, 11)
+      assert.strictEqual(refs[0].get(PDFName.of('Dest')).encodedName, '/_section_1')
     })
   })
 
@@ -324,8 +321,8 @@ describe('PDF converter', function () {
         const inputFile = fixturesPath(inputFileName)
 
         const pdfDoc = await convert(inputFile, outputFile, options)
-        expect(pdfDoc.getPages().length).to.equal(scenario['expected-page-number'])
-        expect(outputFile).to.be.visuallyIdentical(outputFileName)
+        assert.strictEqual(pdfDoc.getPages().length, scenario['expected-page-number'])
+        assertVisuallyIdentical(outputFile, outputFileName)
       })
     }
   })
@@ -367,12 +364,14 @@ describe('PDF converter', function () {
   })
 
   describe('Timeout', () => {
-    beforeEach(function () {
-      sinon.spy(console, 'error')
+    let errorMock
+
+    beforeEach(() => {
+      errorMock = mock.method(console, 'error')
     })
 
-    afterEach(function () {
-      console.error.restore()
+    afterEach(() => {
+      errorMock.mock.restore()
     })
 
     it('should timeout while navigating', async () => {
@@ -381,9 +380,8 @@ describe('PDF converter', function () {
         delete require.cache[require.resolve('../lib/converter.js')]
         const converter = require('../lib/converter.js')
         await converter.convert(asciidoctor, { path: fixturesPath('title-page.adoc') }, {}, false)
-        const call = console.error.getCall(0)
-        expect(call).to.have.property('firstArg')
-        expect(call.firstArg).to.equal('Unable to generate the PDF - Error: TimeoutError: Navigation timeout of 1 ms exceeded')
+        assert.ok(errorMock.mock.calls.length > 0)
+        assert.strictEqual(errorMock.mock.calls[0].arguments[0], 'Unable to generate the PDF - Error: TimeoutError: Navigation timeout of 1 ms exceeded')
       } finally {
         delete process.env.PUPPETEER_NAVIGATION_TIMEOUT
       }
