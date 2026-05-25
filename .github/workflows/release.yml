@@ -1,9 +1,16 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v2.1.3
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0-alpha.17)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   build:
@@ -20,13 +27,73 @@ jobs:
           sudo apt-get install -y libgbm-dev ghostscript poppler-utils
         if: ${{ runner.os == 'Linux' }}
       - name: Install dependencies
-        run: |
-          npm ci
+        run: npm ci
+      - name: Set version
+        run: npm version ${{ inputs.version }} --no-git-tag-version
       - name: Lint and test
         run: |
           npm run lint
           npm t
+      - name: Build binaries
+        run: npm run build -- --no-progress
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: win-binary
+          path: build/asciidoctor-web-pdf-win.zip
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: mac-binary
+          path: build/asciidoctor-web-pdf-mac.zip
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-binary
+          path: build/asciidoctor-web-pdf-linux.zip
+
   publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm ci
+      - name: Commit and tag release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          npm version ${{ inputs.version }} -m "Release v%s"
+          git push origin HEAD --tags
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+      - name: Download binary artifacts
+        uses: actions/download-artifact@v8
+        with:
+          merge-multiple: true
+          path: build/
+      - name: Create GitHub release
+        run: |
+          PRERELEASE_FLAG=""
+          if [[ "${{ inputs.version }}" == *"-"* ]]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+          gh release create "v${{ inputs.version }}" \
+            --title "v${{ inputs.version }}" \
+            $PRERELEASE_FLAG \
+            build/asciidoctor-web-pdf-win.zip \
+            build/asciidoctor-web-pdf-mac.zip \
+            build/asciidoctor-web-pdf-linux.zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish_dockerhub:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -34,72 +101,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      # libgbm-dev is required by Puppeteer 3+
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgbm-dev ghostscript poppler-utils
-        if: ${{ runner.os == 'Linux' }}
       - name: Install dependencies
-        run: |
-          npm ci
-      # package and publish
-      - name: Package and publish
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm run build -- --no-progress
-          npm run publish
-      - run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      # create the GitHub release
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: "${{ github.ref }}"
-          draft: false
-          prerelease: true
-      # upload assets
-      - name: Upload macOS binary (zip)
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/asciidoctor-web-pdf-mac.zip
-          asset_name: asciidoctor-web-pdf-mac-${{ env.RELEASE_VERSION }}.zip
-          asset_content_type: application/zip
-      - name: Upload Windows binary (zip)
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/asciidoctor-web-pdf-win.zip
-          asset_name: asciidoctor-web-pdf-win-${{ env.RELEASE_VERSION }}.zip
-          asset_content_type: application/zip
-      - name: Upload Linux binary (zip)
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/asciidoctor-web-pdf-linux.zip
-          asset_name: asciidoctor-web-pdf-linux-${{ env.RELEASE_VERSION }}.zip
-          asset_content_type: application/zip
-  publish_dockerhub:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-      - name: Install dependencies
-        run: |
-          npm ci
+        run: npm ci
       - name: Setup Docker
         # taken from https://github.com/docker/github-actions/blob/0f18e2abad9a4ac2963d2516246787375b5ec917/Dockerfile#L32
         run: curl -fL https://download.docker.com/linux/static/stable/x86_64/docker-20.10.4.tgz | tar xzO docker/docker > docker && sudo mv -f docker /usr/bin/docker && sudo chmod +x /usr/bin/docker
@@ -114,4 +117,4 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - name: Publish Docker images
-        run: RELEASE_VERSION=${GITHUB_REF#refs/*/v*} make publishDocker
+        run: RELEASE_VERSION=${{ inputs.version }} make publishDocker
