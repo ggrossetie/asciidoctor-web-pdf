@@ -97,7 +97,12 @@ function buildBinary() {
   }
 
   console.log('Injecting SEA blob...')
-  const postjectBin = path.join(rootDirPath, 'node_modules', '.bin', 'postject')
+  const postjectBin = path.join(
+    rootDirPath,
+    'node_modules',
+    '.bin',
+    isWindows ? 'postject.cmd' : 'postject',
+  )
   const postjectArgs = [
     binaryPath,
     'NODE_SEA_BLOB',
@@ -108,7 +113,10 @@ function buildBinary() {
   if (isMac) {
     postjectArgs.push('--macho-segment-name', 'NODE_SEA')
   }
-  execFileSync(postjectBin, postjectArgs, { stdio: 'inherit' })
+  execFileSync(postjectBin, postjectArgs, {
+    stdio: 'inherit',
+    shell: isWindows,
+  })
 
   if (isMac) {
     execSync(`codesign --sign - "${binaryPath}"`, { stdio: 'inherit' })
