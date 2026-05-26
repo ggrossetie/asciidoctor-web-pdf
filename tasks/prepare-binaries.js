@@ -1,18 +1,17 @@
-const path = require('node:path')
-const fs = require('node:fs')
-const fsExtra = require('fs-extra')
-const archiver = require('archiver')
-const {
-  install,
-  detectBrowserPlatform,
-  Browser,
-} = require('@puppeteer/browsers')
-const { execSync, execFileSync } = require('node:child_process')
-const esbuild = require('esbuild')
+import { execFileSync, execSync } from 'node:child_process'
+import fs from 'node:fs'
+import { createRequire } from 'node:module'
+import path from 'node:path'
+import { Browser, detectBrowserPlatform, install } from '@puppeteer/browsers'
+import archiver from 'archiver'
+import esbuild from 'esbuild'
+import fsExtra from 'fs-extra'
+
+const require = createRequire(import.meta.url)
 
 const appName = 'asciidoctor-web-pdf'
 const buildDir = 'build'
-const rootDirPath = path.join(__dirname, '..')
+const rootDirPath = path.join(import.meta.dirname, '..')
 const buildDirPath = path.join(rootDirPath, buildDir)
 const version = require('../package.json').version
 const nodeMajor = parseInt(process.version.slice(1), 10)
@@ -248,11 +247,9 @@ async function main() {
   console.log('Done!')
 }
 
-;(async () => {
-  try {
-    await main()
-  } catch (err) {
-    console.error(err)
-    process.exit(1)
-  }
-})()
+try {
+  await main()
+} catch (err) {
+  console.error(err)
+  process.exit(1)
+}
