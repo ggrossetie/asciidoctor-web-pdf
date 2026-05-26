@@ -1,7 +1,7 @@
-const ospath = require('path')
-const fs = require('fs')
-const os = require('os')
-const childProcess = require('child_process')
+const ospath = require('node:path')
+const fs = require('node:fs')
+const os = require('node:os')
+const childProcess = require('node:child_process')
 const PNG = require('pngjs').PNG
 const pixelmatch = require('pixelmatch')
 

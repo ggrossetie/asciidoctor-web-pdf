@@ -1,6 +1,6 @@
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
-const ospath = require('path')
+const ospath = require('node:path')
 const cheerio = require('cheerio')
 
 const asciidoctor = require('@asciidoctor/core')()

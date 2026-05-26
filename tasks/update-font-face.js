@@ -1,5 +1,5 @@
-const fs = require('fs')
-const ospath = require('path')
+const fs = require('node:fs')
+const ospath = require('node:path')
 const cssDirectoryPath = ospath.join(__dirname, '..', 'css')
 const fontsDirectoryPath = ospath.join(__dirname, '..', 'fonts')
 const fonts = fs.readdirSync(fontsDirectoryPath)

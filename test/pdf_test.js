@@ -8,10 +8,10 @@ const {
   mock,
 } = require('node:test')
 const assert = require('node:assert/strict')
-const fs = require('fs')
+const fs = require('node:fs')
 const { PDFDocument, PDFName, PDFDict } = require('pdf-lib')
 const rimraf = require('rimraf')
-const ospath = require('path')
+const ospath = require('node:path')
 const helper = require('./helper.js')
 
 const asciidoctor = require('@asciidoctor/core')()

@@ -10,14 +10,6 @@
     "asciidoctor-pdf": "bin/asciidoctor-pdf",
     "asciidoctor-web-pdf": "bin/asciidoctor-web-pdf"
   },
-  "pkg": {
-    "assets": [
-      "css/**/*.css"
-    ],
-    "scripts": [
-      "lib/document/**/*.js"
-    ]
-  },
   "files": [
     "bin",
     "lib",
@@ -60,7 +52,7 @@
     "html-entities": "~2.3",
     "mathjax": "3.2.2",
     "pdf-lib": "~1.17",
-    "puppeteer": "15.4.0",
+    "puppeteer": "25.1.0",
     "yargs": "17.6.2"
   },
   "devDependencies": {
@@ -69,8 +61,9 @@
     "archiver": "~5.3.0",
     "cheerio": "~1.0.0-rc.3",
     "nunjucks": "~3.2",
+    "esbuild": "^0.25.0",
     "pixelmatch": "~5.3.0",
-    "pkg": "~5.8",
+    "postject": "^1.0.0-alpha.6",
     "rimraf": "~4.1.0"
   },
   "peerDependencies": {

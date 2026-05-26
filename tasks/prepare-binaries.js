@@ -1,183 +1,256 @@
-const path = require('path')
-const fs = require('fs')
+const path = require('node:path')
+const fs = require('node:fs')
 const fsExtra = require('fs-extra')
 const archiver = require('archiver')
-const { exec } = require('pkg')
-const puppeteer = require('puppeteer')
+const {
+  install,
+  detectBrowserPlatform,
+  Browser,
+} = require('@puppeteer/browsers')
+const { execSync, execFileSync } = require('node:child_process')
+const esbuild = require('esbuild')
 
 const appName = 'asciidoctor-web-pdf'
 const buildDir = 'build'
-const buildDirPath = path.join(__dirname, '..', buildDir)
-
-// Gets chromium browser and builds binaries using pkg
-// Can specify linux/mac/win as first argument to only build one of these platforms
-
-const platforms = {
-  linux: { target: 'node16-linux-x64' },
-  mac: { target: 'node16-macos-x64' },
-  win: { target: 'node16-win-x64', suffix: '.exe', puppeteerPlatform: 'win64' },
-}
-
+const rootDirPath = path.join(__dirname, '..')
+const buildDirPath = path.join(rootDirPath, buildDir)
 const version = require('../package.json').version
+const nodeMajor = parseInt(process.version.slice(1), 10)
 
-async function createPackage(platforms) {
-  for (const [name, platform] of Object.entries(platforms)) {
-    console.log(`Building ${appName} for: ${name}`)
-    await exec([
-      `bin/${appName}`,
-      '--config',
-      'package.json',
-      '--target',
-      platform.target,
-      '--output',
-      `./${buildDir}/${name}/${appName}${platform.suffix || ''}`,
-    ])
-  }
+const isWindows = process.platform === 'win32'
+const isMac = process.platform === 'darwin'
+const suffix = isWindows ? '.exe' : ''
+
+function getPlatformKey() {
+  const { platform, arch } = process
+  if (platform === 'darwin' && arch === 'arm64') return 'mac-arm64'
+  if (platform === 'linux' && arch === 'x64') return 'linux-x64'
+  if (platform === 'linux' && arch === 'arm64') return 'linux-arm64'
+  if (platform === 'win32' && arch === 'x64') return 'win-x64'
+  throw new Error(`Unsupported platform: ${platform}/${arch}`)
 }
 
-async function getBrowsers(platforms, showProgress) {
-  if (showProgress) {
-    console.log('\n')
-  } else {
-    console.log(
-      `Downloading ${Object.keys(platforms).length > 1 ? 'browsers' : 'browser'}: ${Object.keys(platforms).join(', ')}...`,
+const platformKey = getPlatformKey()
+
+// Chrome does not ship a linux-arm64 build via @puppeteer/browsers; set PUPPETEER_EXECUTABLE_PATH at runtime
+const isLinuxArm = process.platform === 'linux' && process.arch === 'arm64'
+
+async function bundle() {
+  console.log('Bundling application with esbuild...')
+  const bundlePath = path.join(buildDirPath, 'bundle.js')
+  await esbuild.build({
+    entryPoints: [path.join(rootDirPath, 'bin', appName)],
+    bundle: true,
+    platform: 'node',
+    target: [`node${nodeMajor}`],
+    outfile: bundlePath,
+    loader: { '': 'js' },
+    external: [
+      // Native addon - chokidar falls back to polling without it
+      'fsevents',
+      // Read as text at runtime via fs.readFileSync; not imported as a module
+      '@ggrossetie/pagedjs',
+      'mathjax',
+    ],
+  })
+  // Remove the top-level "use strict" that esbuild propagates from entry files.
+  // Opal's method aliasing assigns to alias.length which is non-writable in strict mode.
+  // In sloppy mode the assignment silently fails, which is acceptable.
+  let content = fs.readFileSync(bundlePath, 'utf8')
+  content = content.replace(/^(#!.*\n)"use strict";\n/, '$1')
+  fs.writeFileSync(bundlePath, content)
+}
+
+function createSeaConfig() {
+  const seaConfig = {
+    main: path.join(buildDirPath, 'bundle.js'),
+    output: path.join(buildDirPath, 'sea-prep.blob'),
+    disableExperimentalSEAWarning: true,
+  }
+  const configPath = path.join(buildDirPath, 'sea-config.json')
+  fs.writeFileSync(configPath, JSON.stringify(seaConfig, null, 2))
+  return configPath
+}
+
+function createSeaBlob(configPath) {
+  console.log('Creating SEA blob...')
+  execSync(`node --experimental-sea-config "${configPath}"`, {
+    stdio: 'inherit',
+  })
+}
+
+function buildBinary() {
+  const platformDir = path.join(buildDirPath, platformKey)
+  const binaryPath = path.join(platformDir, `${appName}${suffix}`)
+  const blobPath = path.join(buildDirPath, 'sea-prep.blob')
+
+  console.log('Copying Node.js binary...')
+  fsExtra.copySync(process.execPath, binaryPath)
+  if (!isWindows) {
+    fs.chmodSync(binaryPath, 0o755)
+  }
+
+  if (isMac) {
+    execSync(`codesign --remove-signature "${binaryPath}"`, {
+      stdio: 'inherit',
+    })
+  }
+
+  console.log('Injecting SEA blob...')
+  const postjectBin = path.join(
+    rootDirPath,
+    'node_modules',
+    '.bin',
+    isWindows ? 'postject.cmd' : 'postject',
+  )
+  const postjectArgs = [
+    binaryPath,
+    'NODE_SEA_BLOB',
+    blobPath,
+    '--sentinel-fuse',
+    'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
+  ]
+  if (isMac) {
+    postjectArgs.push('--macho-segment-name', 'NODE_SEA')
+  }
+  execFileSync(postjectBin, postjectArgs, {
+    stdio: 'inherit',
+    shell: isWindows,
+  })
+
+  if (isMac) {
+    execSync(`codesign --sign - "${binaryPath}"`, { stdio: 'inherit' })
+  }
+
+  return binaryPath
+}
+
+async function getBrowser() {
+  if (isLinuxArm) {
+    console.log('Skipping Chrome download (not supported on linux-arm64)')
+    return
+  }
+
+  const {
+    PUPPETEER_REVISIONS,
+  } = require('puppeteer-core/lib/puppeteer/revisions.js')
+  const buildId = PUPPETEER_REVISIONS.chrome
+  console.log(`Downloading Chrome ${buildId} for ${platformKey}...`)
+  await install({
+    browser: Browser.CHROME,
+    buildId,
+    cacheDir: path.join(buildDirPath, platformKey, 'chromium'),
+    platform: detectBrowserPlatform(),
+  })
+}
+
+function copyAssets() {
+  console.log('Copying assets...')
+  const outDir = path.join(buildDirPath, platformKey)
+
+  // MathJax: must be file-accessible from Chromium (not bundled into the binary)
+  const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
+  fsExtra.ensureDirSync(mathjaxOutDir)
+  const mathjaxSrcDir = path.dirname(
+    require.resolve('mathjax/es5/tex-chtml-full.js'),
+  )
+  fsExtra.copySync(mathjaxSrcDir, mathjaxOutDir)
+
+  // Scripts read at runtime and injected inline into the HTML page
+  const scriptsOutDir = path.join(outDir, 'scripts')
+  fsExtra.ensureDirSync(scriptsOutDir)
+  fsExtra.copySync(
+    require.resolve('@ggrossetie/pagedjs/dist/paged.polyfill.js'),
+    path.join(scriptsOutDir, 'paged.polyfill.js'),
+  )
+  const libDocDir = path.join(rootDirPath, 'lib', 'document')
+  for (const scriptFile of [
+    'repeating-table-elements.js',
+    'paged-rendering.js',
+  ]) {
+    fsExtra.copySync(
+      path.join(libDocDir, scriptFile),
+      path.join(scriptsOutDir, scriptFile),
     )
   }
-  const downloadProgress = Object.assign(
-    {},
-    ...Object.keys(platforms).map((key) => ({ [key]: 0 })),
-  )
-  return Promise.all(
-    Object.entries(platforms).map(async ([name, platform], index) => {
-      const puppeteerPlatform = platform.puppeteerPlatform || name
-      return puppeteer
-        .createBrowserFetcher({
-          platform: puppeteerPlatform, // one of: linux, mac, win32 or win64
-          path: path.resolve(path.join(buildDirPath, name, 'chromium')),
-        })
-        .download(
-          puppeteer.default._preferredRevision,
-          (downloadBytes, totalBytes) => {
-            if (showProgress) {
-              downloadProgress[name] = Math.round(
-                (downloadBytes / totalBytes) * 100,
-              )
-              const entries = Object.entries(downloadProgress)
-              const status = `Downloading ${entries.length > 1 ? 'browsers' : 'browser'} [${entries.map(([name, percent]) => `${name}: ${percent.toString().padStart(2)}%`).join(', ')}]`
-              console.log('\x1B[1A\x1B[K' + status)
-            }
-          },
-        )
-    }),
-  )
-}
 
-function copyAssets(platforms) {
-  for (const platform of Object.keys(platforms)) {
-    console.log(`Copying MathJax / examples / css / fonts into ${platform}`)
-    const outDir = path.join(buildDirPath, platform)
-    // MathJax cannot be embedded in the binary because it has to be accessed in Chromium
-    // which does not have access to the pkg snapshotted filesystem
-    const mathjaxBinaryDir = path.join(outDir, 'assets', 'mathjax')
-    // also creates folder structure
-    fsExtra.ensureDirSync(mathjaxBinaryDir)
-
-    // done like this to make it more "findable"
-    const mathjaxDir = path.dirname(
-      require.resolve('mathjax/es5/tex-chtml-full.js'),
-    )
-    fsExtra.copySync(mathjaxDir, mathjaxBinaryDir)
-
-    const copyDirs = ['css', 'examples', 'fonts']
-    for (const copyDir of copyDirs) {
-      fsExtra.copySync(
-        path.join(__dirname, '..', copyDir),
-        path.join(outDir, copyDir),
-      )
-    }
+  // CSS, examples, fonts
+  for (const dir of ['css', 'examples', 'fonts']) {
+    fsExtra.copySync(path.join(rootDirPath, dir), path.join(outDir, dir))
   }
 }
 
-async function archive(platforms) {
+function smokeTest() {
+  if (isLinuxArm) {
+    console.log('Skipping smoke test (no bundled Chrome on linux-arm64)')
+    return
+  }
+
+  console.log('Running smoke test...')
+  const platformDir = path.join(buildDirPath, platformKey)
+  const binaryPath = path.join(platformDir, `${appName}${suffix}`)
+  const inputDoc = path.join(
+    platformDir,
+    'examples',
+    'document',
+    'basic-example.adoc',
+  )
+  const outputPdf = path.join(platformDir, 'smoke-test.pdf')
+
+  execFileSync(binaryPath, [inputDoc, '-o', outputPdf], { stdio: 'inherit' })
+
+  if (!fs.existsSync(outputPdf) || fs.statSync(outputPdf).size === 0) {
+    throw new Error('Smoke test failed: PDF was not generated or is empty')
+  }
+
+  fs.unlinkSync(outputPdf)
+  console.log('Smoke test passed!')
+}
+
+async function archive() {
   console.log('Zipping...')
-  await Promise.all(
-    Object.keys(platforms).map(async (platform) => {
-      const archive = archiver('zip', {
-        zlib: { level: 9 }, // Maximize compression
-      })
-      const archiveName = `${appName}-${platform}`
-      const rootFolder = `${archiveName}-v${version}`
-      // must not be in same dir where we are zipping
-      const zipOut = fs.createWriteStream(
-        path.join(buildDirPath, `${archiveName}.zip`),
+  const archiveName = `${appName}-${platformKey}`
+  const rootFolder = `${archiveName}-v${version}`
+  const zipPath = path.join(buildDirPath, `${archiveName}.zip`)
+
+  await new Promise((resolve, reject) => {
+    const arch = archiver('zip', { zlib: { level: 9 } })
+    const zipOut = fs.createWriteStream(zipPath)
+    zipOut.on('close', () => {
+      console.log(
+        `Wrote ${Math.round(arch.pointer() / 1e4) / 1e2} Mb to ${archiveName}.zip`,
       )
-      zipOut.on('close', () => {
-        console.log(
-          `Wrote ${Math.round(archive.pointer() / 1e4) / 1e2} Mb total to ${platform}`,
-        )
-      })
-      archive.on('error', (err) => {
-        throw err
-      })
-      // pipe archive to file stream
-      archive.pipe(zipOut)
-      // recursively add directory to folder ${archiveName}-${version}
-      archive.directory(path.join(buildDirPath, platform), rootFolder, {})
-      await archive.finalize()
-    }),
-  )
+      resolve()
+    })
+    arch.on('error', reject)
+    arch.pipe(zipOut)
+    arch.directory(path.join(buildDirPath, platformKey), rootFolder)
+    arch.finalize()
+  })
 }
 
-async function main(platforms, options) {
-  // remove existing build dir
-  console.log(`Remove ${buildDir} directory`)
+async function main() {
+  console.log(`Building for ${platformKey}...`)
   fsExtra.removeSync(buildDirPath)
+  fsExtra.ensureDirSync(path.join(buildDirPath, platformKey))
 
-  // create dir structure for builds and browser download
-  console.log('Create directory structure')
-  for (const platform of Object.keys(platforms)) {
-    const chromiumDir = path.join(buildDirPath, platform, 'chromium')
-    fsExtra.ensureDirSync(chromiumDir)
-  }
+  await bundle()
 
-  // get browser
-  await getBrowsers(platforms, options.showProgress)
-  console.log('\nBrowsers are downloaded/available')
+  const seaConfigPath = createSeaConfig()
+  createSeaBlob(seaConfigPath)
 
-  // using pkg create the binary for asciidoctor-web-pdf
-  await createPackage(platforms)
+  buildBinary()
+  await getBrowser()
+  copyAssets()
+  smokeTest()
+  await archive()
 
-  // copy MathJax and the css/examples/fonts folders
-  copyAssets(platforms)
-
-  await archive(platforms)
+  console.log('Done!')
 }
-// allow invoking `node tasks/prepare-binaries.js` with linux/mac/win as the argument
-// e.g. `npm run build linux`
+
 ;(async () => {
   try {
-    let args = process.argv.slice(2)
-    const options = { showProgress: true }
-    if (args.length > 0) {
-      if (args.includes('--no-progress')) {
-        args = args.filter((e) => e !== '--no-progress')
-        options.showProgress = false
-      }
-    }
-    if (args.length > 0) {
-      const platform = args[0]
-      if (platform in platforms) {
-        const singleBuild = {}
-        singleBuild[platform] = platforms[platform]
-        await main(singleBuild, options)
-      } else {
-        console.error(
-          `${platform} is not a recognized platform, please use one of: ${Object.keys(platforms)}`,
-        )
-      }
-    } else {
-      await main(platforms, options)
-    }
+    await main()
   } catch (err) {
     console.error(err)
     process.exit(1)

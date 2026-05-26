@@ -14,43 +14,38 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac-arm64
+            artifact: mac-arm64-binary
+          - os: ubuntu-latest
+            platform: linux-x64
+            artifact: linux-x64-binary
+          - os: ubuntu-24.04-arm
+            platform: linux-arm64
+            artifact: linux-arm64-binary
+          - os: windows-latest
+            platform: win-x64
+            artifact: win-x64-binary
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      # libgbm-dev is required by Puppeteer 3+
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgbm-dev ghostscript poppler-utils
-        if: ${{ runner.os == 'Linux' }}
       - name: Install dependencies
         run: npm ci
       - name: Set version
         run: npm version ${{ inputs.version }} --no-git-tag-version
-      - name: Lint and test
-        run: |
-          npm run lint
-          npm t
-      - name: Build binaries
-        run: npm run build -- --no-progress
-      - name: Upload Windows artifact
+      - name: Build binary
+        run: npm run build
+      - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: win-binary
-          path: build/asciidoctor-web-pdf-win.zip
-      - name: Upload macOS artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: mac-binary
-          path: build/asciidoctor-web-pdf-mac.zip
-      - name: Upload Linux artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: linux-binary
-          path: build/asciidoctor-web-pdf-linux.zip
+          name: ${{ matrix.artifact }}
+          path: build/asciidoctor-web-pdf-${{ matrix.platform }}.zip
 
   publish:
     needs: build
@@ -63,8 +58,16 @@ jobs:
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev ghostscript poppler-utils
       - name: Install dependencies
         run: npm ci
+      - name: Lint and test
+        run: |
+          npm run lint
+          npm t
       - name: Commit and tag release
         run: |
           git config user.name "github-actions[bot]"
@@ -73,6 +76,8 @@ jobs:
           git push origin HEAD --tags
       - name: Publish to npm
         run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Download binary artifacts
         uses: actions/download-artifact@v8
         with:
@@ -87,9 +92,10 @@ jobs:
           gh release create "v${{ inputs.version }}" \
             --title "v${{ inputs.version }}" \
             $PRERELEASE_FLAG \
-            build/asciidoctor-web-pdf-win.zip \
-            build/asciidoctor-web-pdf-mac.zip \
-            build/asciidoctor-web-pdf-linux.zip
+            build/asciidoctor-web-pdf-win-x64.zip \
+            build/asciidoctor-web-pdf-mac-arm64.zip \
+            build/asciidoctor-web-pdf-linux-x64.zip \
+            build/asciidoctor-web-pdf-linux-arm64.zip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -107,9 +113,9 @@ jobs:
         # taken from https://github.com/docker/github-actions/blob/0f18e2abad9a4ac2963d2516246787375b5ec917/Dockerfile#L32
         run: curl -fL https://download.docker.com/linux/static/stable/x86_64/docker-20.10.4.tgz | tar xzO docker/docker > docker && sudo mv -f docker /usr/bin/docker && sudo chmod +x /usr/bin/docker
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin

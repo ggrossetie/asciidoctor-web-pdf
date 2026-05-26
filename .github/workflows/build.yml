@@ -9,30 +9,20 @@ on:
       - '*'
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.package_info.outputs.version }}
     steps:
     - uses: actions/checkout@v6
-    - name: Current version
-      id: package_info
-      run: |
-        VERSION=$(node -e 'console.log(require("./package.json").version)')
-        echo "::set-output name=version::v$VERSION"
     - name: Set up Node 24
       uses: actions/setup-node@v6
       with:
         node-version: 24
-    # libgbm-dev is required by Puppeteer 3+
     - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y libgbm-dev ghostscript poppler-utils
-      if: ${{ runner.os == 'Linux' }}
     - name: Install dependencies
-      run: |
-        npm ci
+      run: npm ci
     - name: Lint and test
       run: |
         npm run lint
@@ -41,78 +31,44 @@ jobs:
       # taken from https://github.com/docker/github-actions/blob/0f18e2abad9a4ac2963d2516246787375b5ec917/Dockerfile#L32
       run: curl -fL https://download.docker.com/linux/static/stable/x86_64/docker-20.10.4.tgz | tar xzO docker/docker > docker && sudo mv -f docker /usr/bin/docker && sudo chmod +x /usr/bin/docker
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
     - name: Build container image
       run: make packageLocalDocker
     - name: Smoke test
       run: make testDocker
+
+  build:
+    needs: check
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac-arm64
+            artifact: mac-arm64-binary
+          - os: ubuntu-latest
+            platform: linux-x64
+            artifact: linux-x64-binary
+          - os: ubuntu-24.04-arm
+            platform: linux-arm64
+            artifact: linux-arm64-binary
+          - os: windows-latest
+            platform: win-x64
+            artifact: win-x64-binary
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v6
+    - name: Set up Node 24
+      uses: actions/setup-node@v6
+      with:
+        node-version: 24
+    - name: Install dependencies
+      run: npm ci
     - name: Build binary
-      run: |
-        npm run build
-    - name: Upload Windows artifact
-      uses: actions/upload-artifact@v4
+      run: npm run build
+    - name: Upload artifact
+      uses: actions/upload-artifact@v7
       with:
-        name: win-binary
-        path: build/asciidoctor-web-pdf-win.zip
-    - name: Upload macOS artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: mac-binary
-        path: build/asciidoctor-web-pdf-mac.zip
-    - name: Upload Linux artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux-binary
-        path: build/asciidoctor-web-pdf-linux.zip
-  test-linux:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: linux-binary
-      - name: Unzip
-        run: |
-          unzip asciidoctor-web-pdf-linux.zip -d out
-      - name: Smoke test
-        run: |
-          cd out/asciidoctor-web-pdf-linux-${{ needs.build.outputs.version }}
-          rm -rf basic.pdf
-          ./asciidoctor-web-pdf ./examples/document/basic-example.adoc -o basic.pdf
-          ls basic.pdf
-          test -f basic.pdf -a -s basic.pdf
-  test-macos:
-    needs: build
-    runs-on: macos-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: mac-binary
-      - name: Unzip
-        run: |
-          unzip asciidoctor-web-pdf-mac.zip -d out
-      - name: Smoke test
-        run: |
-          cd out/asciidoctor-web-pdf-mac-${{ needs.build.outputs.version }}
-          rm -rf basic.pdf
-          ./asciidoctor-web-pdf ./examples/document/basic-example.adoc -o basic.pdf
-          ls basic.pdf
-          test -f basic.pdf -a -s basic.pdf
-  test-win:
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: win-binary
-      - name: Unzip
-        run: |
-          unzip asciidoctor-web-pdf-win.zip -d out
-      - name: Smoke test
-        run: |
-          cd out\asciidoctor-web-pdf-win-${{ needs.build.outputs.version }}
-          asciidoctor-web-pdf.exe examples\document\basic-example.adoc -o basic.pdf
-          ls basic.pdf
-        shell: cmd
+        name: ${{ matrix.artifact }}
+        path: build/asciidoctor-web-pdf-${{ matrix.platform }}.zip
