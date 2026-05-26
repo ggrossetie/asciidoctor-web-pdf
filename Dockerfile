@@ -3,7 +3,7 @@ FROM --platform=${TARGETPLATFORM:-linux/amd64} node:24-bookworm-slim AS builder
 
 # Chrome system libs are required by the smoke test that runs at the end of npm run build
 RUN apt-get update \
-    && apt-get install -y chromium \
+    && apt-get install -y chromium unzip \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
