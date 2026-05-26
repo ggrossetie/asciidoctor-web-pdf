@@ -18,10 +18,9 @@ COPY examples ./examples
 COPY fonts ./fonts
 COPY tasks ./tasks
 
-ARG TARGETARCH=amd64
 RUN npm run build && \
-    PLATFORM_KEY=$([ "$TARGETARCH" = "amd64" ] && echo "linux-x64" || echo "linux-$TARGETARCH") && \
-    mv build/$PLATFORM_KEY build/output
+    PLATFORM_DIR=$(find build -maxdepth 1 -type d \( -name 'linux-x64' -o -name 'linux-arm64' \) | head -1) && \
+    test -n "$PLATFORM_DIR" && mv "$PLATFORM_DIR" build/output
 
 # Create the final image
 # Must use a glibc-based image (Debian/Ubuntu): the SEA binary embeds the Node.js runtime
