@@ -1,6 +1,6 @@
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
-const cheerio = require('cheerio')
+const { parse } = require('node-html-parser')
 const ospath = require('node:path')
 
 const asciidoctor = require('@asciidoctor/core')()
@@ -27,8 +27,8 @@ Guillaume Grossetie
 == Section`,
       { backend: 'custom-web-pdf' },
     )
-    const $ = cheerio.load(doc.convert({ header_footer: true }))
-    assert.strictEqual($('h1').text(), 'Static title')
+    const root = parse(doc.convert({ header_footer: true }))
+    assert.strictEqual(root.querySelector('h1')?.textContent, 'Static title')
   })
 
   describe('Docinfo', () => {
@@ -36,7 +36,7 @@ Guillaume Grossetie
       asciidoctor.ConverterFactory.register(new DocumentConverter(), [
         'web-pdf',
       ])
-      const $ = cheerio.load(
+      const root = parse(
         asciidoctor.convertFile(fixturesPath('simple.adoc'), {
           safe: 'safe',
           backend: 'web-pdf',
@@ -46,16 +46,21 @@ Guillaume Grossetie
         }),
       )
       assert.strictEqual(
-        $('head > meta[name="keywords"]').attr('content'),
+        root
+          .querySelector('head > meta[name="keywords"]')
+          .getAttribute('content'),
         'journalism, press',
       )
-      assert.strictEqual($('head > script[src="debug.js"]').length, 1)
+      assert.strictEqual(
+        root.querySelectorAll('head > script[src="debug.js"]').length,
+        1,
+      )
     })
     it('should include private (footer) docinfo', () => {
       asciidoctor.ConverterFactory.register(new DocumentConverter(), [
         'web-pdf',
       ])
-      const $ = cheerio.load(
+      const root = parse(
         asciidoctor.convertFile(fixturesPath('simple.adoc'), {
           safe: 'safe',
           backend: 'web-pdf',
@@ -64,13 +69,16 @@ Guillaume Grossetie
           attributes: { docinfo: 'private-footer' },
         }),
       )
-      assert.strictEqual($('footer').text(), 'This is the end.')
+      assert.strictEqual(
+        root.querySelector('footer')?.textContent,
+        'This is the end.',
+      )
     })
     it('should include private (running) docinfo', () => {
       asciidoctor.ConverterFactory.register(new DocumentConverter(), [
         'web-pdf',
       ])
-      const $ = cheerio.load(
+      const root = parse(
         asciidoctor.convertFile(fixturesPath('simple.adoc'), {
           safe: 'safe',
           backend: 'web-pdf',
@@ -79,7 +87,7 @@ Guillaume Grossetie
           attributes: { docinfo: 'private-running' },
         }),
       )
-      assert.strictEqual($('body > .contact-us').length, 1)
+      assert.strictEqual(root.querySelectorAll('body > .contact-us').length, 1)
     })
   })
 })

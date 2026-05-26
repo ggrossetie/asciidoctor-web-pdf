@@ -57,13 +57,13 @@
   },
   "devDependencies": {
     "@asciidoctor/core": "~2.2",
-    "@biomejs/biome": "^2.4.15",
-    "archiver": "~5.3.0",
-    "cheerio": "~1.0.0-rc.3",
+    "@biomejs/biome": "2.4.15",
+    "archiver": "~8.0",
+    "esbuild": "0.28.0",
+    "node-html-parser": "~7.1",
     "nunjucks": "~3.2",
-    "esbuild": "^0.25.0",
-    "pixelmatch": "~5.3.0",
-    "postject": "^1.0.0-alpha.6"
+    "pixelmatch": "~7.2",
+    "postject": "1.0.0-alpha.6"
   },
   "peerDependencies": {
     "@asciidoctor/core": "~2.2"
