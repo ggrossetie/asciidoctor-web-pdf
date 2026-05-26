@@ -124,8 +124,9 @@ async function getBrowser() {
   }
 
   const {
-    puppeteer: { chrome: buildId },
-  } = require('puppeteer/package.json')
+    PUPPETEER_REVISIONS,
+  } = require('puppeteer-core/lib/puppeteer/revisions.js')
+  const buildId = PUPPETEER_REVISIONS.chrome
   console.log(`Downloading Chrome ${buildId} for ${platformKey}...`)
   await install({
     browser: Browser.CHROME,
