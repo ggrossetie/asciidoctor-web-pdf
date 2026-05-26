@@ -68,7 +68,7 @@ jobs:
     - name: Build binary
       run: npm run build
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.artifact }}
         path: build/asciidoctor-web-pdf-${{ matrix.platform }}.zip
