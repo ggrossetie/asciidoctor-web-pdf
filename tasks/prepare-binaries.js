@@ -2,7 +2,11 @@ const path = require('node:path')
 const fs = require('node:fs')
 const fsExtra = require('fs-extra')
 const archiver = require('archiver')
-const { install, detectBrowserPlatform, Browser } = require('@puppeteer/browsers')
+const {
+  install,
+  detectBrowserPlatform,
+  Browser,
+} = require('@puppeteer/browsers')
 const { execSync, execFileSync } = require('node:child_process')
 const esbuild = require('esbuild')
 
@@ -119,7 +123,9 @@ async function getBrowser() {
     return
   }
 
-  const { puppeteer: { chrome: buildId } } = require('puppeteer/package.json')
+  const {
+    puppeteer: { chrome: buildId },
+  } = require('puppeteer/package.json')
   console.log(`Downloading Chrome ${buildId} for ${platformKey}...`)
   await install({
     browser: Browser.CHROME,
