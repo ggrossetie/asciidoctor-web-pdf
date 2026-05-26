@@ -1,10 +1,9 @@
-const path = require('path')
-const fs = require('fs')
+const path = require('node:path')
+const fs = require('node:fs')
 const fsExtra = require('fs-extra')
 const archiver = require('archiver')
 const puppeteer = require('puppeteer')
-const { execSync, execFileSync } = require('child_process')
-const https = require('https')
+const { execSync, execFileSync } = require('node:child_process')
 const esbuild = require('esbuild')
 
 const appName = 'asciidoctor-web-pdf'
@@ -12,41 +11,30 @@ const buildDir = 'build'
 const rootDirPath = path.join(__dirname, '..')
 const buildDirPath = path.join(rootDirPath, buildDir)
 const version = require('../package.json').version
-const nodeVersion = process.version // e.g., 'v24.15.0'
-const nodeMajor = parseInt(nodeVersion.slice(1))
+const nodeMajor = parseInt(process.version.slice(1), 10)
 
-// codesign is required on macOS to remove/add the signature before/after blob injection
-const hasCodesign = process.platform === 'darwin'
+const isWindows = process.platform === 'win32'
+const isMac = process.platform === 'darwin'
+const suffix = isWindows ? '.exe' : ''
 
-const platforms = {
-  'mac-arm64': {
-    nodeArchive: `node-${nodeVersion}-darwin-arm64.tar.gz`,
-    nodeBinaryPath: `node-${nodeVersion}-darwin-arm64/bin/node`,
-    suffix: '',
-    puppeteerPlatform: 'mac_arm',
-    isMac: true,
-  },
-  'linux-arm64': {
-    nodeArchive: `node-${nodeVersion}-linux-arm64.tar.gz`,
-    nodeBinaryPath: `node-${nodeVersion}-linux-arm64/bin/node`,
-    suffix: '',
-    // puppeteer v15 does not ship linux-arm64 Chromium; set PUPPETEER_EXECUTABLE_PATH at runtime
-    skipChromium: true,
-  },
-  'linux-x64': {
-    nodeArchive: `node-${nodeVersion}-linux-x64.tar.gz`,
-    nodeBinaryPath: `node-${nodeVersion}-linux-x64/bin/node`,
-    suffix: '',
-    puppeteerPlatform: 'linux',
-  },
-  'win-x64': {
-    nodeArchive: `node-${nodeVersion}-win-x64.zip`,
-    nodeBinaryPath: `node-${nodeVersion}-win-x64/node.exe`,
-    suffix: '.exe',
-    puppeteerPlatform: 'win64',
-    isWindows: true,
-  },
+function getPlatformKey() {
+  const { platform, arch } = process
+  if (platform === 'darwin' && arch === 'arm64') return 'mac-arm64'
+  if (platform === 'linux' && arch === 'x64') return 'linux-x64'
+  if (platform === 'linux' && arch === 'arm64') return 'linux-arm64'
+  if (platform === 'win32' && arch === 'x64') return 'win-x64'
+  throw new Error(`Unsupported platform: ${platform}/${arch}`)
 }
+
+const platformKey = getPlatformKey()
+
+// linux-arm64: puppeteer v15 does not ship a Chromium build; set PUPPETEER_EXECUTABLE_PATH at runtime
+const puppeteerPlatformMap = {
+  'mac-arm64': 'mac_arm',
+  'linux-x64': 'linux',
+  'win-x64': 'win64',
+}
+const puppeteerPlatform = puppeteerPlatformMap[platformKey]
 
 async function bundle() {
   console.log('Bundling application with esbuild...')
@@ -92,72 +80,24 @@ function createSeaBlob(configPath) {
   })
 }
 
-async function downloadFile(url, dest) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest)
-    const handleResponse = (response) => {
-      if (response.statusCode === 301 || response.statusCode === 302) {
-        https.get(response.headers.location, handleResponse).on('error', reject)
-        return
-      }
-      response.pipe(file)
-      file.on('finish', () => file.close(resolve))
-    }
-    https.get(url, handleResponse).on('error', (err) => {
-      fs.unlink(dest, () => {})
-      reject(err)
-    })
-  })
-}
-
-async function downloadNodeBinary(platformKey, platform) {
+function buildBinary() {
   const platformDir = path.join(buildDirPath, platformKey)
-  const archivePath = path.join(platformDir, platform.nodeArchive)
-  const nodeDistUrl = `https://nodejs.org/dist/${nodeVersion}/${platform.nodeArchive}`
+  const binaryPath = path.join(platformDir, `${appName}${suffix}`)
+  const blobPath = path.join(buildDirPath, 'sea-prep.blob')
 
-  console.log(`Downloading Node.js ${nodeVersion} for ${platformKey}...`)
-  await downloadFile(nodeDistUrl, archivePath)
-
-  console.log(`Extracting Node.js binary for ${platformKey}...`)
-  if (platform.isWindows) {
-    execSync(
-      `unzip -q "${archivePath}" "${platform.nodeBinaryPath}" -d "${platformDir}"`,
-    )
-  } else {
-    execSync(
-      `tar -xzf "${archivePath}" -C "${platformDir}" "${platform.nodeBinaryPath}"`,
-    )
+  console.log('Copying Node.js binary...')
+  fsExtra.copySync(process.execPath, binaryPath)
+  if (!isWindows) {
+    fs.chmodSync(binaryPath, 0o755)
   }
 
-  const extractedBinaryPath = path.join(
-    platformDir,
-    ...platform.nodeBinaryPath.split('/'),
-  )
-  const binaryPath = path.join(platformDir, `${appName}${platform.suffix}`)
-  fsExtra.moveSync(extractedBinaryPath, binaryPath)
-
-  // Clean up the downloaded archive and extracted directory skeleton
-  fs.unlinkSync(archivePath)
-  const extractedTopDir = path.join(
-    platformDir,
-    platform.nodeBinaryPath.split('/')[0],
-  )
-  if (fs.existsSync(extractedTopDir)) {
-    fsExtra.removeSync(extractedTopDir)
-  }
-
-  return binaryPath
-}
-
-async function injectBlob(platformKey, platform, binaryPath, blobPath) {
-  console.log(`Injecting SEA blob into ${platformKey} binary...`)
-
-  if (platform.isMac && hasCodesign) {
+  if (isMac) {
     execSync(`codesign --remove-signature "${binaryPath}"`, {
       stdio: 'inherit',
     })
   }
 
+  console.log('Injecting SEA blob...')
   const postjectBin = path.join(rootDirPath, 'node_modules', '.bin', 'postject')
   const postjectArgs = [
     binaryPath,
@@ -166,156 +106,143 @@ async function injectBlob(platformKey, platform, binaryPath, blobPath) {
     '--sentinel-fuse',
     'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
   ]
-  if (platform.isMac) {
+  if (isMac) {
     postjectArgs.push('--macho-segment-name', 'NODE_SEA')
   }
   execFileSync(postjectBin, postjectArgs, { stdio: 'inherit' })
 
-  if (platform.isMac && hasCodesign) {
+  if (isMac) {
     execSync(`codesign --sign - "${binaryPath}"`, { stdio: 'inherit' })
   }
+
+  return binaryPath
 }
 
-async function getBrowsers(platforms) {
-  const platformsWithChromium = Object.entries(platforms).filter(
-    ([, p]) => p.puppeteerPlatform && !p.skipChromium,
-  )
-
-  if (platformsWithChromium.length === 0) {
-    console.log('No Chromium download needed for selected platforms')
+async function getBrowser() {
+  if (!puppeteerPlatform) {
+    console.log('Skipping Chromium download (not supported on this platform)')
     return
   }
 
-  console.log(
-    `Downloading Chromium for: ${platformsWithChromium.map(([k]) => k).join(', ')}...`,
+  console.log(`Downloading Chromium for ${platformKey}...`)
+  const chromiumPath = path.resolve(
+    path.join(buildDirPath, platformKey, 'chromium'),
   )
-
-  await Promise.all(
-    platformsWithChromium.map(async ([name, platform]) => {
-      return puppeteer
-        .createBrowserFetcher({
-          platform: platform.puppeteerPlatform,
-          path: path.resolve(path.join(buildDirPath, name, 'chromium')),
-        })
-        .download(puppeteer.default._preferredRevision)
-    }),
-  )
+  await puppeteer
+    .createBrowserFetcher({
+      platform: puppeteerPlatform,
+      path: chromiumPath,
+    })
+    .download(puppeteer.default._preferredRevision)
 }
 
-function copyAssets(platforms) {
-  for (const [name] of Object.entries(platforms)) {
-    console.log(`Copying assets into ${name}...`)
-    const outDir = path.join(buildDirPath, name)
+function copyAssets() {
+  console.log('Copying assets...')
+  const outDir = path.join(buildDirPath, platformKey)
 
-    // MathJax: must be file-accessible from Chromium (not bundled into the binary)
-    const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
-    fsExtra.ensureDirSync(mathjaxOutDir)
-    const mathjaxSrcDir = path.dirname(
-      require.resolve('mathjax/es5/tex-chtml-full.js'),
-    )
-    fsExtra.copySync(mathjaxSrcDir, mathjaxOutDir)
+  // MathJax: must be file-accessible from Chromium (not bundled into the binary)
+  const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
+  fsExtra.ensureDirSync(mathjaxOutDir)
+  const mathjaxSrcDir = path.dirname(
+    require.resolve('mathjax/es5/tex-chtml-full.js'),
+  )
+  fsExtra.copySync(mathjaxSrcDir, mathjaxOutDir)
 
-    // Scripts read at runtime and injected inline into the HTML page
-    const scriptsOutDir = path.join(outDir, 'scripts')
-    fsExtra.ensureDirSync(scriptsOutDir)
+  // Scripts read at runtime and injected inline into the HTML page
+  const scriptsOutDir = path.join(outDir, 'scripts')
+  fsExtra.ensureDirSync(scriptsOutDir)
+  fsExtra.copySync(
+    require.resolve('@ggrossetie/pagedjs/dist/paged.polyfill.js'),
+    path.join(scriptsOutDir, 'paged.polyfill.js'),
+  )
+  const libDocDir = path.join(rootDirPath, 'lib', 'document')
+  for (const scriptFile of [
+    'repeating-table-elements.js',
+    'paged-rendering.js',
+  ]) {
     fsExtra.copySync(
-      require.resolve('@ggrossetie/pagedjs/dist/paged.polyfill.js'),
-      path.join(scriptsOutDir, 'paged.polyfill.js'),
+      path.join(libDocDir, scriptFile),
+      path.join(scriptsOutDir, scriptFile),
     )
-    const libDocDir = path.join(rootDirPath, 'lib', 'document')
-    for (const scriptFile of [
-      'repeating-table-elements.js',
-      'paged-rendering.js',
-    ]) {
-      fsExtra.copySync(
-        path.join(libDocDir, scriptFile),
-        path.join(scriptsOutDir, scriptFile),
-      )
-    }
+  }
 
-    // CSS, examples, fonts
-    for (const dir of ['css', 'examples', 'fonts']) {
-      fsExtra.copySync(path.join(rootDirPath, dir), path.join(outDir, dir))
-    }
+  // CSS, examples, fonts
+  for (const dir of ['css', 'examples', 'fonts']) {
+    fsExtra.copySync(path.join(rootDirPath, dir), path.join(outDir, dir))
   }
 }
 
-async function archive(platforms) {
-  console.log('Zipping...')
-  await Promise.all(
-    Object.keys(platforms).map(async (platform) => {
-      const arch = archiver('zip', { zlib: { level: 9 } })
-      const archiveName = `${appName}-${platform}`
-      const rootFolder = `${archiveName}-v${version}`
-      const zipOut = fs.createWriteStream(
-        path.join(buildDirPath, `${archiveName}.zip`),
-      )
-      zipOut.on('close', () => {
-        console.log(
-          `Wrote ${Math.round(arch.pointer() / 1e4) / 1e2} Mb to ${archiveName}.zip`,
-        )
-      })
-      arch.on('error', (err) => {
-        throw err
-      })
-      arch.pipe(zipOut)
-      arch.directory(path.join(buildDirPath, platform), rootFolder)
-      await arch.finalize()
-    }),
+function smokeTest() {
+  if (!puppeteerPlatform) {
+    console.log('Skipping smoke test (no bundled Chromium on this platform)')
+    return
+  }
+
+  console.log('Running smoke test...')
+  const platformDir = path.join(buildDirPath, platformKey)
+  const binaryPath = path.join(platformDir, `${appName}${suffix}`)
+  const inputDoc = path.join(
+    platformDir,
+    'examples',
+    'document',
+    'basic-example.adoc',
   )
+  const outputPdf = path.join(platformDir, 'smoke-test.pdf')
+
+  execFileSync(binaryPath, [inputDoc, '-o', outputPdf], { stdio: 'inherit' })
+
+  if (!fs.existsSync(outputPdf) || fs.statSync(outputPdf).size === 0) {
+    throw new Error('Smoke test failed: PDF was not generated or is empty')
+  }
+
+  fs.unlinkSync(outputPdf)
+  console.log('Smoke test passed!')
 }
 
-async function main(platforms, options) {
-  console.log(`Remove ${buildDir} directory`)
-  fsExtra.removeSync(buildDirPath)
+async function archive() {
+  console.log('Zipping...')
+  const archiveName = `${appName}-${platformKey}`
+  const rootFolder = `${archiveName}-v${version}`
+  const zipPath = path.join(buildDirPath, `${archiveName}.zip`)
 
-  console.log('Create directory structure')
-  for (const name of Object.keys(platforms)) {
-    fsExtra.ensureDirSync(path.join(buildDirPath, name))
-  }
+  await new Promise((resolve, reject) => {
+    const arch = archiver('zip', { zlib: { level: 9 } })
+    const zipOut = fs.createWriteStream(zipPath)
+    zipOut.on('close', () => {
+      console.log(
+        `Wrote ${Math.round(arch.pointer() / 1e4) / 1e2} Mb to ${archiveName}.zip`,
+      )
+      resolve()
+    })
+    arch.on('error', reject)
+    arch.pipe(zipOut)
+    arch.directory(path.join(buildDirPath, platformKey), rootFolder)
+    arch.finalize()
+  })
+}
+
+async function main() {
+  console.log(`Building for ${platformKey}...`)
+  fsExtra.removeSync(buildDirPath)
+  fsExtra.ensureDirSync(path.join(buildDirPath, platformKey))
 
   await bundle()
 
   const seaConfigPath = createSeaConfig()
   createSeaBlob(seaConfigPath)
 
-  const blobPath = path.join(buildDirPath, 'sea-prep.blob')
-
-  for (const [platformKey, platform] of Object.entries(platforms)) {
-    const binaryPath = await downloadNodeBinary(platformKey, platform)
-    await injectBlob(platformKey, platform, binaryPath, blobPath)
-  }
-
-  await getBrowsers(platforms)
-  console.log('\nChromium downloaded/available')
-
-  copyAssets(platforms)
-
-  await archive(platforms)
+  buildBinary()
+  await getBrowser()
+  copyAssets()
+  smokeTest()
+  await archive()
 
   console.log('Done!')
 }
 
 ;(async () => {
   try {
-    let args = process.argv.slice(2)
-    const options = {}
-    if (args.includes('--no-progress')) {
-      args = args.filter((e) => e !== '--no-progress')
-    }
-    if (args.length > 0) {
-      const platform = args[0]
-      if (platform in platforms) {
-        await main({ [platform]: platforms[platform] }, options)
-      } else {
-        console.error(
-          `${platform} is not a recognized platform. Use one of: ${Object.keys(platforms).join(', ')}`,
-        )
-        process.exit(1)
-      }
-    } else {
-      await main(platforms, options)
-    }
+    await main()
   } catch (err) {
     console.error(err)
     process.exit(1)
