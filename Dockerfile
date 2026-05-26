@@ -1,5 +1,5 @@
 # Build the SEA binary
-FROM --platform=${TARGETPLATFORM:-linux/amd64} node:24-bookworm-slim AS builder
+FROM node:24-bookworm-slim AS builder
 
 # Chrome system libs are required by the smoke test that runs at the end of npm run build
 RUN apt-get update \
@@ -25,7 +25,7 @@ RUN npm run build && \
 # Create the final image
 # Must use a glibc-based image (Debian/Ubuntu): the SEA binary embeds the Node.js runtime
 # which is compiled against glibc. Alpine uses musl and cannot run the binary.
-FROM --platform=${TARGETPLATFORM:-linux/amd64} debian:bookworm-slim
+FROM debian:bookworm-slim
 
 RUN addgroup --gid 1000 asciidoctor && adduser --disabled-password --ingroup asciidoctor -u 1000 asciidoctor
 
