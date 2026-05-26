@@ -22,7 +22,7 @@
     "test:js": "node --test --test-timeout=30000 test/*_test.js",
     "lint": "biome check lib/ test/ tasks/",
     "format": "biome format --write lib/ test/ tasks/",
-"test:update-linux-reference": "docker build -f test/Dockerfile -t asciidoctor/web-pdf-test . && docker run --name asciidoctorwebpdftest asciidoctor/web-pdf-test:latest; docker cp asciidoctorwebpdftest:/app/test/output/. ./test/reference/linux/ && docker rm asciidoctorwebpdftest"
+    "test:update-linux-reference": "docker build -f test/Dockerfile -t asciidoctor/web-pdf-test . && docker run --name asciidoctorwebpdftest asciidoctor/web-pdf-test:latest; docker cp asciidoctorwebpdftest:/app/test/output/. ./test/reference/linux/ && docker rm asciidoctorwebpdftest"
   },
   "repository": {
     "type": "git",
@@ -33,12 +33,12 @@
     "asciidoctor",
     "pdf"
   ],
-  "author": "Guillaume Grossetie (https://github.com/mogztter)",
+  "author": "Guillaume Grossetie (https://github.com/ggrossetie)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Mogztter/asciidoctor-web-pdf/issues"
+    "url": "https://github.com/ggrossetie/asciidoctor-web-pdf/issues"
   },
-  "homepage": "https://github.com/Mogztter/asciidoctor-web-pdf#readme",
+  "homepage": "https://github.com/ggrossetie/asciidoctor-web-pdf#readme",
   "dependencies": {
     "@asciidoctor/cli": "~3.5",
     "@fortawesome/fontawesome-svg-core": "6.2.1",
