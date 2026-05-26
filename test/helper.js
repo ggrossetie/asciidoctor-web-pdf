@@ -3,7 +3,7 @@ const fs = require('node:fs')
 const os = require('node:os')
 const childProcess = require('node:child_process')
 const PNG = require('pngjs').PNG
-const pixelmatch = require('pixelmatch')
+const { default: pixelmatch } = require('pixelmatch')
 
 function outputDir() {
   return ospath.join(__dirname, 'output')

@@ -13,10 +13,9 @@ const { PDFDocument, PDFName, PDFDict } = require('pdf-lib')
 const ospath = require('node:path')
 const helper = require('./helper.js')
 
-const asciidoctor = require('@asciidoctor/core')()
 const converter = require('../lib/converter.js')
 const { templates } = require('../lib/document/document-converter')
-converter.registerTemplateConverter(asciidoctor, templates)
+converter.registerTemplateConverter(templates)
 
 const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 const outputPath = (...paths) => ospath.join(__dirname, 'output', ...paths)
@@ -78,7 +77,7 @@ describe('PDF converter', () => {
   const convert = async (inputFile, outputFile, options) => {
     const opts = options || {}
     opts.to_file = outputFile
-    await converter.convert(asciidoctor, { path: inputFile }, opts, false)
+    await converter.convert({ path: inputFile }, opts, false)
     return PDFDocument.load(fs.readFileSync(outputFile))
   }
 
@@ -96,7 +95,6 @@ describe('PDF converter', () => {
     opts.attributes.reproducible = ''
     opts.to_file = outputFile
     await converter.convert(
-      asciidoctor,
       { path: fixturesPath(`${inputBaseFileName}.adoc`) },
       opts,
       false,
@@ -457,7 +455,6 @@ describe('PDF converter', () => {
         delete require.cache[require.resolve('../lib/converter.js')]
         const converter = require('../lib/converter.js')
         await converter.convert(
-          asciidoctor,
           { path: fixturesPath('title-page.adoc') },
           {},
           false,

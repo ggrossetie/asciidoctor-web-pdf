@@ -2,7 +2,7 @@ const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const { PDFDocument, PDFName, PDFHexString } = require('pdf-lib')
 
-const asciidoctor = require('@asciidoctor/core')()
+const { load } = require('@asciidoctor/core')
 const { addMetadata } = require('../lib/metadata.js')
 const { version: pkgVersion } = require('../package.json')
 
@@ -36,7 +36,7 @@ const assertMetadataEqual = (pdf, metadataKey, expectedValue) => {
 }
 
 const toPdfWithMetadata = async (content, options) => {
-  const doc = asciidoctor.load(content, options)
+  const doc = await load(content, options)
   const pdfDoc = await PDFDocument.create()
   return addMetadata(pdfDoc, doc)
 }

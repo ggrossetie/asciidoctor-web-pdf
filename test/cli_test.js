@@ -1,10 +1,11 @@
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 
-const { PdfOptions, PdfInvoker, processor } = require('../lib/cli.js')
+const { convert } = require('@asciidoctor/core')
+const { PdfOptions, PdfInvoker } = require('../lib/cli.js')
 
 describe('CLI', () => {
-  it('should set the env attributes', () => {
+  it('should set the env attributes', async () => {
     const options = new PdfOptions().parse([
       'node',
       'asciidoctor-pdf',
@@ -14,7 +15,7 @@ describe('CLI', () => {
     const attributes = pdfInvoker.options.options.attributes
     assert.ok(attributes.includes('env-web-pdf'))
     assert.ok(attributes.includes('env=web-pdf'))
-    const html = processor.convert(
+    const html = await convert(
       '{env}',
       Object.assign({}, pdfInvoker.options.options, { standalone: false }),
     )
@@ -25,7 +26,7 @@ describe('CLI', () => {
 </div>`,
     )
   })
-  it('should override the default env attributes', () => {
+  it('should override the default env attributes', async () => {
     const options = new PdfOptions().parse([
       'node',
       'asciidoctor-pdf',
@@ -38,7 +39,7 @@ describe('CLI', () => {
     assert.ok(attributes.includes('env-web-pdf'))
     assert.ok(attributes.includes('env=web-pdf'))
     assert.ok(attributes.includes('env=pdf'))
-    const html = processor.convert(
+    const html = await convert(
       '{env}',
       Object.assign({}, pdfInvoker.options.options, { standalone: false }),
     )
