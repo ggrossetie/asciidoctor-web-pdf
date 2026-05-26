@@ -2,7 +2,7 @@ const path = require('node:path')
 const fs = require('node:fs')
 const fsExtra = require('fs-extra')
 const archiver = require('archiver')
-const puppeteer = require('puppeteer')
+const { install, detectBrowserPlatform, Browser } = require('@puppeteer/browsers')
 const { execSync, execFileSync } = require('node:child_process')
 const esbuild = require('esbuild')
 
@@ -28,13 +28,8 @@ function getPlatformKey() {
 
 const platformKey = getPlatformKey()
 
-// linux-arm64: puppeteer v15 does not ship a Chromium build; set PUPPETEER_EXECUTABLE_PATH at runtime
-const puppeteerPlatformMap = {
-  'mac-arm64': 'mac_arm',
-  'linux-x64': 'linux',
-  'win-x64': 'win64',
-}
-const puppeteerPlatform = puppeteerPlatformMap[platformKey]
+// Chrome does not ship a linux-arm64 build via @puppeteer/browsers; set PUPPETEER_EXECUTABLE_PATH at runtime
+const isLinuxArm = process.platform === 'linux' && process.arch === 'arm64'
 
 async function bundle() {
   console.log('Bundling application with esbuild...')
@@ -119,21 +114,19 @@ function buildBinary() {
 }
 
 async function getBrowser() {
-  if (!puppeteerPlatform) {
-    console.log('Skipping Chromium download (not supported on this platform)')
+  if (isLinuxArm) {
+    console.log('Skipping Chrome download (not supported on linux-arm64)')
     return
   }
 
-  console.log(`Downloading Chromium for ${platformKey}...`)
-  const chromiumPath = path.resolve(
-    path.join(buildDirPath, platformKey, 'chromium'),
-  )
-  await puppeteer
-    .createBrowserFetcher({
-      platform: puppeteerPlatform,
-      path: chromiumPath,
-    })
-    .download(puppeteer.default._preferredRevision)
+  const { puppeteer: { chrome: buildId } } = require('puppeteer/package.json')
+  console.log(`Downloading Chrome ${buildId} for ${platformKey}...`)
+  await install({
+    browser: Browser.CHROME,
+    buildId,
+    cacheDir: path.join(buildDirPath, platformKey, 'chromium'),
+    platform: detectBrowserPlatform(),
+  })
 }
 
 function copyAssets() {
@@ -173,8 +166,8 @@ function copyAssets() {
 }
 
 function smokeTest() {
-  if (!puppeteerPlatform) {
-    console.log('Skipping smoke test (no bundled Chromium on this platform)')
+  if (isLinuxArm) {
+    console.log('Skipping smoke test (no bundled Chrome on linux-arm64)')
     return
   }
 
