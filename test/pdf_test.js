@@ -10,7 +10,6 @@ const {
 const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const { PDFDocument, PDFName, PDFDict } = require('pdf-lib')
-const rimraf = require('rimraf')
 const ospath = require('node:path')
 const helper = require('./helper.js')
 
@@ -36,14 +35,14 @@ function assertVisuallyIdentical(outputFile, reference) {
 describe('PDF converter', () => {
   before(() => {
     const outputDir = ospath.join(__dirname, 'output')
-    rimraf.sync(outputDir)
+    fs.rmSync(outputDir, { recursive: true, force: true })
     fs.mkdirSync(outputDir)
   })
 
   after(() => {
     if (typeof process.env.DEBUG === 'undefined') {
       const outputDir = ospath.join(__dirname, 'output')
-      rimraf.sync(outputDir)
+      fs.rmSync(outputDir, { recursive: true, force: true })
       fs.mkdirSync(outputDir)
     }
   })

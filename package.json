@@ -63,8 +63,7 @@
     "nunjucks": "~3.2",
     "esbuild": "^0.25.0",
     "pixelmatch": "~5.3.0",
-    "postject": "^1.0.0-alpha.6",
-    "rimraf": "~4.1.0"
+    "postject": "^1.0.0-alpha.6"
   },
   "peerDependencies": {
     "@asciidoctor/core": "~2.2"
