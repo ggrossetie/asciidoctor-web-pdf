@@ -1,7 +1,7 @@
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 const cheerio = require('cheerio')
-const ospath = require('path')
+const ospath = require('node:path')
 
 const asciidoctor = require('@asciidoctor/core')()
 const DocumentConverter = require('../lib/document/document-converter')
@@ -11,7 +11,7 @@ const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 describe('Document converter', () => {
   it('should override the titlePage function', () => {
     class CustomDocumentConverter extends DocumentConverter {
-      titlePage(node) {
+      titlePage(_node) {
         return '<h1>Static title</h1>'
       }
     }
