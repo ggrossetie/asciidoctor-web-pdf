@@ -16,6 +16,7 @@ COPY bin ./bin
 COPY css ./css
 COPY examples ./examples
 COPY fonts ./fonts
+COPY tasks ./tasks
 
 ARG TARGETARCH=amd64
 RUN npm run build && \
