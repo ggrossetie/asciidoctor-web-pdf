@@ -1,20 +1,9 @@
 #!/usr/bin/env node
 
-'use strict'
+import { PdfOptions, PdfInvoker } from '../lib/cli.js'
 
 process.title = 'asciidoctor-web-pdf'
-const { PdfOptions, PdfInvoker } = require('../lib/cli.js')
-
-;(async () => {
-  const options = new PdfOptions().parse(process.argv)
-  return new PdfInvoker(options).invoke()
-})()
-.then((result) => {
-  if (result.exit) {
-    process.exit(0)
-  }
-})
-.catch((error) => {
+new PdfInvoker(new PdfOptions().parse(process.argv)).invoke().catch((error) => {
   console.error('ERROR: ', error)
   process.exit(1)
 })

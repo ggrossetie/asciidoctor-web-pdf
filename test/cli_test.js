@@ -1,8 +1,8 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert/strict')
+import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
 
-const { convert } = require('@asciidoctor/core')
-const { PdfOptions, PdfInvoker } = require('../lib/cli.js')
+import { convert } from '@asciidoctor/core'
+import { PdfInvoker, PdfOptions } from '../lib/cli.js'
 
 describe('CLI', () => {
   it('should set the env attributes', async () => {

@@ -1,9 +1,11 @@
-const ospath = require('node:path')
-const fs = require('node:fs')
-const os = require('node:os')
-const childProcess = require('node:child_process')
-const PNG = require('pngjs').PNG
-const { default: pixelmatch } = require('pixelmatch')
+import childProcess from 'node:child_process'
+import fs from 'node:fs'
+import os from 'node:os'
+import ospath from 'node:path'
+import { default as pixelmatch } from 'pixelmatch'
+import { PNG } from 'pngjs'
+
+const __dirname = import.meta.dirname
 
 function outputDir() {
   return ospath.join(__dirname, 'output')
@@ -30,7 +32,7 @@ function computeImageDifferences(referenceBuffer, actualBuffer, diffFilename) {
   return numDiffPixels
 }
 
-function toVisuallyMatch(referenceFilename, actualPath) {
+export function toVisuallyMatch(referenceFilename, actualPath) {
   const platform = os.platform() === 'darwin' ? 'macos' : 'linux'
   let referencePath
   if (ospath.isAbsolute(referenceFilename)) {
@@ -109,5 +111,3 @@ function toVisuallyMatch(referenceFilename, actualPath) {
   }
   return pixels
 }
-
-module.exports = { toVisuallyMatch }

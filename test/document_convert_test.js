@@ -1,11 +1,11 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert/strict')
-const { parse } = require('node-html-parser')
-const ospath = require('node:path')
+import assert from 'node:assert/strict'
+import ospath from 'node:path'
+import { describe, it } from 'node:test'
+import { ConverterFactory, convertFile, load } from '@asciidoctor/core'
+import { parse } from 'node-html-parser'
+import DocumentConverter from '../lib/document/document-converter.js'
 
-const { load, convertFile, ConverterFactory } = require('@asciidoctor/core')
-const DocumentConverter = require('../lib/document/document-converter')
-
+const __dirname = import.meta.dirname
 const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 
 describe('Document converter', () => {

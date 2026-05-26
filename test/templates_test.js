@@ -1,14 +1,20 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert/strict')
-const ospath = require('node:path')
-const { parse } = require('node-html-parser')
+import assert from 'node:assert/strict'
+import { createRequire } from 'node:module'
+import ospath from 'node:path'
+import { describe, it } from 'node:test'
+import { convert, load } from '@asciidoctor/core'
+import fileUrl from 'file-url'
+import { parse } from 'node-html-parser'
+import * as converter from '../lib/converter.js'
+import { templates } from '../lib/document/document-converter.js'
 
-const { load, convert } = require('@asciidoctor/core')
-const converter = require('../lib/converter.js')
-const { templates } = require('../lib/document/document-converter')
 converter.registerTemplateConverter(templates)
 
+const require = createRequire(import.meta.url)
+const __dirname = import.meta.dirname
 const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
+
+const mathjaxFileUrl = fileUrl(require.resolve('mathjax/es5/tex-chtml-full.js'))
 
 describe('Default converter', () => {
   describe('Language', () => {
@@ -175,11 +181,6 @@ Guillaume Grossetie
   })
 
   describe('Stem', () => {
-    const fileUrl = require('file-url')
-    const mathjaxFileUrl = fileUrl(
-      require.resolve('mathjax/es5/tex-chtml-full.js'),
-    )
-
     it('should include MathML when stem is set', async () => {
       const doc = await load(`= Title
 :stem:
