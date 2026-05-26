@@ -214,7 +214,7 @@ async function archive() {
   const zipPath = path.join(buildDirPath, `${archiveName}.zip`)
 
   await new Promise((resolve, reject) => {
-    const arch = archiver('zip', { zlib: { level: 9 } })
+    const arch = new archiver.ZipArchive({ zlib: { level: 9 } })
     const zipOut = fs.createWriteStream(zipPath)
     zipOut.on('close', () => {
       console.log(
