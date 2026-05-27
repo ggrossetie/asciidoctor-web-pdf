@@ -52,7 +52,6 @@ async function bundle() {
       // Native addon - chokidar falls back to polling without it
       'fsevents',
       // Read as text at runtime via fs.readFileSync; not imported as a module
-      '@ggrossetie/pagedjs',
       'mathjax',
     ],
   })
@@ -159,23 +158,11 @@ function copyAssets() {
   )
   fsExtra.copySync(mathjaxSrcDir, mathjaxOutDir)
 
-  // Scripts read at runtime and injected inline into the HTML page
-  const scriptsOutDir = path.join(outDir, 'scripts')
-  fsExtra.ensureDirSync(scriptsOutDir)
-  fsExtra.copySync(
-    require.resolve('@ggrossetie/pagedjs/dist/paged.polyfill.js'),
-    path.join(scriptsOutDir, 'paged.polyfill.js'),
-  )
-  const libDocDir = path.join(rootDirPath, 'lib', 'document')
-  for (const scriptFile of [
-    'repeating-table-elements.js',
-    'paged-rendering.js',
-  ]) {
-    fsExtra.copySync(
-      path.join(libDocDir, scriptFile),
-      path.join(scriptsOutDir, scriptFile),
-    )
-  }
+  // Vivliostyle viewer: HTML + JS + CSS served via file:// for headless rendering
+  const viewerOutDir = path.join(outDir, 'viewer')
+  fsExtra.ensureDirSync(viewerOutDir)
+  const viewerPkgDir = path.dirname(require.resolve('@vivliostyle/viewer/package.json'))
+  fsExtra.copySync(path.join(viewerPkgDir, 'lib'), viewerOutDir)
 
   // CSS, examples, fonts
   for (const dir of ['css', 'examples', 'fonts']) {

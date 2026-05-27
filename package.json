@@ -45,7 +45,7 @@
     "@fortawesome/free-brands-svg-icons": "6.2.1",
     "@fortawesome/free-regular-svg-icons": "6.2.1",
     "@fortawesome/free-solid-svg-icons": "6.2.1",
-    "@ggrossetie/pagedjs": "0.2.0-next.1623590414",
+    "@vivliostyle/viewer": "2.43.0",
     "asciidoctor": ">= 4.0.0-alpha.5 < 5",
     "chokidar": "~3.5",
     "file-url": "~3.0",
