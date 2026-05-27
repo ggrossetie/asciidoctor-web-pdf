@@ -1,17 +1,3 @@
-@page {
-  size: 210mm 297mm;
-  margin: 0;
-}
-
-@media only screen {
-  .page-bleed {
-    position: absolute;
-    height: calc(29.7cm - .5cm);
-    width: calc(21cm - .5cm);
-    margin: .25cm;
-    border: 1px solid red;
-  }
-}
 
 body {
   font-family: 'Fira Sans', sans-serif;
@@ -19,23 +5,24 @@ body {
   text-rendering: optimizeSpeed;
   font-size: 10pt;
   text-align: justify;
-  height: 29.7cm;
-  width: 21cm;
   margin: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 @media only screen {
   body {
+    font-size: 16px;
     border-right: 1px solid black;
     border-bottom: 1px solid black;
   }
 }
 .header {
   background-color: #81c784;
-  padding: .75rem;
-  padding-top: 1rem;
+  line-height: 4rem;
+}
+
+#content {
+  display: flex;
+  flex-direction: row;
 }
 
 h1 {
@@ -62,17 +49,17 @@ h1 {
 .chronologie h2 {
   text-transform: uppercase;
   margin-top: .75rem;
-  font-size: 1.8em;
+  font-size: 1.8rem;
   font-weight: 300;
 }
 
 .chronologie h3 {
   margin-top: 0.5rem;
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
 
 .info h2 {
-  font-size: 2em;
+  font-size: 2rem;
   text-align: center;
   padding-top: 0.4cm;
   padding-bottom: 0.4cm;
@@ -90,13 +77,13 @@ h1 {
 
 .info h3 {
   margin-top: 2rem;
-  font-size: .85em;
+  font-size: .85rem;
 }
 
 ul {
   list-style-type: circle;
   padding-left: 1.5rem;
-  font-size: 0.9em;
+  font-size: 0.9rem;
   line-height: 12pt;
 }
 
@@ -107,16 +94,14 @@ div.atouts {
 }
 
 ul.atouts {
-  padding: 0;
   margin: 0;
   list-style-type: none;
   text-align: center;
   text-transform: uppercase;
-  font-size: 1.15em;
+  font-size: 1.15rem;
   font-weight: 200;
-  padding-top: 1rem;
   border-top: 1pt solid grey;
-  padding-bottom: 1rem;
+  padding: 1rem 0;
   border-bottom: 1pt solid grey;
 }
 
@@ -130,10 +115,6 @@ ul.contact {
   list-style-type: none;
 }
 
-#content {
-  display: flex;
-  height: 100%;
-}
 
 #content>.info {
   width: calc(5.2cm - 0.6cm);
@@ -169,6 +150,10 @@ ul.contact {
   background-color: #81c784;
 }
 
+.footer {
+  display: none;
+}
+
 span.picto {
   vertical-align: middle;
 }
@@ -182,11 +167,61 @@ span.picto.phone>img {
   transform: scaleX(-1);
 }
 
-/**
-  The preamble is (misused) as running content for a paged layout.
-  It is of no use in this non-paged layout and therefore being
-  removed from rendering.
- */
-#preamble {
-  display: none;
+.running-footer {
+  position: running(runningFooter)
+}
+
+@page {
+  size: A4;
+  margin: 1cm;
+  marks: crop cross;    // purpose of demonstration only
+}
+
+@page {
+  @bottom-left {
+    background-color: #81c784;
+    color: white;
+  }
+
+}
+@page :right {
+  @bottom-left {
+    content: '';
+    background-color: #81c784;
+    color: white;
+  }
+  @bottom-center {
+    content: element(runningFooter);
+    background-color: #81c784;
+    color: white;
+  }
+  @bottom-right {
+    content: 'Page ' counter(page) "/" counter(pages);
+    background-color: #81c784;
+    color: white;
+    padding-right: 1em;
+  }
+}
+
+@page :left {
+  @bottom-left {
+    content: 'Page ' counter(page) "/" counter(pages);
+    background-color: #81c784;
+    color: white;
+    padding-left: 1em;
+  }
+  @bottom-center {
+    content: element(runningFooter);
+    background-color: #81c784;
+    color: white;
+  }
+  @bottom-right {
+    content: '';
+    background-color: #81c784;
+    color: white;
+  }
+}
+
+[data-align-last-split-element='justify'] {
+  text-align-last: left;
 }
