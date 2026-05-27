@@ -15,7 +15,6 @@ The release process is fully automated and will:
 - Publish Docker images to Docker Hub
 
 The following secrets must be configured on the repository:
-- `NPM_TOKEN` — npm publish token
 - `DOCKER_USERNAME` / `DOCKER_PASSWORD` — Docker Hub credentials
 
 See the `.github/workflows/release.yml` file for details.

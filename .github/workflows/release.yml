@@ -76,8 +76,6 @@ jobs:
           git push origin HEAD --tags
       - name: Publish to npm
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Download binary artifacts
         uses: actions/download-artifact@v8
         with:
