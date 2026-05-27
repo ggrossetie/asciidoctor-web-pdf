@@ -55,8 +55,16 @@ export function toVisuallyMatch(referenceFilename, actualPath) {
   }
   const actualBasename = ospath.basename(actualPath, '.pdf')
   const outputBasename = ospath.join(imagesOutputDir, `${actualBasename}`)
-  childProcess.execFileSync('pdftocairo', ['-png', actualPath, `${outputBasename}-actual`], { stdio: 'pipe' })
-  childProcess.execFileSync('pdftocairo', ['-png', referencePath, `${outputBasename}-reference`], { stdio: 'pipe' })
+  childProcess.execFileSync(
+    'pdftocairo',
+    ['-png', actualPath, `${outputBasename}-actual`],
+    { stdio: 'pipe' },
+  )
+  childProcess.execFileSync(
+    'pdftocairo',
+    ['-png', referencePath, `${outputBasename}-reference`],
+    { stdio: 'pipe' },
+  )
 
   let pixels = 0
   const tmpFiles = [actualPath]
