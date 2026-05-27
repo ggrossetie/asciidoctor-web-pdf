@@ -53,7 +53,6 @@ async function bundle() {
       'fsevents',
     ],
   })
-
 }
 
 function createSeaConfig() {
@@ -144,7 +143,12 @@ function copyAssets() {
   const outDir = path.join(buildDirPath, platformKey)
 
   // highlight.js styles: inlined as CSS by the server-side syntax highlighter
-  const highlightJsStylesOutDir = path.join(outDir, 'assets', 'highlight', 'styles')
+  const highlightJsStylesOutDir = path.join(
+    outDir,
+    'assets',
+    'highlight',
+    'styles',
+  )
   fsExtra.ensureDirSync(highlightJsStylesOutDir)
   const highlightJsStylesSrcDir = path.join(
     path.dirname(require.resolve('highlight.js/package.json')),
@@ -158,7 +162,10 @@ function copyAssets() {
   const mathjaxPkgDir = path.dirname(require.resolve('mathjax/package.json'))
   const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
   for (const file of ['core.js', 'startup.js', 'loader.js']) {
-    fsExtra.copySync(path.join(mathjaxPkgDir, file), path.join(mathjaxOutDir, file))
+    fsExtra.copySync(
+      path.join(mathjaxPkgDir, file),
+      path.join(mathjaxOutDir, file),
+    )
   }
   for (const file of ['tex.js', 'tex-base.js', 'asciimath.js']) {
     fsExtra.copySync(
@@ -195,7 +202,9 @@ function copyAssets() {
   // Vivliostyle viewer: HTML + JS + CSS served via file:// for headless rendering
   const viewerOutDir = path.join(outDir, 'viewer')
   fsExtra.ensureDirSync(viewerOutDir)
-  const viewerPkgDir = path.dirname(require.resolve('@vivliostyle/viewer/package.json'))
+  const viewerPkgDir = path.dirname(
+    require.resolve('@vivliostyle/viewer/package.json'),
+  )
   fsExtra.copySync(path.join(viewerPkgDir, 'lib'), viewerOutDir)
 
   // CSS, examples, fonts
