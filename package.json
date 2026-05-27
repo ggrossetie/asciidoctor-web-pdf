@@ -46,7 +46,7 @@
     "@fortawesome/free-regular-svg-icons": "6.2.1",
     "@fortawesome/free-solid-svg-icons": "6.2.1",
     "@ggrossetie/pagedjs": "0.2.0-next.1623590414",
-    "asciidoctor": "^4.0.0-alpha.5",
+    "asciidoctor": ">= 4.0.0-alpha.5 < 5",
     "chokidar": "~3.5",
     "file-url": "~3.0",
     "fs-extra": "~11.1.0",
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
+    "@puppeteer/browsers": "~3.0",
     "archiver": "~8.0",
     "esbuild": "0.28.0",
     "node-html-parser": "~7.1",

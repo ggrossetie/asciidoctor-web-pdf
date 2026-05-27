@@ -3,11 +3,11 @@ import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { Browser, detectBrowserPlatform, install } from '@puppeteer/browsers'
-import archiver from 'archiver'
 import esbuild from 'esbuild'
 import fsExtra from 'fs-extra'
 
 const require = createRequire(import.meta.url)
+const archiver = require('archiver')
 
 const appName = 'asciidoctor-web-pdf'
 const buildDir = 'build'
@@ -44,6 +44,10 @@ async function bundle() {
     target: [`node${nodeMajor}`],
     outfile: bundlePath,
     loader: { '': 'js' },
+    define: {
+      'import.meta.url': '__filename',
+      'import.meta.dirname': '__dirname',
+    },
     external: [
       // Native addon - chokidar falls back to polling without it
       'fsevents',
