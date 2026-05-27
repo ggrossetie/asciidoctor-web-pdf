@@ -50,6 +50,7 @@
     "chokidar": "~3.5",
     "file-url": "~3.0",
     "fs-extra": "~11.1.0",
+    "highlight.js": "^11.11.1",
     "html-entities": "~2.3",
     "mathjax": "3.2.2",
     "pdf-lib": "~1.17",
