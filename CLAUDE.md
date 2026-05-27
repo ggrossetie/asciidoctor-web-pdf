@@ -20,8 +20,9 @@ A PDF converter for AsciiDoc based on web technologies (Node.js + Puppeteer).
 | `lib/cli.js` | CLI entry point (argument parsing, watch mode) |
 | `lib/converter.js` | Orchestrates Asciidoctor + Puppeteer conversion; builds the Vivliostyle viewer URL |
 | `lib/browser.js` | Puppeteer browser management; waits for `data-vivliostyle-viewer-status === "complete"` |
-| `lib/document/document-converter.js` | Custom Asciidoctor converter; generates the HTML document (content + CSS + optional MathJax) |
-| `lib/document/stem.js` | MathJax integration for math rendering (CHTML output) |
+| `lib/document/document-converter.js` | Custom Asciidoctor converter; generates the HTML document (content + CSS); invokes stem and syntax-highlighter processing |
+| `lib/document/stem.js` | Server-side MathJax 4 rendering: processes TeX/AsciiMath expressions in the HTML and replaces them with CHTML markup before the page is written to disk |
+| `lib/document/syntax-highlighter.js` | Server-side highlight.js adapter: syntax-highlights source blocks during Asciidoctor conversion and inlines the theme CSS |
 | `lib/outline.js` | Generates PDF bookmarks from section headings; encodes destinations in Vivliostyle's format |
 | `lib/metadata.js` | Injects PDF metadata (title, author, etc.) |
 | `css/document.css` | Core print CSS: page size, margins, TOC numbering, footnotes |
@@ -35,7 +36,8 @@ A PDF converter for AsciiDoc based on web technologies (Node.js + Puppeteer).
 
 `document-converter.js` produces a clean HTML page with:
 - Inline `<style>` containing `asciidoctor.css` + `document.css` + feature CSS
-- Optional MathJax scripts (when `:stem:` is set)
+- Math expressions already rendered as CHTML markup (when `:stem:` is set), with the MathJax CHTML stylesheet inlined in `<head>`
+- Syntax-highlighted source blocks with the highlight.js theme CSS inlined in `<head>` (when a source block is present)
 - A hidden outline `<div>` with `visibility:hidden; position:fixed` containing `<a href="#section-id">` links for each section — required for Chromium to create PDF named destinations
 
 There is **no Vivliostyle JavaScript** in the generated HTML. The Vivliostyle viewer is a separate standalone app that loads the HTML as a source document.
@@ -75,9 +77,15 @@ where non-`[A-Za-z0-9_-]` characters in the URL are replaced by `:XXXX` (4-digit
 
 ### MathJax
 
-MathJax (CHTML output, `tex-chtml-full.js`) is injected into the HTML document when `:stem:` is set. It executes inside Vivliostyle's source document context and modifies the DOM before Vivliostyle completes layout.
+MathJax 4 (CHTML output) runs **server-side in Node.js** during conversion, not in the browser. `lib/document/stem.js` receives the rendered HTML from `document-converter.js`, finds TeX (`\(...\)`, `\[...\]`) and AsciiMath (`\$...\$`) delimiters, converts each expression to CHTML using `mathjax` npm package, and appends the MathJax CHTML stylesheet to `<head>`.
 
-Note: SVG output was previously used as a workaround for an old architecture where the DOM was cloned into a blob URL (stripping CHTML's dynamically-injected styles). That workaround is no longer needed.
+CHTML fonts are loaded by Chromium at render time as `file://` URLs pointing to `assets/mathjax-fonts/` (woff2 files from `@mathjax/mathjax-newcm-font`).
+
+MathJax component JS files (`input/tex`, `input/asciimath`, `output/chtml` and their extensions) are loaded dynamically by Node.js via `require()` at the first stem conversion. In SEA mode these files live in `assets/mathjax/` next to the binary; a `package.json` with `"type":"commonjs"` is placed there to prevent Node.js from inheriting `"type":"module"` from a parent directory (which would run the legacy `asciimath.js` code in strict ESM mode and break its `arguments.callee` usage).
+
+### Syntax highlighting
+
+`lib/document/syntax-highlighter.js` registers a server-side highlight.js adapter with Asciidoctor. Source blocks are highlighted during conversion (spans already in the HTML when Vivliostyle processes it) and the chosen theme CSS (default: `github`) is inlined in `<head>`. Theme files are read from `node_modules/highlight.js/styles/` at runtime, or from `assets/highlight/styles/` in SEA mode.
 
 ### Binary distribution (Node SEA)
 
@@ -87,12 +95,23 @@ Note: SVG output was previously used as a workaround for an old architecture whe
 3. Copies the blob into a Node.js binary
 4. Copies runtime assets alongside the binary
 
-Assets that must be file-accessible from Chromium (not bundled):
-- `viewer/` — full `@vivliostyle/viewer/lib/` directory
-- `assets/mathjax/` — MathJax ES5 bundle
-- `css/` — stylesheet files
+Assets copied alongside the binary (all resolved relative to `path.dirname(process.execPath)`):
+
+| Path | Purpose |
+|------|---------|
+| `viewer/` | Full `@vivliostyle/viewer/lib/` directory — served via `file://` to Chromium |
+| `assets/mathjax/` | MathJax component JS files loaded by Node.js via `require()` at runtime (`input/tex.js`, `input/asciimath.js`, `output/chtml.js`, extensions). Includes a `package.json {"type":"commonjs"}` to prevent ESM mode inheritance. |
+| `assets/mathjax-fonts/` | CHTML woff2 fonts from `@mathjax/mathjax-newcm-font` — served as `file://` URLs to Chromium |
+| `assets/highlight/styles/` | highlight.js CSS theme files read by the server-side syntax highlighter |
+| `css/` | Stylesheet files |
+| `examples/` | Example documents |
+| `fonts/` | Font files |
 
 In SEA mode, the viewer index path is `path.join(path.dirname(process.execPath), 'viewer', 'index.html')`.
+
+**SEA-specific MathJax wiring** (`lib/document/stem.js`): before the first `MathJax.init()` call, two overrides are applied to the loader config:
+- `config.loader.paths.mathjax` → `assets/mathjax/` (esbuild sets `__dirname` to the binary dir, making `node-main.js` compute the wrong root)
+- `config.loader.require` → CJS `require` (the default `eval("(file) => import(file)")` uses dynamic ESM import which does not work in a SEA/CJS-only context)
 
 ## Development
 
