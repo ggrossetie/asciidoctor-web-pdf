@@ -1,0 +1,105 @@
+= Contributing to Asciidoctor Web PDF
+
+Thank you for your interest in contributing!
+This document describes how to set up your development environment, run tests, and submit changes.
+
+== Prerequisites
+
+* https://nodejs.org/[Node.js] >= 21
+* Git
+
+== Getting started
+
+Clone the repository and install dependencies:
+
+[source,sh]
+----
+git clone https://github.com/ggrossetie/asciidoctor-web-pdf.git
+cd asciidoctor-web-pdf
+npm install
+----
+
+== Running the CLI locally
+
+[source,sh]
+----
+./bin/asciidoctor-web-pdf --help
+./bin/asciidoctor-web-pdf examples/basic-example/basic-example.adoc
+----
+
+== Testing
+
+Run all tests (smoke + unit):
+
+[source,sh]
+----
+npm test
+----
+
+Run only the JavaScript unit tests:
+
+[source,sh]
+----
+npm run test:js
+----
+
+Run only the smoke test (verifies the CLI starts):
+
+[source,sh]
+----
+npm run test:smoke
+----
+
+=== Updating reference images
+
+PDF rendering output is compared against reference images stored in `test/reference/`.
+When an intentional visual change is made, update the Linux reference images via Docker:
+
+[source,sh]
+----
+npm run test:update-linux-reference
+----
+
+== Linting and formatting
+
+This project uses https://biomejs.dev/[Biome] for linting and formatting.
+
+Check for issues:
+
+[source,sh]
+----
+npm run lint
+----
+
+Auto-fix formatting:
+
+[source,sh]
+----
+npm run format
+----
+
+== Docker
+
+Build a local Docker image:
+
+[source,sh]
+----
+make packageLocalDocker
+----
+
+Test the Docker image:
+
+[source,sh]
+----
+make testDocker
+----
+
+== Submitting changes
+
+. Fork the repository and create a branch from `main`.
+. Make your changes, add tests where appropriate, and ensure `npm run format`, `npm test`, and `npm run lint` pass.
+. Open a pull request against `main` with a clear description of what you changed and why.
+
+== Reporting issues
+
+Please report bugs and feature requests on the https://github.com/ggrossetie/asciidoctor-web-pdf/issues[issue tracker].
