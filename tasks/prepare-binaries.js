@@ -53,12 +53,7 @@ async function bundle() {
       'fsevents',
     ],
   })
-  // Remove the top-level "use strict" that esbuild propagates from entry files.
-  // Opal's method aliasing assigns to alias.length which is non-writable in strict mode.
-  // In sloppy mode the assignment silently fails, which is acceptable.
-  let content = fs.readFileSync(bundlePath, 'utf8')
-  content = content.replace(/^(#!.*\n)"use strict";\n/, '$1')
-  fs.writeFileSync(bundlePath, content)
+
 }
 
 function createSeaConfig() {
@@ -147,6 +142,45 @@ async function getBrowser() {
 function copyAssets() {
   console.log('Copying assets...')
   const outDir = path.join(buildDirPath, platformKey)
+
+  // highlight.js styles: inlined as CSS by the server-side syntax highlighter
+  const highlightJsStylesOutDir = path.join(outDir, 'assets', 'highlight', 'styles')
+  fsExtra.ensureDirSync(highlightJsStylesOutDir)
+  const highlightJsStylesSrcDir = path.join(
+    path.dirname(require.resolve('highlight.js/package.json')),
+    'styles',
+  )
+  fsExtra.copySync(highlightJsStylesSrcDir, highlightJsStylesOutDir)
+
+  // MathJax component JS files: loaded dynamically at runtime via require() —
+  // esbuild cannot bundle them because paths are resolved at init() time.
+  // Only copy the components actually used (tex+asciimath input, chtml output).
+  const mathjaxPkgDir = path.dirname(require.resolve('mathjax/package.json'))
+  const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
+  for (const file of ['core.js', 'startup.js', 'loader.js']) {
+    fsExtra.copySync(path.join(mathjaxPkgDir, file), path.join(mathjaxOutDir, file))
+  }
+  for (const file of ['tex.js', 'tex-base.js', 'asciimath.js']) {
+    fsExtra.copySync(
+      path.join(mathjaxPkgDir, 'input', file),
+      path.join(mathjaxOutDir, 'input', file),
+    )
+  }
+  fsExtra.copySync(
+    path.join(mathjaxPkgDir, 'input', 'tex'),
+    path.join(mathjaxOutDir, 'input', 'tex'),
+  )
+  fsExtra.copySync(
+    path.join(mathjaxPkgDir, 'output', 'chtml.js'),
+    path.join(mathjaxOutDir, 'output', 'chtml.js'),
+  )
+  // Force CJS so Node.js does not walk up and inherit "type":"module" from the
+  // project root package.json, which would make asciimath.js run as strict ESM
+  // (breaking its legacy arguments.callee usage).
+  fs.writeFileSync(
+    path.join(mathjaxOutDir, 'package.json'),
+    JSON.stringify({ type: 'commonjs' }),
+  )
 
   // MathJax fonts: must be file-accessible from Chromium for CHTML rendering
   const mathjaxFontsOutDir = path.join(outDir, 'assets', 'mathjax-fonts')
