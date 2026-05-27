@@ -51,8 +51,6 @@ async function bundle() {
     external: [
       // Native addon - chokidar falls back to polling without it
       'fsevents',
-      // Read as text at runtime via fs.readFileSync; not imported as a module
-      'mathjax',
     ],
   })
   // Remove the top-level "use strict" that esbuild propagates from entry files.
@@ -150,13 +148,15 @@ function copyAssets() {
   console.log('Copying assets...')
   const outDir = path.join(buildDirPath, platformKey)
 
-  // MathJax: must be file-accessible from Chromium (not bundled into the binary)
-  const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
-  fsExtra.ensureDirSync(mathjaxOutDir)
-  const mathjaxSrcDir = path.dirname(
-    require.resolve('mathjax/es5/tex-chtml-full.js'),
+  // MathJax fonts: must be file-accessible from Chromium for CHTML rendering
+  const mathjaxFontsOutDir = path.join(outDir, 'assets', 'mathjax-fonts')
+  fsExtra.ensureDirSync(mathjaxFontsOutDir)
+  const mathjaxFontsSrcDir = path.join(
+    path.dirname(require.resolve('@mathjax/mathjax-newcm-font/package.json')),
+    'chtml',
+    'woff2',
   )
-  fsExtra.copySync(mathjaxSrcDir, mathjaxOutDir)
+  fsExtra.copySync(mathjaxFontsSrcDir, mathjaxFontsOutDir)
 
   // Vivliostyle viewer: HTML + JS + CSS served via file:// for headless rendering
   const viewerOutDir = path.join(outDir, 'viewer')
