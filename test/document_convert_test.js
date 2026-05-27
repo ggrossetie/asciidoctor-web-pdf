@@ -1,25 +1,23 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert/strict')
-const { parse } = require('node-html-parser')
-const ospath = require('node:path')
+import assert from 'node:assert/strict'
+import ospath from 'node:path'
+import { describe, it } from 'node:test'
+import { ConverterFactory, convertFile, load } from '@asciidoctor/core'
+import { parse } from 'node-html-parser'
+import DocumentConverter from '../lib/document/document-converter.js'
 
-const asciidoctor = require('@asciidoctor/core')()
-const DocumentConverter = require('../lib/document/document-converter')
-
+const __dirname = import.meta.dirname
 const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 
 describe('Document converter', () => {
-  it('should override the titlePage function', () => {
+  it('should override the titlePage function', async () => {
     class CustomDocumentConverter extends DocumentConverter {
       titlePage(_node) {
         return '<h1>Static title</h1>'
       }
     }
 
-    asciidoctor.ConverterFactory.register(new CustomDocumentConverter(), [
-      'custom-web-pdf',
-    ])
-    const doc = asciidoctor.load(
+    ConverterFactory.register(new CustomDocumentConverter(), ['custom-web-pdf'])
+    const doc = await load(
       `= Title
 Guillaume Grossetie
 :title-page:
@@ -27,20 +25,18 @@ Guillaume Grossetie
 == Section`,
       { backend: 'custom-web-pdf' },
     )
-    const root = parse(doc.convert({ header_footer: true }))
+    const root = parse(await doc.convert({ header_footer: true }))
     assert.strictEqual(root.querySelector('h1')?.textContent, 'Static title')
   })
 
   describe('Docinfo', () => {
-    it('should include shared (head) docinfo', () => {
-      asciidoctor.ConverterFactory.register(new DocumentConverter(), [
-        'web-pdf',
-      ])
+    it('should include shared (head) docinfo', async () => {
+      ConverterFactory.register(new DocumentConverter(), ['web-pdf'])
       const root = parse(
-        asciidoctor.convertFile(fixturesPath('simple.adoc'), {
+        await convertFile(fixturesPath('simple.adoc'), {
           safe: 'safe',
           backend: 'web-pdf',
-          header_footer: true,
+          standalone: true,
           to_file: false,
           attributes: { docinfo: 'shared' },
         }),
@@ -56,15 +52,13 @@ Guillaume Grossetie
         1,
       )
     })
-    it('should include private (footer) docinfo', () => {
-      asciidoctor.ConverterFactory.register(new DocumentConverter(), [
-        'web-pdf',
-      ])
+    it('should include private (footer) docinfo', async () => {
+      ConverterFactory.register(new DocumentConverter(), ['web-pdf'])
       const root = parse(
-        asciidoctor.convertFile(fixturesPath('simple.adoc'), {
+        await convertFile(fixturesPath('simple.adoc'), {
           safe: 'safe',
           backend: 'web-pdf',
-          header_footer: true,
+          standalone: true,
           to_file: false,
           attributes: { docinfo: 'private-footer' },
         }),
@@ -74,15 +68,13 @@ Guillaume Grossetie
         'This is the end.',
       )
     })
-    it('should include private (running) docinfo', () => {
-      asciidoctor.ConverterFactory.register(new DocumentConverter(), [
-        'web-pdf',
-      ])
+    it('should include private (running) docinfo', async () => {
+      ConverterFactory.register(new DocumentConverter(), ['web-pdf'])
       const root = parse(
-        asciidoctor.convertFile(fixturesPath('simple.adoc'), {
+        await convertFile(fixturesPath('simple.adoc'), {
           safe: 'safe',
           backend: 'web-pdf',
-          header_footer: true,
+          standalone: true,
           to_file: false,
           attributes: { docinfo: 'private-running' },
         }),

@@ -2,8 +2,9 @@
   "name": "asciidoctor-pdf",
   "version": "1.0.0-alpha.16",
   "description": "A PDF converter for AsciiDoc based on web technologies",
+  "type": "module",
   "engines": {
-    "node": ">=18",
+    "node": ">=21",
     "npm": ">=8.0.0"
   },
   "bin": {
@@ -40,24 +41,23 @@
   },
   "homepage": "https://github.com/ggrossetie/asciidoctor-web-pdf#readme",
   "dependencies": {
-    "@asciidoctor/cli": "~3.5",
     "@fortawesome/fontawesome-svg-core": "6.2.1",
     "@fortawesome/free-brands-svg-icons": "6.2.1",
     "@fortawesome/free-regular-svg-icons": "6.2.1",
     "@fortawesome/free-solid-svg-icons": "6.2.1",
     "@ggrossetie/pagedjs": "0.2.0-next.1623590414",
+    "asciidoctor": ">= 4.0.0-alpha.5 < 5",
     "chokidar": "~3.5",
     "file-url": "~3.0",
     "fs-extra": "~11.1.0",
     "html-entities": "~2.3",
     "mathjax": "3.2.2",
     "pdf-lib": "~1.17",
-    "puppeteer": "25.1.0",
-    "yargs": "17.6.2"
+    "puppeteer": "25.1.0"
   },
   "devDependencies": {
-    "@asciidoctor/core": "~2.2",
     "@biomejs/biome": "2.4.15",
+    "@puppeteer/browsers": "~3.0",
     "archiver": "~8.0",
     "esbuild": "0.28.0",
     "node-html-parser": "~7.1",
@@ -66,6 +66,6 @@
     "postject": "1.0.0-alpha.6"
   },
   "peerDependencies": {
-    "@asciidoctor/core": "~2.2"
+    "asciidoctor": ">= 4.0.0-alpha.5 < 5"
   }
 }

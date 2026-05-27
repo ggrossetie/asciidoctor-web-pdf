@@ -1,21 +1,10 @@
 #!/usr/bin/env node
 
-'use strict'
+import { PdfOptions, PdfInvoker } from '../lib/cli.js'
 
 process.title = 'asciidoctor-pdf'
-const { PdfOptions, PdfInvoker } = require('../lib/cli.js')
-
-;(async () => {
-  console.warn('WARN: `asciidoctor-pdf` is deprecated and will be removed in a future version, please use `asciidoctor-web-pdf` instead')
-  const options = new PdfOptions().parse(process.argv)
-  return new PdfInvoker(options).invoke()
-})()
-.then((result) => {
-  if (result.exit) {
-    process.exit(0)
-  }
-})
-.catch((error) => {
+console.warn('WARN: `asciidoctor-pdf` is deprecated and will be removed in a future version, please use `asciidoctor-web-pdf` instead')
+new PdfInvoker(new PdfOptions().parse(process.argv)).invoke().catch((error) => {
   console.error('ERROR: ', error)
   process.exit(1)
 })
