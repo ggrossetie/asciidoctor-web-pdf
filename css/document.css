@@ -203,14 +203,9 @@ tr {
 }
 
 /*
-TOC page numbering and leaders.
-The page numbering uses target-counter(). The leader works by filling the li with dots,
-and arranging for the <a> and a::after to cover them, using the same background color as the TOC div.
+TOC page numbering and leaders using CSS Generated Content for Paged Media.
+leader() fills the available space with dots; target-counter() generates the page number.
 */
-#toc.toc, #toc.toc2 {
-  background-color: white;
-}
-
 #toc.toc ul > li:first-child,
 #toc.toc2 ul > li:first-child {
   margin-top: 0;
@@ -218,45 +213,7 @@ and arranging for the <a> and a::after to cover them, using the same background 
 
 #toc.toc a::after,
 #toc.toc2 a::after {
-  content: target-counter(attr(href url), page);
-  float: right;
-  /* for leader: */
-  position: relative;
-  right: 0;
-  background-color: inherit;
-  padding-left: 6px;
-}
-
-/* fake leading */
-#toc.toc li.toc-entry::after,
-#toc.toc2 li.toc-entry::after {
-  content:
-    ".............................................."
-    ".............................................."
-    ".............................................."
-    "........";
-  float: left;
-  width: 0;
-  letter-spacing: 2px;
-  color: #999;
-}
-
-#toc.toc ul,
-#toc.toc2 ul {
-  background-color: inherit;
-}
-
-#toc.toc li,
-#toc.toc2 li {
-  overflow-x: hidden;
-  background-color: inherit;
-}
-
-#toc.toc a,
-#toc.toc2 a {
-  background-color: inherit;
-  right: 0;
-  padding-right: 0.25rem;
+  content: leader('. ') target-counter(attr(href url), page);
 }
 
 .front-matter {
