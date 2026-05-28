@@ -1,13 +1,13 @@
 export default {
-  paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
-  document: (node) => `<!DOCTYPE html>
+  paragraph: async (node) => `<p class="${node.getRoles().join(' ')}">${await node.getContent()}</p>`,
+  document: async (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <link href="${new URL('./letter.css', import.meta.url).href}" rel="stylesheet">
 </head>
 <body>
-${node.getContent()}
+${await node.getContent()}
 </body>`,
-  image: (node) => `<div class="image ${node.getRoles().join(' ')}"><img src="${node.getImageUri(node.getAttribute('target'))}"/></div>`
+  image: async (node) => `<div class="image ${node.getRoles().join(' ')}"><img src="${await node.getImageUri(node.getAttribute('target'))}"/></div>`
 }

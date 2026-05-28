@@ -9,36 +9,40 @@ Simon Maple <https://twitter.com/sjmaple>; Robert Scholte <https://twitter.com/r
 
 == Encrypt your Secrets
 
-```
+[source]
+----
 $ mvn --encrypt-master-password
 Master password: *********
 {encrypted_master_password}
-```
+----
 
 Store this in `~/.m2/settings-security.xml`
 
-```xml
+[source,xml]
+----
 <settingsSecurity>
  <master>{encrypted_master_password}</master>
 </settingsSecurity>
-```
+----
 Now encrypt your server password:
 
-```
+[source]
+----
 mvn --encrypt-password
 Master password: *********
 {encrypted_password}
-```
+----
 
 Store this in your `settings.xml` file as follows:
 
-```xml
+[source,xml]
+----
 <server>
  <id>my.server</id>
  <username>smaple</username>
  <password>{encrypted_password}</password>
 </server>
-```
+----
 
 == Don't use passwords in the CLI
 
@@ -62,9 +66,9 @@ Ensure your `<repositories>` and `<pluginRepositories>` use https in their URLs.
 Verify the health of your third-party libraries by confirming they have:
 
 [.do]
-* [x] A team of committers
-* [x] Well documented security policies
-* [x] Regular updates and releases
+* A team of committers
+* Well documented security policies
+* Regular updates and releases
 
 == Test for Known Vulnerabilities
 
@@ -72,22 +76,23 @@ Do not use Maven dependencies with known vulnerabilities. +
 Use a tool like Snyk to:
 
 [.do]
-* [x] Test your app for known vulnerabilities.
-* [x] Automatically fix issues that exist.
-* [x] Continuously monitor for new vulnerabilities
+* Test your app for known vulnerabilities.
+* Automatically fix issues that exist.
+* Continuously monitor for new vulnerabilities
 
 == Test your Checksums
 
 As part of validating the authenticity of your dependencies,
 test their checksums using the -C flag on Maven commands:
 
-```
+[source]
+----
 $ mvn -C install
 // fail if checksums don’t match
 
 $ mvn -c install
 // warn if checksums don’t match
-```
+----
 
 == Don't use Properties for Passwords
 
@@ -104,7 +109,8 @@ Never store your secrets in your pom.xml properties.
 
 Use Maven roles to state who should be contacted for security issues.
 
-```xml
+[source,xml]
+----
 <developers>
  <developer>
    <id>grander</id>
@@ -113,9 +119,9 @@ Use Maven roles to state who should be contacted for security issues.
    <roles>
      <role>security</role>
    </roles>
- <developer>
-<developers>
-```
+ </developer>
+</developers>
+----
 
 == Stay up-to-date
 
@@ -127,4 +133,3 @@ Avoid Maven 3.0.4 as it ignores certificates for HTTPS connections.
 
 Monitor the security bulletins the Apache Maven team publish on the
 https://maven.apache.org/security.html[Maven site].
-

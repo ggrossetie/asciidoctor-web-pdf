@@ -40,7 +40,9 @@ const renderAuthors = function (node) {
 
 
 export default {
-  paragraph: async (node) => `<p class="${node.getRoles().join(' ')}">${await node.getContent()}</p>`,
+  paragraph: async (node) => {
+    return `<p class="${node.getRoles().join(' ')}">${await node.getContent()}</p>`
+  },
   document: async (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
