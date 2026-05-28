@@ -1,20 +1,15 @@
 import assert from 'node:assert/strict'
-import { createRequire } from 'node:module'
 import ospath from 'node:path'
 import { describe, it } from 'node:test'
 import { convert, load } from '@asciidoctor/core'
-import fileUrl from 'file-url'
 import { parse } from 'node-html-parser'
 import * as converter from '../lib/converter.js'
 import { templates } from '../lib/document/document-converter.js'
 
 converter.registerTemplateConverter(templates)
 
-const require = createRequire(import.meta.url)
 const __dirname = import.meta.dirname
 const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
-
-const mathjaxFileUrl = fileUrl(require.resolve('mathjax/es5/tex-chtml-full.js'))
 
 describe('Default converter', () => {
   describe('Language', () => {
@@ -181,98 +176,72 @@ Guillaume Grossetie
   })
 
   describe('Stem', () => {
-    it('should include MathML when stem is set', async () => {
+    it('should include MathJax CHTML stylesheet when stem is set', async () => {
       const doc = await load(`= Title
 :stem:
 
 == Section`)
       const root = parse(await templates.document(doc))
-      assert.strictEqual(
-        root.querySelectorAll(`script[src="${mathjaxFileUrl}"]`).length,
-        1,
-      )
-      assert.ok(
-        root
-          .querySelector('script[data-type="mathjax-config"]')
-          .innerHTML.includes('tags: "none"'),
-      )
+      assert.ok(root.querySelector('style#MJX-CHTML-styles'))
     })
 
-    it('should not include MathML when stem is not set', async () => {
+    it('should not include MathJax CHTML stylesheet when stem is not set', async () => {
       const doc = await load(`= Title
 :stem!:
 
 == Section`)
       const root = parse(await templates.document(doc))
-      assert.strictEqual(
-        root.querySelectorAll(`script[src="${mathjaxFileUrl}"]`).length,
-        0,
-      )
+      assert.strictEqual(root.querySelector('style#MJX-CHTML-styles'), null)
     })
 
-    it('should not include MathML when stem is not present', async () => {
+    it('should not include MathJax CHTML stylesheet when stem is not present', async () => {
       const doc = await load(`= Title
 
 == Section`)
       const root = parse(await templates.document(doc))
-      assert.strictEqual(
-        root.querySelectorAll(`script[src="${mathjaxFileUrl}"]`).length,
-        0,
-      )
+      assert.strictEqual(root.querySelector('style#MJX-CHTML-styles'), null)
     })
 
     it('should add equation numbers when eqnums equals AMS', async () => {
       const doc = await load(`= Title
-:stem:
+:stem: latexmath
 :eqnums: AMS
 
-== Section`)
+[stem]
+++++
+\\begin{equation}E=mc^2\\end{equation}
+++++`)
       const root = parse(await templates.document(doc))
-      assert.strictEqual(
-        root.querySelectorAll(`script[src="${mathjaxFileUrl}"]`).length,
-        1,
-      )
-      assert.ok(
-        root
-          .querySelector('script[data-type="mathjax-config"]')
-          .innerHTML.includes('tags: "ams"'),
-      )
+      assert.ok(root.querySelector('style#MJX-CHTML-styles'))
+      assert.ok(root.querySelector('[id^="mjx-eqn:"]'))
     })
 
     it('should add equation numbers when eqnums is present', async () => {
       const doc = await load(`= Title
-:stem:
+:stem: latexmath
 :eqnums:
 
-== Section`)
+[stem]
+++++
+\\begin{equation}E=mc^2\\end{equation}
+++++`)
       const root = parse(await templates.document(doc))
-      assert.strictEqual(
-        root.querySelectorAll(`script[src="${mathjaxFileUrl}"]`).length,
-        1,
-      )
-      assert.ok(
-        root
-          .querySelector('script[data-type="mathjax-config"]')
-          .innerHTML.includes('tags: "ams"'),
-      )
+      assert.ok(root.querySelector('style#MJX-CHTML-styles'))
+      assert.ok(root.querySelector('[id^="mjx-eqn:"]'))
     })
 
     it('should add equation numbers when eqnums equals all', async () => {
       const doc = await load(`= Title
-:stem:
+:stem: latexmath
 :eqnums: all
 
-== Section`)
+[stem]
+++++
+\\[E=mc^2\\]
+++++`)
       const root = parse(await templates.document(doc))
-      assert.strictEqual(
-        root.querySelectorAll(`script[src="${mathjaxFileUrl}"]`).length,
-        1,
-      )
-      assert.ok(
-        root
-          .querySelector('script[data-type="mathjax-config"]')
-          .innerHTML.includes('tags: "all"'),
-      )
+      assert.ok(root.querySelector('style#MJX-CHTML-styles'))
+      assert.ok(root.querySelector('[id^="mjx-eqn:"]'))
     })
   })
 

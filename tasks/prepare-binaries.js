@@ -51,17 +51,8 @@ async function bundle() {
     external: [
       // Native addon - chokidar falls back to polling without it
       'fsevents',
-      // Read as text at runtime via fs.readFileSync; not imported as a module
-      '@ggrossetie/pagedjs',
-      'mathjax',
     ],
   })
-  // Remove the top-level "use strict" that esbuild propagates from entry files.
-  // Opal's method aliasing assigns to alias.length which is non-writable in strict mode.
-  // In sloppy mode the assignment silently fails, which is acceptable.
-  let content = fs.readFileSync(bundlePath, 'utf8')
-  content = content.replace(/^(#!.*\n)"use strict";\n/, '$1')
-  fs.writeFileSync(bundlePath, content)
 }
 
 function createSeaConfig() {
@@ -151,31 +142,70 @@ function copyAssets() {
   console.log('Copying assets...')
   const outDir = path.join(buildDirPath, platformKey)
 
-  // MathJax: must be file-accessible from Chromium (not bundled into the binary)
-  const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
-  fsExtra.ensureDirSync(mathjaxOutDir)
-  const mathjaxSrcDir = path.dirname(
-    require.resolve('mathjax/es5/tex-chtml-full.js'),
+  // highlight.js styles: inlined as CSS by the server-side syntax highlighter
+  const highlightJsStylesOutDir = path.join(
+    outDir,
+    'assets',
+    'highlight',
+    'styles',
   )
-  fsExtra.copySync(mathjaxSrcDir, mathjaxOutDir)
+  fsExtra.ensureDirSync(highlightJsStylesOutDir)
+  const highlightJsStylesSrcDir = path.join(
+    path.dirname(require.resolve('highlight.js/package.json')),
+    'styles',
+  )
+  fsExtra.copySync(highlightJsStylesSrcDir, highlightJsStylesOutDir)
 
-  // Scripts read at runtime and injected inline into the HTML page
-  const scriptsOutDir = path.join(outDir, 'scripts')
-  fsExtra.ensureDirSync(scriptsOutDir)
-  fsExtra.copySync(
-    require.resolve('@ggrossetie/pagedjs/dist/paged.polyfill.js'),
-    path.join(scriptsOutDir, 'paged.polyfill.js'),
-  )
-  const libDocDir = path.join(rootDirPath, 'lib', 'document')
-  for (const scriptFile of [
-    'repeating-table-elements.js',
-    'paged-rendering.js',
-  ]) {
+  // MathJax component JS files: loaded dynamically at runtime via require() —
+  // esbuild cannot bundle them because paths are resolved at init() time.
+  // Only copy the components actually used (tex+asciimath input, chtml output).
+  const mathjaxPkgDir = path.dirname(require.resolve('mathjax/package.json'))
+  const mathjaxOutDir = path.join(outDir, 'assets', 'mathjax')
+  for (const file of ['core.js', 'startup.js', 'loader.js']) {
     fsExtra.copySync(
-      path.join(libDocDir, scriptFile),
-      path.join(scriptsOutDir, scriptFile),
+      path.join(mathjaxPkgDir, file),
+      path.join(mathjaxOutDir, file),
     )
   }
+  for (const file of ['tex.js', 'tex-base.js', 'asciimath.js']) {
+    fsExtra.copySync(
+      path.join(mathjaxPkgDir, 'input', file),
+      path.join(mathjaxOutDir, 'input', file),
+    )
+  }
+  fsExtra.copySync(
+    path.join(mathjaxPkgDir, 'input', 'tex'),
+    path.join(mathjaxOutDir, 'input', 'tex'),
+  )
+  fsExtra.copySync(
+    path.join(mathjaxPkgDir, 'output', 'chtml.js'),
+    path.join(mathjaxOutDir, 'output', 'chtml.js'),
+  )
+  // Force CJS so Node.js does not walk up and inherit "type":"module" from the
+  // project root package.json, which would make asciimath.js run as strict ESM
+  // (breaking its legacy arguments.callee usage).
+  fs.writeFileSync(
+    path.join(mathjaxOutDir, 'package.json'),
+    JSON.stringify({ type: 'commonjs' }),
+  )
+
+  // MathJax fonts: must be file-accessible from Chromium for CHTML rendering
+  const mathjaxFontsOutDir = path.join(outDir, 'assets', 'mathjax-fonts')
+  fsExtra.ensureDirSync(mathjaxFontsOutDir)
+  const mathjaxFontsSrcDir = path.join(
+    path.dirname(require.resolve('@mathjax/mathjax-newcm-font/package.json')),
+    'chtml',
+    'woff2',
+  )
+  fsExtra.copySync(mathjaxFontsSrcDir, mathjaxFontsOutDir)
+
+  // Vivliostyle viewer: HTML + JS + CSS served via file:// for headless rendering
+  const viewerOutDir = path.join(outDir, 'viewer')
+  fsExtra.ensureDirSync(viewerOutDir)
+  const viewerPkgDir = path.dirname(
+    require.resolve('@vivliostyle/viewer/package.json'),
+  )
+  fsExtra.copySync(path.join(viewerPkgDir, 'lib'), viewerOutDir)
 
   // CSS, examples, fonts
   for (const dir of ['css', 'examples', 'fonts']) {

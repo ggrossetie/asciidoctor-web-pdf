@@ -61,8 +61,8 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
       </a>
     </td>
     <td width="25%">
-      <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/slides/ioslides/presentation.pdf">
-        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/slides/ioslides/presentation_screenshot.png" />
+      <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf">
+        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/presentation/ioslides/presentation_screenshot.png" />
       </a>
     </td>
     <td width="25%"></td>
@@ -75,9 +75,9 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
       <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf"> PDF </a>
     </td>
     <td width="25%">
-      Slides<br/>
-      <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/slides/ioslides/"> Source </a> /
-      <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/slides/ioslides/presentation.pdf"> PDF </a>
+      Presentation<br/>
+      <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/presentation/ioslides/"> Source </a> /
+      <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf"> PDF </a>
     </td>
     <td width="25%"></td>
     <td width="25%"></td>
@@ -345,16 +345,16 @@ Otherwise, running elements will be visible on the page.
 To enable docinfo files, you need to configure the scope using the `docinfo` attribute.
 The scope defines if the docinfo files apply for a specific document ("private") or for all documents in the same directory ("shared").
 
-| Mode	| Location | Behavior | Docinfo file name |
-| ----- | -------- | -------- | ----------------- |
-| Private | Head   | Adds content to `<head>` for `<docname>.adoc` files. | `<docname>-docinfo-pdf.html` |
-| Private | Header | Adds content to start of document for `<docname>.adoc` files. | `<docname>-docinfo-header-pdf.html` |
-| Private | Footer | Adds content to end of document for `<docname>.adoc` files. Useful for supporting [Paged.js hooks and custom JavaScript](https://www.pagedjs.org/documentation/11-hooks/) | `<docname>-docinfo-footer-pdf.html` |
-| Private | Running | Adds running content to start of document for `<docname>.adoc` files. | `<docname>-docinfo-running-pdf.html` |
-| Shared | Head | Adds content to `<head>` for any document in same directory. | `docinfo-pdf.html` |
-| Shared | Header | Adds content to start of document for any document in same directory. | `docinfo-header-pdf.html` |
-| Shared | Footer | Adds content to end of document for any document in same directory. Useful for supporting [Paged.js hooks and custom JavaScript](https://www.pagedjs.org/documentation/11-hooks/)| `docinfo-footer-pdf.html` |
-| Shared | Running | Adds running content to start for any document in same directory. | `docinfo-running-pdf.html` |
+| Mode	   | Location | Behavior                                                                                                                                                                          | Docinfo file name                    |
+|---------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
+| Private | Head     | Adds content to `<head>` for `<docname>.adoc` files.                                                                                                                              | `<docname>-docinfo-pdf.html`         |
+| Private | Header   | Adds content to start of document for `<docname>.adoc` files.                                                                                                                     | `<docname>-docinfo-header-pdf.html`  |
+| Private | Footer   | Adds content to end of document for `<docname>.adoc` files. Useful for supporting [Paged.js hooks and custom JavaScript](https://www.pagedjs.org/documentation/11-hooks/)         | `<docname>-docinfo-footer-pdf.html`  |
+| Private | Running  | Adds running content to start of document for `<docname>.adoc` files.                                                                                                             | `<docname>-docinfo-running-pdf.html` |
+| Shared  | Head     | Adds content to `<head>` for any document in same directory.                                                                                                                      | `docinfo-pdf.html`                   |
+| Shared  | Header   | Adds content to start of document for any document in same directory.                                                                                                             | `docinfo-header-pdf.html`            |
+| Shared  | Footer   | Adds content to end of document for any document in same directory. Useful for supporting [Paged.js hooks and custom JavaScript](https://www.pagedjs.org/documentation/11-hooks/) | `docinfo-footer-pdf.html`            |
+| Shared  | Running  | Adds running content to start for any document in same directory.                                                                                                                 | `docinfo-running-pdf.html`           |
 
 To specify which file(s) you want to apply, set the docinfo attribute to any combination of these values:
 
@@ -646,13 +646,13 @@ If you want to learn more, please read the [Asciidoctor.js API documentation](ht
 
 To help you get started, we provides a few alternative layouts in the `examples` directory:
 
-| Layout                    | Template file                                                                     |
-| ------------------------- |---------------------------------------------------------------------------------- |
-| **Letter**                | [`examples/letter/template.js`](examples/letter/template.js)                      |
-| **Book**                  | [`examples/book/template.js`](examples/book/template.js)                          |
-| **Slides**                | [`examples/slides/template.js`](examples/slides/template.js)                      |
-| **Resume**                | [`examples/resume/template.js`](examples/resume/template.js)                      |
-| **Cheat sheet (Snyk)**    | [`examples/cheat-sheet/snyk/template.js`](examples/cheat-sheet/snyk/template.js)  |
+| Layout                 | Template file                                                                    |
+|------------------------|----------------------------------------------------------------------------------|
+| **Letter**             | [`examples/letter/template.js`](examples/letter/template.js)                     |
+| **Book**               | [`examples/book/template.js`](examples/book/template.js)                         |
+| **Presentation**       | [`examples/presentation/template.js`](examples/presentation/template.js)         |
+| **Resume**             | [`examples/resume/template.js`](examples/resume/template.js)                     |
+| **Cheat sheet (Snyk)** | [`examples/cheat-sheet/snyk/template.js`](examples/cheat-sheet/snyk/template.js) |
 
 To enable a custom layout, use the `--template-require` command line option.
 For instance, if I want to use the cheat sheet layout on `examples/cheat-sheet/maven-security-cheat-sheet.adoc`:

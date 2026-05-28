@@ -35,7 +35,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=asciidoctor:asciidoctor --from=builder /app/build/output/asciidoctor-web-pdf /usr/bin/asciidoctor-web-pdf
-COPY --chown=asciidoctor:asciidoctor --from=builder /app/build/output/scripts/ /usr/bin/scripts/
+COPY --chown=asciidoctor:asciidoctor --from=builder /app/build/output/viewer/ /usr/bin/viewer/
 COPY --chown=asciidoctor:asciidoctor --from=builder /app/build/output/assets/ /usr/bin/assets/
 COPY --chown=asciidoctor:asciidoctor --from=builder /app/build/output/css/ /usr/bin/css/
 COPY --chown=asciidoctor:asciidoctor --from=builder /app/build/output/examples/ /usr/bin/examples/

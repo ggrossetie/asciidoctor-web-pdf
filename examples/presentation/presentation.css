@@ -4,8 +4,7 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
+  display: block;
 }
 
 html {
@@ -18,9 +17,10 @@ html {
   height: 768px;
   padding: 10px;
 
-  align-self: center;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  break-after: page;
 }
 
 .slide.title {
@@ -88,4 +88,8 @@ h1, h2 {
   box-shadow: none;
   margin: 0;
   padding: 0;
+}
+
+.admonitionblock td.icon [class^="fa icon-"] {
+  text-shadow: none;
 }
