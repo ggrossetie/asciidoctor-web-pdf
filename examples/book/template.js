@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
   section: (node) => `<section class="chapter">
 <h2>${node.getTitle()}</h2>
@@ -8,7 +8,7 @@ ${node.getContent()}
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="./book.css" rel="stylesheet">
+<link href="${new URL('./book.css', import.meta.url).href}" rel="stylesheet">
 </head>
 <body>
 <div id="cover">

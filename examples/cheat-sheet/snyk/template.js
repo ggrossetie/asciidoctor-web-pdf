@@ -39,23 +39,23 @@ const renderAuthors = function (node) {
 }
 
 
-module.exports = {
-  paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
-  document: (node) => `<!DOCTYPE html>
+export default {
+  paragraph: async (node) => `<p class="${node.getRoles().join(' ')}">${await node.getContent()}</p>`,
+  document: async (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="./snyk/assets/style.css" rel="stylesheet">
+<link href="${new URL('./assets/style.css', import.meta.url).href}" rel="stylesheet">
 </head>
 <body>
 <header>
-  <img class="wordmark" src="./snyk/assets/wordmark.svg"/>
+  <img class="wordmark" src="${new URL('./assets/wordmark.svg', import.meta.url).href}"/>
   <h1>${node.getHeader().getTitle()}</h1>
   <a class="website" href="www.snyk.io">www.snyk.io</a>
-  <img class="logo" src="./snyk/assets/logo.svg"/>
+  <img class="logo" src="${new URL('./assets/logo.svg', import.meta.url).href}"/>
 </header>
 <section class="content">
-${node.getContent()}
+${await node.getContent()}
 <div class="sect1 authors">
 <h3>Authors :</h3>
 ${renderAuthors(node)}

@@ -1,10 +1,10 @@
-module.exports = {
+export default {
   paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
   document: (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="./letter.css" rel="stylesheet">
+<link href="${new URL('./letter.css', import.meta.url).href}" rel="stylesheet">
 </head>
 <body>
 ${node.getContent()}

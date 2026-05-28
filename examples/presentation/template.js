@@ -1,7 +1,8 @@
-const path = require('path')
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 const customStyleContent = (node) => {
-  const stylesheet = node.getAttribute('stylesheet') || `${__dirname}/slides.css`
+  const stylesheet = node.getAttribute('stylesheet') || `${import.meta.dirname}/presentation.css`
   if (path.isAbsolute(stylesheet)) {
     return stylesheet
   }
@@ -85,6 +86,12 @@ const sectionRoles = (node) => {
   return roles
 }
 
+const outlineAnchors = (node) =>
+  node.getSections().map((section) => {
+    const id = section.getId()
+    return id ? `<a href="#${id}"></a>${outlineAnchors(section)}` : outlineAnchors(section)
+  }).join('')
+
 const elementId = (node) => {
   const id = node.getId()
   if (id) {
@@ -93,18 +100,21 @@ const elementId = (node) => {
   return ''
 }
 
-module.exports = {
-  paragraph: (node) => `<p class="${node.getRoles().join(' ')}">${node.getContent()}</p>`,
-  section: (node) => `<section class="${sectionRoles(node).join(' ')} ${node.getTitle() === '!' ? 'no-title' : ''}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
+export default {
+  paragraph: async (node) => `<p class="${node.getRoles().join(' ')}">${await node.getContent()}</p>`,
+  section: async (node) => {
+    const id = node.getId()
+    return `<section${id ? ` id="${id}"` : ''} class="${sectionRoles(node).join(' ')} ${node.getTitle() === '!' ? 'no-title' : ''}" data-slide-number="${node.index + 1}" data-slide-count="${node.parent.blocks.length}" ${sectionInlineStyle(node)}>
   ${sectionTitle(node)}
-  ${node.getContent()}
-</section>`,
-  document: (node) => `<!DOCTYPE html>
+  ${await node.getContent()}
+</section>`
+  },
+  document: async (node) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="${__dirname}/asciidoctor.css" rel="stylesheet">
-<link rel="stylesheet" href="${customStyleContent(node)}" rel="stylesheet">
+<link href="${new URL('./asciidoctor.css', import.meta.url).href}" rel="stylesheet">
+<link rel="stylesheet" href="${pathToFileURL(customStyleContent(node)).href}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
@@ -113,10 +123,11 @@ hljs.initHighlightingOnLoad();
 </script>
 </head>
 <body>
+<div style="position:fixed;visibility:hidden;width:0;height:0;overflow:hidden;">${outlineAnchors(node)}</div>
 ${titleSlide(node)}
-${node.getContent()}
+${await node.getContent()}
 </body>`,
-  open: (node) => `<div${elementId(node)} class="${node.getRoles().join(' ')}">${node.getContent()}</div>`,
+  open: async (node) => `<div${elementId(node)} class="${node.getRoles().join(' ')}">${await node.getContent()}</div>`,
   image: (node) => {
     const roles = node.getRoles()
     if (roles && roles.includes('canvas')) {
