@@ -1,4 +1,4 @@
-FROM node:24-bookworm-slim
+FROM node:26-bookworm-slim
 
 RUN addgroup --gid 1001 asciidoc && adduser --disabled-password --ingroup asciidoc -u 1001 asciidoc
 

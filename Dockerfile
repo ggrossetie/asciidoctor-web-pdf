@@ -1,5 +1,5 @@
 # Build the SEA binary
-FROM node:24-bookworm-slim AS builder
+FROM node:26-bookworm-slim AS builder
 
 # Chrome system libs are required by the smoke test that runs at the end of npm run build
 RUN apt-get update \
