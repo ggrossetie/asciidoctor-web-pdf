@@ -105,8 +105,6 @@ script {
 
 html {
   font-family: sans-serif;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%
 }
 
 a {
@@ -139,7 +137,6 @@ dfn {
 }
 
 hr {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   height: 0
 }
@@ -219,7 +216,6 @@ button, select {
 }
 
 button, html input[type="button"], input[type="reset"], input[type="submit"] {
-  -webkit-appearance: button;
   cursor: pointer
 }
 
@@ -233,19 +229,7 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 input[type="search"] {
-  -webkit-appearance: textfield;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box
-}
-
-input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none
-}
-
-button::-moz-focus-inner, input::-moz-focus-inner {
-  border: 0;
-  padding: 0
 }
 
 textarea {
@@ -259,8 +243,6 @@ table {
 }
 
 *, *:before, *:after {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box
 }
 
@@ -280,7 +262,6 @@ body {
   position: relative;
   cursor: auto;
   tab-size: 4;
-  -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased
 }
 
@@ -295,10 +276,6 @@ img, object, embed {
 
 object, embed {
   height: 100%
-}
-
-img {
-  -ms-interpolation-mode: bicubic
 }
 
 .left {
@@ -488,6 +465,10 @@ ul.square li ul, ul.circle li ul, ul.disc li ul {
   list-style: inherit
 }
 
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]) {
+  list-style: inherit
+}
+
 ul.square {
   list-style-type: square
 }
@@ -579,6 +560,10 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
   background: #f8f8f7
 }
 
+table.stripes-all>tbody>tr,table.stripes-odd>tbody>tr:nth-of-type(odd),table.stripes-even>tbody>tr:nth-of-type(even),table.stripes-hover>tbody>tr:hover {
+  background: #f8f8f7
+}
+
 table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
   display: table-cell;
   line-height: 1.6
@@ -609,7 +594,6 @@ h1 strong, h2 strong, h3 strong, #toctitle strong, .sidebarblock > .content > .t
   padding: .1em .5ex;
   word-spacing: -.15em;
   background-color: #f7f7f8;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   line-height: 1.45;
   text-rendering: optimizeSpeed;
@@ -622,6 +606,24 @@ h1 strong, h2 strong, h3 strong, #toctitle strong, .sidebarblock > .content > .t
 
 *:not(pre) > code.nowrap {
   white-space: nowrap
+}
+
+:not(pre).nobreak {
+  word-wrap: normal
+}
+
+:not(pre).nowrap {
+  white-space: nowrap
+}
+
+:not(pre).pre-wrap {
+  white-space: pre-wrap
+}
+
+pre code,pre pre {
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit
 }
 
 pre, pre > code {
@@ -652,9 +654,7 @@ kbd {
   line-height: 1.45;
   background-color: #f7f7f7;
   border: 1px solid #ccc;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
-  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .2), 0 0 0 .1em white inset;
   box-shadow: 0 1px 0 rgba(0, 0, 0, .2), 0 0 0 .1em #fff inset;
   margin: 0 .15em;
   padding: .2em .5em;
@@ -711,6 +711,22 @@ b.button:after {
   padding: 0 2px 0 3px
 }
 
+b.button::before,b.button::after {
+  position: relative;
+  top: -1px;
+  font-weight: 400
+}
+
+b.button::before {
+  content: "[";
+  padding: 0 3px 0 2px
+}
+
+b.button::after {
+  content: "]";
+  padding: 0 2px 0 3px
+}
+
 p a > code:hover {
   color: rgba(0, 0, 0, .9)
 }
@@ -759,11 +775,7 @@ p a > code:hover {
   padding-bottom: .25em;
   padding-left: .25em;
   color: rgba(0, 0, 0, .75);
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
-  -ms-flex-flow: row wrap;
-  -webkit-flex-flow: row wrap;
   flex-flow: row wrap
 }
 
@@ -820,6 +832,10 @@ p a > code:hover {
   font-style: italic
 }
 
+#toc ul.sectlevel0>li:not([class])>a {
+  font-style: italic
+}
+
 #toc ul.sectlevel0 ul.sectlevel1 {
   margin: .5em 0
 }
@@ -854,7 +870,6 @@ p a > code:hover {
   margin-bottom: 1.25em;
   padding: 1.25em;
   background: #f8f8f7;
-  -webkit-border-radius: 4px;
   border-radius: 4px
 }
 
@@ -879,6 +894,14 @@ p a > code:hover {
 
 .sect1 {
   padding-bottom: .625em
+}
+
+.sect1:last-child {
+  padding-bottom: 0
+}
+
+.sect1+.sect1 {
+  border-top: 1px solid #e7e7e9
 }
 
 #content h1 > a.anchor, h2 > a.anchor, h3 > a.anchor, #toctitle > a.anchor, .sidebarblock > .content > .title > a.anchor, h4 > a.anchor, h5 > a.anchor, h6 > a.anchor {
@@ -913,8 +936,53 @@ p a > code:hover {
   color: #a53221
 }
 
-.audioblock, .imageblock, .literalblock, .listingblock, .stemblock, .videoblock {
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock {
   margin-bottom: 1.25em
+}
+
+details {
+  margin-left: 1.25rem
+}
+
+details>summary {
+  cursor: pointer;
+  display: block;
+  position: relative;
+  line-height: 1.6;
+  margin-bottom: .625rem;
+  outline: none;
+  -webkit-tap-highlight-color: transparent
+}
+
+details>summary::-webkit-details-marker {
+  display: none
+}
+
+details>summary::before {
+  content: "";
+  border: solid transparent;
+  border-left: solid;
+  border-width: .3em 0 .3em .5em;
+  position: absolute;
+  top: .5em;
+  left: -1.25rem;
+  transform: translateX(15%)
+}
+
+details[open]>summary::before {
+  border: solid transparent;
+  border-top: solid;
+  border-width: .5em .3em 0;
+  transform: translateY(15%)
+}
+
+details>summary::after {
+  content: "";
+  width: 1.25rem;
+  height: 1em;
+  position: absolute;
+  top: .3em;
+  left: -1.25rem
 }
 
 .admonitionblock td.content > .title, .audioblock > .title, .exampleblock > .title, .imageblock > .title, .listingblock > .title, .literalblock > .title, .stemblock > .title, .openblock > .title, .paragraph > .title, .quoteblock > .title, table.tableblock > .title, .verseblock > .title, .videoblock > .title, .dlist > .title, .olist > .title, .ulist > .title, .qlist > .title, .hdlist > .title {
@@ -979,7 +1047,6 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p {
   margin-bottom: 1.25em;
   padding: 1.25em;
   background: #fff;
-  -webkit-border-radius: 4px;
   border-radius: 4px
 }
 
@@ -998,7 +1065,6 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p {
   margin-bottom: 1.25em;
   padding: 1.25em;
   background: #f8f8f7;
-  -webkit-border-radius: 4px;
   border-radius: 4px
 }
 
@@ -1029,7 +1095,6 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p {
 }
 
 .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] {
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   word-wrap: break-word;
   padding: 1em;
@@ -1065,7 +1130,6 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p {
 
 .listingblock pre.highlightjs > code {
   padding: 1em;
-  -webkit-border-radius: 4px;
   border-radius: 4px
 }
 
@@ -1075,6 +1139,21 @@ table.tableblock #preamble > .sectionbody > .paragraph:first-of-type p {
 
 .listingblock > .content {
   position: relative
+}
+
+.literalblock pre,.listingblock>.content>pre {
+  border-radius: 4px;
+  overflow-x: auto;
+  padding: 1em;
+  font-size: .8125em
+}
+
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "] {
+  background: #f7f7f8
+}
+
+.listingblock pre>code {
+  display: block
 }
 
 .listingblock code[data-lang]:before {
@@ -1137,6 +1216,42 @@ pre.pygments .lineno {
 table.pyhltable .linenodiv {
   background: none !important;
   padding-right: 0 !important
+}
+
+table.linenotable {
+  border-collapse: separate;
+  border: 0;
+  margin-bottom: 0;
+  background: none
+}
+
+table.linenotable td[class] {
+  color: inherit;
+  vertical-align: top;
+  padding: 0;
+  line-height: inherit;
+  white-space: normal
+}
+
+table.linenotable td.code {
+  padding-left: .75em
+}
+
+table.linenotable td.linenos {
+  width: .01%
+}
+
+table.linenotable td.linenos,pre.pygments .linenos,pre.rouge .linenos {
+  border-right: 1px solid;
+  opacity: .35;
+  padding-right: .5em;
+  -webkit-user-select: none;
+  user-select: none
+}
+
+pre.pygments span.linenos,pre.rouge span.linenos {
+  display: inline-block;
+  margin-right: .75em
 }
 
 .quoteblock {
@@ -1250,6 +1365,47 @@ table.pyhltable .linenodiv {
 
 .quoteblock.abstract blockquote:before, .quoteblock.abstract blockquote p:first-of-type:before {
   display: none
+}
+
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before {
+  display: none
+}
+
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p {
+  line-height: 1.6;
+  word-spacing: 0
+}
+
+.quoteblock.abstract {
+  margin: 0 1em 1.25em;
+  display: block
+}
+
+.quoteblock.abstract>.title {
+  margin: 0 0 .375em;
+  font-size: 1.15em;
+  text-align: center
+}
+
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock {
+  padding: 0 0 .25em 1em;
+  border-left: .25em solid #dddddf
+}
+
+.quoteblock.excerpt,.quoteblock .quoteblock {
+  margin-left: 0
+}
+
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p {
+  color: inherit;
+  font-size: 1.0625rem
+}
+
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution {
+  color: inherit;
+  font-size: .85rem;
+  text-align: left;
+  margin-right: 0
 }
 
 table.tableblock {
@@ -1400,8 +1556,19 @@ ul.checklist li > p:first-child > .fa-square-o:first-child, ul.checklist li > p:
   bottom: .125em
 }
 
+li>p:empty:only-child::before {
+  content: "";
+  display: inline-block
+}
+
 ul.checklist li > p:first-child > input[type="checkbox"]:first-child {
   margin-right: .25em
+}
+
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child {
+  font: inherit;
+  margin: 0 .25em 0 0;
+  padding: 0
 }
 
 ul.inline {
@@ -1498,7 +1665,6 @@ td.hdlist1 {
   line-height: 0;
   display: inline-block;
   border: solid 4px #fff;
-  -webkit-box-shadow: 0 0 0 1px #ddd;
   box-shadow: 0 0 0 1px #ddd
 }
 
@@ -1804,7 +1970,6 @@ a span.icon > .fa {
   display: inline-flex;
   color: #fff !important;
   background-color: rgba(0, 0, 0, .8);
-  -webkit-border-radius: 100px;
   border-radius: 100px;
   text-align: center;
   font-size: .75em;
@@ -1864,12 +2029,29 @@ p {
 .exampleblock > .content {
   background-color: #fffef7;
   border-color: #e0e0dc;
-  -webkit-box-shadow: 0 1px 4px #e0e0dc;
   box-shadow: 0 1px 4px #e0e0dc
 }
 
 .print-only {
   display: none !important
+}
+
+@media print {
+  .hide-on-print {
+    display: none !important
+  }
+
+  .print-only {
+    display: block !important
+  }
+
+  .hide-for-print {
+    display: none !important
+  }
+
+  .show-for-print {
+    display: inherit !important
+  }
 }
 
 .stretch {

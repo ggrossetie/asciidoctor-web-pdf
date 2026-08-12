@@ -53,15 +53,14 @@ header > .logo {
 h1 {
   font-size: 2em;
   margin: 0;
-  padding: 0;
-  padding-left: 1em;
+  padding: 0 0 0 1em;
   font-weight: 400;
 }
 
 section.content {
   margin: 0.5cm;
   padding: 0;
-  height: calc(100vh - 50mm);
+  height: calc(100vh - 45mm);
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -135,16 +134,26 @@ ul.checklist {
   padding: 0;
 }
 
-.ulist.checklist.do > ul.checklist > li > p::first-letter {
+.ulist.do > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ulist.do > ul > li > p::before {
+  marker: none;
+  display: inline-flex;
+  content: "✓ ";
   color: #188a8a;
-  border-radius: 50%;
   background-color: #e9f9f0;
-  line-height: 1em;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  margin-right: 0.5em;
+  border-radius: 50%;
+  width: 1.4em;
+  height: 1.4em;
+  margin-right: 0.3em;
+  vertical-align: middle;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
 }
 
 a {

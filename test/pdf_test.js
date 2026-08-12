@@ -10,7 +10,7 @@ import {
   it,
   mock,
 } from 'node:test'
-import { PDFDict, PDFDocument, PDFName } from 'pdf-lib'
+import { PDFArray, PDFDict, PDFDocument, PDFName } from 'pdf-lib'
 import Browser from '../lib/browser.js'
 import * as converter from '../lib/converter.js'
 import { templates } from '../lib/document/document-converter.js'
@@ -113,18 +113,12 @@ describe('PDF converter', () => {
     )
     const refs = getOutlineRefs(pdfDoc)
     assert.strictEqual(refs.length, 9)
-    assert.strictEqual(
-      refs[2].get(PDFName.of('Dest')).encodedName,
-      '/_section_2_black_white',
-    )
+    assert.ok(refs[2].get(PDFName.of('Dest')) instanceof PDFArray)
     assert.strictEqual(
       decodePDFHexStringValue(refs[2].get(PDFName.of('Title')).value),
       'Section 2: Black & White',
     )
-    assert.strictEqual(
-      refs[5].get(PDFName.of('Dest')).encodedName,
-      '/_section_3_typographic_quotes',
-    )
+    assert.ok(refs[5].get(PDFName.of('Dest')) instanceof PDFArray)
     assert.strictEqual(
       decodePDFHexStringValue(refs[5].get(PDFName.of('Title')).value),
       'Section 3: “Typographic quotes”',
@@ -145,10 +139,7 @@ describe('PDF converter', () => {
       )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 9)
-      assert.strictEqual(
-        refs[0].get(PDFName.of('Dest')).encodedName,
-        '/_section_1',
-      )
+      assert.ok(refs[0].get(PDFName.of('Dest')) instanceof PDFArray)
     })
 
     it('should generate a PDF outline even if the TOC is not enabled', async () => {
@@ -158,10 +149,7 @@ describe('PDF converter', () => {
       )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 9)
-      assert.strictEqual(
-        refs[0].get(PDFName.of('Dest')).encodedName,
-        '/_section_1',
-      )
+      assert.ok(refs[0].get(PDFName.of('Dest')) instanceof PDFArray)
     })
 
     it('should honor toclevels 1 when generating a PDF outline', async () => {
@@ -173,10 +161,7 @@ describe('PDF converter', () => {
       )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 4)
-      assert.strictEqual(
-        refs[0].get(PDFName.of('Dest')).encodedName,
-        '/_section_1',
-      )
+      assert.ok(refs[0].get(PDFName.of('Dest')) instanceof PDFArray)
     })
 
     it('should honor toclevels 3 when generating a PDF outline', async () => {
@@ -188,10 +173,7 @@ describe('PDF converter', () => {
       )
       const refs = getOutlineRefs(pdfDoc)
       assert.strictEqual(refs.length, 11)
-      assert.strictEqual(
-        refs[0].get(PDFName.of('Dest')).encodedName,
-        '/_section_1',
-      )
+      assert.ok(refs[0].get(PDFName.of('Dest')) instanceof PDFArray)
     })
   })
 

@@ -9,8 +9,7 @@ html {
 
 /*
 Justify the content of the following block elements unless it is specifically aligned using text-*
-Be most specific (that is on dd/li) as pagedjs will add a text-align-last to the whole element including
-nested elements once that breaks across two pages.
+Be most specific (that is on dd/li) to avoid text-align-last leaking into nested elements across page breaks.
  */
 .dlist:not(.text-left):not(.text-right):not(.text-center) dd p,
 .ulist:not(.text-left):not(.text-right):not(.text-center) li p,
@@ -105,10 +104,6 @@ h6 {
   align-items: flex-end;
 }
 
-/* Workaround: https://gitlab.pagedmedia.org/tools/pagedjs/issues/162 */
-.pagedjs_page_content > div {
-  height: 100%;
-}
 
 #cover h1 {
   color: #999;
@@ -208,14 +203,9 @@ tr {
 }
 
 /*
-TOC page numbering and leaders, adapted from https://www.pagedjs.org/posts/2020-02-19-toc/
-The page numbering is straightforward and generally works.
-The leader works by filling the li with dots, and arranging for the <a> and a::after to cover them, using the same background color as the TOC div.
+TOC page numbering and leaders using CSS Generated Content for Paged Media.
+leader() fills the available space with dots; target-counter() generates the page number.
 */
-#toc.toc, #toc.toc2 {
-  background-color: white;
-}
-
 #toc.toc ul > li:first-child,
 #toc.toc2 ul > li:first-child {
   margin-top: 0;
@@ -223,45 +213,7 @@ The leader works by filling the li with dots, and arranging for the <a> and a::a
 
 #toc.toc a::after,
 #toc.toc2 a::after {
-  content: target-counter(attr(href url), page);
-  float: right;
-  /* for leader: */
-  position: relative;
-  right: 0;
-  background-color: inherit;
-  padding-left: 6px;
-}
-
-/* fake leading */
-#toc.toc li.toc-entry::after,
-#toc.toc2 li.toc-entry::after {
-  content:
-    ".............................................."
-    ".............................................."
-    ".............................................."
-    "........";
-  float: left;
-  width: 0;
-  letter-spacing: 2px;
-  color: #999;
-}
-
-#toc.toc ul,
-#toc.toc2 ul {
-  background-color: inherit;
-}
-
-#toc.toc li,
-#toc.toc2 li {
-  overflow-x: hidden;
-  background-color: inherit;
-}
-
-#toc.toc a,
-#toc.toc2 a {
-  background-color: inherit;
-  right: 0;
-  padding-right: 0.25rem;
+  content: leader('. ') target-counter(attr(href url), page);
 }
 
 .front-matter {
@@ -289,10 +241,6 @@ span.footnote {
   content: "[" counter(footnote) "]";
 }
 
-.pagedjs_area a[data-footnote-call] {
+a[data-footnote-call] {
   cursor: pointer;
-}
-
-[data-footnote-call]::after {
-  content: "[" counter(footnote) "]";
 }

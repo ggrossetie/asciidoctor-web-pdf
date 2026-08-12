@@ -51,7 +51,7 @@ image::barchart.png[Bar chart description,697,299,role=crux,credit="source: plac
 == Table Option A: Subtitle Placeholder
 [%header%autowidth.spread]
 |===
- |      |Column 1     |Column 2    |Column 3    |Column 4
+|      |Column 1     |Column 2    |Column 3    |Column 4
 s|Row 1 |placeholder v|placeholder |placeholder |placeholder
 s|Row 2 |placeholder  |placeholder |placeholder |placeholder
 s|Row 3 |placeholder  |placeholder |placeholder |placeholder
@@ -63,7 +63,7 @@ s|Row 5 |placeholder  |placeholder |placeholder |placeholder
 == Table Option A (Smaller Text): Subtitle Placeholder
 [%header%autowidth.spread]
 |===
- |      |Column 1     |Column 2    |Column 3    |Column 4
+|      |Column 1     |Column 2    |Column 3    |Column 4
 s|Row 1 |placeholder v|placeholder |placeholder |placeholder
 s|Row 2 |placeholder  |placeholder |placeholder |placeholder
 s|Row 3 |placeholder  |placeholder |placeholder |placeholder
