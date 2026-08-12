@@ -1,0 +1,16 @@
+= How Does It Work?
+
+Asciidoctor Web PDF converts an AsciiDoc document to a PDF file in a few steps:
+
+. *Asciidoctor* converts the `.adoc` document to a single, self-contained HTML 5 page.
+This page inlines the base stylesheets, the syntax-highlighted source blocks (highlighted server-side by highlight.js), and any STEM expressions (rendered server-side by MathJax 4 into CHTML markup).
+There is no client-side JavaScript in this page.
+. The HTML is written to a temporary `.html` file.
+. *Puppeteer* opens the https://github.com/vivliostyle/vivliostyle.js[Vivliostyle Viewer], a standalone application, and points it at that file as its source document.
+. The viewer paginates the document according to the https://www.w3.org/TR/css-page-3/[CSS Paged Media] specification, laying it out page by page.
+. Puppeteer waits until the viewer reports that every page has been rendered, then prints the paginated result to a PDF using `page.pdf()`.
+. *pdf-lib* post-processes the generated PDF to add the document outline (bookmarks) and metadata (title, authors, subject, keywords, etc.).
+
+== Custom layouts
+
+A xref:custom-layout.adoc[custom layout] (`template.js`) defines how each AsciiDoc node is converted to HTML 5 in the first step of the pipeline above — everything downstream (pagination and PDF generation) stays the same regardless of the layout used.

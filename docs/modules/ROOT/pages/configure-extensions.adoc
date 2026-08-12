@@ -1,0 +1,47 @@
+= Asciidoctor Extensions
+
+Asciidoctor Web PDF can use Asciidoctor extensions written in JavaScript from the CLI.
+For instance, if you want to use the https://github.com/asciidoctor/asciidoctor-kroki[Asciidoctor Kroki] extension, you first need to install it:
+
+[source,sh]
+----
+npm i asciidoctor-kroki
+----
+
+Then, you can use the following command to load this extension:
+
+[source,sh]
+----
+asciidoctor-web-pdf --require asciidoctor-kroki document.adoc
+----
+
+It's also possible to use an extension from a JavaScript file.
+For instance, if you want to load a local extension declared in a JavaScript file named `my-asciidoctor-extension.js`, then you can use the following command:
+
+[source,sh]
+----
+asciidoctor-web-pdf --require ./my-asciidoctor-extension.js document.adoc
+----
+
+[NOTE]
+====
+The extension should export a function named `register`, otherwise the extension won't be registered:
+
+[source,js]
+----
+module.exports.register = function (registry) {
+  if (typeof registry.register === 'function') {
+    registry.register(function () {
+      this.block(function () {
+        // ...
+      })
+    })
+  } else if (typeof registry.block === 'function') {
+    registry.block(function () {
+      // ...
+    })
+  }
+  return registry
+}
+----
+====

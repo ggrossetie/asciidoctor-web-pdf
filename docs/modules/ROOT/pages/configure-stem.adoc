@@ -1,0 +1,13 @@
+= STEM Support
+
+Asciidoctor Web PDF can render LaTeX-style mathematical equations and formulas using https://www.mathjax.org/[MathJax] 4.
+Rendering happens server-side, during the conversion, so no JavaScript runs in the browser to display equations.
+
+To activate equation and formula support, set the `stem` attribute in the document's header (or by passing the attribute on the command line):
+
+[source,sh]
+----
+asciidoctor-web-pdf document.adoc -a stem
+----
+
+Both TeX (`\(...\)`, `\[...\]`) and AsciiMath (`\$...\$`) delimiters are supported.

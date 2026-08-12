@@ -1,0 +1,11 @@
+= Title Page
+
+The title page is enabled if either of these conditions are met:
+
+* The document has the `book` doctype.
+* The `title-page` attribute is set (with an empty value) in the document header.
+
+[source,sh]
+----
+asciidoctor-web-pdf document.adoc -a title-page
+----
