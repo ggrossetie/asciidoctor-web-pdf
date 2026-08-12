@@ -1,6 +1,6 @@
 # Asciidoctor Web PDF
 
-[![Build](https://github.com/ggrossetie/asciidoctor-web-pdf/actions/workflows/build.yml/badge.svg)](https://github.com/ggrossetie/asciidoctor-web-pdf/actions/workflows/build.yml)
+[![Build](https://github.com/ggrossetie/asciidoctor-web-pdf/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ggrossetie/asciidoctor-web-pdf/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/asciidoctor-pdf.svg)](https://www.npmjs.org/package/asciidoctor-pdf)
 [![Docker image](https://img.shields.io/docker/v/ggrossetie/asciidoctor-web-pdf?label=Docker%20image)](https://hub.docker.com/r/ggrossetie/asciidoctor-web-pdf)
 
