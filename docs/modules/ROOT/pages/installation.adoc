@@ -1,0 +1,151 @@
+= Installation
+
+== Run from pre-compiled binaries
+
+Asciidoctor Web PDF is available for each release as a zip file for Windows 64-bit, Linux 64-bit and macOS 64-bit (x86-64 and arm64).
+
+Go to the https://github.com/ggrossetie/asciidoctor-web-pdf/releases[releases] page and download the appropriate binary for your platform (under "Assets").
+Extract this to a folder of your choosing.
+
+From a command line in this folder you can then run the `asciidoctor-web-pdf` command.
+
+== Install using npm
+
+To run from source, you need https://nodejs.org[Node.js] installed on your machine to install and run Asciidoctor Web PDF.
+The best way to install Node.js is to use _nvm_ (Node Version Manager).
+
+.How to set up nvm on my machine
+[%collapsible]
+====
+*Install nvm and Node.js on Linux or macOS*
+
+Follow these https://github.com/nvm-sh/nvm#installation-and-update[installation instructions] to set up nvm on your machine.
+Once you've installed nvm, open a new terminal and install the latest Node.js LTS release.
+
+[source,sh]
+----
+nvm install --lts
+----
+
+The above command will install the latest LTS release of Node.js and automatically set it as your default alias.
+
+*Install nvm and Node.js on Windows*
+
+Follow these https://github.com/coreybutler/nvm-windows#installation--upgrades[installation instructions] to set up nvm on your machine.
+Once you've installed nvm, open a new, regular PowerShell terminal, and install Node.js using nvm.
+
+[source,sh]
+----
+nvm install --lts
+nvm use lts
+----
+====
+
+Asciidoctor Web PDF requires Node.js 21 or later, and is only tested against active LTS releases.
+
+=== Install in a project directory
+
+You can opt to install Asciidoctor Web PDF in a project directory, such as the directory where your AsciiDoc files are stored.
+If you don't have a _package.json_ file in your project directory, you can create one using:
+
+[source,sh]
+----
+npm init -y
+----
+
+To install Asciidoctor Web PDF in a project directory, move into your project directory and type:
+
+[source,sh]
+----
+npm i asciidoctor-pdf --save-dev
+----
+
+The dependency will be installed under the `node_modules` folder in the current directory and npm will save it as a `devDependency` in the _package.json_ file.
+
+Verify that the `asciidoctor-web-pdf` command is available:
+
+[source,sh]
+----
+npx asciidoctor-web-pdf --version
+----
+
+If installation was successful, the command should report the version of Asciidoctor Web PDF:
+
+[source,console]
+----
+$ npx asciidoctor-web-pdf --version
+Asciidoctor Web PDF 1.0.0-alpha.16 [https://github.com/ggrossetie/asciidoctor-web-pdf]
+Asciidoctor.js 4.0.8 (Asciidoctor 2.0.26) [https://asciidoctor.org]
+Runtime Environment (node v22.14.0 on linux)
+CLI version 4.0.8
+----
+
+=== Install globally using npm
+
+[IMPORTANT]
+====
+This installation procedure is only applicable if you are not using a Node.js version manager like _nvm_.
+Otherwise, npm will try to install Asciidoctor Web PDF in the system space, which has proven to be unreliable!
+====
+
+To install the Asciidoctor Web PDF package globally, open a terminal and type:
+
+[source,sh]
+----
+npm i -g asciidoctor-pdf
+----
+
+[NOTE]
+====
+Installing Asciidoctor Web PDF globally makes the `asciidoctor-web-pdf` command available on your `PATH`, so you can run it from any directory.
+====
+
+Verify that the `asciidoctor-web-pdf` command is available on your `PATH` by running:
+
+[source,sh]
+----
+asciidoctor-web-pdf --version
+----
+
+[NOTE]
+====
+If you get an error about https://go.microsoft.com/fwlink/?LinkID=135170[Execution Policies] when running this command on PowerShell, try using the following command instead: `asciidoctor-web-pdf.cmd --version`.
+====
+
+[TIP]
+====
+If you prefer Yarn over npm, use this command to install the Asciidoctor Web PDF package:
+
+[source,sh]
+----
+yarn global add asciidoctor-pdf
+----
+====
+
+== Using Docker
+
+[source,sh]
+----
+docker run --rm ggrossetie/asciidoctor-web-pdf --version
+----
+
+If you want to render the cheat sheet example, move to the root of the repository and type:
+
+[source,sh]
+----
+docker run -i --rm \
+  --volume=$PWD/examples/cheat-sheet:"/usr/app" \
+  -u $(id -u ${USER}):$(id -g ${USER}) \
+  ggrossetie/asciidoctor-web-pdf:latest \
+  --template-require ./snyk/template.js maven-security-cheat-sheet.adoc
+----
+
+The `--volume` option mounts your local copy of the Asciidoctor Web PDF repository into the container.
+Since it is a non-root user, we have to map our user to the `asciidoctor` user in the container.
+
+You can also use `stdin` and `stdout` without the need for volumes:
+
+[source,sh]
+----
+cat examples/document/basic-example.adoc | docker run -i --rm ggrossetie/asciidoctor-web-pdf:latest - > doc.pdf
+----

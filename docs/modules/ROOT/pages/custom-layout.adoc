@@ -1,0 +1,95 @@
+= Custom Layout
+
+It's also possible to create your own layout by extending the default HTML 5 converter.
+To create a new layout, you will need some JavaScript knowledge.
+
+Let's say that we want to override how the `document` node is converted:
+
+[source,js]
+----
+export default {
+  document: async (node) => `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="./layout.css" rel="stylesheet">
+</head>
+<body>
+${await node.getContent()}
+</body>`,
+}
+----
+
+The template file is an ES module and exports an object whose keys are node names and whose values are (possibly `async`) converter functions.
+
+You can also override other elements.
+
+.Complete list of elements
+[%collapsible]
+====
+* `document`
+* `embedded`
+* `outline`
+* `section`
+* `admonition`
+* `audio`
+* `colist`
+* `dlist`
+* `example`
+* `floating-title`
+* `image`
+* `listing`
+* `literal`
+* `stem`
+* `olist`
+* `open`
+* `page_break`
+* `paragraph`
+* `preamble`
+* `quote`
+* `thematic_break`
+* `sidebar`
+* `table`
+* `toc`
+* `ulist`
+* `verse`
+* `video`
+* `inline_anchor`
+* `inline_break`
+* `inline_button`
+* `inline_callout`
+* `inline_footnote`
+* `inline_image`
+* `inline_indexterm`
+* `inline_kbd`
+* `inline_menu`
+* `inline_quoted`
+====
+
+The function takes one parameter, called `node`.
+Depending on the context, a `node` can be a https://asciidoctor.github.io/asciidoctor.js/main/#block[Block], a https://asciidoctor.github.io/asciidoctor.js/main/#section[Section], a https://asciidoctor.github.io/asciidoctor.js/main/#list[List], or a `Table`.
+`Block`, `Section`, `List`, and `Table` extend https://asciidoctor.github.io/asciidoctor.js/main/#abstractblock[AbstractBlock], which extends https://asciidoctor.github.io/asciidoctor.js/main/#abstractnode[AbstractNode].
+If you want to learn more, see the https://asciidoctor.github.io/asciidoctor.js/main/[Asciidoctor.js API documentation].
+
+To help you get started, we provide a few alternative layouts in the `examples` directory:
+
+[cols="1,3"]
+|===
+| Layout | Template file
+
+| *Letter* | https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/letter/template.js[`examples/letter/template.js`]
+| *Book* | https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/book/template.js[`examples/book/template.js`]
+| *Presentation* | https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/template.js[`examples/presentation/template.js`]
+| *Resume* | https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/template.js[`examples/resume/template.js`]
+| *Cheat sheet (Snyk)* | https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/snyk/template.js[`examples/cheat-sheet/snyk/template.js`]
+|===
+
+To enable a custom layout, use the `--template-require` command line option.
+For instance, if you want to use the cheat sheet layout on `examples/cheat-sheet/maven-security-cheat-sheet.adoc`:
+
+[source,sh]
+----
+asciidoctor-web-pdf ./examples/cheat-sheet/maven-security-cheat-sheet.adoc --template-require ./examples/cheat-sheet/snyk/template.js
+----
+
+It will produce a file named `examples/cheat-sheet/maven-security-cheat-sheet.pdf`.

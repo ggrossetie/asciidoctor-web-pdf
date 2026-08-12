@@ -1,0 +1,48 @@
+= Introduction
+
+Asciidoctor Web PDF is a PDF converter for AsciiDoc based on web technologies.
+It allows complex layouts to be defined with CSS and JavaScript, while writing the content in AsciiDoc.
+
+Asciidoctor Web PDF has support for LaTeX-style mathematical equations (via https://www.mathjax.org/[MathJax]) and syntax highlighting (via https://highlightjs.org/[highlight.js]).
+Many more features can be added by importing an existing JavaScript or CSS framework.
+
+== Highlights
+
+* Complex layouts with CSS and JavaScript
+* SVG icons with Font Awesome 6
+* PDF document outline (i.e., bookmarks)
+* Table of contents
+* Document metadata (title, authors, subject, keywords, etc.)
+* Fully customizable template
+* Syntax highlighting with highlight.js
+* Page numbering
+* Preview mode
+* STEM support with MathJax 4
+
+== Examples
+
+|===
+| Document | Letter | Book | Cheat sheet
+
+| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/document/document_screenshot.png[Document,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/document/document.pdf]
+| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/letter/letter_screenshot.png[Letter,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf]
+| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/book/book_screenshot.png[Book,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/book/book.pdf]
+| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png[Cheat sheet,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf]
+
+| https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/document/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/document/document.pdf[PDF]
+| https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/letter/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf[PDF]
+| https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/book/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/book/book.pdf[PDF]
+| https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/cheat-sheet/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf[PDF]
+|===
+
+|===
+| Resume | Presentation
+
+| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/resume/resume_screenshot.png[Resume,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf]
+| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/presentation/ioslides/presentation_screenshot.png[Presentation,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf]
+
+| https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/resume/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf[PDF]
+| https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/presentation/ioslides/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf[PDF]
+|===
+
+Head to xref:installation.adoc[Installation] to get started.

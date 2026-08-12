@@ -1,0 +1,50 @@
+= Front Cover Image
+
+When using a xref:configure-title-page.adoc[title page], you might want to set a front cover image.
+To do that, you will need to add a few lines of CSS.
+
+Here's a complete example:
+
+. Create a file named _orly.adoc_ with the following content:
++
+[source]
+----
+= Hoping This Works
+:doctype: book
+
+== Guessing
+
+The first step is guessing.
+----
++
+We are using `:doctype: book` to get a title page.
+
+. Create a file named _orly.css_ with the following content:
++
+[source,css]
+----
+@page :first {
+  background-size: contain;
+  background-image: url("./orly.jpg");
+}
+
+/* move the book title to the correct location */
+#cover > h1 {
+  color: white;
+  margin-top: 8cm;
+  font-size: 7rem;
+}
+----
+
+. Download the image https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/document/orly.jpg[_orly.jpg_] and put it next to the _orly.adoc_ file.
+
+. Open a terminal and type:
++
+[source,sh]
+----
+asciidoctor-web-pdf orly.adoc -a stylesheet="+orly.css"
+----
+
+The above command will create a file named _orly.pdf_ which should look like:
+
+image::front-cover-image.png[front cover image,300]

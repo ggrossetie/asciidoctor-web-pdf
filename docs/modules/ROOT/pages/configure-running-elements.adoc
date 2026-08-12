@@ -1,0 +1,124 @@
+= Running Elements
+
+Running elements can be positioned on the https://www.w3.org/TR/css-page-3/#margin-boxes[top, bottom, left or right margins of pages].
+Let's take a concrete example where we want to display an address block in the bottom left box of every page.
+
+[source,html]
+----
+<address class="contact-us">
+  <strong>Example Inc.</strong><br>
+  1234 Example Street<br>
+  Antartica, Example 0987<br>
+  <abbr title="Phone">P:</abbr> (123) 456-7890
+</address>
+----
+
+First, you need to define your element as running using the `position` property.
+Here, we are using `runningContact` as an identifier, but you can use any name that makes sense to you:
+
+[source,css]
+----
+.contact-us {
+  position: running(runningContact)
+}
+----
+
+Then, place the element into a margin box with the `element()` function via the `content` property:
+
+[source,css]
+----
+@page {
+  @bottom-left {
+    content: element(runningContact)
+  }
+}
+----
+
+As you can see, we are using the identifier `runningContact` defined earlier.
+The above definition effectively removes the `.contact-us` element from the page and repeats it on every page in the bottom left box.
+
+Here's a complete example:
+
+. Create a file named _report.adoc_ with the following content:
++
+[source]
+----
+= 2021 Annual Report
+:docinfo: private
+----
+
+. Create a file named _report-docinfo-running-pdf.html_ with the following content:
++
+[source,html]
+----
+<address class="contact-us">
+  <strong>Handicap International</strong><br>
+  138, avenue des Frères Lumière<br>
+  69008 Lyon - France
+</address>
+----
+
+. Create a file named _report.css_ with the following content:
++
+[source,css]
+----
+.contact-us {
+  width: 6cm;
+  position: running(runningContact)
+}
+
+@page {
+  margin: 1cm 2cm 4cm 2cm;
+}
+
+@page :right {
+  @bottom-left {
+    content: element(runningContact)
+  }
+
+  @bottom-right {
+    content: counter(page);
+    margin: 10pt 10pt 30pt 0;
+  }
+}
+
+@page :left {
+  @bottom-right {
+    content: element(runningContact)
+  }
+
+  @bottom-left {
+    content: counter(page);
+    margin: 10pt 0 30pt 10pt;
+  }
+}
+----
+
+. Open a terminal and type:
++
+[source,sh]
+----
+asciidoctor-web-pdf report.adoc -a stylesheet="+report.css"
+----
+
+The above command will create a file named _report.pdf_ which should look like:
+
+image::complex-footer.png[complex footer,300]
+
+[TIP]
+====
+In this case, you don't need to use a docinfo file — you can declare the "contact us" block directly in the AsciiDoc file.
+In other words, you should get the same result using the following content:
+
+[source]
+----
+= 2021 Annual Report
+
+[.contact-us]
+--
+*Handicap International* +
+138, avenue des Frères Lumière +
+69008 Lyon - France
+--
+----
+====
