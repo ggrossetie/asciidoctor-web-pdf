@@ -46,7 +46,7 @@
     "@fortawesome/free-regular-svg-icons": "6.2.1",
     "@fortawesome/free-solid-svg-icons": "6.2.1",
     "@vivliostyle/viewer": "2.43.0",
-    "asciidoctor": ">= 4.0.0-alpha.5 < 5",
+    "asciidoctor": ">= 4.0.0 < 5",
     "chokidar": "~3.5",
     "fs-extra": "~11.1.0",
     "highlight.js": "^11.11.1",
@@ -59,13 +59,13 @@
     "@biomejs/biome": "2.4.15",
     "@puppeteer/browsers": "~3.0",
     "archiver": "~8.0",
-    "esbuild": "0.28.0",
+    "esbuild": "0.28.2",
     "node-html-parser": "~7.1",
     "nunjucks": "~3.2",
     "pixelmatch": "~7.2",
     "postject": "1.0.0-alpha.6"
   },
   "peerDependencies": {
-    "asciidoctor": ">= 4.0.0-alpha.5 < 5"
+    "asciidoctor": ">= 4.0.0 < 5"
   }
 }
