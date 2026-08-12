@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mogztter/asciidoctor-web-pdf.git"
+    "url": "git+https://github.com/ggrossetie/asciidoctor-web-pdf.git"
   },
   "keywords": [
     "asciidoc",
