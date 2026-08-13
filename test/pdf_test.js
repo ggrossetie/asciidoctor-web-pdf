@@ -566,6 +566,8 @@ describe('PDF converter', () => {
       const gotoMock = mock.method(Browser.prototype, 'goto', async () => {
         throw timeoutError
       })
+      const originalExitCode = process.exitCode
+      process.exitCode = undefined
       try {
         await converter.convert(
           { path: fixturesPath('title-page.adoc') },
@@ -577,8 +579,40 @@ describe('PDF converter', () => {
           errorMock.mock.calls[0].arguments[0],
           'Unable to generate the PDF - Error: TimeoutError: Navigation timeout of 1 ms exceeded',
         )
+        assert.strictEqual(
+          process.exitCode,
+          1,
+          'expected the process exit code to be set to 1 when a conversion fails',
+        )
       } finally {
         gotoMock.mock.restore()
+        process.exitCode = originalExitCode
+      }
+    })
+
+    it('should not set a non-zero exit code while watching', async () => {
+      const timeoutError = new Error('Navigation timeout of 1 ms exceeded')
+      timeoutError.name = 'TimeoutError'
+      const gotoMock = mock.method(Browser.prototype, 'goto', async () => {
+        throw timeoutError
+      })
+      const originalExitCode = process.exitCode
+      process.exitCode = undefined
+      try {
+        await converter.convert(
+          { path: fixturesPath('title-page.adoc') },
+          {},
+          false,
+          true, // watch
+        )
+        assert.strictEqual(
+          process.exitCode,
+          undefined,
+          'expected the exit code to be left untouched while in watch mode',
+        )
+      } finally {
+        gotoMock.mock.restore()
+        process.exitCode = originalExitCode
       }
     })
   })
