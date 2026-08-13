@@ -15,6 +15,12 @@ function outputFile(path) {
   return ospath.join(outputDir(), path)
 }
 
+export function extractText(pdfPath) {
+  return childProcess.execFileSync('pdftotext', ['-layout', pdfPath, '-'], {
+    encoding: 'utf8',
+  })
+}
+
 function computeImageDifferences(referenceBuffer, actualBuffer, diffFilename) {
   const referenceImage = PNG.sync.read(referenceBuffer)
   const actualImage = PNG.sync.read(actualBuffer)

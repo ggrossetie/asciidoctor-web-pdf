@@ -1,0 +1,17 @@
+= Anchor With Diacritics
+:toc: macro
+:sectnums:
+
+toc::[]
+
+== Überblick
+
+Content referencing <<Königsstraße>> and a direct xref:Übersicht[link].
+
+== Königsstraße
+
+More content here.
+
+== Übersicht
+
+Even more content.

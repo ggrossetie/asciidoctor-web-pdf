@@ -1,0 +1,8 @@
+= Test
+:stem: latexmath
+
+== Chapter 1
+
+We start with some math: stem:[c^2 = a^2 + b^2]
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

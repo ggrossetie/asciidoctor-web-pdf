@@ -1,0 +1,32 @@
+= Highlighted Code Near Page Break
+:source-highlighter: highlight.js
+
+== Section A
+
+Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph.
+
+[source,python]
+----
+def f(x):
+    return x + 1
+----
+
+Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph.
+
+[source,python]
+----
+def g(x):
+    return x + 2
+----
+
+Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph. Lorem ipsum filler paragraph.
+
+[source,python]
+----
+def h(x):
+    return x + 3
+----
+
+== Final Section
+
+FINAL-MARKER-PARAGRAPH-CANARY end of document.

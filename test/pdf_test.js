@@ -422,6 +422,133 @@ describe('PDF converter', () => {
     await shouldBeVisuallyIdentical('orphaned-table-header')
   })
 
+  describe('Page splitting (regressions from the Paged.js era)', () => {
+    it('should not lose table rows when a table spans multiple pages', async () => {
+      const outputFile = outputPath('table-spanning-pages.pdf')
+      await converter.convert(
+        { path: fixturesPath('table-spanning-pages.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      for (const i of [1, 53, 54, 55, 56, 119, 120]) {
+        assert.ok(
+          text.includes(`row-${i}-marker`),
+          `expected row-${i}-marker to be present in the extracted text`,
+        )
+      }
+    })
+
+    it('should keep the bullet marker when a list item spans a page break', async () => {
+      const outputFile = outputPath('list-split-across-pages.pdf')
+      const pdfDoc = await convert(
+        fixturesPath('list-split-across-pages.adoc'),
+        outputFile,
+      )
+      assert.ok(
+        pdfDoc.getPages().length > 1,
+        'expected the giant list item to force a page break',
+      )
+      const text = helper.extractText(outputFile)
+      assert.ok(text.includes('START-MARKER-GIANT-ITEM'))
+      assert.ok(text.includes('END-MARKER-GIANT-ITEM'))
+      assert.ok(text.includes('Short item after the giant one'))
+    })
+
+    it('should not drop content around highlighted code blocks near a page break', async () => {
+      const outputFile = outputPath('highlighted-code-near-page-break.pdf')
+      await converter.convert(
+        { path: fixturesPath('highlighted-code-near-page-break.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      assert.ok(text.includes('FINAL-MARKER-PARAGRAPH-CANARY'))
+    })
+
+    it('should honor a custom @page size and margins when :stem: is enabled', async () => {
+      const attributes = {
+        stylesheet: `${cssPath('asciidoctor.css')},${cssPath('document.css')},${fixturesPath('stem-custom-page-size.css')}`,
+      }
+      const outputFile = outputPath('stem-custom-page-size.pdf')
+      const pdfDoc = await convert(
+        fixturesPath('stem-custom-page-size.adoc'),
+        outputFile,
+        { attributes },
+      )
+      const { width, height } = pdfDoc.getPage(0).getSize()
+      // 148mm x 210mm in points, with a small tolerance
+      assert.ok(
+        Math.abs(width - 419.53) < 1,
+        `expected width ~419.53, got ${width}`,
+      )
+      assert.ok(
+        Math.abs(height - 595.28) < 1,
+        `expected height ~595.28, got ${height}`,
+      )
+    })
+  })
+
+  describe('PDF outline destinations', () => {
+    let warnMock
+    let errorMock
+
+    beforeEach(() => {
+      warnMock = mock.method(console, 'warn')
+      errorMock = mock.method(console, 'error')
+    })
+
+    afterEach(() => {
+      warnMock.mock.restore()
+      errorMock.mock.restore()
+    })
+
+    it('should resolve destinations for section titles with diacritics', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('anchor-with-diacritics.adoc'),
+        outputPath('anchor-with-diacritics.pdf'),
+      )
+      const titledRefs = getOutlineRefs(pdfDoc).filter((ref) =>
+        ref.has(PDFName.of('Title')),
+      )
+      const titles = titledRefs.map((ref) =>
+        decodePDFHexStringValue(ref.get(PDFName.of('Title')).value),
+      )
+      assert.deepStrictEqual(titles, ['Überblick', 'Königsstraße', 'Übersicht'])
+      const messages = [...warnMock.mock.calls, ...errorMock.mock.calls].map(
+        (call) => String(call.arguments[0]),
+      )
+      assert.ok(
+        !messages.some((message) =>
+          message.includes('Unable to find destination'),
+        ),
+        `expected no "Unable to find destination" warning, got: ${messages.join('; ')}`,
+      )
+    })
+  })
+
+  describe('Known issues', () => {
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726
+    // A listing block that spans a page break loses the indentation of its
+    // whitespace-only text nodes when the DOM is split/cloned across pages.
+    // Un-skip once the underlying page-splitting behavior preserves them.
+    it('should preserve indentation in a code block split across a page break', {
+      skip: 'https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726',
+    }, async () => {
+      const outputFile = outputPath('source-code-split-across-pages.pdf')
+      await converter.convert(
+        { path: fixturesPath('source-code-split-across-pages.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      assert.ok(
+        text.includes('    "indent_check": "    four spaces before this"'),
+        'expected indentation to be preserved after the page break',
+      )
+    })
+  })
+
   describe('Timeout', () => {
     let errorMock
 
