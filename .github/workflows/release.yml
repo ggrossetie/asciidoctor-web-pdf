@@ -74,8 +74,20 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           npm version ${{ inputs.version }} -m "Release v%s"
           git push origin HEAD --tags
+      - name: Determine npm dist-tag
+        id: npm_tag
+        run: |
+          VERSION="${{ inputs.version }}"
+          if [[ "$VERSION" == *-* ]]; then
+            TAG="testing"
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            TAG="latest"
+          else
+            TAG="latest-$(echo "$VERSION" | cut -d. -f1,2 | tr . -)"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
       - name: Publish to npm
-        run: npm publish --provenance --access public
+        run: npm publish --provenance --access public --tag ${{ steps.npm_tag.outputs.tag }}
       - name: Download binary artifacts
         uses: actions/download-artifact@v8
         with:
