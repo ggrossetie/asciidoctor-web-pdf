@@ -72,12 +72,14 @@ jobs:
       - name: Roll changelog
         run: |
           npx bestikk-changelog release ${{ inputs.version }} --file CHANGELOG.md --format markdown
-          git add CHANGELOG.md
       - name: Commit and tag release
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          npm version ${{ inputs.version }} -m "Release v%s"
+          npm version ${{ inputs.version }} --no-git-tag-version
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "Release v${{ inputs.version }}"
+          git tag "v${{ inputs.version }}"
           git push origin HEAD --tags
       - name: Generate release notes
         run: |
@@ -120,7 +122,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_dockerhub:
-    needs: build
+    needs: [build, publish]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
