@@ -8,3 +8,6 @@ test/reference/output/
 test/reference/*/visual-comparison-workdir/
 build
 .idea/
+
+# Local Netlify folder
+.netlify

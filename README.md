@@ -102,14 +102,7 @@ docker run --rm ggrossetie/asciidoctor-web-pdf --version
 
 ## Documentation
 
-The full documentation lives in [`docs/`](docs/modules/ROOT/pages/index.adoc), structured as an Antora component:
-
-- [Introduction](docs/modules/ROOT/pages/index.adoc)
-- [Installation](docs/modules/ROOT/pages/installation.adoc)
-- [Get started](docs/modules/ROOT/pages/get-started.adoc)
-- Configuration: [STEM support](docs/modules/ROOT/pages/configure-stem.adoc), [title page](docs/modules/ROOT/pages/configure-title-page.adoc), [custom styles](docs/modules/ROOT/pages/configure-custom-styles.adoc), [front cover image](docs/modules/ROOT/pages/configure-front-cover-image.adoc), [docinfo](docs/modules/ROOT/pages/configure-docinfo.adoc), [running elements](docs/modules/ROOT/pages/configure-running-elements.adoc), [Asciidoctor extensions](docs/modules/ROOT/pages/configure-extensions.adoc), [diagrams](docs/modules/ROOT/pages/configure-diagrams.adoc)
-- [Custom layout](docs/modules/ROOT/pages/custom-layout.adoc)
-- [How does it work?](docs/modules/ROOT/pages/how-it-works.adoc)
+The full documentation is published at [asciidoctor-web-pdf.netlify.app](https://asciidoctor-web-pdf.netlify.app).
 
 ## Contribute!
 
