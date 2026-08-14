@@ -439,6 +439,26 @@ describe('PDF converter', () => {
       }
     })
 
+    it('should keep sequential numbering when an ordered list spans multiple pages', async () => {
+      const outputFile = outputPath('ordered-list-numbering-across-pages.pdf')
+      const pdfDoc = await convert(
+        fixturesPath('ordered-list-numbering-across-pages.adoc'),
+        outputFile,
+      )
+      assert.strictEqual(
+        pdfDoc.getPages().length,
+        2,
+        'expected the ordered list to span exactly 2 pages',
+      )
+      const text = helper.extractText(outputFile)
+      for (let i = 1; i <= 30; i++) {
+        assert.ok(
+          text.includes(`${i}. item-${i}-marker`),
+          `expected item ${i} to be numbered "${i}." instead of restarting the counter`,
+        )
+      }
+    })
+
     it('should keep a consistent number of rows per page when a table with images spans multiple pages', async () => {
       const outputFile = outputPath('table-with-images-spanning-pages.pdf')
       const pdfDoc = await convert(
