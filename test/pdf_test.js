@@ -459,6 +459,25 @@ describe('PDF converter', () => {
       }
     })
 
+    it('should render the TOC dot leader when the TOC is placed manually with the toc::[] macro', async () => {
+      const outputFile = outputPath('toc-macro-dot-leader.pdf')
+      await converter.convert(
+        { path: fixturesPath('toc-macro-dot-leader.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const lines = helper
+        .extractText(outputFile)
+        .split('\n')
+        .map((line) => line.replace(/\s+/g, ''))
+      for (const title of ['Preface', 'SectionOne', 'SectionTwo']) {
+        assert.ok(
+          lines.some((line) => new RegExp(`^${title}\\.{10,}\\d+$`).test(line)),
+          `expected a dot leader between "${title}" and its page number in the TOC`,
+        )
+      }
+    })
+
     it('should keep a consistent number of rows per page when a table with images spans multiple pages', async () => {
       const outputFile = outputPath('table-with-images-spanning-pages.pdf')
       const pdfDoc = await convert(
