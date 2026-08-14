@@ -11,22 +11,22 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
   <tr align="center">
     <td width="25%">
       <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/document/document.pdf">
-        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/document/document_screenshot.png" />
+        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/docs/modules/ROOT/images/document_screenshot.png" />
       </a>
     </td>
     <td width="25%">
       <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf">
-        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/letter/letter_screenshot.png" />
+        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/docs/modules/ROOT/images/letter_screenshot.png" />
       </a>
     </td>
     <td width="25%">
       <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/book/book.pdf">
-        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/book/book_screenshot.png" />
+        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/docs/modules/ROOT/images/book_screenshot.png" />
       </a>
     </td>
     <td width="25%">
       <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf">
-      <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png" />
+      <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/docs/modules/ROOT/images/maven-security-cheat-sheet_screenshot.png" />
       </a>
     </td>
   </tr>
@@ -57,12 +57,12 @@ It allows complex layouts to be defined with CSS and JavaScript, while writing t
   <tr align="center">
     <td width="25%">
       <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf">
-        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/resume/resume_screenshot.png" />
+        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/docs/modules/ROOT/images/resume_screenshot.png" />
       </a>
     </td>
     <td width="25%">
       <a href="https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf">
-        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/presentation/ioslides/presentation_screenshot.png" />
+        <img src="https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/docs/modules/ROOT/images/presentation_screenshot.png" />
       </a>
     </td>
     <td width="25%"></td>

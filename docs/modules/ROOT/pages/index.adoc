@@ -21,28 +21,34 @@ Many more features can be added by importing an existing JavaScript or CSS frame
 
 == Examples
 
+[%noheader,cols=4]
 |===
 | Document | Letter | Book | Cheat sheet
 
-| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/document/document_screenshot.png[Document,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/document/document.pdf]
-| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/letter/letter_screenshot.png[Letter,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf]
-| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/book/book_screenshot.png[Book,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/book/book.pdf]
-| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/cheat-sheet/maven-security-cheat-sheet_screenshot.png[Cheat sheet,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf]
+a| image::document_screenshot.png[Document,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/document/document.pdf]
+a| image::letter_screenshot.png[Letter,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf]
+a| image::book_screenshot.png[Book,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/book/book.pdf]
+a| image::maven-security-cheat-sheet_screenshot.png[Cheat sheet,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf]
 
 | https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/document/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/document/document.pdf[PDF]
 | https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/letter/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/letter/letter.pdf[PDF]
 | https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/book/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/book/book.pdf[PDF]
 | https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/cheat-sheet/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/cheat-sheet/maven-security-cheat-sheet.pdf[PDF]
-|===
 
-|===
-| Resume | Presentation
+| *Resume*
+| *Presentation*
+|
+|
 
-| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/resume/resume_screenshot.png[Resume,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf]
-| image::https://github.com/ggrossetie/asciidoctor-web-pdf/raw/main/examples/presentation/ioslides/presentation_screenshot.png[Presentation,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf]
+a| image::resume_screenshot.png[Resume,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf]
+a| image::presentation_screenshot.png[Presentation,link=https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf]
+|
+|
 
 | https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/resume/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/resume/resume.pdf[PDF]
 | https://github.com/ggrossetie/asciidoctor-web-pdf/tree/main/examples/presentation/ioslides/[Source] / https://github.com/ggrossetie/asciidoctor-web-pdf/blob/main/examples/presentation/ioslides/presentation.pdf[PDF]
+|
+|
 |===
 
 Head to xref:installation.adoc[Installation] to get started.
