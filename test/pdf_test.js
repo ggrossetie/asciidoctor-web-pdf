@@ -603,9 +603,29 @@ describe('PDF converter', () => {
         false,
       )
       const text = helper.extractText(outputFile)
-      assert.ok(
-        text.includes('    "indent_check": "    four spaces before this"'),
-        'expected indentation to be preserved after the page break',
+      // pdftotext -layout approximates column widths from glyph metrics, so the
+      // exact number of spaces it renders for a given indentation level is not
+      // stable across environments. What must hold is that every occurrence of
+      // this line is indented by the same amount - a page-break-induced loss of
+      // indentation shows up as a line with fewer leading spaces than the rest.
+      const matches = [
+        ...text.matchAll(
+          /^[ \f]*"indent_check": "[ \f]*four spaces before this"/gm,
+        ),
+      ]
+      assert.strictEqual(
+        matches.length,
+        69,
+        `expected 69 "indent_check" lines, got ${matches.length}`,
+      )
+      const indentWidths = matches.map(
+        (match) => match[0].replace(/\f/g, '').match(/^ */)[0].length,
+      )
+      const distinctWidths = [...new Set(indentWidths)]
+      assert.strictEqual(
+        distinctWidths.length,
+        1,
+        `expected the same indentation on every occurrence, got widths: ${distinctWidths.join(', ')}`,
       )
     })
   })
