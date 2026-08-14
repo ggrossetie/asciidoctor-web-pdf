@@ -439,6 +439,26 @@ describe('PDF converter', () => {
       }
     })
 
+    it('should keep a consistent number of rows per page when a table with images spans multiple pages', async () => {
+      const outputFile = outputPath('table-with-images-spanning-pages.pdf')
+      const pdfDoc = await convert(
+        fixturesPath('table-with-images-spanning-pages.adoc'),
+        outputFile,
+      )
+      assert.strictEqual(
+        pdfDoc.getPages().length,
+        2,
+        'expected the table to span exactly 2 pages',
+      )
+      const text = helper.extractText(outputFile)
+      for (let i = 1; i <= 24; i++) {
+        assert.ok(
+          text.includes(`row-${i}-marker`),
+          `expected row-${i}-marker to be present in the extracted text`,
+        )
+      }
+    })
+
     it('should keep the bullet marker when a list item spans a page break', async () => {
       const outputFile = outputPath('list-split-across-pages.pdf')
       const pdfDoc = await convert(
