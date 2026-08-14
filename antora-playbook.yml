@@ -3,6 +3,10 @@ site:
   start_page: asciidoctor-web-pdf::index.adoc
   url: https://asciidoctor-web-pdf.netlify.app
 
+urls:
+  latest_version_segment_strategy: redirect:to
+  latest_version_segment: latest
+
 content:
   sources:
   - url: .
