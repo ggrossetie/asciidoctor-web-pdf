@@ -11,10 +11,14 @@ converter.registerTemplateConverter(templates)
 const __dirname = import.meta.dirname
 const fixturesPath = (...paths) => ospath.join(__dirname, 'fixtures', ...paths)
 
+function loadPdf(source, opts = {}) {
+  return load(source, { ...opts, backend: 'pdf' })
+}
+
 describe('Default converter', () => {
   describe('Language', () => {
     it('should have a default language', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 
 == Section`)
       const root = parse(await templates.document(doc))
@@ -22,7 +26,7 @@ describe('Default converter', () => {
     })
 
     it('respect the document lang attribute', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :lang: de
 
 == Section`)
@@ -31,7 +35,7 @@ describe('Default converter', () => {
     })
 
     it('respect the document nolang attribute', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :nolang:
 
 == Section`)
@@ -45,7 +49,7 @@ describe('Default converter', () => {
 
   describe('Page title', () => {
     it('should include a title page if title-page attribute is defined', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 Guillaume Grossetie
 :title-page:
 
@@ -58,7 +62,7 @@ Guillaume Grossetie
     })
 
     it('should include a title page if doctype is book', async () => {
-      const doc = await load(
+      const doc = await loadPdf(
         `= Title
 Guillaume Grossetie
 
@@ -73,7 +77,7 @@ Guillaume Grossetie
     })
 
     it('should not include a title page', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 Guillaume Grossetie
 
 == Section`)
@@ -82,7 +86,7 @@ Guillaume Grossetie
     })
 
     it('should not include a title page if the document title is empty', async () => {
-      const doc = await load('Hello world!', {
+      const doc = await loadPdf('Hello world!', {
         attributes: { 'title-page': '' },
       })
       const root = parse(await doc.convert({ standalone: true }))
@@ -90,7 +94,7 @@ Guillaume Grossetie
     })
 
     it('should not include a document title if the document title is empty', async () => {
-      const doc = await load('Hello world!')
+      const doc = await loadPdf('Hello world!')
       const root = parse(await doc.convert({ standalone: true }))
       assert.strictEqual(
         root.querySelectorAll('.title-document > h1').length,
@@ -100,7 +104,7 @@ Guillaume Grossetie
   })
 
   it('should replace the default stylesheet with a custom stylesheet', async () => {
-    const doc = await load('[.greetings]#Hello world#', {
+    const doc = await loadPdf('[.greetings]#Hello world#', {
       attributes: { stylesheet: fixturesPath('custom.css') },
     })
     const root = parse(await doc.convert({ standalone: true }))
@@ -117,7 +121,7 @@ Guillaume Grossetie
   })
 
   it('should load multiple stylesheets', async () => {
-    const doc = await load('Hello world', {
+    const doc = await loadPdf('Hello world', {
       attributes: {
         stylesheet: `${fixturesPath('variable.css')}, ,${fixturesPath('theme.css')},`,
       },
@@ -142,7 +146,7 @@ Guillaume Grossetie
   })
 
   it('should resolve the stylesheet when using a relative path', async () => {
-    const doc = await load('[.greetings]#Hello world#', {
+    const doc = await loadPdf('[.greetings]#Hello world#', {
       attributes: {
         stylesheet: ospath.join(
           '@asciidoctor',
@@ -177,7 +181,7 @@ Guillaume Grossetie
 
   describe('Stem', () => {
     it('should include MathJax CHTML stylesheet when stem is set', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :stem:
 
 == Section`)
@@ -186,7 +190,7 @@ Guillaume Grossetie
     })
 
     it('should not include MathJax CHTML stylesheet when stem is not set', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :stem!:
 
 == Section`)
@@ -195,7 +199,7 @@ Guillaume Grossetie
     })
 
     it('should not include MathJax CHTML stylesheet when stem is not present', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 
 == Section`)
       const root = parse(await templates.document(doc))
@@ -203,7 +207,7 @@ Guillaume Grossetie
     })
 
     it('should add equation numbers when eqnums equals AMS', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :stem: latexmath
 :eqnums: AMS
 
@@ -217,7 +221,7 @@ Guillaume Grossetie
     })
 
     it('should add equation numbers when eqnums is present', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :stem: latexmath
 :eqnums:
 
@@ -231,7 +235,7 @@ Guillaume Grossetie
     })
 
     it('should add equation numbers when eqnums equals all', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :stem: latexmath
 :eqnums: all
 
@@ -247,7 +251,7 @@ Guillaume Grossetie
 
   describe('Admonition', () => {
     it('should use an emoji shortcode as admonition icon', async () => {
-      const doc = await load(`= Title
+      const doc = await loadPdf(`= Title
 :tip-caption: :bulb:
 
 [TIP]
@@ -263,7 +267,7 @@ It's possible to use emojis as admonition.`)
   describe('Inline icon', () => {
     describe('FontAwesome SVG icons set', () => {
       it('should enable SVG icon when icons attribute is equals to font (user experience)', async () => {
-        const doc = await load(
+        const doc = await loadPdf(
           `= Title
 :icons: font
 
@@ -278,7 +282,7 @@ icon:address-book[]`,
         )
       })
       it('should render a solid FontAwesome SVG icon (default)', async () => {
-        const doc = await load(`:icontype: svg
+        const doc = await loadPdf(`:icontype: svg
 
 icon:address-book[]`)
         const root = parse(await doc.convert())
@@ -289,7 +293,7 @@ icon:address-book[]`)
         )
       })
       it('should render a regular FontAwesome SVG icon (default)', async () => {
-        const doc = await load(`:icontype: svg
+        const doc = await loadPdf(`:icontype: svg
 
 icon:address-book[set=far]`)
         const root = parse(await doc.convert())
@@ -300,7 +304,7 @@ icon:address-book[set=far]`)
         )
       })
       it('should render a brand FontAwesome SVG icon (default)', async () => {
-        const doc = await load(`:icontype: svg
+        const doc = await loadPdf(`:icontype: svg
 
 icon:chrome@fab[]`)
         const root = parse(await doc.convert())
@@ -315,7 +319,7 @@ icon:chrome@fab[]`)
 
   describe('Table Of Contents', () => {
     it('should add a toc when toc is set', async () => {
-      const doc = await load(
+      const doc = await loadPdf(
         `= Title
 :toc:
 
@@ -334,7 +338,7 @@ icon:chrome@fab[]`)
     })
 
     it("should not add a toc when there's no section", async () => {
-      const doc = await load(
+      const doc = await loadPdf(
         `= Title
 :toc:
 
@@ -349,7 +353,7 @@ Just a preamble.`,
     })
 
     it('should not add a toc in the header when toc placement is macro', async () => {
-      const doc = await load(
+      const doc = await loadPdf(
         `= Title
 :toc: macro
 
