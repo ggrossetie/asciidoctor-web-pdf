@@ -1,0 +1,18 @@
+site:
+  title: Asciidoctor Web PDF
+  start_page: asciidoctor-web-pdf::index.adoc
+  url: https://asciidoctor-web-pdf.netlify.app
+
+content:
+  sources:
+  - url: .
+    branches: HEAD
+    start_path: docs
+
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+
+output:
+  dir: ./build/site

@@ -23,7 +23,8 @@
     "test:js": "node --test --test-timeout=30000 test/*_test.js",
     "lint": "biome check lib/ test/ tasks/",
     "format": "biome format --write lib/ test/ tasks/",
-    "test:update-linux-reference": "docker build -f test/Dockerfile -t asciidoctor/web-pdf-test . && docker run --name asciidoctorwebpdftest asciidoctor/web-pdf-test:latest; docker cp asciidoctorwebpdftest:/app/test/output/. ./test/reference/linux/ && docker rm asciidoctorwebpdftest"
+    "test:update-linux-reference": "docker build -f test/Dockerfile -t asciidoctor/web-pdf-test . && docker run --name asciidoctorwebpdftest asciidoctor/web-pdf-test:latest; docker cp asciidoctorwebpdftest:/app/test/output/. ./test/reference/linux/ && docker rm asciidoctorwebpdftest",
+    "docs:build": "antora antora-playbook.yml"
   },
   "repository": {
     "type": "git",
@@ -56,6 +57,8 @@
     "puppeteer": "25.1.0"
   },
   "devDependencies": {
+    "@antora/cli": "3.1.15",
+    "@antora/site-generator": "3.1.15",
     "@biomejs/biome": "2.4.15",
     "@puppeteer/browsers": "~3.0",
     "archiver": "~8.0",

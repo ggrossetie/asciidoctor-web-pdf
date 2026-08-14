@@ -1,0 +1,6 @@
+[build]
+  command = "npx antora antora-playbook.yml"
+  publish = "build/site"
+
+[build.environment]
+  NODE_VERSION = "20"
