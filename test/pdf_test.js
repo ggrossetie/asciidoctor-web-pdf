@@ -38,6 +38,7 @@ describe('PDF converter', () => {
     const outputDir = ospath.join(__dirname, 'output')
     fs.rmSync(outputDir, { recursive: true, force: true })
     fs.mkdirSync(outputDir)
+    fs.writeFileSync(ospath.join(outputDir, '.gitkeep'), '')
   })
 
   after(() => {
@@ -45,6 +46,7 @@ describe('PDF converter', () => {
       const outputDir = ospath.join(__dirname, 'output')
       fs.rmSync(outputDir, { recursive: true, force: true })
       fs.mkdirSync(outputDir)
+      fs.writeFileSync(ospath.join(outputDir, '.gitkeep'), '')
     }
   })
 
