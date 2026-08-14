@@ -1,0 +1,287 @@
+= Source Code Split Across Pages
+:source-highlighter: highlight.js
+
+== Section 1
+
+[source,json]
+----
+{
+  "key1": {
+    "nested": "value 1",
+    "indent_check": "    four spaces before this"
+  },
+  "key2": {
+    "nested": "value 2",
+    "indent_check": "    four spaces before this"
+  },
+  "key3": {
+    "nested": "value 3",
+    "indent_check": "    four spaces before this"
+  },
+  "key4": {
+    "nested": "value 4",
+    "indent_check": "    four spaces before this"
+  },
+  "key5": {
+    "nested": "value 5",
+    "indent_check": "    four spaces before this"
+  },
+  "key6": {
+    "nested": "value 6",
+    "indent_check": "    four spaces before this"
+  },
+  "key7": {
+    "nested": "value 7",
+    "indent_check": "    four spaces before this"
+  },
+  "key8": {
+    "nested": "value 8",
+    "indent_check": "    four spaces before this"
+  },
+  "key9": {
+    "nested": "value 9",
+    "indent_check": "    four spaces before this"
+  },
+  "key10": {
+    "nested": "value 10",
+    "indent_check": "    four spaces before this"
+  },
+  "key11": {
+    "nested": "value 11",
+    "indent_check": "    four spaces before this"
+  },
+  "key12": {
+    "nested": "value 12",
+    "indent_check": "    four spaces before this"
+  },
+  "key13": {
+    "nested": "value 13",
+    "indent_check": "    four spaces before this"
+  },
+  "key14": {
+    "nested": "value 14",
+    "indent_check": "    four spaces before this"
+  },
+  "key15": {
+    "nested": "value 15",
+    "indent_check": "    four spaces before this"
+  },
+  "key16": {
+    "nested": "value 16",
+    "indent_check": "    four spaces before this"
+  },
+  "key17": {
+    "nested": "value 17",
+    "indent_check": "    four spaces before this"
+  },
+  "key18": {
+    "nested": "value 18",
+    "indent_check": "    four spaces before this"
+  },
+  "key19": {
+    "nested": "value 19",
+    "indent_check": "    four spaces before this"
+  },
+  "key20": {
+    "nested": "value 20",
+    "indent_check": "    four spaces before this"
+  },
+  "key21": {
+    "nested": "value 21",
+    "indent_check": "    four spaces before this"
+  },
+  "key22": {
+    "nested": "value 22",
+    "indent_check": "    four spaces before this"
+  },
+  "key23": {
+    "nested": "value 23",
+    "indent_check": "    four spaces before this"
+  },
+  "key24": {
+    "nested": "value 24",
+    "indent_check": "    four spaces before this"
+  },
+  "key25": {
+    "nested": "value 25",
+    "indent_check": "    four spaces before this"
+  },
+  "key26": {
+    "nested": "value 26",
+    "indent_check": "    four spaces before this"
+  },
+  "key27": {
+    "nested": "value 27",
+    "indent_check": "    four spaces before this"
+  },
+  "key28": {
+    "nested": "value 28",
+    "indent_check": "    four spaces before this"
+  },
+  "key29": {
+    "nested": "value 29",
+    "indent_check": "    four spaces before this"
+  },
+  "key30": {
+    "nested": "value 30",
+    "indent_check": "    four spaces before this"
+  },
+  "key31": {
+    "nested": "value 31",
+    "indent_check": "    four spaces before this"
+  },
+  "key32": {
+    "nested": "value 32",
+    "indent_check": "    four spaces before this"
+  },
+  "key33": {
+    "nested": "value 33",
+    "indent_check": "    four spaces before this"
+  },
+  "key34": {
+    "nested": "value 34",
+    "indent_check": "    four spaces before this"
+  },
+  "key35": {
+    "nested": "value 35",
+    "indent_check": "    four spaces before this"
+  },
+  "key36": {
+    "nested": "value 36",
+    "indent_check": "    four spaces before this"
+  },
+  "key37": {
+    "nested": "value 37",
+    "indent_check": "    four spaces before this"
+  },
+  "key38": {
+    "nested": "value 38",
+    "indent_check": "    four spaces before this"
+  },
+  "key39": {
+    "nested": "value 39",
+    "indent_check": "    four spaces before this"
+  },
+  "key40": {
+    "nested": "value 40",
+    "indent_check": "    four spaces before this"
+  },
+  "key41": {
+    "nested": "value 41",
+    "indent_check": "    four spaces before this"
+  },
+  "key42": {
+    "nested": "value 42",
+    "indent_check": "    four spaces before this"
+  },
+  "key43": {
+    "nested": "value 43",
+    "indent_check": "    four spaces before this"
+  },
+  "key44": {
+    "nested": "value 44",
+    "indent_check": "    four spaces before this"
+  },
+  "key45": {
+    "nested": "value 45",
+    "indent_check": "    four spaces before this"
+  },
+  "key46": {
+    "nested": "value 46",
+    "indent_check": "    four spaces before this"
+  },
+  "key47": {
+    "nested": "value 47",
+    "indent_check": "    four spaces before this"
+  },
+  "key48": {
+    "nested": "value 48",
+    "indent_check": "    four spaces before this"
+  },
+  "key49": {
+    "nested": "value 49",
+    "indent_check": "    four spaces before this"
+  },
+  "key50": {
+    "nested": "value 50",
+    "indent_check": "    four spaces before this"
+  },
+  "key51": {
+    "nested": "value 51",
+    "indent_check": "    four spaces before this"
+  },
+  "key52": {
+    "nested": "value 52",
+    "indent_check": "    four spaces before this"
+  },
+  "key53": {
+    "nested": "value 53",
+    "indent_check": "    four spaces before this"
+  },
+  "key54": {
+    "nested": "value 54",
+    "indent_check": "    four spaces before this"
+  },
+  "key55": {
+    "nested": "value 55",
+    "indent_check": "    four spaces before this"
+  },
+  "key56": {
+    "nested": "value 56",
+    "indent_check": "    four spaces before this"
+  },
+  "key57": {
+    "nested": "value 57",
+    "indent_check": "    four spaces before this"
+  },
+  "key58": {
+    "nested": "value 58",
+    "indent_check": "    four spaces before this"
+  },
+  "key59": {
+    "nested": "value 59",
+    "indent_check": "    four spaces before this"
+  },
+  "key60": {
+    "nested": "value 60",
+    "indent_check": "    four spaces before this"
+  },
+  "key61": {
+    "nested": "value 61",
+    "indent_check": "    four spaces before this"
+  },
+  "key62": {
+    "nested": "value 62",
+    "indent_check": "    four spaces before this"
+  },
+  "key63": {
+    "nested": "value 63",
+    "indent_check": "    four spaces before this"
+  },
+  "key64": {
+    "nested": "value 64",
+    "indent_check": "    four spaces before this"
+  },
+  "key65": {
+    "nested": "value 65",
+    "indent_check": "    four spaces before this"
+  },
+  "key66": {
+    "nested": "value 66",
+    "indent_check": "    four spaces before this"
+  },
+  "key67": {
+    "nested": "value 67",
+    "indent_check": "    four spaces before this"
+  },
+  "key68": {
+    "nested": "value 68",
+    "indent_check": "    four spaces before this"
+  },
+  "key69": {
+    "nested": "value 69",
+    "indent_check": "    four spaces before this"
+  },
+  "end": true
+}
+----
