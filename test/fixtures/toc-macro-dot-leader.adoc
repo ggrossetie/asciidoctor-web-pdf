@@ -1,0 +1,22 @@
+= Demo
+:toc:
+:toc-placement!:
+
+[preface]
+== Preface
+
+Preface text.
+
+toc::[]
+
+<<<
+
+== Section One
+
+Content.
+
+<<<
+
+== Section Two
+
+Content.
