@@ -1,5 +1,5 @@
 name: asciidoctor-web-pdf
 title: Asciidoctor Web PDF
-version: main
+version: '1.0-beta'
 nav:
 - modules/ROOT/nav.adoc
