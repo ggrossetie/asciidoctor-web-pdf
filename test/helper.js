@@ -21,6 +21,24 @@ export function extractText(pdfPath) {
   })
 }
 
+// Returns the exact glyph position (in PDF points) of every word, decoded from
+// pdftotext's XML bbox output. Unlike extractText(), this isn't affected by
+// -layout's approximate reconstruction of column widths from font metrics.
+export function extractWordBoxes(pdfPath) {
+  const xml = childProcess.execFileSync('pdftotext', ['-bbox', pdfPath, '-'], {
+    encoding: 'utf8',
+  })
+  const decodeEntities = (text) =>
+    text
+      .replace(/&quot;/g, '"')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
+  return [...xml.matchAll(/<word xMin="([\d.]+)"[^>]*>([^<]*)<\/word>/g)].map(
+    (match) => ({ xMin: Number(match[1]), text: decodeEntities(match[2]) }),
+  )
+}
+
 function computeImageDifferences(referenceBuffer, actualBuffer, diffFilename) {
   const referenceImage = PNG.sync.read(referenceBuffer)
   const actualImage = PNG.sync.read(actualBuffer)

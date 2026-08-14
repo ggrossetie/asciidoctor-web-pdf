@@ -548,6 +548,38 @@ describe('PDF converter', () => {
         `expected height ~595.28, got ${height}`,
       )
     })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726
+    // Paged.js's DOM cloning stripped whitespace-only text nodes when
+    // splitting a listing block across pages. Vivliostyle doesn't clone the
+    // DOM that way, so this no longer reproduces - confirmed here by
+    // comparing the exact glyph x-position (not an approximate space count)
+    // of every occurrence across the page break.
+    it('should preserve indentation in a code block split across a page break', async () => {
+      const outputFile = outputPath('source-code-split-across-pages.pdf')
+      await converter.convert(
+        { path: fixturesPath('source-code-split-across-pages.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const words = helper.extractWordBoxes(outputFile)
+      const indentChecks = words.filter(
+        (word) => word.text === '"indent_check":',
+      )
+      assert.strictEqual(
+        indentChecks.length,
+        69,
+        `expected 69 "indent_check" occurrences, got ${indentChecks.length}`,
+      )
+      const distinctPositions = [
+        ...new Set(indentChecks.map((word) => word.xMin)),
+      ]
+      assert.strictEqual(
+        distinctPositions.length,
+        1,
+        `expected the same horizontal position for every occurrence, got: ${distinctPositions.join(', ')}`,
+      )
+    })
   })
 
   describe('PDF outline destinations', () => {
@@ -584,48 +616,6 @@ describe('PDF converter', () => {
           message.includes('Unable to find destination'),
         ),
         `expected no "Unable to find destination" warning, got: ${messages.join('; ')}`,
-      )
-    })
-  })
-
-  describe('Known issues', () => {
-    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726
-    // A listing block that spans a page break loses the indentation of its
-    // whitespace-only text nodes when the DOM is split/cloned across pages.
-    // Un-skip once the underlying page-splitting behavior preserves them.
-    it('should preserve indentation in a code block split across a page break', {
-      skip: 'https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726',
-    }, async () => {
-      const outputFile = outputPath('source-code-split-across-pages.pdf')
-      await converter.convert(
-        { path: fixturesPath('source-code-split-across-pages.adoc') },
-        { to_file: outputFile },
-        false,
-      )
-      const text = helper.extractText(outputFile)
-      // pdftotext -layout approximates column widths from glyph metrics, so the
-      // exact number of spaces it renders for a given indentation level is not
-      // stable across environments. What must hold is that every occurrence of
-      // this line is indented by the same amount - a page-break-induced loss of
-      // indentation shows up as a line with fewer leading spaces than the rest.
-      const matches = [
-        ...text.matchAll(
-          /^[ \f]*"indent_check": "[ \f]*four spaces before this"/gm,
-        ),
-      ]
-      assert.strictEqual(
-        matches.length,
-        69,
-        `expected 69 "indent_check" lines, got ${matches.length}`,
-      )
-      const indentWidths = matches.map(
-        (match) => match[0].replace(/\f/g, '').match(/^ */)[0].length,
-      )
-      const distinctWidths = [...new Set(indentWidths)]
-      assert.strictEqual(
-        distinctWidths.length,
-        1,
-        `expected the same indentation on every occurrence, got widths: ${distinctWidths.join(', ')}`,
       )
     })
   })
