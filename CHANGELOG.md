@@ -17,3 +17,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The `backend` attribute is now set to `pdf` ([#736](https://github.com/ggrossetie/asciidoctor-web-pdf/pull/736))
 - Switched linting/formatting to Biome and the test suite to Node's built-in test runner ([#721](https://github.com/ggrossetie/asciidoctor-web-pdf/pull/721), [#720](https://github.com/ggrossetie/asciidoctor-web-pdf/pull/720))
 - Migrated the release process to a manually triggered GitHub Actions workflow with npm trusted publishing ([#722](https://github.com/ggrossetie/asciidoctor-web-pdf/pull/722))
+- The release workflow now rolls this changelog into a dated release section and uses it as the GitHub release notes
