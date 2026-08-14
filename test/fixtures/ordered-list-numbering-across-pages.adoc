@@ -1,0 +1,63 @@
+= Ordered List Numbering Across Pages
+
+== Section
+
+. item-1-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-2-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-3-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-4-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-5-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-6-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-7-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-8-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-9-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-10-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-11-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-12-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-13-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-14-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-15-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-16-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-17-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-18-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-19-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-20-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-21-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-22-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-23-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-24-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-25-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-26-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-27-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-28-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-29-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
+
+. item-30-marker filler text to give the list item some height so the list spans multiple pages when repeated many times over.
