@@ -156,6 +156,7 @@ table.frame-all {
 table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
   line-height: 1.25rem;
   font-size: 0.9rem;
+  overflow-wrap: anywhere;
 }
 
 table.grid-all > thead > tr > .tableblock, table.grid-all > tbody > tr > .tableblock {

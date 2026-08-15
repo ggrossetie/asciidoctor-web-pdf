@@ -624,7 +624,7 @@ describe('PDF converter', () => {
 
   describe('Known issues (bucket D backlog triage)', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/164
-    it.skip('should wrap a long unbroken word instead of letting it overflow the page', async () => {
+    it('should wrap a long unbroken word instead of letting it overflow the page', async () => {
       const outputFile = outputPath('table-cell-long-word.pdf')
       const pdfDoc = await convert(
         fixturesPath('table-cell-long-word.adoc'),
