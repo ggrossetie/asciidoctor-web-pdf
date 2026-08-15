@@ -285,7 +285,7 @@ describe('PDF converter', () => {
         section: true,
         toc: 'preamble',
         'title-page-attribute': true,
-        'expected-page-number': 3,
+        'expected-page-number': 4,
       },
       {
         doctype: 'article',
@@ -663,7 +663,7 @@ describe('PDF converter', () => {
     })
 
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/241
-    it.skip('should render collapsible block content even without the %open option', async () => {
+    it('should render collapsible block content even without the %open option', async () => {
       const outputFile = outputPath('collapsible-block.pdf')
       await converter.convert(
         { path: fixturesPath('collapsible-block.adoc') },
@@ -678,7 +678,7 @@ describe('PDF converter', () => {
     })
 
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/492
-    it.skip('should place the ToC after the preamble for the book doctype when toc-placement is preamble', async () => {
+    it('should place the ToC after the preamble for the book doctype when toc-placement is preamble', async () => {
       const outputFile = outputPath('toc-preamble-book-doctype.pdf')
       await converter.convert(
         { path: fixturesPath('toc-preamble-book-doctype.adoc') },
@@ -716,7 +716,7 @@ describe('PDF converter', () => {
     })
 
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/664
-    it.skip('should not duplicate a footnote that is referenced more than once', async () => {
+    it('should not duplicate a footnote that is referenced more than once', async () => {
       const outputFile = outputPath('footnotes-duplicate.pdf')
       await converter.convert(
         { path: fixturesPath('footnotes.adoc') },
@@ -733,7 +733,7 @@ describe('PDF converter', () => {
     })
 
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/676
-    it.skip('should render the table frame border when grid is set to rows', async () => {
+    it('should render the table frame border when grid is set to rows', async () => {
       const outputFile = outputPath('table-frame-with-grid-rows.pdf')
       await converter.convert(
         { path: fixturesPath('table-frame-with-grid-rows.adoc') },
@@ -748,7 +748,9 @@ describe('PDF converter', () => {
       const yTop = Math.min(...header.map((word) => word.yMin))
       const png = helper.renderPageToPNG(outputFile)
       let hasTopBorder = false
-      for (let y = yTop - 14; y <= yTop - 2 && !hasTopBorder; y += 1) {
+      // a hairline border is <1pt thick, so the y step must be fine enough
+      // not to step over it entirely
+      for (let y = yTop - 14; y <= yTop - 2 && !hasTopBorder; y += 0.25) {
         for (let x = xFrom; x <= xTo && !hasTopBorder; x += 2) {
           hasTopBorder = helper.hasInkAt(png, 150, x, y)
         }
@@ -760,7 +762,7 @@ describe('PDF converter', () => {
     })
 
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/84
-    it.skip('should render the revision number, date and remark on the title page', async () => {
+    it('should render the revision number, date and remark on the title page', async () => {
       const outputFile = outputPath('title-page-metadata.pdf')
       await converter.convert(
         { path: fixturesPath('title-page-metadata.adoc') },

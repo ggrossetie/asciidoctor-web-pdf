@@ -26,3 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Long unbroken words (e.g. a fully-qualified class name) in a table cell no longer overflow past the page edge; they now wrap ([#164](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/164))
 - Sidebar and example blocks no longer split across a page break ([#374](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/374))
 - The document subtitle is now rendered distinctly from the main title on the title page, instead of being merged into the same heading ([#699](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/699))
+- Collapsible blocks (`[%collapsible]`) are now always rendered expanded, since a static PDF has no way to expand a collapsed one ([#241](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/241))
+- `:toc-placement: preamble` now places the ToC after the preamble for the book doctype instead of being ignored in favor of the header ToC ([#492](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/492))
+- Referencing the same footnote more than once no longer duplicates it at the bottom of the page; the repeat reference now links back to the original ([#664](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/664))
+- Tables with `frame=all` now show their outer border again when `grid` is anything other than `all` (e.g. `grid=rows`) ([#676](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/676))
+- The revision number, date and remark are now rendered on the title page when set ([#84](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/84))
