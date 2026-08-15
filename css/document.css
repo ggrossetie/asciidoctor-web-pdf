@@ -127,6 +127,20 @@ h1 .subtitle {
   margin-top: 0.4rem;
 }
 
+.details {
+  font-size: 0.9rem;
+  font-weight: 200;
+  margin-top: 0.75rem;
+}
+
+.details span {
+  display: block;
+}
+
+.title-document .details {
+  text-align: center;
+}
+
 h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
   color: #333;
   font-family: 'Noto Serif', serif;
@@ -156,8 +170,12 @@ p {
 }
 
 table.frame-all {
-  border-width: 0;
+  border-width: 1px;
   border-collapse: collapse;
+}
+
+table.frame-all.grid-all {
+  border-width: 0;
 }
 
 table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
