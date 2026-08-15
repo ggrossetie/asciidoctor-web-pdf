@@ -19,3 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Migrated the release process to a manually triggered GitHub Actions workflow with npm trusted publishing ([#722](https://github.com/ggrossetie/asciidoctor-web-pdf/pull/722))
 - The release workflow now rolls this changelog into a dated release section and uses it as the GitHub release notes
 - README now links to the published documentation site instead of duplicating the table of contents
+
+### Fixed
+
+- Long unbroken words (e.g. a fully-qualified class name) in a table cell no longer overflow past the page edge; they now wrap ([#164](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/164))
