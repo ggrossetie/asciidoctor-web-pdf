@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The release workflow now rolls this changelog into a dated release section and uses it as the GitHub release notes
 - README now links to the published documentation site instead of duplicating the table of contents
 - The CI Docker image build now uses a GitHub Actions cache, speeding up the `check` job
+- `convert()` in `lib/converter.js` now takes a single `config` object (`timings`, `watch`, `preview`, `verbose`, `preserveHtml`, `preprocessScripts`, `browser`) instead of eight positional boolean/flag arguments; all functions in `lib/converter.js` are now documented with JSDoc
 
 ### Fixed
 

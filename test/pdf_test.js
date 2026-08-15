@@ -40,20 +40,9 @@ describe('PDF converter', () => {
   // instead of once per conversion (this file alone converts ~30 documents).
   const sharedBrowser = new Browser()
 
-  // Wraps converter.convert() with the shared browser plumbed into its
-  // trailing (rarely used in tests) positional params.
+  // Wraps converter.convert() with the shared browser plumbed in.
   const convertPdf = (inputFile, options, timings) =>
-    converter.convert(
-      inputFile,
-      options,
-      timings,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      sharedBrowser,
-    )
+    converter.convert(inputFile, options, { timings, browser: sharedBrowser })
 
   before(() => {
     const outputDir = ospath.join(__dirname, 'output')
@@ -920,11 +909,7 @@ describe('PDF converter', () => {
       const originalExitCode = process.exitCode
       process.exitCode = undefined
       try {
-        await converter.convert(
-          { path: fixturesPath('title-page.adoc') },
-          {},
-          false,
-        )
+        await converter.convert({ path: fixturesPath('title-page.adoc') }, {})
         assert.ok(errorMock.mock.calls.length > 0)
         assert.strictEqual(
           errorMock.mock.calls[0].arguments[0],
@@ -953,8 +938,7 @@ describe('PDF converter', () => {
         await converter.convert(
           { path: fixturesPath('title-page.adoc') },
           {},
-          false,
-          true, // watch
+          { watch: true },
         )
         assert.strictEqual(
           process.exitCode,
