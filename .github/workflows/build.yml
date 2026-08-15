@@ -35,7 +35,13 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v4
     - name: Build container image
-      run: make packageLocalDocker
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        tags: asciidoctor-web-pdf:latest
+        load: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     - name: Smoke test
       run: make testDocker
 
