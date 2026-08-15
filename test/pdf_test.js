@@ -36,6 +36,25 @@ function assertVisuallyIdentical(outputFile, reference) {
 }
 
 describe('PDF converter', () => {
+  // Shared across every test in this file so Chromium is launched once
+  // instead of once per conversion (this file alone converts ~30 documents).
+  const sharedBrowser = new Browser()
+
+  // Wraps converter.convert() with the shared browser plumbed into its
+  // trailing (rarely used in tests) positional params.
+  const convertPdf = (inputFile, options, timings) =>
+    converter.convert(
+      inputFile,
+      options,
+      timings,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      sharedBrowser,
+    )
+
   before(() => {
     const outputDir = ospath.join(__dirname, 'output')
     fs.rmSync(outputDir, { recursive: true, force: true })
@@ -43,7 +62,8 @@ describe('PDF converter', () => {
     fs.writeFileSync(ospath.join(outputDir, '.gitkeep'), '')
   })
 
-  after(() => {
+  after(async () => {
+    await sharedBrowser.close()
     if (typeof process.env.DEBUG === 'undefined') {
       const outputDir = ospath.join(__dirname, 'output')
       fs.rmSync(outputDir, { recursive: true, force: true })
@@ -83,7 +103,7 @@ describe('PDF converter', () => {
   const convert = async (inputFile, outputFile, options) => {
     const opts = options || {}
     opts.to_file = outputFile
-    await converter.convert({ path: inputFile }, opts, false)
+    await convertPdf({ path: inputFile }, opts, false)
     return PDFDocument.load(fs.readFileSync(outputFile))
   }
 
@@ -100,7 +120,7 @@ describe('PDF converter', () => {
     opts.attributes = attributes || {}
     opts.attributes.reproducible = ''
     opts.to_file = outputFile
-    await converter.convert(
+    await convertPdf(
       { path: fixturesPath(`${inputBaseFileName}.adoc`) },
       opts,
       false,
@@ -429,7 +449,7 @@ describe('PDF converter', () => {
   describe('Page splitting (regressions from the Paged.js era)', () => {
     it('should not lose table rows when a table spans multiple pages', async () => {
       const outputFile = outputPath('table-spanning-pages.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('table-spanning-pages.adoc') },
         { to_file: outputFile },
         false,
@@ -465,7 +485,7 @@ describe('PDF converter', () => {
 
     it('should render the TOC dot leader when the TOC is placed manually with the toc::[] macro', async () => {
       const outputFile = outputPath('toc-macro-dot-leader.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('toc-macro-dot-leader.adoc') },
         { to_file: outputFile },
         false,
@@ -520,7 +540,7 @@ describe('PDF converter', () => {
 
     it('should not drop content around highlighted code blocks near a page break', async () => {
       const outputFile = outputPath('highlighted-code-near-page-break.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('highlighted-code-near-page-break.adoc') },
         { to_file: outputFile },
         false,
@@ -559,7 +579,7 @@ describe('PDF converter', () => {
     // of every occurrence across the page break.
     it('should preserve indentation in a code block split across a page break', async () => {
       const outputFile = outputPath('source-code-split-across-pages.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('source-code-split-across-pages.adoc') },
         { to_file: outputFile },
         false,
@@ -586,7 +606,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/374
     it('should not split a sidebar block across a page break', async () => {
       const outputFile = outputPath('sidebar-avoid-page-break.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('sidebar-avoid-page-break.adoc') },
         { to_file: outputFile },
         false,
@@ -665,7 +685,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/241
     it('should render collapsible block content even without the %open option', async () => {
       const outputFile = outputPath('collapsible-block.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('collapsible-block.adoc') },
         { to_file: outputFile },
         false,
@@ -680,7 +700,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/492
     it('should place the ToC after the preamble for the book doctype when toc-placement is preamble', async () => {
       const outputFile = outputPath('toc-preamble-book-doctype.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('toc-preamble-book-doctype.adoc') },
         { to_file: outputFile },
         false,
@@ -702,7 +722,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/547
     it.skip('should not render the document title when showtitle is unset', async () => {
       const outputFile = outputPath('showtitle-disabled.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('showtitle-disabled.adoc') },
         { to_file: outputFile },
         false,
@@ -718,7 +738,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/664
     it('should not duplicate a footnote that is referenced more than once', async () => {
       const outputFile = outputPath('footnotes-duplicate.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('footnotes.adoc') },
         { to_file: outputFile },
         false,
@@ -735,7 +755,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/676
     it('should render the table frame border when grid is set to rows', async () => {
       const outputFile = outputPath('table-frame-with-grid-rows.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('table-frame-with-grid-rows.adoc') },
         { to_file: outputFile },
         false,
@@ -764,7 +784,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/84
     it('should render the revision number, date and remark on the title page', async () => {
       const outputFile = outputPath('title-page-metadata.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('title-page-metadata.adoc') },
         { to_file: outputFile },
         false,
@@ -830,7 +850,7 @@ describe('PDF converter', () => {
       converter.registerTemplateConverter(customTemplates)
       try {
         const outputFile = outputPath('custom-template-override.pdf')
-        await converter.convert(
+        await convertPdf(
           { path: fixturesPath('custom-template-override.adoc') },
           { to_file: outputFile },
           false,
@@ -852,7 +872,7 @@ describe('PDF converter', () => {
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/684
     it('should apply cols alignment to body cells, not just the header row', async () => {
       const outputFile = outputPath('table-column-alignment.pdf')
-      await converter.convert(
+      await convertPdf(
         { path: fixturesPath('table-column-alignment.adoc') },
         { to_file: outputFile },
         false,

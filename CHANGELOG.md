@@ -31,3 +31,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Referencing the same footnote more than once no longer duplicates it at the bottom of the page; the repeat reference now links back to the original ([#664](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/664))
 - Tables with `frame=all` now show their outer border again when `grid` is anything other than `all` (e.g. `grid=rows`) ([#676](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/676))
 - The revision number, date and remark are now rendered on the title page when set ([#84](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/84))
+- When converting several documents against a shared browser instance (e.g. `--watch` across multiple files), each document is now rendered in a clean page instead of silently reusing stale content from the previous one
