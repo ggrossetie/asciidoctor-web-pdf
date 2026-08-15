@@ -120,6 +120,13 @@ h6 {
   margin: 0;
 }
 
+h1 .subtitle {
+  display: block;
+  font-size: 0.55em;
+  font-weight: 400;
+  margin-top: 0.4rem;
+}
+
 h1, h2, h3, #toctitle, .sidebarblock > .content > .title, h4, h5, h6 {
   color: #333;
   font-family: 'Noto Serif', serif;
@@ -185,6 +192,14 @@ tr {
 }
 
 .listingblock {
+  break-inside: avoid;
+}
+
+.sidebarblock {
+  break-inside: avoid;
+}
+
+.exampleblock {
   break-inside: avoid;
 }
 

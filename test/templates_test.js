@@ -5,6 +5,7 @@ import { convert, load } from '@asciidoctor/core'
 import { parse } from 'node-html-parser'
 import * as converter from '../lib/converter.js'
 import { templates } from '../lib/document/document-converter.js'
+import pkg from '../package.json' with { type: 'json' }
 
 converter.registerTemplateConverter(templates)
 
@@ -45,6 +46,20 @@ describe('Default converter', () => {
         undefined,
       )
     })
+  })
+
+  // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/300
+  it('should include a generator meta tag with the current version', async () => {
+    const doc = await loadPdf(`= Title
+
+== Section`)
+    const root = parse(await templates.document(doc))
+    assert.strictEqual(
+      root
+        .querySelector('head > meta[name="generator"]')
+        ?.getAttribute('content'),
+      `Asciidoctor Web PDF ${pkg.version}`,
+    )
   })
 
   describe('Page title', () => {
@@ -99,6 +114,43 @@ Guillaume Grossetie
       assert.strictEqual(
         root.querySelectorAll('.title-document > h1').length,
         0,
+      )
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/699
+    it('should render the subtitle distinctly from the main title', async () => {
+      const doc = await loadPdf('= Main Title: A Subtitle Marker')
+      const root = parse(await doc.convert({ standalone: true }))
+      const h1 = root.querySelector('.title-document > h1')
+      assert.strictEqual(
+        h1.querySelector('.subtitle')?.textContent,
+        'A Subtitle Marker',
+      )
+      assert.strictEqual(
+        h1.textContent,
+        'Main TitleA Subtitle Marker',
+        'expected the main title text to exclude the subtitle separator',
+      )
+    })
+
+    it('should render the subtitle distinctly on the cover title page too', async () => {
+      const doc = await loadPdf(
+        '= Main Title: A Subtitle Marker\nGuillaume Grossetie\n:title-page:',
+      )
+      const root = parse(await doc.convert({ standalone: true }))
+      const h1 = root.querySelector('.title-page > h1')
+      assert.strictEqual(
+        h1.querySelector('.subtitle')?.textContent,
+        'A Subtitle Marker',
+      )
+    })
+
+    it('should not render an empty subtitle element when there is no subtitle', async () => {
+      const doc = await loadPdf('= Main Title')
+      const root = parse(await doc.convert({ standalone: true }))
+      assert.strictEqual(
+        root.querySelector('.title-document > h1')?.querySelector('.subtitle'),
+        null,
       )
     })
   })

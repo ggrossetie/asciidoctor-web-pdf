@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - New documentation site built with Antora ([#731](https://github.com/ggrossetie/asciidoctor-web-pdf/pull/731))
 - Binaries are now built as Node.js Single Executable Applications (SEA), replacing `pkg`, adding native macOS and Linux arm64 support ([#723](https://github.com/ggrossetie/asciidoctor-web-pdf/pull/723))
+- A `generator` meta tag with the current version is now included in the document `<head>`, useful for debugging ([#300](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/300))
 
 ### Changed
 
@@ -23,3 +24,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Long unbroken words (e.g. a fully-qualified class name) in a table cell no longer overflow past the page edge; they now wrap ([#164](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/164))
+- Sidebar and example blocks no longer split across a page break ([#374](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/374))
+- The document subtitle is now rendered distinctly from the main title on the title page, instead of being merged into the same heading ([#699](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/699))

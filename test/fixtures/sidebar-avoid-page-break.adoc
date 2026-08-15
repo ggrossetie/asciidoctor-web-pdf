@@ -1,0 +1,61 @@
+= Sidebar Break Test
+
+Filler paragraph number 1 to push content down toward the bottom of the first page.
+
+Filler paragraph number 2 to push content down toward the bottom of the first page.
+
+Filler paragraph number 3 to push content down toward the bottom of the first page.
+
+Filler paragraph number 4 to push content down toward the bottom of the first page.
+
+Filler paragraph number 5 to push content down toward the bottom of the first page.
+
+Filler paragraph number 6 to push content down toward the bottom of the first page.
+
+Filler paragraph number 7 to push content down toward the bottom of the first page.
+
+Filler paragraph number 8 to push content down toward the bottom of the first page.
+
+Filler paragraph number 9 to push content down toward the bottom of the first page.
+
+Filler paragraph number 10 to push content down toward the bottom of the first page.
+
+Filler paragraph number 11 to push content down toward the bottom of the first page.
+
+Filler paragraph number 12 to push content down toward the bottom of the first page.
+
+Filler paragraph number 13 to push content down toward the bottom of the first page.
+
+Filler paragraph number 14 to push content down toward the bottom of the first page.
+
+Filler paragraph number 15 to push content down toward the bottom of the first page.
+
+Filler paragraph number 16 to push content down toward the bottom of the first page.
+
+Filler paragraph number 17 to push content down toward the bottom of the first page.
+
+Filler paragraph number 18 to push content down toward the bottom of the first page.
+
+****
+START-SIDEBAR-MARKER
+
+Sidebar filler line 1 that adds enough height to force a split if break-inside is not honored.
+
+Sidebar filler line 2 that adds enough height to force a split if break-inside is not honored.
+
+Sidebar filler line 3 that adds enough height to force a split if break-inside is not honored.
+
+Sidebar filler line 4 that adds enough height to force a split if break-inside is not honored.
+
+Sidebar filler line 5 that adds enough height to force a split if break-inside is not honored.
+
+Sidebar filler line 6 that adds enough height to force a split if break-inside is not honored.
+
+Sidebar filler line 7 that adds enough height to force a split if break-inside is not honored.
+
+Sidebar filler line 8 that adds enough height to force a split if break-inside is not honored.
+
+END-SIDEBAR-MARKER
+****
+
+AFTER-SIDEBAR-MARKER

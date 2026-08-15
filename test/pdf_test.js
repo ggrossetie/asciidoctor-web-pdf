@@ -582,6 +582,27 @@ describe('PDF converter', () => {
         `expected the same horizontal position for every occurrence, got: ${distinctPositions.join(', ')}`,
       )
     })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/374
+    it('should not split a sidebar block across a page break', async () => {
+      const outputFile = outputPath('sidebar-avoid-page-break.pdf')
+      await converter.convert(
+        { path: fixturesPath('sidebar-avoid-page-break.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const pages = helper.extractText(outputFile).split('\f')
+      const pageOf = (marker) =>
+        pages.findIndex((page) => page.includes(marker))
+      const startPage = pageOf('START-SIDEBAR-MARKER')
+      const endPage = pageOf('END-SIDEBAR-MARKER')
+      assert.ok(startPage >= 0 && endPage >= 0)
+      assert.strictEqual(
+        startPage,
+        endPage,
+        `expected the sidebar block to stay on a single page, got start on page ${startPage} and end on page ${endPage}`,
+      )
+    })
   })
 
   describe('PDF outline destinations', () => {
