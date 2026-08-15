@@ -1,0 +1,9 @@
+= Table Frame With Grid Rows
+
+[grid="rows", frame="all"]
+|===
+| Name | Description
+
+| Asciidoctor
+| Awesome way to write documentation
+|===

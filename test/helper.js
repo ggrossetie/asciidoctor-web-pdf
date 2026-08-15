@@ -34,8 +34,54 @@ export function extractWordBoxes(pdfPath) {
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
       .replace(/&amp;/g, '&')
-  return [...xml.matchAll(/<word xMin="([\d.]+)"[^>]*>([^<]*)<\/word>/g)].map(
-    (match) => ({ xMin: Number(match[1]), text: decodeEntities(match[2]) }),
+  return [
+    ...xml.matchAll(
+      /<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+)" yMax="([\d.]+)"[^>]*>([^<]*)<\/word>/g,
+    ),
+  ].map((match) => ({
+    xMin: Number(match[1]),
+    yMin: Number(match[2]),
+    xMax: Number(match[3]),
+    yMax: Number(match[4]),
+    text: decodeEntities(match[5]),
+  }))
+}
+
+// Renders a single PDF page to a decoded PNG, for pixel-level assertions
+// (e.g. checking for a border line) that plain text extraction can't make.
+export function renderPageToPNG(pdfPath, pageIndex = 1, dpi = 150) {
+  const outBase = pdfPath.replace(/\.pdf$/, '')
+  childProcess.execFileSync(
+    'pdftocairo',
+    [
+      '-png',
+      '-r',
+      String(dpi),
+      '-f',
+      String(pageIndex),
+      '-l',
+      String(pageIndex),
+      pdfPath,
+      outBase,
+    ],
+    { stdio: 'pipe' },
+  )
+  const pngPath = `${outBase}-${pageIndex}.png`
+  const png = PNG.sync.read(fs.readFileSync(pngPath))
+  fs.unlinkSync(pngPath)
+  return png
+}
+
+// True if the pixel at the given PDF point coordinates (top-left origin, as
+// reported by pdftotext -bbox) is darker than a plain white/near-white
+// background, i.e. a border or text/ink pixel.
+export function hasInkAt(png, dpi, xPt, yPt) {
+  const scale = dpi / 72
+  const x = Math.round(xPt * scale)
+  const y = Math.round(yPt * scale)
+  const idx = (png.width * y + x) << 2
+  return (
+    png.data[idx] < 240 || png.data[idx + 1] < 240 || png.data[idx + 2] < 240
   )
 }
 

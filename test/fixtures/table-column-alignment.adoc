@@ -1,0 +1,10 @@
+= Table Column Alignment
+
+[cols=">,^,<"]
+|===
+| Right | Center | Left
+
+| right-cell-marker
+| center-cell-marker
+| left-cell-marker
+|===

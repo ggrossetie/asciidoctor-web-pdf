@@ -1,0 +1,9 @@
+= Table Cell Long Word
+
+[cols="1,3"]
+|===
+| Marker | Class
+
+| marker-cell
+| org.apache.isis.applib.annotation.ActionVeryLongUnbrokenIdentifierThatShouldWrapInsteadOfOverflowingThePage
+|===

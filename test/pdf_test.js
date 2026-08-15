@@ -13,7 +13,9 @@ import {
 import { PDFArray, PDFDict, PDFDocument, PDFName } from 'pdf-lib'
 import Browser from '../lib/browser.js'
 import * as converter from '../lib/converter.js'
-import { templates } from '../lib/document/document-converter.js'
+import DocumentPDFConverter, {
+  templates,
+} from '../lib/document/document-converter.js'
 import * as helper from './helper.js'
 
 converter.registerTemplateConverter(templates)
@@ -616,6 +618,241 @@ describe('PDF converter', () => {
           message.includes('Unable to find destination'),
         ),
         `expected no "Unable to find destination" warning, got: ${messages.join('; ')}`,
+      )
+    })
+  })
+
+  describe('Known issues (bucket D backlog triage)', () => {
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/164
+    it.skip('should wrap a long unbroken word instead of letting it overflow the page', async () => {
+      const outputFile = outputPath('table-cell-long-word.pdf')
+      const pdfDoc = await convert(
+        fixturesPath('table-cell-long-word.adoc'),
+        outputFile,
+      )
+      const { width: pageWidth } = pdfDoc.getPage(0).getSize()
+      const overflowing = helper
+        .extractWordBoxes(outputFile)
+        .filter((word) => word.xMax > pageWidth)
+      assert.deepStrictEqual(
+        overflowing,
+        [],
+        `expected no word to extend past the page width (${pageWidth}pt), got: ${overflowing.map((w) => `"${w.text}" (xMax=${w.xMax})`).join(', ')}`,
+      )
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/241
+    it.skip('should render collapsible block content even without the %open option', async () => {
+      const outputFile = outputPath('collapsible-block.pdf')
+      await converter.convert(
+        { path: fixturesPath('collapsible-block.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      assert.ok(
+        text.includes('COLLAPSIBLE-CONTENT-MARKER'),
+        'expected the collapsible content to be visible in the PDF even when collapsed',
+      )
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/492
+    it.skip('should place the ToC after the preamble for the book doctype when toc-placement is preamble', async () => {
+      const outputFile = outputPath('toc-preamble-book-doctype.pdf')
+      await converter.convert(
+        { path: fixturesPath('toc-preamble-book-doctype.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      const preambleIndex = text.indexOf('PREAMBLE-MARKER-TEXT')
+      const tocIndex = text.indexOf('Thing One') // first occurrence is the ToC entry
+      const sectionIndex = text.indexOf('SECTION-ONE-MARKER')
+      assert.ok(
+        preambleIndex >= 0 && tocIndex >= 0 && sectionIndex >= 0,
+        'expected to find the preamble, ToC and section markers in the output',
+      )
+      assert.ok(
+        preambleIndex < tocIndex && tocIndex < sectionIndex,
+        'expected the ToC to appear after the preamble and before the first section',
+      )
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/547
+    it.skip('should not render the document title when showtitle is unset', async () => {
+      const outputFile = outputPath('showtitle-disabled.pdf')
+      await converter.convert(
+        { path: fixturesPath('showtitle-disabled.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      assert.ok(
+        !text.includes('Deployment Instructions'),
+        'expected the document title to be hidden when :showtitle!: is set',
+      )
+      assert.ok(text.includes('PARAGRAPH-MARKER-CONTENT'))
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/664
+    it.skip('should not duplicate a footnote that is referenced more than once', async () => {
+      const outputFile = outputPath('footnotes-duplicate.pdf')
+      await converter.convert(
+        { path: fixturesPath('footnotes.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      const occurrences = text.split('Opinions are my own.').length - 1
+      assert.strictEqual(
+        occurrences,
+        1,
+        `expected the "disclaimer" footnote to be defined once, found it ${occurrences} times`,
+      )
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/676
+    it.skip('should render the table frame border when grid is set to rows', async () => {
+      const outputFile = outputPath('table-frame-with-grid-rows.pdf')
+      await converter.convert(
+        { path: fixturesPath('table-frame-with-grid-rows.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const header = helper
+        .extractWordBoxes(outputFile)
+        .filter((word) => word.text === 'Name' || word.text === 'Description')
+      const xFrom = Math.min(...header.map((word) => word.xMin)) - 4
+      const xTo = Math.max(...header.map((word) => word.xMax)) + 4
+      const yTop = Math.min(...header.map((word) => word.yMin))
+      const png = helper.renderPageToPNG(outputFile)
+      let hasTopBorder = false
+      for (let y = yTop - 14; y <= yTop - 2 && !hasTopBorder; y += 1) {
+        for (let x = xFrom; x <= xTo && !hasTopBorder; x += 2) {
+          hasTopBorder = helper.hasInkAt(png, 150, x, y)
+        }
+      }
+      assert.ok(
+        hasTopBorder,
+        'expected a visible top frame border above the table header row',
+      )
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/84
+    it.skip('should render the revision number, date and remark on the title page', async () => {
+      const outputFile = outputPath('title-page-metadata.pdf')
+      await converter.convert(
+        { path: fixturesPath('title-page-metadata.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const text = helper.extractText(outputFile)
+      assert.ok(
+        text.includes('2.5'),
+        'expected the revision number to be rendered',
+      )
+      assert.ok(
+        text.includes('2026-08-15'),
+        'expected the revision date to be rendered',
+      )
+      assert.ok(
+        text.includes('Draft for review'),
+        'expected the revision remark to be rendered',
+      )
+    })
+  })
+
+  describe('Backlog triage — already working today', () => {
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/605
+    // Reported against the Paged.js-specific page-count markup, which no
+    // longer exists post-migration (PR #725). Kept as a regression guard.
+    it('should not add an extra title page for the book doctype with a private running docinfo file', async () => {
+      const withDocinfo = await convert(
+        fixturesPath('running-elements-book.adoc'),
+        outputPath('running-elements-book.pdf'),
+      )
+      const withoutDocinfo = await convert(
+        fixturesPath('running-elements-book-no-docinfo.adoc'),
+        outputPath('running-elements-book-no-docinfo.pdf'),
+      )
+      assert.strictEqual(
+        withDocinfo.getPages().length,
+        withoutDocinfo.getPages().length,
+        'expected docinfo:private plus a running docinfo file not to add an extra page compared to the same book without it',
+      )
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/649
+    it('should allow a subclass to override a single template method without reimplementing the others', async () => {
+      class CustomDocumentPDFConverter extends DocumentPDFConverter {
+        titlePage(node) {
+          if (!node.getDocumentTitle()) {
+            return ''
+          }
+          return `<div id="cover" class="custom-title-page">CUSTOM-TITLE-PAGE-MARKER ${node.getDocumentTitle()}</div>`
+        }
+      }
+      const instance = new CustomDocumentPDFConverter()
+      const customTemplates = {
+        document: (node, opts) => instance.convert_document(node, opts),
+        convert_outline: (node, opts) => instance.convert_outline(node, opts),
+        admonition: (node) => instance.convert_admonition(node),
+        inline_callout: (node) => instance.convert_inline_callout(node),
+        inline_image: (node) => instance.convert_inline_image(node),
+        inline_footnote: (node) => instance.convert_inline_footnote(node),
+        colist: (node) => instance.convert_colist(node),
+        page_break: (node) => instance.convert_page_break(node),
+        preamble: (node) => instance.convert_preamble(node),
+      }
+      converter.registerTemplateConverter(customTemplates)
+      try {
+        const outputFile = outputPath('custom-template-override.pdf')
+        await converter.convert(
+          { path: fixturesPath('custom-template-override.adoc') },
+          { to_file: outputFile },
+          false,
+        )
+        const text = helper.extractText(outputFile)
+        assert.ok(
+          text.includes('CUSTOM-TITLE-PAGE-MARKER'),
+          'expected the overridden titlePage() method to be used',
+        )
+        assert.ok(
+          text.includes('This admonition should still render'),
+          'expected the default (non-overridden) admonition template to still work',
+        )
+      } finally {
+        converter.registerTemplateConverter(templates)
+      }
+    })
+
+    // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/684
+    it('should apply cols alignment to body cells, not just the header row', async () => {
+      const outputFile = outputPath('table-column-alignment.pdf')
+      await converter.convert(
+        { path: fixturesPath('table-column-alignment.adoc') },
+        { to_file: outputFile },
+        false,
+      )
+      const words = helper.extractWordBoxes(outputFile)
+      const byText = (text) => words.find((word) => word.text === text)
+      const closeTo = (a, b) =>
+        Math.abs(a - b) < 0.5 ? true : `${a} is not close to ${b}`
+      const rightHeader = byText('Right')
+      const rightCell = byText('right-cell-marker')
+      assert.strictEqual(
+        closeTo(rightCell.xMax, rightHeader.xMax),
+        true,
+        'expected the right-aligned cell to end at the same x position as its header',
+      )
+      const centerHeader = byText('Center')
+      const centerCell = byText('center-cell-marker')
+      const headerMidpoint = (centerHeader.xMin + centerHeader.xMax) / 2
+      const cellMidpoint = (centerCell.xMin + centerCell.xMax) / 2
+      assert.strictEqual(
+        closeTo(cellMidpoint, headerMidpoint),
+        true,
+        'expected the center-aligned cell to share the same horizontal midpoint as its header',
       )
     })
   })

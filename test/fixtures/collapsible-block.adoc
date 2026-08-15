@@ -1,0 +1,7 @@
+= Collapsible Block
+
+[%collapsible]
+.Custom Summary Title
+====
+COLLAPSIBLE-CONTENT-MARKER
+====

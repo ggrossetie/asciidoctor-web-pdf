@@ -1,0 +1,6 @@
+= My Doc Title
+
+[NOTE]
+====
+This admonition should still render using the default (non-overridden) template.
+====

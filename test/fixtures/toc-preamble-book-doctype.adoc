@@ -1,0 +1,14 @@
+= Just A Little Test
+:doctype: book
+:toc:
+:toc-placement: preamble
+
+PREAMBLE-MARKER-TEXT should render before the ToC.
+
+== Thing One
+
+SECTION-ONE-MARKER
+
+== Thing Two
+
+== Thing Three

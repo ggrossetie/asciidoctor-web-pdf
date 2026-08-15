@@ -1,0 +1,7 @@
+= Main Title: A Subtitle Marker
+:doctype: book
+:revnumber: 2.5
+:revdate: 2026-08-15
+:revremark: Draft for review
+
+Content.
