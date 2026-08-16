@@ -109,9 +109,9 @@ Assets copied alongside the binary (all resolved relative to `path.dirname(proce
 
 In SEA mode, the viewer index path is `path.join(path.dirname(process.execPath), 'viewer', 'index.html')`.
 
-**SEA-specific MathJax wiring** (`lib/document/stem.js`): before the first `MathJax.init()` call, two overrides are applied to the loader config:
-- `config.loader.paths.mathjax` → `assets/mathjax/` (esbuild sets `__dirname` to the binary dir, making `node-main.js` compute the wrong root)
-- `config.loader.require` → CJS `require` (the default `eval("(file) => import(file)")` uses dynamic ESM import which does not work in a SEA/CJS-only context)
+**MathJax loader wiring** (`lib/document/stem.js`): before the first `MathJax.init()` call, overrides are applied to the loader config:
+- `config.loader.require` → CJS `require`, always, on every platform. The default `eval("(file) => import(file)")` uses dynamic ESM `import()`, which does not work in a SEA/CJS-only context, and also fails on Windows for plain drive-letter paths (`C:/...`) since Node's ESM loader requires a `file://` URL there.
+- `config.loader.paths.mathjax` → `assets/mathjax/`, SEA-only (esbuild sets `__dirname` to the binary dir, making `node-main.js` compute the wrong root)
 
 ## Development
 
