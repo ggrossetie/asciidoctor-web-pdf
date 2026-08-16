@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import ospath from 'node:path'
 import { describe, it } from 'node:test'
 import { convert, load } from '@asciidoctor/core'
+import MathJaxModule from 'mathjax'
 import { parse } from 'node-html-parser'
 import * as converter from '../lib/converter.js'
 import { templates } from '../lib/document/document-converter.js'
@@ -239,6 +240,25 @@ Guillaume Grossetie
 == Section`)
       const root = parse(await templates.document(doc))
       assert.ok(root.querySelector('style#MJX-CHTML-styles'))
+    })
+
+    it('loads MathJax components with a CJS require instead of the default dynamic ESM import', async () => {
+      // The default `loader.require` (`eval("(file) => import(file)")`) breaks on
+      // Windows: resolved component paths are plain drive-letter paths (e.g.
+      // "C:/..."), and Node's ESM loader rejects those as an invalid "c:" URL
+      // scheme. stem.js overrides `loader.require` with a plain CJS require,
+      // which accepts OS paths natively on every platform.
+      const doc = await loadPdf(`= Title
+:stem:
+
+== Section`)
+      await templates.document(doc)
+      const loaderRequire = MathJaxModule.config.loader.require
+      assert.strictEqual(typeof loaderRequire, 'function')
+      assert.ok(
+        !loaderRequire.toString().includes('import('),
+        'expected MathJax loader.require to be a CJS require, not the default dynamic import()',
+      )
     })
 
     it('should not include MathJax CHTML stylesheet when stem is not set', async () => {
