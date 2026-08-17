@@ -83,6 +83,8 @@ CHTML fonts are loaded by Chromium at render time as `file://` URLs pointing to 
 
 MathJax component JS files (`input/tex`, `input/asciimath`, `output/chtml` and their extensions) are loaded dynamically by Node.js via `require()` at the first stem conversion. In SEA mode these files live in `assets/mathjax/` next to the binary; a `package.json` with `"type":"commonjs"` is placed there to prevent Node.js from inheriting `"type":"module"` from a parent directory (which would run the legacy `asciimath.js` code in strict ESM mode and break its `arguments.callee` usage).
 
+`output/chtml` also `require()`s the `@mathjax/mathjax-newcm-font` component server-side for glyph metrics (`chtml.js`, plus per-script files under `chtml/dynamic/` such as `greek.js`/`cyrillic.js`, loaded on demand) — separate from the woff2 files below, which are only for Chromium's CSS. In SEA mode these live in `assets/mathjax-newcm-font/`.
+
 ### Syntax highlighting
 
 `lib/document/syntax-highlighter.js` registers a server-side highlight.js adapter with Asciidoctor. Source blocks are highlighted during conversion (spans already in the HTML when Vivliostyle processes it) and the chosen theme CSS (default: `github`) is inlined in `<head>`. Theme files are read from `node_modules/highlight.js/styles/` at runtime, or from `assets/highlight/styles/` in SEA mode.
@@ -102,6 +104,7 @@ Assets copied alongside the binary (all resolved relative to `path.dirname(proce
 | `viewer/` | Full `@vivliostyle/viewer/lib/` directory — served via `file://` to Chromium |
 | `assets/mathjax/` | MathJax component JS files loaded by Node.js via `require()` at runtime (`input/tex.js`, `input/asciimath.js`, `output/chtml.js`, extensions). Includes a `package.json {"type":"commonjs"}` to prevent ESM mode inheritance. |
 | `assets/mathjax-fonts/` | CHTML woff2 fonts from `@mathjax/mathjax-newcm-font` — served as `file://` URLs to Chromium |
+| `assets/mathjax-newcm-font/` | `@mathjax/mathjax-newcm-font`'s `chtml.js` + `chtml/dynamic/` component, loaded by Node.js via `require()` for server-side glyph metrics. Includes a `package.json {"type":"commonjs"}` for the same reason as `assets/mathjax/`. |
 | `assets/highlight/styles/` | highlight.js CSS theme files read by the server-side syntax highlighter |
 | `css/` | Stylesheet files |
 | `examples/` | Example documents |
@@ -112,6 +115,9 @@ In SEA mode, the viewer index path is `path.join(path.dirname(process.execPath),
 **MathJax loader wiring** (`lib/document/stem.js`): before the first `MathJax.init()` call, overrides are applied to the loader config:
 - `config.loader.require` → CJS `require`, always, on every platform. The default `eval("(file) => import(file)")` uses dynamic ESM `import()`, which does not work in a SEA/CJS-only context, and also fails on Windows for plain drive-letter paths (`C:/...`) since Node's ESM loader requires a `file://` URL there.
 - `config.loader.paths.mathjax` → `assets/mathjax/`, SEA-only (esbuild sets `__dirname` to the binary dir, making `node-main.js` compute the wrong root)
+- `config.loader.paths['mathjax-newcm']` → `assets/mathjax-newcm-font/`, SEA-only, for the same reason
+
+**Runtime `require()` of npm packages vs. `import`**: a package that's only ever loaded via a *runtime* `require()` call (through `createRequire`, as MathJax components are, since their paths are resolved dynamically at `init()` time) is never bundled by esbuild — it stays a real filesystem lookup, which fails once the SEA binary ships without its build machine's `node_modules`. `lib/browser.js`'s use of `@puppeteer/browsers` to compute the Chromium executable path in SEA mode uses a static `import` instead, specifically so esbuild inlines it into the binary. `tasks/prepare-binaries.js`'s smoke test runs the built binary from a directory copied outside the repo (no ancestor `node_modules`) to catch this class of bug — running it in place would silently pass by resolving through the repo's own `node_modules`.
 
 ## Development
 
