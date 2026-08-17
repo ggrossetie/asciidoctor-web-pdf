@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - The release workflow run title now includes the version number being released, making it easier to identify runs in the Actions list
 
+### Fixed
+
+- `:stem:` no longer fails to load MathJax on Windows with `Only URLs with a scheme in: file, data, and node are supported by the default ESM loader`
+- Binaries no longer fail with `Cannot find module '@puppeteer/browsers'` (or, for documents using `:stem:` with Greek/Cyrillic/etc. characters, `Cannot find module '@mathjax/mathjax-newcm-font/chtml.js'`) when run outside of a development checkout; the build now smoke-tests the binary from an isolated directory to catch this class of bug
+
 ## [1.0.0] - 2026-08-15
 
 ### Added
@@ -40,5 +45,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Tables with `frame=all` now show their outer border again when `grid` is anything other than `all` (e.g. `grid=rows`) ([#676](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/676))
 - The revision number, date and remark are now rendered on the title page when set ([#84](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/84))
 - When converting several documents against a shared browser instance (e.g. `--watch` across multiple files), each document is now rendered in a clean page instead of silently reusing stale content from the previous one
-- `:stem:` no longer fails to load MathJax on Windows with `Only URLs with a scheme in: file, data, and node are supported by the default ESM loader`
-- Binaries no longer fail with `Cannot find module '@puppeteer/browsers'` (or, for documents using `:stem:` with Greek/Cyrillic/etc. characters, `Cannot find module '@mathjax/mathjax-newcm-font/chtml.js'`) when run outside of a development checkout; the build now smoke-tests the binary from an isolated directory to catch this class of bug
