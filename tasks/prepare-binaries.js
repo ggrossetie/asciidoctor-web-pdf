@@ -1,6 +1,7 @@
 import { execFileSync, execSync } from 'node:child_process'
 import fs from 'node:fs'
 import { createRequire } from 'node:module'
+import os from 'node:os'
 import path from 'node:path'
 import { Browser, detectBrowserPlatform, install } from '@puppeteer/browsers'
 import esbuild from 'esbuild'
@@ -192,12 +193,35 @@ function copyAssets() {
   // MathJax fonts: must be file-accessible from Chromium for CHTML rendering
   const mathjaxFontsOutDir = path.join(outDir, 'assets', 'mathjax-fonts')
   fsExtra.ensureDirSync(mathjaxFontsOutDir)
-  const mathjaxFontsSrcDir = path.join(
-    path.dirname(require.resolve('@mathjax/mathjax-newcm-font/package.json')),
-    'chtml',
-    'woff2',
+  const mathjaxNewcmFontPkgDir = path.dirname(
+    require.resolve('@mathjax/mathjax-newcm-font/package.json'),
   )
-  fsExtra.copySync(mathjaxFontsSrcDir, mathjaxFontsOutDir)
+  fsExtra.copySync(
+    path.join(mathjaxNewcmFontPkgDir, 'chtml', 'woff2'),
+    mathjaxFontsOutDir,
+  )
+
+  // MathJax-Newcm font component: required server-side by output/chtml for
+  // glyph metrics (separate from the woff2 files above, which are only for
+  // Chromium's CSS @font-face). chtml.js requires per-script glyph range
+  // files from chtml/dynamic/ on demand (e.g. greek.js, cyrillic.js).
+  const mathjaxNewcmFontOutDir = path.join(
+    outDir,
+    'assets',
+    'mathjax-newcm-font',
+  )
+  fsExtra.copySync(
+    path.join(mathjaxNewcmFontPkgDir, 'chtml.js'),
+    path.join(mathjaxNewcmFontOutDir, 'chtml.js'),
+  )
+  fsExtra.copySync(
+    path.join(mathjaxNewcmFontPkgDir, 'chtml', 'dynamic'),
+    path.join(mathjaxNewcmFontOutDir, 'chtml', 'dynamic'),
+  )
+  fs.writeFileSync(
+    path.join(mathjaxNewcmFontOutDir, 'package.json'),
+    JSON.stringify({ type: 'commonjs' }),
+  )
 
   // Vivliostyle viewer: HTML + JS + CSS served via file:// for headless rendering
   const viewerOutDir = path.join(outDir, 'viewer')
@@ -221,23 +245,38 @@ function smokeTest() {
 
   console.log('Running smoke test...')
   const platformDir = path.join(buildDirPath, platformKey)
-  const binaryPath = path.join(platformDir, `${appName}${suffix}`)
-  const inputDoc = path.join(
-    platformDir,
-    'examples',
-    'document',
-    'basic-example.adoc',
+
+  // Run from a directory with no node_modules anywhere above it, mirroring
+  // where a user actually unzips the release archive. Running the smoke test
+  // in-place inside the repo would silently succeed even if the binary
+  // depends on an unbundled npm package, because Node's module resolution
+  // would find it by walking up to the repo's own node_modules.
+  const smokeTestDir = fs.mkdtempSync(
+    path.join(os.tmpdir(), 'asciidoctor-web-pdf-smoke-'),
   )
-  const outputPdf = path.join(platformDir, 'smoke-test.pdf')
+  try {
+    fsExtra.copySync(platformDir, smokeTestDir)
+    const binaryPath = path.join(smokeTestDir, `${appName}${suffix}`)
+    if (!isWindows) {
+      fs.chmodSync(binaryPath, 0o755)
+    }
+    const inputDoc = path.join(
+      smokeTestDir,
+      'examples',
+      'document',
+      'basic-example.adoc',
+    )
+    const outputPdf = path.join(smokeTestDir, 'smoke-test.pdf')
 
-  execFileSync(binaryPath, [inputDoc, '-o', outputPdf], { stdio: 'inherit' })
+    execFileSync(binaryPath, [inputDoc, '-o', outputPdf], { stdio: 'inherit' })
 
-  if (!fs.existsSync(outputPdf) || fs.statSync(outputPdf).size === 0) {
-    throw new Error('Smoke test failed: PDF was not generated or is empty')
+    if (!fs.existsSync(outputPdf) || fs.statSync(outputPdf).size === 0) {
+      throw new Error('Smoke test failed: PDF was not generated or is empty')
+    }
+    console.log('Smoke test passed!')
+  } finally {
+    fsExtra.removeSync(smokeTestDir)
   }
-
-  fs.unlinkSync(outputPdf)
-  console.log('Smoke test passed!')
 }
 
 async function archive() {
