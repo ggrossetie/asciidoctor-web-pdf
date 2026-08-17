@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-17
+
 ### Changed
 
 - The release workflow run title now includes the version number being released, making it easier to identify runs in the Actions list
