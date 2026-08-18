@@ -85,6 +85,8 @@ MathJax component JS files (`input/tex`, `input/asciimath`, `output/chtml` and t
 
 `output/chtml` also `require()`s the `@mathjax/mathjax-newcm-font` component server-side for glyph metrics (`chtml.js`, plus per-script files under `chtml/dynamic/` such as `greek.js`/`cyrillic.js`, loaded on demand) — separate from the woff2 files below, which are only for Chromium's CSS. In SEA mode these live in `assets/mathjax-newcm-font/`.
 
+Because those per-variant glyph files are loaded on demand and that load is inherently asynchronous, `stem.js` converts expressions with the promise-based `tex2chtmlPromise()`/`asciimath2chtmlPromise()` API, not the synchronous `tex2chtml()`/`asciimath2chtml()`. The synchronous API throws `MathJax retry -- an asynchronous action is required` as soon as an expression needs a variant not already loaded (e.g. `\mathscr`, which needs the "script" variant) — this reproduces on every platform, not just Windows/SEA.
+
 ### Syntax highlighting
 
 `lib/document/syntax-highlighter.js` registers a server-side highlight.js adapter with Asciidoctor. Source blocks are highlighted during conversion (spans already in the HTML when Vivliostyle processes it) and the chosen theme CSS (default: `github`) is inlined in `<head>`. Theme files are read from `node_modules/highlight.js/styles/` at runtime, or from `assets/highlight/styles/` in SEA mode.

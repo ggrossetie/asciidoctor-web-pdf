@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `:stem:` no longer fails with `MathJax retry -- an asynchronous action is required` for expressions needing a font variant not loaded upfront, e.g. `\mathscr` ([#748](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/748))
+
 ## [1.0.1] - 2026-08-17
 
 ### Changed
