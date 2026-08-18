@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Upgraded `@vivliostyle/viewer` to 2.44.1
+
+### Fixed
+
+- Table of Contents entries no longer all show the same page number when the document has a title page ([#747](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/747))
+
+## [1.0.1] - 2026-08-17
+
+### Changed
+
 - The release workflow run title now includes the version number being released, making it easier to identify runs in the Actions list
 
 ### Fixed

@@ -254,8 +254,13 @@ leader() fills the available space with dots; target-counter() generates the pag
   page: front;
 }
 
-#content {
-  counter-reset: page 1;
+/* counter-reset must live on @page, not on this element — vivliostyle/vivliostyle.js#1978 (element-level reset breaks target-counter()). Value is 0, not 1, since `page` auto-increments per page. Scoped to docs with a title page: naming this page unconditionally would force a page break before #content even when it previously flowed straight from the body start. */
+.front-matter ~ #content {
+  page: content;
+}
+
+@page :nth(1 of content) {
+  counter-reset: page 0;
 }
 
 /* footnotes */
