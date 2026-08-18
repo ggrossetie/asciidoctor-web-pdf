@@ -260,6 +260,8 @@ function smokeTest() {
     if (!isWindows) {
       fs.chmodSync(binaryPath, 0o755)
     }
+    execFileSync(binaryPath, ['--version'], { stdio: 'inherit' })
+
     const inputDoc = path.join(
       smokeTestDir,
       'examples',
