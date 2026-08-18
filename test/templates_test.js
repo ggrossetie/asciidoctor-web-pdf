@@ -319,6 +319,22 @@ Guillaume Grossetie
       assert.ok(root.querySelector('style#MJX-CHTML-styles'))
       assert.ok(root.querySelector('[id^="mjx-eqn:"]'))
     })
+
+    it('should render a stem expression that needs an on-demand-loaded font variant', async () => {
+      // \mathscr needs the "script" font variant, whose glyph metrics are
+      // loaded on demand from @mathjax/mathjax-newcm-font's chtml/dynamic/
+      // component. That load is inherently asynchronous, so it can't
+      // complete inside MathJax's synchronous tex2chtml()/asciimath2chtml()
+      // API and throws "MathJax retry -- an asynchronous action is
+      // required" (#748). stem.js must use the promise-based
+      // tex2chtmlPromise()/asciimath2chtmlPromise() API instead.
+      const doc = await loadPdf(`= Title
+:stem: latexmath
+
+stem:[\\mathscr{C}]`)
+      const root = parse(await templates.document(doc))
+      assert.ok(root.querySelector('mjx-container'))
+    })
   })
 
   describe('Admonition', () => {
