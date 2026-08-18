@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - `:stem:` no longer fails with `MathJax retry -- an asynchronous action is required` for expressions needing a font variant not loaded upfront, e.g. `\mathscr` ([#748](https://github.com/ggrossetie/asciidoctor-web-pdf/issues/748))
+- Internal links and bookmarks no longer trigger PDF validator warnings such as `Warning: name token is longer than what the specification says it can be`; Vivliostyle's long encoded destination names are now resolved to explicit destinations and the oversized name dictionary is dropped from the output
 
 ## [1.0.1] - 2026-08-17
 
