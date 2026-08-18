@@ -47,7 +47,7 @@
     "@fortawesome/free-regular-svg-icons": "6.2.1",
     "@fortawesome/free-solid-svg-icons": "6.2.1",
     "@puppeteer/browsers": "~3.0",
-    "@vivliostyle/viewer": "2.43.0",
+    "@vivliostyle/viewer": "2.44.1",
     "asciidoctor": ">= 4.0.0 < 5",
     "chokidar": "~3.5",
     "fs-extra": "~11.1.0",
