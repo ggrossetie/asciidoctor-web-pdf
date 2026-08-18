@@ -650,6 +650,47 @@ describe('PDF converter', () => {
         `expected no "Unable to find destination" warning, got: ${messages.join('; ')}`,
       )
     })
+
+    // Vivliostyle's named destinations encode the full source document URL
+    // (viv-id-<encoded-url>#<id>), which routinely exceeds the PDF spec's
+    // 127-byte limit for name tokens and trips up strict PDF parsers with
+    // "Warning: name token is longer than what the specification says it
+    // can be". Both the outline entries and the in-page cross-reference
+    // links must be resolved to explicit destinations, and the oversized
+    // `/Dests` dictionary itself must be dropped from the output.
+    it('should not leave any named destination in the generated PDF', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('anchor-with-diacritics.adoc'),
+        outputPath('anchor-with-diacritics-dests.pdf'),
+      )
+      assert.strictEqual(
+        pdfDoc.catalog.get(PDFName.of('Dests')),
+        undefined,
+        'expected the /Dests name dictionary to be removed from the catalog',
+      )
+      const namedLinkDests = []
+      for (const page of pdfDoc.getPages()) {
+        const annots = page.node.Annots()
+        if (!annots) {
+          continue
+        }
+        for (let i = 0; i < annots.size(); i++) {
+          const annot = pdfDoc.context.lookup(annots.get(i))
+          if (annot.get(PDFName.of('Subtype')) !== PDFName.of('Link')) {
+            continue
+          }
+          const dest = annot.get(PDFName.of('Dest'))
+          if (dest instanceof PDFName) {
+            namedLinkDests.push(dest.asString())
+          }
+        }
+      }
+      assert.deepStrictEqual(
+        namedLinkDests,
+        [],
+        'expected every link annotation to use an explicit destination, not a named one',
+      )
+    })
   })
 
   describe('Known issues (bucket D backlog triage)', () => {
