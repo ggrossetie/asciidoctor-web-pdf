@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Upgraded `asciidoctor` to 4.0.11; the `--help` usage line now shows `asciidoctor-web-pdf` instead of `asciidoctor` as the program name
+
 ### Fixed
 
 - `:stem:` expressions needing an on-demand-loaded font variant (e.g. `\mathscr`) no longer fail on Windows with `Only URLs with a scheme in: file, data, and node are supported by the default ESM loader`; MathJax's separate on-demand loader used for these variants was still using the default ESM `import()`-based loader, missed by the earlier fix for the same error
