@@ -1,6 +1,6 @@
 {
   "name": "asciidoctor-pdf",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A PDF converter for AsciiDoc based on web technologies",
   "type": "module",
   "engines": {

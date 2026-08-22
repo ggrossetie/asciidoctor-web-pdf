@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-08-22
+
 ### Changed
 
 - Upgraded `asciidoctor` to 4.0.11; the `--help` usage line now shows `asciidoctor-web-pdf` instead of `asciidoctor` as the program name
