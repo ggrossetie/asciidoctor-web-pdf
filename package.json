@@ -48,7 +48,7 @@
     "@fortawesome/free-solid-svg-icons": "6.2.1",
     "@puppeteer/browsers": "~3.0",
     "@vivliostyle/viewer": "2.44.1",
-    "asciidoctor": ">= 4.0.0 < 5",
+    "asciidoctor": ">= 4.0.11 < 5",
     "chokidar": "~3.5",
     "fs-extra": "~11.1.0",
     "highlight.js": "^11.11.1",
@@ -70,6 +70,6 @@
     "postject": "1.0.0-alpha.6"
   },
   "peerDependencies": {
-    "asciidoctor": ">= 4.0.0 < 5"
+    "asciidoctor": ">= 4.0.11 < 5"
   }
 }
