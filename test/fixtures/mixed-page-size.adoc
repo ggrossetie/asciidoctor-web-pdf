@@ -1,0 +1,10 @@
+= Mixed Page Size Test
+
+Portrait page one content.
+
+[.landscape-page]
+--
+Landscape page content.
+--
+
+Portrait page two content.

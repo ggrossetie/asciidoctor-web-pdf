@@ -622,6 +622,40 @@ describe('PDF converter', () => {
       assertPageSize(pdfDoc, 595.28, 841.89)
     })
 
+    it('should crop each page to its own declared @page size in a mixed portrait/landscape document', async () => {
+      const attributes = {
+        stylesheet: `${cssPath('asciidoctor.css')},${cssPath('document.css')},${fixturesPath('mixed-page-size.css')}`,
+      }
+      const outputFile = outputPath('mixed-page-size.pdf')
+      const pdfDoc = await convert(
+        fixturesPath('mixed-page-size.adoc'),
+        outputFile,
+        { attributes },
+      )
+      assert.strictEqual(pdfDoc.getPageCount(), 3)
+      const sizes = [0, 1, 2].map((i) => pdfDoc.getPage(i).getSize())
+      // A4 portrait: 595.28 x 841.89pt. A4 landscape: 841.89 x 595.28pt.
+      assert.ok(
+        Math.abs(sizes[0].width - 595.28) < 1 &&
+          Math.abs(sizes[0].height - 841.89) < 1,
+        `expected page 1 to be A4 portrait, got ${JSON.stringify(sizes[0])}`,
+      )
+      assert.ok(
+        Math.abs(sizes[1].width - 841.89) < 1 &&
+          Math.abs(sizes[1].height - 595.28) < 1,
+        `expected page 2 to be A4 landscape, got ${JSON.stringify(sizes[1])}`,
+      )
+      assert.ok(
+        Math.abs(sizes[2].width - 595.28) < 1 &&
+          Math.abs(sizes[2].height - 841.89) < 1,
+        `expected page 3 to be A4 portrait, got ${JSON.stringify(sizes[2])}`,
+      )
+      const text = helper.extractText(outputFile)
+      assert.ok(text.includes('Portrait page one content.'))
+      assert.ok(text.includes('Landscape page content.'))
+      assert.ok(text.includes('Portrait page two content.'))
+    })
+
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726
     // Paged.js's DOM cloning stripped whitespace-only text nodes when
     // splitting a listing block across pages. Vivliostyle doesn't clone the
