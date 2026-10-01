@@ -572,33 +572,54 @@ describe('PDF converter', () => {
       )
     }
 
-    it('should use the page size defined by the pdf-format attribute', async () => {
+    it('should use the named page size defined by the pdf-page-size attribute', async () => {
       const pdfDoc = await convert(
         fixturesPath('simple.adoc'),
-        outputPath('pdf-format-a5.pdf'),
-        { attributes: { 'pdf-format': 'A5' } },
+        outputPath('pdf-page-size-named.pdf'),
+        { attributes: { 'pdf-page-size': 'a5' } },
       )
-      // 148mm x 210mm
       assertPageSize(pdfDoc, 419.53, 595.28)
     })
 
-    it('should keep the Puppeteer orientation of the Ledger pdf-format', async () => {
+    it('should use the custom page size defined by the pdf-page-size attribute', async () => {
       const pdfDoc = await convert(
         fixturesPath('simple.adoc'),
-        outputPath('pdf-format-ledger.pdf'),
-        { attributes: { 'pdf-format': 'Ledger' } },
+        outputPath('pdf-page-size-custom.pdf'),
+        { attributes: { 'pdf-page-size': '[5in, 200mm]' } },
       )
-      // 17in x 11in
-      assertPageSize(pdfDoc, 1224, 792)
+      assertPageSize(pdfDoc, 360, 566.93)
     })
 
-    it('should use the page size defined by the pdf-width and pdf-height attributes', async () => {
+    it('should swap the page dimensions when pdf-page-layout is landscape', async () => {
       const pdfDoc = await convert(
         fixturesPath('simple.adoc'),
-        outputPath('pdf-width-height.pdf'),
-        { attributes: { 'pdf-width': '5in', 'pdf-height': '8in' } },
+        outputPath('pdf-page-layout-landscape.pdf'),
+        {
+          attributes: {
+            'pdf-page-size': 'Letter',
+            'pdf-page-layout': 'landscape',
+          },
+        },
       )
-      assertPageSize(pdfDoc, 360, 576)
+      assertPageSize(pdfDoc, 792, 612)
+    })
+
+    it('should use the default A4 page size in landscape when only pdf-page-layout is set', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-page-layout-landscape-a4.pdf'),
+        { attributes: { 'pdf-page-layout': 'landscape' } },
+      )
+      assertPageSize(pdfDoc, 841.89, 595.28)
+    })
+
+    it('should ignore an invalid pdf-page-size attribute', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-page-size-invalid.pdf'),
+        { attributes: { 'pdf-page-size': 'Z9' } },
+      )
+      assertPageSize(pdfDoc, 595.28, 841.89)
     })
 
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726

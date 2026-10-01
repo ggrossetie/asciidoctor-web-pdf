@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-- The `pdf-format`, `pdf-width` and `pdf-height` attributes are honored again; they are now translated into a CSS `@page` size rule, since the page size passed to Puppeteer was ignored in favor of the CSS page size used by Vivliostyle for the layout
+- Support for the `pdf-page-size` and `pdf-page-layout` attributes, with the same values as Asciidoctor PDF (named sizes such as `A5` or `Letter`, custom dimensions such as `[6in, 9in]`, `portrait` or `landscape`); they are translated into a CSS `@page` size rule
+
+### Removed
+
+- The undocumented `pdf-format`, `pdf-width` and `pdf-height` attributes, which no longer had any effect: the page size passed to Puppeteer was ignored in favor of the CSS page size used by Vivliostyle for the layout; use `pdf-page-size` instead
 
 ## [1.0.3] - 2026-08-22
 
