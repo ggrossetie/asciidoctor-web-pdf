@@ -43,3 +43,33 @@ You can also specify where the stylesheets are located with the `stylesdir` attr
 ----
 asciidoctor-web-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
 ----
+
+== Page size
+
+The default page size is A4.
+As with Asciidoctor PDF, you can change it with the `pdf-page-size` attribute, using either a named size:
+
+[source,sh]
+----
+asciidoctor-web-pdf document.adoc -a pdf-page-size=Letter
+----
+
+or custom dimensions, as an array of two measurements (`in`, `mm`, `cm`, `pt`, `pc` or `px`; unitless values are points):
+
+[source,sh]
+----
+asciidoctor-web-pdf document.adoc -a pdf-page-size="[6in, 9in]"
+----
+
+The supported named sizes are the ones of Asciidoctor PDF: `A0` to `A10`, `B0` to `B10`, `C0` to `C10`, `RA0` to `RA4`, `SRA0` to `SRA4`, `4A0`, `2A0`, `Executive`, `Folio`, `Legal`, `Letter` and `Tabloid`.
+An invalid value is ignored.
+
+To print the pages in landscape, set the `pdf-page-layout` attribute to `landscape` (the default is `portrait`), which swaps the page dimensions:
+
+[source,sh]
+----
+asciidoctor-web-pdf document.adoc -a pdf-page-size=A5 -a pdf-page-layout=landscape
+----
+
+These attributes are translated into a `@page { size: ... }` rule that takes precedence over the `@page` size of the stylesheets.
+If you need different sizes for specific pages, use named pages (`@page wide { size: A4 landscape; }`) in a custom stylesheet instead.

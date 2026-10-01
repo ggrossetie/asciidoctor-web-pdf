@@ -560,6 +560,68 @@ describe('PDF converter', () => {
       )
     })
 
+    const assertPageSize = (pdfDoc, expectedWidth, expectedHeight) => {
+      const { width, height } = pdfDoc.getPage(0).getSize()
+      assert.ok(
+        Math.abs(width - expectedWidth) < 1,
+        `expected width ~${expectedWidth}, got ${width}`,
+      )
+      assert.ok(
+        Math.abs(height - expectedHeight) < 1,
+        `expected height ~${expectedHeight}, got ${height}`,
+      )
+    }
+
+    it('should use the named page size defined by the pdf-page-size attribute', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-page-size-named.pdf'),
+        { attributes: { 'pdf-page-size': 'a5' } },
+      )
+      assertPageSize(pdfDoc, 419.53, 595.28)
+    })
+
+    it('should use the custom page size defined by the pdf-page-size attribute', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-page-size-custom.pdf'),
+        { attributes: { 'pdf-page-size': '[5in, 200mm]' } },
+      )
+      assertPageSize(pdfDoc, 360, 566.93)
+    })
+
+    it('should swap the page dimensions when pdf-page-layout is landscape', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-page-layout-landscape.pdf'),
+        {
+          attributes: {
+            'pdf-page-size': 'Letter',
+            'pdf-page-layout': 'landscape',
+          },
+        },
+      )
+      assertPageSize(pdfDoc, 792, 612)
+    })
+
+    it('should use the default A4 page size in landscape when only pdf-page-layout is set', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-page-layout-landscape-a4.pdf'),
+        { attributes: { 'pdf-page-layout': 'landscape' } },
+      )
+      assertPageSize(pdfDoc, 841.89, 595.28)
+    })
+
+    it('should ignore an invalid pdf-page-size attribute', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-page-size-invalid.pdf'),
+        { attributes: { 'pdf-page-size': 'Z9' } },
+      )
+      assertPageSize(pdfDoc, 595.28, 841.89)
+    })
+
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726
     // Paged.js's DOM cloning stripped whitespace-only text nodes when
     // splitting a listing block across pages. Vivliostyle doesn't clone the
