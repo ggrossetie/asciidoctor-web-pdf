@@ -560,6 +560,47 @@ describe('PDF converter', () => {
       )
     })
 
+    const assertPageSize = (pdfDoc, expectedWidth, expectedHeight) => {
+      const { width, height } = pdfDoc.getPage(0).getSize()
+      assert.ok(
+        Math.abs(width - expectedWidth) < 1,
+        `expected width ~${expectedWidth}, got ${width}`,
+      )
+      assert.ok(
+        Math.abs(height - expectedHeight) < 1,
+        `expected height ~${expectedHeight}, got ${height}`,
+      )
+    }
+
+    it('should use the page size defined by the pdf-format attribute', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-format-a5.pdf'),
+        { attributes: { 'pdf-format': 'A5' } },
+      )
+      // 148mm x 210mm
+      assertPageSize(pdfDoc, 419.53, 595.28)
+    })
+
+    it('should keep the Puppeteer orientation of the Ledger pdf-format', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-format-ledger.pdf'),
+        { attributes: { 'pdf-format': 'Ledger' } },
+      )
+      // 17in x 11in
+      assertPageSize(pdfDoc, 1224, 792)
+    })
+
+    it('should use the page size defined by the pdf-width and pdf-height attributes', async () => {
+      const pdfDoc = await convert(
+        fixturesPath('simple.adoc'),
+        outputPath('pdf-width-height.pdf'),
+        { attributes: { 'pdf-width': '5in', 'pdf-height': '8in' } },
+      )
+      assertPageSize(pdfDoc, 360, 576)
+    })
+
     // https://github.com/ggrossetie/asciidoctor-web-pdf/issues/726
     // Paged.js's DOM cloning stripped whitespace-only text nodes when
     // splitting a listing block across pages. Vivliostyle doesn't clone the

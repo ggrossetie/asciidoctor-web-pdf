@@ -43,3 +43,26 @@ You can also specify where the stylesheets are located with the `stylesdir` attr
 ----
 asciidoctor-web-pdf document.adoc -a stylesdir=css -a stylesheet="custom.css,override.css"
 ----
+
+== Page size
+
+The default page size is A4.
+You can change it with the `pdf-format` attribute:
+
+[source,sh]
+----
+asciidoctor-web-pdf document.adoc -a pdf-format=Letter
+----
+
+The supported formats are `Letter`, `Legal`, `Tabloid`, `Ledger` and `A0` to `A6`.
+Any other value is used as-is as a CSS page size (for instance `B5` or `A4 landscape`).
+
+You can also define the page dimensions with the `pdf-width` and `pdf-height` attributes, using a CSS length (unitless values are interpreted as pixels):
+
+[source,sh]
+----
+asciidoctor-web-pdf document.adoc -a pdf-width=5in -a pdf-height=8in
+----
+
+These attributes are translated into a `@page { size: ... }` rule that takes precedence over the stylesheets.
+If you need different sizes for specific pages, use named pages (`@page wide { size: A4 landscape; }`) in a custom stylesheet instead.
